@@ -1,0 +1,163 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "2 of 3 required fields remain unmapped (67% coverage)",
+        "Observation.effective[x] has TODO placeholders for source date/time field mapping",
+        "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input"
+      ],
+      "improvements": [
+        "Extract fixed Coding rules (vital-signs category, LOINC 9279-1, SNOMED 86290005) into reusable named group",
+        "The observation component mapping rule uses the same structure pattern as heart rate map - consider extracting to shared group"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "2 of 3 required fields remain unmapped (67% coverage)",
+          "Observation.effective[x] has TODO placeholders for source date/time field mapping",
+          "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 8,
+          "percent": 75.0,
+          "unmapped": [
+            "value[x]",
+            "value[x].value"
+          ]
+        },
+        "finding_classes": {
+          "2 of 3 required fields remain unmapped (67% coverage)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Observation.effective[x] has TODO placeholders for source date/time field mapping": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "2 of 4 required fields remain unmapped (50% coverage)",
+        "Observation.effective[x] has TODO placeholders for source date/time field mapping",
+        "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input"
+      ],
+      "improvements": [
+        "Extract fixed Coding rules (vital-signs category, SNOMED 364075005, LOINC 8867-4) into reusable named group",
+        "Observation.component mapping and Observation.dataAbsentReason-translate groups are identical to Atemfrequenz map - extract to shared group"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "2 of 4 required fields remain unmapped (50% coverage)",
+          "Observation.effective[x] has TODO placeholders for source date/time field mapping",
+          "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 16,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 8,
+          "percent": 75.0,
+          "unmapped": [
+            "value[x].code",
+            "value[x].value"
+          ]
+        },
+        "finding_classes": {
+          "2 of 4 required fields remain unmapped (50% coverage)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Observation.effective[x] has TODO placeholders for source date/time field mapping": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Cross-resource reference to Patient.subject cannot be resolved - no Patient profile available in input": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "info",
+      "description": "Both Observation profiles use identical ConceptMap for dataAbsentReason translation (cm-dataAbsentReason-3a46debc)",
+      "fix_recommendation": "Create a shared named group 'map-dataAbsentReason-translate' and reference it from both maps using extends relationship"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "info",
+      "description": "Both Observation profiles have TODO-placeholder device references pointing to the Device resource type, but no identifier system is defined in the Device map for cross-reference consistency",
+      "fix_recommendation": "Device profile should define a specific identifier.value mapping that Observations can reference consistently using the same identifier.system"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "warning",
+      "description": "Both Observation profiles reference Patient.subject and Encounter, but neither target profile exists in the input - these references cannot be resolved without additional source profiles",
+      "fix_recommendation": "Document that subject and encounter references will remain as placeholder elements requiring external bundle assembler resolution or manual population"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "info",
+      "description": "Both Observation profiles map category to 'vital-signs' in observation-category CodeSystem using identical rule structure",
+      "fix_recommendation": "Extract to shared named group 'map-category-vitalsigns' to reduce redundancy across all vital sign Observation maps"
+    }
+  ],
+  "resolvable_references": [],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 2,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "2 unconditional / 0 demotion-reliant / 0 invalid (of 2)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

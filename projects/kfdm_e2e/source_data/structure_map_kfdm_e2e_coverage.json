@@ -1,0 +1,484 @@
+{
+  "report_version": 2,
+  "map": "structure_map_kfdm_e2e",
+  "note": "Requirements are enumerated independently from the StructureDefinition snapshot and keyed by ElementDefinition.id so slice identity is preserved. required_total is the active cohort for this draft; constraints below absent optional parents are listed separately as latent. Coverage describes declared providers, not successful FHIR validation.",
+  "summary": {
+    "profiles": 8,
+    "required_total": 34,
+    "required_mapped": 23,
+    "required_unmapped": 11,
+    "static_required_total": 37,
+    "latent_required_total": 3,
+    "required_coverage_pct": 67.6
+  },
+  "profiles": {
+    "anamnese-raucher": {
+      "resource_type": "Observation",
+      "required_total": 5,
+      "required_mapped": 4,
+      "required_unmapped": 1,
+      "unmapped_required_paths": [
+        "Observation.component.code"
+      ],
+      "static_required_total": 5,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Observation.extension",
+          "path": "Observation.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Observation.extension:years",
+          "path": "Observation.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "years"
+        },
+        {
+          "id": "Observation.status",
+          "path": "Observation.status",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "profile-fixed",
+          "status": "covered"
+        },
+        {
+          "id": "Observation.code",
+          "path": "Observation.code",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Observation.component.code",
+          "path": "Observation.component.code",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    },
+    "WAVESPatient": {
+      "resource_type": "Patient",
+      "required_total": 9,
+      "required_mapped": 9,
+      "required_unmapped": 0,
+      "unmapped_required_paths": [],
+      "static_required_total": 12,
+      "latent_required_total": 3,
+      "latent_required_paths": [
+        "Patient.communication.language",
+        "Patient.link.other",
+        "Patient.link.type"
+      ],
+      "requirement_manifest": [
+        {
+          "id": "Patient.extension",
+          "path": "Patient.extension",
+          "min": 4,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Patient.extension:bodyweight",
+          "path": "Patient.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "bodyweight"
+        },
+        {
+          "id": "Patient.extension:bodyheight",
+          "path": "Patient.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "bodyheight"
+        },
+        {
+          "id": "Patient.extension:federalState",
+          "path": "Patient.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "federalState"
+        },
+        {
+          "id": "Patient.extension:current",
+          "path": "Patient.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "current"
+        },
+        {
+          "id": "Patient.identifier",
+          "path": "Patient.identifier",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "profile-fixed",
+          "status": "covered"
+        },
+        {
+          "id": "Patient.gender",
+          "path": "Patient.gender",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Patient.birthDate",
+          "path": "Patient.birthDate",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Patient.maritalStatus",
+          "path": "Patient.maritalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Patient.communication.language",
+          "path": "Patient.communication.language",
+          "min": 1,
+          "max": "1",
+          "active": false,
+          "provider": "missing",
+          "status": "latent",
+          "inactive_optional_ancestors": [
+            "Patient.communication"
+          ]
+        },
+        {
+          "id": "Patient.link.other",
+          "path": "Patient.link.other",
+          "min": 1,
+          "max": "1",
+          "active": false,
+          "provider": "missing",
+          "status": "latent",
+          "inactive_optional_ancestors": [
+            "Patient.link"
+          ]
+        },
+        {
+          "id": "Patient.link.type",
+          "path": "Patient.link.type",
+          "min": 1,
+          "max": "1",
+          "active": false,
+          "provider": "missing",
+          "status": "latent",
+          "inactive_optional_ancestors": [
+            "Patient.link"
+          ]
+        }
+      ]
+    },
+    "anamnese-tumor": {
+      "resource_type": "Condition",
+      "required_total": 4,
+      "required_mapped": 2,
+      "required_unmapped": 2,
+      "unmapped_required_paths": [
+        "Condition.clinicalStatus",
+        "Condition.subject"
+      ],
+      "static_required_total": 4,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Condition.extension",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Condition.extension:existance",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "existance"
+        },
+        {
+          "id": "Condition.clinicalStatus",
+          "path": "Condition.clinicalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        },
+        {
+          "id": "Condition.subject",
+          "path": "Condition.subject",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    },
+    "anamnese-other-disease": {
+      "resource_type": "Condition",
+      "required_total": 4,
+      "required_mapped": 2,
+      "required_unmapped": 2,
+      "unmapped_required_paths": [
+        "Condition.clinicalStatus",
+        "Condition.subject"
+      ],
+      "static_required_total": 4,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Condition.extension",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Condition.extension:other",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "other"
+        },
+        {
+          "id": "Condition.clinicalStatus",
+          "path": "Condition.clinicalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        },
+        {
+          "id": "Condition.subject",
+          "path": "Condition.subject",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    },
+    "anamnese-bewegung": {
+      "resource_type": "Condition",
+      "required_total": 4,
+      "required_mapped": 2,
+      "required_unmapped": 2,
+      "unmapped_required_paths": [
+        "Condition.clinicalStatus",
+        "Condition.subject"
+      ],
+      "static_required_total": 4,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Condition.extension",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Condition.extension:activity",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "activity"
+        },
+        {
+          "id": "Condition.clinicalStatus",
+          "path": "Condition.clinicalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        },
+        {
+          "id": "Condition.subject",
+          "path": "Condition.subject",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    },
+    "anamnese-diabetes": {
+      "resource_type": "Condition",
+      "required_total": 4,
+      "required_mapped": 2,
+      "required_unmapped": 2,
+      "unmapped_required_paths": [
+        "Condition.clinicalStatus",
+        "Condition.subject"
+      ],
+      "static_required_total": 4,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Condition.extension",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Condition.extension:existance",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "existance"
+        },
+        {
+          "id": "Condition.clinicalStatus",
+          "path": "Condition.clinicalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        },
+        {
+          "id": "Condition.subject",
+          "path": "Condition.subject",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    },
+    "Fragebogen-KFDM-WAVES": {
+      "resource_type": "Questionnaire",
+      "required_total": 0,
+      "required_mapped": 0,
+      "required_unmapped": 0,
+      "unmapped_required_paths": [],
+      "static_required_total": 0,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": []
+    },
+    "anamnese-herzkreislauf": {
+      "resource_type": "Condition",
+      "required_total": 4,
+      "required_mapped": 2,
+      "required_unmapped": 2,
+      "unmapped_required_paths": [
+        "Condition.clinicalStatus",
+        "Condition.subject"
+      ],
+      "static_required_total": 4,
+      "latent_required_total": 0,
+      "latent_required_paths": [],
+      "requirement_manifest": [
+        {
+          "id": "Condition.extension",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "*",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered"
+        },
+        {
+          "id": "Condition.extension:existance",
+          "path": "Condition.extension",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "mapped",
+          "status": "covered",
+          "slice_name": "existance"
+        },
+        {
+          "id": "Condition.clinicalStatus",
+          "path": "Condition.clinicalStatus",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        },
+        {
+          "id": "Condition.subject",
+          "path": "Condition.subject",
+          "min": 1,
+          "max": "1",
+          "active": true,
+          "provider": "missing",
+          "status": "unmapped"
+        }
+      ]
+    }
+  }
+}

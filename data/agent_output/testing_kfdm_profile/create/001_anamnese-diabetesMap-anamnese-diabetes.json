@@ -1,0 +1,160 @@
+{
+  "resourceType": "StructureMap",
+  "id": "anamnese-diabetes-map",
+  "url": "http://example.org/StructureMap/anamnese-diabetes-map",
+  "name": "anamnese-diabetesMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-extension-existance",
+          "source": [
+            {
+              "context": "source",
+              "element": "diabetes",
+              "variable": "srcDiab"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtExistance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-existance",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExistance",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/yes-no-unknown-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-extension-value",
+              "source": [
+                {
+                  "context": "srcDiab"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExistance",
+                  "element": "valueCode",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "srcDiab"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "translate-clinical-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "srcCmp",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "srcCmp"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Source field for clinical status not resolved; using placeholder. Requires ConceptMap resolution."
+        },
+        {
+          "name": "TODO-resolve-reference-condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "srcSubj"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<condition.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

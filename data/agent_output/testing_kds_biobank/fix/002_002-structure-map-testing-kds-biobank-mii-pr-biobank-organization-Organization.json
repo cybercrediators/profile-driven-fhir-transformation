@@ -1,0 +1,587 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-organization-42cfd34d",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-mii-pr-biobank-organization",
+  "name": "002-structure-map-testing-kds-biobank-mii-pr-biobank-organization",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Organization",
+      "mode": "target",
+      "alias": "mii-pr-biobank-organization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-organization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Organization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "listMode": [
+                "share"
+              ],
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-contact-forschungskontakt",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "collate"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-purpose",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "element": "purpose",
+                  "variable": "vPurpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-purpose-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vPurpose",
+                      "element": "coding",
+                      "variable": "vCoding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-purpose-coding-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCoding",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/ContactType"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-purpose-coding-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCoding",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "RESEARCH"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-extension-rolle",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "contactRole",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "element": "extension",
+                  "variable": "vExtRolle",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-rolle-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtRolle",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/KontaktRolle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-extension-rolle-value",
+                  "source": [
+                    {
+                      "context": "src-role"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtRolle",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-role"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-name",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "element": "name",
+                  "variable": "vName",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-name-prefix",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactPrefix",
+                      "variable": "src-prefix"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "prefix",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-prefix"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-name-family",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactFamily",
+                      "variable": "src-family"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "family",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-family"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-name-given",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactGiven",
+                      "variable": "src-given"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "given",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-given"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "element": "telecom",
+                  "variable": "vTelecom",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-telecom-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactTelecomSystem",
+                      "variable": "src-tel-sys"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTelecom",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tel-sys"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-telecom-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactTelecomValue",
+                      "variable": "src-tel-val"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTelecom",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tel-val"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-address",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "element": "address",
+                  "variable": "vAddr",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-address-line",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressLine",
+                      "variable": "src-addr-line"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "line",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-addr-line"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-address-postalCode",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressPostalCode",
+                      "variable": "src-addr-pc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "postalCode",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-addr-pc"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-address-city",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressCity",
+                      "variable": "src-addr-city"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "city",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-addr-city"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findPartOf"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "partOf",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findPartOf"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

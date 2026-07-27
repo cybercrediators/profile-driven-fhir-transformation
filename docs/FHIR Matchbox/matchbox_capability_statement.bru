@@ -1,0 +1,40 @@
+meta {
+  name: matchbox_capability_statement
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080/matchboxv3/fhir/metadata
+  body: none
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+    "resourceType": "Parameters",
+    "parameter": [
+      {
+        "name": "source",
+        "resource": {
+          "resourceType": "Patient",
+          "id": "pat1",
+          "name": [ { "family": "Simpson", "given": [ "Homer" ] } ]
+        }
+      },
+      {
+        "name": "content",
+        "valueString": "map \"http://example.org/StructureMap/PatientToBasic\" = \"PatientToBasic\"\n\nuses \"http://hl7.org/fhir/StructureDefinition/Patient\" as source\nuses \"http://hl7.org/fhir/StructureDefinition/Basic\" as target\n\ngroup PatientToBasic(source src : Patient, target tgt : Basic) {\n  tgt.code.coding = create('Coding');\n  tgt.code.coding.system = \"http://example.org/codes\";\n  tgt.code.coding.code = \"PatientSummary\";\n  tgt.subject.reference = \"Patient/\" + src.id;\n}"
+      }
+    ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

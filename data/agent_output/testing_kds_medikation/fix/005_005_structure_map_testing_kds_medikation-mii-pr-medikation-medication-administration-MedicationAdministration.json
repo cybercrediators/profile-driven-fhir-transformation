@@ -1,0 +1,825 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-medikation-medication-administration-32aa5add",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-medikation-mii-pr-medikation-medication-administration",
+  "name": "005_structure_map_testing_kds_medikation-mii-pr-medikation-medication-administration",
+  "title": "Structure Map for testing_kds_medikation - mii-pr-medikation-medication-administration",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-medikation-medication-administration). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+      "mode": "target",
+      "alias": "mii-pr-medikation-medication-administration"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-medikation-medication-administration",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationAdministration",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration"
+        },
+        {
+          "name": "map-category-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CATEGORY",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-coding",
+              "source": [
+                {
+                  "context": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/medication-admin-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-category-79e82f3e"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for MedicationAdministration.category using http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-category-79e82f3e"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-context",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-context"
+            }
+          ],
+          "target": [
+            {
+              "element": "context"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.context> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "dosage",
+              "variable": "tgt-dosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-dose",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-dose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "element": "dose",
+                  "variable": "tgt-dose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.code | Type: [{'code': 'code'}] | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.system | Type: [{'code': 'uri'}] | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-unit",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_UNIT",
+                      "variable": "src-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "element": "unit",
+                      "variable": "tgt-unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.unit | Type: [{'code': 'string'}] | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.value | Type: [{'code': 'decimal'}] | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to MedicationAdministration.dosage.dose | Type: [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'MedicationAdministration.dosage.dose.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.dose.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.dose.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.dose.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.dose.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-rate",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-rate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "element": "rate",
+                  "variable": "tgt-rate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationAdministration.dosage.rate[x] | Type: [{'code': 'Ratio', 'type_structure': [{'path': 'MedicationAdministration.dosage.rate[x].denominator', 'id': 'Ratio.denominator', 'type': 'Quantity', 'description': 'The value of the denominator.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'MedicationAdministration.dosage.rate[x].denominator.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].denominator.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].denominator.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].denominator.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].denominator.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'path': 'MedicationAdministration.dosage.rate[x].numerator', 'id': 'Ratio.numerator', 'type': 'Quantity', 'description': 'The value of the numerator.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'MedicationAdministration.dosage.rate[x].numerator.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].numerator.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].numerator.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].numerator.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].numerator.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}]}, {'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'MedicationAdministration.dosage.rate[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.rate[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-route",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-route"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "element": "route",
+                  "variable": "tgt-route",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationAdministration.dosage.route | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'MedicationAdministration.dosage.route.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'MedicationAdministration.dosage.route.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.route.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.route.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.route.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.route.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'MedicationAdministration.dosage.route.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-site",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-site"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "element": "site",
+                  "variable": "tgt-site",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationAdministration.dosage.site | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'MedicationAdministration.dosage.site.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'MedicationAdministration.dosage.site.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.site.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.site.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.site.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'MedicationAdministration.dosage.site.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'MedicationAdministration.dosage.site.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.dosage | Type: BackboneElement | Cardinality: 0..1 | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "administrationEffective",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveDateTime",
+                  "variable": "tgt-effective-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "administrationEffective",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.effective[x] | Type: choice | Cardinality: 1..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-medication-CodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "medication",
+                  "variable": "tgt-medication-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "administrationMedicationText",
+                      "variable": "src-medication-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-CodeableConcept",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-medication-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.medication[x] | Type: choice | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "target": [
+            {
+              "element": "partOf"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.partOf> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-MedicationAdministration-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "target": [
+                {
+                  "element": "actor"
+                }
+              ],
+              "documentation": "Reference<MedicationAdministration.actor> → Practitioner — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-reasonCode-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-REASONCODE",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "reasonCode",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-reasonCode-coding",
+              "source": [
+                {
+                  "context": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reasonCode-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/reason-medication-given"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-reasonCode-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-reasonCode-75c06b8d"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for MedicationAdministration.reasonCode using http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-reasonCode-75c06b8d"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "target": [
+            {
+              "element": "reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.reasonReference> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-request",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-request"
+            }
+          ],
+          "target": [
+            {
+              "element": "request"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.request> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "administrationStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-e296970e"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for MedicationAdministration.status using http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-e296970e"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

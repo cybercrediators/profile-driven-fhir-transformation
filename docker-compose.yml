@@ -1,0 +1,93 @@
+services:
+
+  valkey:
+    image: valkey/valkey:8
+    restart: unless-stopped
+    volumes:
+      - valkey-data:/data
+    networks:
+      - fhir-net
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  matchbox:
+    image: europe-west6-docker.pkg.dev/ahdis-ch/ahdis/matchbox:latest
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # NOTE: set development mode for matchbox to enable direct resource upload when running
+      SPRING_APPLICATION_JSON: '{"matchbox":{"fhir":{"context":{"onlyOneEngine":true}}}}'
+    networks:
+      - fhir-net
+    healthcheck:
+      # check if matchbox is up (CapabilityStatement available)
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/matchboxv3/fhir/metadata > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 20
+      start_period: 120s
+
+  bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - .env          # additional env vars (e.g. for plugins etc.)
+    volumes:
+      - type: bind
+        source: ./projects
+        target: /app/projects
+      - type: bind
+        source: ./conf
+        target: /app/conf
+      - type: bind
+        source: ./data/resource_cache
+        target: /app/data/resource_cache
+      - bridge-socket:/bridge-socket
+    depends_on:
+      valkey:
+        condition: service_healthy
+      matchbox:
+        condition: service_healthy
+    networks:
+      - fhir-net
+
+  nifi:
+    build:
+      context: .
+      dockerfile: Dockerfile.nifi
+    profiles:
+      - nifi
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: ctsBtRBKHRAx69EqUghvvgEvjnaLjFEB
+      NIFI_WEB_HTTPS_PORT: "8443"
+    volumes:
+      - type: bind
+        source: ./nifi_connector.py
+        target: /opt/nifi/nifi-current/python_extensions/nifi_connector.py
+        read_only: true
+      - bridge-socket:/bridge-socket
+      - nifi-conf:/opt/nifi/nifi-current/conf
+    depends_on:
+      - bridge
+    networks:
+      - fhir-net
+
+
+volumes:
+  valkey-data:
+  bridge-socket:
+  nifi-conf:
+
+networks:
+  fhir-net:
+    driver: bridge

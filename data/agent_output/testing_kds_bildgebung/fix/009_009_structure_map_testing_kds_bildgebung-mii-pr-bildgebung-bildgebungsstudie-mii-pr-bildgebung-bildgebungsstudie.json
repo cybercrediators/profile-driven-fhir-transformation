@@ -1,0 +1,1863 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-bildgebungsstudie-6188c034",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-mii-pr-bildgebung-bildgebungsstudie",
+  "name": "009_structure_map_testing_kds_bildgebung-mii-pr-bildgebung-bildgebungsstudie",
+  "title": "Structure Map for testing_kds_bildgebung - mii-pr-bildgebung-bildgebungsstudie",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-bildgebungsstudie). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-bildgebungsstudie"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-bildgebungsstudie",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ImagingStudy",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "target": [
+            {
+              "element": "basedOn"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.basedOn> → CarePlan|ServiceRequest|Appointment|AppointmentResponse|Task — resolve via bundle assembler"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.description | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "target": [
+            {
+              "element": "encounter"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-c6deb0e2"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate studyStatus via ConceptMap for required status element"
+        },
+        {
+          "name": "mapStarted",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStarted",
+              "variable": "vStarted"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "started",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vStarted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapNumberOfSeries",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyNumberOfSeries",
+              "variable": "vNOSeries"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "numberOfSeries",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vNOSeries"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSubject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSubject"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "mapStudyStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-c6deb0e2"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapStudyStarted",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStarted",
+              "variable": "vStarted"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "started",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vStarted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapStudyNumberOfSeries",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyNumberOfSeries",
+              "variable": "vNumSeries",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "numberOfSeries",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vNumSeries"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSubject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSubject"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-SOURCE-for-series-uid",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSeriesUid"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "vSeries",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ImagingStudySeries"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-series-uid-placeholder",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSeriesUid"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSeries",
+                  "element": "uid",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-findSeriesUid"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-for-series-modality",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSeriesModality"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "vSeriesMod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ImagingStudySeries"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-series-modality-placeholder",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSeriesModality"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSeriesMod",
+                  "element": "modality",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-findSeriesModality"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-for-series-instance-uid",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findInstanceUid"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "vSeriesInst",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ImagingStudySeries"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-series-instance",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findInstanceUid"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSeriesInst",
+                  "element": "instance",
+                  "variable": "vInstance",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ImagingStudyInstance"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-instance-uid-placeholder",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findInstanceUid"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInstance",
+                      "element": "uid",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findInstanceUid"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-for-series-instance-sopClass",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSopClass"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "vSeriesInstSop",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ImagingStudySeries"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-series-instance-sopClass",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSopClass"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSeriesInstSop",
+                  "element": "instance",
+                  "variable": "vInstSop",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ImagingStudyInstance"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-instance-sopClass-placeholder",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSopClass"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInstSop",
+                      "element": "sopClass",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSopClass"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-for-series-performer-actor",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findPerformerActor"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "vSeriesPerf",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ImagingStudySeries"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-series-performer",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findPerformerActor"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSeriesPerf",
+                  "element": "performer",
+                  "variable": "vPerformer",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ImagingStudyPerformer"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-performer-actor-placeholder",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findPerformerActor"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vPerformer",
+                      "element": "actor",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findPerformerActor"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-modality-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-MODALITY",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modality",
+              "variable": "tgt-coding",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-modality-system",
+              "source": [
+                {
+                  "context": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-coding",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://dicom.nema.org/resources/ontology/DCM"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-modality-code",
+              "source": [
+                {
+                  "context": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-coding",
+                  "element": "code",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-modality-b7d4ad8f"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for ImagingStudy.modality using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-modality-b7d4ad8f"
+        },
+        {
+          "name": "map-numberOfInstances",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NUMBEROFINSTANCES",
+              "variable": "src-numberOfInstances"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "numberOfInstances",
+              "variable": "tgt-numberOfInstances",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-numberOfInstances"
+                },
+                {
+                  "valueString": "unsignedInt"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.numberOfInstances | Type: unsignedInt | Cardinality: 0..1"
+        },
+        {
+          "name": "map-numberOfSeries",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyNumberOfSeries",
+              "variable": "src-numberOfSeries"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "numberOfSeries",
+              "variable": "tgt-numberOfSeries",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-numberOfSeries"
+                },
+                {
+                  "valueString": "unsignedInt"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.numberOfSeries | Type: unsignedInt | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-procedureReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-procedureReference"
+            }
+          ],
+          "target": [
+            {
+              "element": "procedureReference"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.procedureReference> → Procedure — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "target": [
+            {
+              "element": "reasonReference"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.reasonReference> → Condition|Observation|Media|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "map-series",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-series"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "series",
+              "variable": "tgt-series",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-series",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-bodySite",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-bodySite"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "bodySite",
+                  "variable": "tgt-bodySite",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.bodySite | Type: [{'code': 'Coding', 'type_structure': [{'path': 'ImagingStudy.series.bodySite.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.bodySite.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.bodySite.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.bodySite.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.bodySite.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_DESCRIPTION",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.description | Type: [{'code': 'string'}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-extension-modalitaetCT",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETCT_SOURCE",
+                  "variable": "src-modalitaetCT"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetCT",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetCT",
+                  "source": [
+                    {
+                      "context": "src-modalitaetCT"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetCT",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct"
+                },
+                {
+                  "name": "set-extension-value-modalitaetCT",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetCT",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:CTDIvol', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'CTDIvol', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:CTDIvol.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:CTDIvol.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'CTDIvol', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:CTDIvol.value[x]', 'type': [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'Extension.extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'A fixed quantity (no comparator)', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.', 'children': [{'path': 'Extension.extension.value[x].code', 'id': 'Extension.extension:CTDIvol.value[x].code', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': … [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-ct] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-modalitaetMG-CR-DX",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETMG-CR-DX_SOURCE",
+                  "variable": "src-modalitaetMG-CR-DX"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetMG-CR-DX",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetMG-CR-DX",
+                  "source": [
+                    {
+                      "context": "src-modalitaetMG-CR-DX"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetMG-CR-DX",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mg-cr-dx"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mg-cr-dx"
+                },
+                {
+                  "name": "set-extension-value-modalitaetMG-CR-DX",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetMG-CR-DX",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mg-cr-dx | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:KVP', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'KVP', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:KVP.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:KVP.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'KVP', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:KVP.value[x]', 'type': [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'Extension.extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'A fixed quantity (no comparator)', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.', 'children': [{'path': 'Extension.extension.value[x].code', 'id': 'Extension.extension:KVP.value[x].code', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Coded … [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mg-cr-dx] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-modalitaetMR",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETMR_SOURCE",
+                  "variable": "src-modalitaetMR"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetMR",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetMR",
+                  "source": [
+                    {
+                      "context": "src-modalitaetMR"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetMR",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mr"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mr"
+                },
+                {
+                  "name": "set-extension-value-modalitaetMR",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetMR",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mr | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:magneticFieldStrength', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'magneticFieldStrength', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:magneticFieldStrength.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:magneticFieldStrength.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'magneticFieldStrength', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:magneticFieldStrength.value[x]', 'type': [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'Extension.extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'A fixed quantity (no comparator)', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.', 'children': [{'path': 'Extension.extension.value[x].code', 'id': 'Extension.extension:m… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-mr] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-modalitaetPT",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETPT_SOURCE",
+                  "variable": "src-modalitaetPT"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetPT",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetPT",
+                  "source": [
+                    {
+                      "context": "src-modalitaetPT"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetPT",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-pt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-pt"
+                },
+                {
+                  "name": "set-extension-value-modalitaetPT",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetPT",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-pt | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:radiopharmaceutical', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'radiopharmaceutical', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:radiopharmaceutical.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:radiopharmaceutical.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'radiopharmaceutical', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:radiopharmaceutical.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-pt] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-modalitaetNM",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETNM_SOURCE",
+                  "variable": "src-modalitaetNM"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetNM",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetNM",
+                  "source": [
+                    {
+                      "context": "src-modalitaetNM"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetNM",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-nm"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-nm"
+                },
+                {
+                  "name": "set-extension-value-modalitaetNM",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetNM",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-nm | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:radiopharmaceutical', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'radiopharmaceutical', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:radiopharmaceutical.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:radiopharmaceutical.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'radiopharmaceutical', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:radiopharmaceutical.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-nm] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-modalitaetUS",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-MODALITAETUS_SOURCE",
+                  "variable": "src-modalitaetUS"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-modalitaetUS",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-modalitaetUS",
+                  "source": [
+                    {
+                      "context": "src-modalitaetUS"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetUS",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-us"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-us"
+                },
+                {
+                  "name": "set-extension-value-modalitaetUS",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-modalitaetUS",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-us | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:transducerType', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'transducerType', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:transducerType.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:transducerType.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'transducerType', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:transducerType.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': F… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-modalitaet-us] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-kontrastmittel",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-KONTRASTMITTEL_SOURCE",
+                  "variable": "src-kontrastmittel"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-kontrastmittel",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-kontrastmittel",
+                  "source": [
+                    {
+                      "context": "src-kontrastmittel"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-kontrastmittel",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-kontrastmittel"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-kontrastmittel"
+                },
+                {
+                  "name": "set-extension-value-kontrastmittel",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-kontrastmittel",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-kontrastmittel | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': True, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:contrastBolus', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'contrastBolus', 'must_support': True, 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:contrastBolus.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:contrastBolus.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'contrastBolus', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:contrastBolus.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}]}, {'path': 'Extension.extension', 'id': 'Extension.extension:contrastBolusDetails', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'contrastBolusDetails', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:contrastBolusDetails.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:contrastBolusDetails.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'contrastBolusDetails', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:contrastBolusDetail… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-kontrastmittel] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-extension-schichtdicke",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO-MAP-SCHICHTDICKE_SOURCE",
+                  "variable": "src-schichtdicke"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "extension",
+                  "variable": "ext-schichtdicke",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-schichtdicke",
+                  "source": [
+                    {
+                      "context": "src-schichtdicke"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-schichtdicke",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke"
+                },
+                {
+                  "name": "set-extension-value-schichtdicke",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-schichtdicke",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueQuantity)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'A fixed quantity (no comparator)', 'is_required': True, 'fixed_value': [], 'options': [], 'must_support': True, 'comment': 'The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.', 'children': [{'path': 'Extension.value[x].code', 'id': 'Extension.value[x].code', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Coded form of the unit', 'is_required': False, 'fixed_value': 'mm', 'options': [], 'comment': 'The preferred system is UCUM, but SNOMED CT can also be used (for customary units) or ISO 4217 for currency.  The context of use may additionally require a code from a particular system.', 'children': []}, {'path': 'Extension.value[x].extension', 'id': 'Extension.value[x].extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [], 'slicing_type': 'value', 'discriminator': {'path': 'url', 'type': 'value'}, 'children': []}, {'path': 'Extension.value[x].id', 'id': 'Extension.value[x].id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for i… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-serie-schichtdicke] | Path: ImagingStudy.series.extension"
+            },
+            {
+              "name": "map-instance",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-instance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "instance",
+                  "variable": "tgt-instance",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-instance",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-InstanceDetails",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO-MAP-INSTANCEDETAILS_SOURCE",
+                      "variable": "src-InstanceDetails"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "element": "extension",
+                      "variable": "ext-InstanceDetails",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-InstanceDetails",
+                      "source": [
+                        {
+                          "context": "src-InstanceDetails"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-InstanceDetails",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-instanz-details"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-instanz-details"
+                    },
+                    {
+                      "name": "set-extension-value-InstanceDetails",
+                      "source": [
+                        {
+                          "context": "src-instance",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-InstanceDetails",
+                          "element": "value",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Extension"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueExtension)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-instanz-details | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:pixelSpacingX', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'pixelSpacingX', 'must_support': True, 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:pixelSpacingX.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:pixelSpacingX.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'pixelSpacingX', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:pixelSpacingX.value[x]', 'type': [{'code': 'Quantity', 'profile': ['http://hl7.org/fhir/StructureDefinition/SimpleQuantity'], 'type_structure': [{'path': 'Extension.extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'A fixed quantity (no comparator)', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'The context of use may frequently define what kind of quantity this is and therefore what kind of units can be used. The context of use may also restrict the values for the comparator.', 'children': [{'path': 'Extension.extension.value[x].code', 'id': 'Extension.extension:pixelSpacingX.value[x].code… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-ex-bildgebung-instanz-details] | Path: ImagingStudy.series.instance.extension"
+                },
+                {
+                  "name": "map-number",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO_MAP_NUMBER",
+                      "variable": "src-number"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "element": "number",
+                      "variable": "tgt-number",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-number"
+                        },
+                        {
+                          "valueString": "unsignedInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.number | Type: [{'code': 'unsignedInt'}] | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-sopClass",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "variable": "src-sopClass"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "element": "sopClass",
+                      "variable": "tgt-sopClass",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.sopClass | Type: [{'code': 'Coding', 'type_structure': [{'path': 'ImagingStudy.series.instance.sopClass.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.instance.sopClass.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.instance.sopClass.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.instance.sopClass.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.instance.sopClass.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-uid",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO_MAP_UID",
+                      "variable": "src-uid"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "element": "uid",
+                      "variable": "tgt-uid",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-uid"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.uid | Type: [{'code': 'id'}] | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.instance | Type: [{'code': 'BackboneElement'}] | Cardinality: 0..* | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-laterality",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-laterality"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "laterality",
+                  "variable": "tgt-laterality",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.laterality | Type: [{'code': 'Coding', 'type_structure': [{'path': 'ImagingStudy.series.laterality.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.laterality.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.laterality.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.laterality.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.laterality.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-modality",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-modality"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "modality",
+                  "variable": "tgt-modality",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.modality | Type: [{'code': 'Coding', 'type_structure': [{'path': 'ImagingStudy.series.modality.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.modality.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.modality.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.modality.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'ImagingStudy.series.modality.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+            },
+            {
+              "name": "map-number",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_NUMBER",
+                  "variable": "src-number"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "number",
+                  "variable": "tgt-number",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-number"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.number | Type: [{'code': 'unsignedInt'}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-numberOfInstances",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_NUMBEROFINSTANCES",
+                  "variable": "src-numberOfInstances"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "numberOfInstances",
+                  "variable": "tgt-numberOfInstances",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-numberOfInstances"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.numberOfInstances | Type: [{'code': 'unsignedInt'}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-performer",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-performer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "performer",
+                  "variable": "tgt-performer",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-performer",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-resolve-reference-ImagingStudy-actor",
+                  "source": [
+                    {
+                      "context": "src-performer",
+                      "variable": "src-actor"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "element": "actor"
+                    }
+                  ],
+                  "documentation": "Reference<ImagingStudy.series.performer.actor> → Device — resolve via bundle assembler"
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.performer | Type: [{'code': 'BackboneElement'}] | Cardinality: 0..* | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-started",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_STARTED",
+                  "variable": "src-started"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "started",
+                  "variable": "tgt-started",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-started"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.started | Type: [{'code': 'dateTime'}] | Cardinality: 0..1"
+            },
+            {
+              "name": "map-uid",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_UID",
+                  "variable": "src-uid"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "element": "uid",
+                  "variable": "tgt-uid",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-uid"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.uid | Type: [{'code': 'id'}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.series | Type: BackboneElement | Cardinality: 0..* | Complex type with 11 child elements"
+        },
+        {
+          "name": "map-started",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStarted",
+              "variable": "src-started"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "started",
+              "variable": "tgt-started",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-started"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.started | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-c6deb0e2"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for ImagingStudy.status using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-c6deb0e2"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

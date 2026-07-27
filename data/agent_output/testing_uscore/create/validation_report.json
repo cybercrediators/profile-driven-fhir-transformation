@@ -1,0 +1,138 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Patient.identifier is created internally but not exposed as an output variable that Observation map can reference for subject resolution"
+      ],
+      "improvements": [
+        "Add documentation comment specifying which identifier system/value combination Observations should use to link to Patient during bundle assembly",
+        "Consider exporting patientId and patientIdSystem as named variables at group level for cross-map visibility"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Patient.identifier is created internally but not exposed as an output variable that Observation map can reference for subject resolution"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 7,
+        "coverage": {
+          "mapped": 8,
+          "denominator": 8,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Patient.identifier is created internally but not exposed as an output variable that Observation map can reference for subject resolution": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Multiple modifierExtension rules use 'context: source' without specifying actual element paths - these will not pull data from source profile",
+        "Extension URL fields contain TODO placeholder strings (e.g., 'TODO-resolve-extension-url-*') which will create invalid Extension elements in production"
+      ],
+      "improvements": [
+        "Resolve or remove extension rules before deployment - current TODO values are not valid FHIR extension URLs",
+        "Observation.subject needs patient identifier context; consider adding source.elements for patient identification (matching Patient.map's patientIdSystem and patientId)",
+        "mapCategory.inner rules use 'context: source' without element - need actual source field for observation-category code"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Multiple modifierExtension rules use 'context: source' without specifying actual element paths - these will not pull data from source profile",
+          "Extension URL fields contain TODO placeholder strings (e.g., 'TODO-resolve-extension-url-*') which will create invalid Extension elements in production"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Multiple modifierExtension rules use 'context: source' without specifying actual element paths - these will not pull data from source profile": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Extension URL fields contain TODO placeholder strings (e.g., 'TODO-resolve-extension-url-*') which will create invalid Extension elements in production": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation"
+      ],
+      "severity": "warning",
+      "description": "Observation.subject reference cannot be resolved within StructureMap context; Patient identifier mapping exists but no mechanism to pass it to Observation map. Both maps use same source profile 'Sourcedefinition_testing_uscore' which contains patientId and patientIdSystem elements, but Observation.map does not reference them.",
+      "fix_recommendation": "Add bundle assembly documentation specifying that Observation.subject should be set to Patient.identifier.value + Patient.identifier.system during post-processing. Alternative: add patient identification source elements to Observation map with TODO-resolve-reference pattern consistent with Patient.identifier approach."
+    },
+    {
+      "affected_resources": [
+        "http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation"
+      ],
+      "severity": "warning",
+      "description": "Multiple extension rules (modifierExtension for who, origin, type, ctx) follow identical pattern but cannot be resolved from available source elements. All use empty 'context: source' without specifying element paths.",
+      "fix_recommendation": "Either remove these extension creation rules if not needed, or add actual source profile fields that map to these extension values with concrete URLs for extension definitions."
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation",
+      "rule_name": "TODO-resolve-reference-Observation-subject",
+      "target_element": "subject",
+      "candidate_map": "us-core-patient-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vPatientIdentifierValue",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "patientIdSystem variable from source"
+      }
+    },
+    {
+      "resource": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+      "rule_name": "TODO-resolve-reference-Patient-identifier-assigner",
+      "target_element": "assigner",
+      "candidate_map": null,
+      "resolution": null
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 2,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "2 unconditional / 0 demotion-reliant / 0 invalid (of 2)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

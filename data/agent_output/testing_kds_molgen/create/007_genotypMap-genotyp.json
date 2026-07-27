@@ -1,0 +1,1113 @@
+{
+  "resourceType": "StructureMap",
+  "id": "genotyp-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/genotyp-map",
+  "name": "genotypMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vReportStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vReportStatus"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-FOR-Category",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vCatTodo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required: Observation.category 2..1 CodeableConcept — source field unknown"
+        },
+        {
+          "name": "TODO-SOURCE-FOR-Code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vCodeTodo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required: Observation.code 1..1 CodeableConcept — source field unknown"
+        },
+        {
+          "name": "mapValue",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteValue",
+              "variable": "vVariantValue"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "vCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "varianteValue",
+                      "variable": "vCodeSrc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vCodeSrc"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "mapEffectiveModifierExtension-SampledData",
+          "source": [
+            {
+              "context": "source",
+              "element": "tmbValue",
+              "variable": "vTmbValue"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vModExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-SampledData",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vModExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-valueSampledData"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-SampledData-origin-inner-ext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vModExt",
+                  "element": "extension",
+                  "variable": "vInnerSampledData",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-SampledData-inner-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerSampledData",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/extension-valueSampledData"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-origin-extension-inner-ext",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerSampledData",
+                      "element": "extension",
+                      "variable": "vOrigExt",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-origin-extension-url",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vOrigExt",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/extension-valueSampledData-origin"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-origin-quantity-value",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "tmbValue",
+                          "variable": "vOrigQtyVal",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vOrigExt",
+                          "element": "valueDecimal",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "vOrigQtyVal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveModifierExtension-Signature",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteStatus",
+              "variable": "vVariantStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vSigExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-signature-extension-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSigExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-valueSignature"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-signature-inner-ext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSigExt",
+                  "element": "extension",
+                  "variable": "vInnerSignature",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-signature-inner-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerSignature",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/extension-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-signature-type",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerSignature",
+                      "element": "extension",
+                      "variable": "vTypeExt",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-type-extension-url",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vTypeExt",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/extension-valueSignature-type"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "map-signature-type-coding-inner-ext",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vTypeExt",
+                          "element": "extension",
+                          "variable": "vTypedCoding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Extension"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-typed-coding-url",
+                          "source": [
+                            {
+                              "context": "source"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "vTypedCoding",
+                              "element": "url",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://hl7.org/fhir/StructureDefinition/extension-coding"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-signature-type-system",
+                          "source": [
+                            {
+                              "context": "source"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "vTypedCoding",
+                              "element": "value[x]",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Coding"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveModifierExtension-UsageContext",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vReportStatus2"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vUseExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-usage-context-extension-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vUseExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-valueUsageContext"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-usage-context-inner-ext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vUseExt",
+                  "element": "extension",
+                  "variable": "vInnerUsageContext",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-usage-context-inner-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerUsageContext",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/extension-valueUsageContext"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-usage-context-code-inner-ext",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vInnerUsageContext",
+                      "element": "extension",
+                      "variable": "vUseExtValue",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-usage-context-code-url",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vUseExtValue",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/extension-coding"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-usage-context-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vUseExtValue",
+                          "element": "value[x]",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapReportConclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportConclusion",
+              "variable": "vReportConclusion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vConclusionExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-conclusion-extension-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vConclusionExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/empfohlene-massnahme"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-conclusion-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "reportConclusion",
+                  "variable": "vReportConclusionSrc"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vConclusionExt",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vReportConclusionSrc"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapRiskAssessment",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteStatus",
+              "variable": "vVariantStatus2"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vRiskExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-risk-extension-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vRiskExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/risk-assessment-einflussfaktor"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-risk-extension-inner-ext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vRiskExt",
+                  "element": "extension",
+                  "variable": "vRiskInner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-risk-inner-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vRiskInner",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/extension-CodeableConcept"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-risk-extension-coding-inner-ext",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vRiskInner",
+                      "element": "extension",
+                      "variable": "vRiskExtValue",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-risk-extvalue-url",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vRiskExtValue",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/extension-coding"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "map-risk-extension-coding-value-x",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vRiskExtValue",
+                          "element": "value[x]",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "CodeableConcept"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapTmbData",
+          "source": [
+            {
+              "context": "source",
+              "element": "tmbValue",
+              "variable": "vTmbVal"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vTmbExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-tmb-extension-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vTmbExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-ex-molgen-familiare-linie"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-tmb-inner-ext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vTmbExt",
+                  "element": "extension",
+                  "variable": "vTmbInner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-tmb-inner-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTmbInner",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/extension-Quantity"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-tmb-value-inner-ext",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTmbInner",
+                      "element": "extension",
+                      "variable": "vTmbExtValue",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-tmb-extvalue-url",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vTmbExtValue",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/extension-quantity-value"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-tmb-value-condition",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "tmbValue",
+                          "variable": "vTmbExtVal",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vTmbExtValue",
+                          "element": "valueDecimal",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "vTmbExtVal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-SOURCE-FOR-Component",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required: Observation.component 0..* — source field unknown"
+        }
+      ]
+    }
+  ]
+}

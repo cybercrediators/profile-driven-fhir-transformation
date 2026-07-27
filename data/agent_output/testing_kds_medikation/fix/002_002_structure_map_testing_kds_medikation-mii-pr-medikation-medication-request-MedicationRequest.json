@@ -1,0 +1,564 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-medikation-medication-request-8cdfa226",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-medikation-mii-pr-medikation-medication-request",
+  "name": "002_structure_map_testing_kds_medikation-mii-pr-medikation-medication-request",
+  "title": "Structure Map for testing_kds_medikation - mii-pr-medikation-medication-request",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-medikation-medication-request). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+      "mode": "target",
+      "alias": "mii-pr-medikation-medication-request"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-medikation-medication-request",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AUTHOREDON",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.authoredOn | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "target": [
+            {
+              "element": "basedOn"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.basedOn> → CarePlan — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosageInstruction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosageInstruction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "dosageInstruction",
+              "variable": "tgt-dosageInstruction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosageInstruction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.timing | Type: Timing"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dosageInstruction | Type: Dosage | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "target": [
+            {
+              "element": "encounter"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-intent-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestIntent",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-intent-672bc90e"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for MedicationRequest.intent using http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-intent-672bc90e"
+        },
+        {
+          "name": "map-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-medication-CodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "medication",
+                  "variable": "tgt-medication-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "requestMedicationText",
+                      "variable": "src-medication-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-CodeableConcept",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-medication-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.medication[x] | Type: choice | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-priorPrescription",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-priorPrescription"
+            }
+          ],
+          "target": [
+            {
+              "element": "priorPrescription"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.priorPrescription> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-REASONCODE",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "reasonCode",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-reasonCode-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reasonCode-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-reasonCode-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for MedicationRequest.reasonCode (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "target": [
+            {
+              "element": "reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.reasonReference> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-requester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-requester"
+            }
+          ],
+          "target": [
+            {
+              "element": "requester"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.requester> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-3c4b8fee"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for MedicationRequest.status using http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-3c4b8fee"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-substitution",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-substitution"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "substitution",
+              "variable": "tgt-substitution",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-allowed",
+              "source": [
+                {
+                  "context": "src-substitution",
+                  "element": "requestSubstitutionAllowed",
+                  "variable": "src-allowed"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-substitution",
+                  "element": "allowed",
+                  "variable": "tgt-allowed",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-allowed"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.substitution.allowed[x] | Type: [{'code': 'boolean'}, {'code': 'CodeableConcept', 'type_structure': [{'path': 'MedicationRequest.substitution.allowed[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'MedicationRequest.substitution.allowed[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'MedicationRequest.substitution.allowed[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'MedicationRequest.substitution.allowed[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'MedicationRequest.substitution.allowed[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'MedicationRequest.substitution.allowed[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'MedicationRequest.substitution.allowed[x].text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.substitution | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        }
+      ]
+    }
+  ]
+}

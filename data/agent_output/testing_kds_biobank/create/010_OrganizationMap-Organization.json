@@ -1,0 +1,400 @@
+{
+  "resourceType": "StructureMap",
+  "id": "organization-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/Organization-map",
+  "name": "OrganizationMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Organization",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformOrganization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapOrganizationName",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "vOrgName"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vOrgName"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "createContact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "vSrc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "contact",
+              "variable": "vContact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapContactRoleExtension",
+              "source": [
+                {
+                  "context": "vSrc",
+                  "element": "contactRole",
+                  "variable": "vRole"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContact",
+                  "element": "extension",
+                  "variable": "vExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setRolleExtensionUrl",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/KontaktRolle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setRolleValue",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactRole",
+                      "variable": "vRoleVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExt",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vRoleVal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "createContactHumanName",
+              "source": [
+                {
+                  "context": "vSrc",
+                  "element": "contactFamily"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContact",
+                  "element": "name",
+                  "variable": "vName",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "mapPrefix",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactPrefix",
+                      "variable": "vPref"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "prefix",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vPref"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapFamily",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactFamily",
+                      "variable": "vFam"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "family",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vFam"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapGiven",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactGiven",
+                      "variable": "vGiven"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vName",
+                      "element": "given",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vGiven"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "createContactAddress",
+              "source": [
+                {
+                  "context": "vSrc",
+                  "element": "contactAddressLine"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContact",
+                  "element": "address",
+                  "variable": "vAddr",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "mapAddressLine",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactAddressLine",
+                      "variable": "vALine"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "line",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vALine"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapAddressCity",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactAddressCity",
+                      "variable": "vACity"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "city",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vACity"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapAddressPostalCode",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactAddressPostalCode",
+                      "variable": "vAPCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vAddr",
+                      "element": "postalCode",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vAPCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "createContactTelecom",
+              "source": [
+                {
+                  "context": "vSrc",
+                  "element": "contactTelecomValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContact",
+                  "element": "telecom",
+                  "variable": "vTelecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "mapTelecomSystem",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactTelecomSystem",
+                      "variable": "vTSys"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTelecom",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vTSys"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapTelecomValue",
+                  "source": [
+                    {
+                      "context": "vSrc",
+                      "element": "contactTelecomValue",
+                      "variable": "vTVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTelecom",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vTVal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

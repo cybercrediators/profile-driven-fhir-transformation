@@ -1,0 +1,248 @@
+{
+  "resourceType": "StructureMap",
+  "id": "us-core-patient-map",
+  "url": "http://hl7.org/fhir/us/core/StructureMap/us-core-patient-map",
+  "name": "us-core-patientMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-uscore",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_uscore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "vGender",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vGender"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-uscore/ConceptMap/cm-gender-77ac516f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcAlias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "vIdent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setIdentSystem",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patientIdSystem",
+                  "variable": "vSys"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vIdent",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vSys"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setIdentValue",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patientId",
+                  "variable": "vVal"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vIdent",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vVal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapName",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcAlias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "vName",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setNameFamily",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "familyName",
+                  "variable": "vFamily"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vName",
+                  "element": "family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vFamily"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setNameGiven",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "givenName",
+                  "variable": "vGiven"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vName",
+                  "element": "given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vGiven"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapBirthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "vBd"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vBd"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Patient-identifier-assigner",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "assigner",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Patient.identifier-assigner> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

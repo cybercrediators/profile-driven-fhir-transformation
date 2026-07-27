@@ -1,0 +1,99 @@
+meta {
+  name: upload_structuredefinition copy
+  type: http
+  seq: 12
+}
+
+post {
+  url: http://localhost:8080/matchboxv3/fhir/StructureDefinition
+  body: json
+  auth: inherit
+}
+
+headers {
+  accept: application/fhir+json
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+    "resourceType": "StructureDefinition",
+    "id": "source-definition-testing-minimal",
+    "url": "http://example.org/StructureDefinition/source-definition-testing-minimal",
+    "name": "Sourcedefinitiontesting_minimal",
+    "status": "draft",
+    "kind": "logical",
+    "abstract": false,
+    "type": "Sourcedefinitiontesting_minimal",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Element",
+    "derivation": "specialization",
+    "snapshot": {
+      "element": [
+        {
+          "id": "Sourcedefinitiontesting_minimal",
+          "path": "Sourcedefinitiontesting_minimal",
+          "min": 0,
+          "max": "*",
+          "type": [
+            {
+              "code": "Element"
+            }
+          ]
+        },
+        {
+          "id": "Sourcedefinitiontesting_minimal.givenName",
+          "path": "Sourcedefinitiontesting_minimal.givenName",
+          "min": 0,
+          "max": "1",
+          "type": [
+            {
+              "code": "string"
+            }
+          ]
+        },
+        {
+          "id": "Sourcedefinitiontesting_minimal.familyName",
+          "path": "Sourcedefinitiontesting_minimal.familyName",
+          "min": 0,
+          "max": "1",
+          "type": [
+            {
+              "code": "string"
+            }
+          ]
+        },
+        {
+          "id": "Sourcedefinitiontesting_minimal.pid",
+          "path": "Sourcedefinitiontesting_minimal.pid",
+          "min": 0,
+          "max": "1",
+          "type": [
+            {
+              "code": "integer"
+            }
+          ]
+        },
+        {
+          "id": "Sourcedefinitiontesting_minimal.birthDate",
+          "path": "Sourcedefinitiontesting_minimal.birthDate",
+          "min": 0,
+          "max": "1",
+          "type": [
+            {
+              "code": "string"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
+body:file {
+  file: @file(/home/lutzseba/Desktop/repo/fsh-nifi-bridge/data/testing5.tgz)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

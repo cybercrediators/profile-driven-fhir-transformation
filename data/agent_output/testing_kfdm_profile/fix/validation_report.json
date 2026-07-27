@@ -1,0 +1,514 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-raucher",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Observation.code and Observation.component.code use identical rule name 'map-code-copy' causing ambiguity",
+        "Rule 'map-code-copy' targets both Observation.code (with system http://snomed.info/sct) and Observation.component.code (with system http://loinc.org) in separate rules with same source element placeholder"
+      ],
+      "improvements": [
+        "Use distinct rule names for code mapping vs component code mapping to avoid confusion",
+        "Resolve TODO-SOURCE-FOR-CODE with actual source field name from input profile"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Observation.code and Observation.component.code use identical rule name 'map-code-copy' causing ambiguity",
+          "Rule 'map-code-copy' targets both Observation.code (with system http://snomed.info/sct) and Observation.component.code (with system http://loinc.org) in separate rules with same source element placeholder"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 5,
+          "percent": 60.0,
+          "unmapped": [
+            "component.code",
+            "component.value[x]"
+          ]
+        },
+        "finding_classes": {
+          "Observation.code and Observation.component.code use identical rule name 'map-code-copy' causing ambiguity": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Rule 'map-code-copy' targets both Observation.code (with system http://snomed.info/sct) and Observation.component.code (with system http://loinc.org) in separate rules with same source element placeholder": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/WAVESPatient",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Rule 'map-type-translate' references source element 'TODO-SOURCE-FOR-TYPE' which has no mapped counterpart"
+      ],
+      "improvements": [
+        "Patient.link.type appears to be optional - consider removing TODO placeholder rule if not required",
+        "Consider adding identifier.system to Patient.identifier for cross-resource reference consistency"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'map-type-translate' references source element 'TODO-SOURCE-FOR-TYPE' which has no mapped counterpart"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 9,
+          "percent": 66.7,
+          "unmapped": [
+            "communication.language",
+            "link.other",
+            "link.type"
+          ]
+        },
+        "finding_classes": {
+          "Rule 'map-type-translate' references source element 'TODO-SOURCE-FOR-TYPE' which has no mapped counterpart": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-other-disease",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "ClinicalStatus uses translate transform with TODO-SOURCE-FOR-CLINICALSTATUS placeholder",
+        "Reference to Condition.subject remains as TODO placeholder"
+      ],
+      "improvements": [
+        "Subject reference should resolve to WAVESPatient.identifier.value for cross-resource integrity"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "ClinicalStatus uses translate transform with TODO-SOURCE-FOR-CLINICALSTATUS placeholder",
+          "Reference to Condition.subject remains as TODO placeholder"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "ClinicalStatus uses translate transform with TODO-SOURCE-FOR-CLINICALSTATUS placeholder": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Reference to Condition.subject remains as TODO placeholder": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-bewegung",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "ClinicalStatus uses hardcoded placeholder 'TODO-active' instead of translate or source value mapping"
+      ],
+      "improvements": [
+        "Subject reference should resolve to WAVESPatient.identifier.value for cross-resource integrity",
+        "ClinicalStatus should use consistent approach across all Condition profiles (translate vs hardcoded)"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "ClinicalStatus uses hardcoded placeholder 'TODO-active' instead of translate or source value mapping"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "ClinicalStatus uses hardcoded placeholder 'TODO-active' instead of translate or source value mapping": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-diabetes",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "ClinicalStatus uses explicit TODO-manually-set-clinicalStatus-code placeholder"
+      ],
+      "improvements": [
+        "Subject reference should resolve to WAVESPatient.identifier.value for cross-resource integrity",
+        "Consider using same clinical status approach as other Condition profiles"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "ClinicalStatus uses explicit TODO-manually-set-clinicalStatus-code placeholder"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "ClinicalStatus uses explicit TODO-manually-set-clinicalStatus-code placeholder": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/Questionnaire/Fragebogen-KFDM-WAVES",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Status reports 0/0 fields mapped with 100% coverage which appears inconsistent"
+      ],
+      "improvements": [],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Status reports 0/0 fields mapped with 100% coverage which appears inconsistent"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 13,
+        "coverage": {
+          "mapped": 18,
+          "denominator": 18,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Status reports 0/0 fields mapped with 100% coverage which appears inconsistent": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-tumor",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)",
+        "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)",
+        "Matchbox engine ($validate): Constraint failed: dom-6: 'A resource should have narrative for robust management' (defined in http://hl7.org/fhir/StructureDefinition/DomainResource) (Best Practice Recommendation) (at Condition)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 2,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 5,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate): Constraint failed: dom-6: 'A resource should have narrative for robust management' (defined in http://hl7.org/fhir/StructureDefinition/DomainResource) (Best Practice Recommendation) (at Condition)": {
+            "class": "engine_warning",
+            "severity": "warning",
+            "code": "invariant"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)",
+          "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-tumor|0.1.0) (at Condition)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-herzkreislauf",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)",
+        "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)",
+        "Matchbox engine ($validate): Constraint failed: dom-6: 'A resource should have narrative for robust management' (defined in http://hl7.org/fhir/StructureDefinition/DomainResource) (Best Practice Recommendation) (at Condition)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 2,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate): Constraint failed: dom-6: 'A resource should have narrative for robust management' (defined in http://hl7.org/fhir/StructureDefinition/DomainResource) (Best Practice Recommendation) (at Condition)": {
+            "class": "engine_warning",
+            "severity": "warning",
+            "code": "invariant"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Condition.clinicalStatus: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)",
+          "Matchbox engine ($validate, pending bundle assembly): Condition.subject: minimum required = 1, but only found 0 (from http://example.org/StructureDefinition/anamnese-herzkreislauf|0.1.0) (at Condition)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-tumor",
+        "http://example.org/StructureDefinition/WAVESPatient"
+      ],
+      "severity": "warning",
+      "description": "Condition.subject references remain as TODO placeholder but WAVESPatient map exists with identifier mapping",
+      "fix_recommendation": "Resolve all Condition subject references to target Patient.identifier.value in WAVESPatient"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-other-disease",
+        "http://example.org/StructureDefinition/WAVESPatient"
+      ],
+      "severity": "warning",
+      "description": "Condition.subject references remain as TODO placeholder but WAVESPatient map exists with identifier mapping",
+      "fix_recommendation": "Resolve all Condition subject references to target Patient.identifier.value in WAVESPatient"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-bewegung",
+        "http://example.org/StructureDefinition/WAVESPatient"
+      ],
+      "severity": "warning",
+      "description": "Condition.subject references remain as TODO placeholder but WAVESPatient map exists with identifier mapping",
+      "fix_recommendation": "Resolve all Condition subject references to target Patient.identifier.value in WAVESPatient"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-diabetes",
+        "http://example.org/StructureDefinition/WAVESPatient"
+      ],
+      "severity": "warning",
+      "description": "Condition.subject references remain as TODO placeholder but WAVESPatient map exists with identifier mapping",
+      "fix_recommendation": "Resolve all Condition subject references to target Patient.identifier.value in WAVESPatient"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-herzkreislauf",
+        "http://example.org/StructureDefinition/WAVESPatient"
+      ],
+      "severity": "warning",
+      "description": "Condition.subject references remain as TODO placeholder but WAVESPatient map exists with identifier mapping",
+      "fix_recommendation": "Resolve all Condition subject references to target Patient.identifier.value in WAVESPatient"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-tumor",
+        "http://example.org/StructureDefinition/anamnese-other-disease",
+        "http://example.org/StructureDefinition/anamnese-bewegung",
+        "http://example.org/StructureDefinition/anamnese-diabetes",
+        "http://example.org/StructureDefinition/anamnese-herzkreislauf"
+      ],
+      "severity": "info",
+      "description": "All Condition profiles use different approaches for clinicalStatus mapping - some translate, some hardcoded evaluation, some TODO placeholder",
+      "fix_recommendation": "Standardize clinicalStatus handling across all Condition maps using consistent transform approach"
+    },
+    {
+      "affected_resources": [
+        "http://example.org/StructureDefinition/anamnese-tumor",
+        "http://example.org/StructureDefinition/anamnese-other-disease",
+        "http://example.org/StructureDefinition/anamnese-bewegung",
+        "http://example.org/StructureDefinition/anamnese-diabetes"
+      ],
+      "severity": "info",
+      "description": "Repeated pattern in Condition maps for setting meta-profile, extension handling, and verificationStatus - no group extends relationships defined",
+      "fix_recommendation": "Create reusable named groups that can be extended by each Condition profile to reduce code duplication"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-tumor",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-other-disease",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-bewegung",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-diabetes",
+      "rule_name": "TODO-resolve-reference-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-herzkreislauf",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-raucher",
+      "rule_name": "TODO-resolve-reference-Observation-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "http://example.org/StructureDefinition/anamnese-raucher",
+      "rule_name": "TODO-resolve-reference-Observation-performer",
+      "target_element": "performer",
+      "candidate_map": "sm-WAVESPatient-c68af19c",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "$this",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": null
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 6,
+    "demotion_reliant": 2,
+    "invalid": 0,
+    "headline": "6 unconditional / 2 demotion-reliant / 0 invalid (of 8)",
+    "demotion_reliant_resources": [
+      "http://example.org/StructureDefinition/anamnese-tumor",
+      "http://example.org/StructureDefinition/anamnese-herzkreislauf"
+    ],
+    "invalid_resources": []
+  }
+}

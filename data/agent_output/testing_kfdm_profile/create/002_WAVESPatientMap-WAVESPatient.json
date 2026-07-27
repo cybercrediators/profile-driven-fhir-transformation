@@ -1,0 +1,460 @@
+{
+  "resourceType": "StructureMap",
+  "id": "wavespatient-map",
+  "url": "http://example.org/StructureMap/WAVESPatient-map",
+  "name": "WAVESPatientMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapBirthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "geburtsdatum",
+              "variable": "vGeburtsdatum"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vGeburtsdatum"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "geschlecht",
+              "variable": "vGeschlecht",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vGeschlecht"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-gender-77ac516f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "record_id",
+              "variable": "vRecordId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "vIdent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setIdentValue",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vIdent",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vRecordId"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setIdentSystem",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vIdent",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/sid/patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapExtensionBodyheight",
+          "source": [
+            {
+              "context": "source",
+              "element": "groesse",
+              "variable": "vGrosse",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtBodyheight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setExtensionUrlBodyheight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtBodyheight",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-height-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setExtensionValueBodyheight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtBodyheight",
+                  "element": "valueInteger",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vGrosse"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapExtensionBodyweight",
+          "source": [
+            {
+              "context": "source",
+              "element": "gewicht",
+              "variable": "vGewicht",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtBodyweight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setExtensionUrlBodyweight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtBodyweight",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-weight-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setExtensionValueBodyweight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtBodyweight",
+                  "element": "valueDecimal",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vGewicht"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapExtensionFederalState",
+          "source": [
+            {
+              "context": "source",
+              "element": "bundesland",
+              "variable": "vBundesland"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtFederalState",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setExtensionUrlFederalState",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtFederalState",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/country-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setExtensionValueFederalState",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtFederalState",
+                  "element": "valueCode",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vBundesland"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Source code may not be in required ValueSet http://example.org/ValueSet/federal-state-vs - data-side issue"
+            }
+          ]
+        },
+        {
+          "name": "mapExtensionCurrent",
+          "source": [
+            {
+              "context": "source",
+              "element": "aktbefinden",
+              "variable": "vAktbefinden"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtCurrent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setExtensionUrlCurrent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtCurrent",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/current-condition-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "setExtensionValueCurrent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtCurrent",
+                  "element": "valueCode",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vAktbefinden"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Source code may not be in required ValueSet http://example.org/ValueSet/current-condition-vs - data-side issue"
+            }
+          ]
+        },
+        {
+          "name": "mapMaritalStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "familienstand",
+              "variable": "vFamilienstand",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "maritalStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vFamilienstand"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-maritalStatus-aca56a7a"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

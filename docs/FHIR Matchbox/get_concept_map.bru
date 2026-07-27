@@ -1,0 +1,75 @@
+meta {
+  name: get_concept_map
+  type: http
+  seq: 13
+}
+
+get {
+  url: http://localhost:8080/matchboxv3/fhir/ConceptMap?url=http://example.org/ConceptMap/cm-gender
+  body: none
+  auth: inherit
+}
+
+params:query {
+  url: http://example.org/ConceptMap/cm-gender
+}
+
+headers {
+  accept: application/fhir+json
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+    "resourceType": "StructureDefinition",
+    "id": "TLeft",
+    "extension": [
+      {
+        "url": "http://hl7.org/fhir/StructureDefinition/elementdefinition-namespace",
+        "valueUri": "http://hl7.org/fhir/tutorial"
+      }
+    ],
+    "url": "http://hl7.org/fhir/StructureDefinition/tutorial-left-1",
+    "name": "TLeft",
+    "status": "draft",
+    "fhirVersion": "4.0.1",
+    "kind": "logical",
+    "abstract": true,
+    "type": "TLeft",
+    "baseDefinition": "http://hl7.org/fhir/StructureDefinition/Base",
+    "derivation": "specialization",
+    "differential": {
+      "element": [
+        {
+          "id": "TLeft",
+          "path": "TLeft",
+          "definition": "TLeft definition",
+          "min": 1,
+          "max": "1"
+        },
+        {
+          "id": "TLeft.a",
+          "path": "TLeft.a",
+          "definition": "TLeft definition",
+          "min": 1,
+          "max": "1",
+          "type": [
+            {
+              "code": "string"
+            }
+          ]
+        }
+      ]
+    }
+  }
+  
+}
+
+body:file {
+  file: @file(/home/lutzseba/Desktop/repo/fsh-nifi-bridge/data/testing5.tgz)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,0 +1,128 @@
+{
+  "resourceType": "StructureMap",
+  "id": "medicationrequest-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureMap/MedicationRequest-map",
+  "name": "MedicationRequestMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationRequest",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformMedicationRequest",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestStatus",
+              "variable": "vReqStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vReqStatus"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapIntent",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestIntent",
+              "variable": "vReqIntent",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vReqIntent"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapMedicationText",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestMedicationText"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medication",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "valueString"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

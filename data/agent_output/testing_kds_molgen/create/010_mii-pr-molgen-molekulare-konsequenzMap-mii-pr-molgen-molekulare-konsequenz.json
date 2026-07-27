@@ -1,0 +1,737 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-molgen-molekulare-konsequenz-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/mii-pr-molgen-molekulare-konsequenz-map",
+  "name": "mii-pr-molgen-molekulare-konsequenzMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vStatusSrc",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatusSrc"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-derivedFrom",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "derivedFrom",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.derivedFrom> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-effective-modifier-extension-sampled-data-origin",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcEffectiveExt"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffective",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-effective-modifier-extension-sampled-data-origin-ext",
+              "source": [
+                {
+                  "context": "srcEffectiveExt"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffective",
+                  "element": "modifier",
+                  "variable": "vEffModExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-eff-mod-ext-url-sampled-data",
+                  "source": [
+                    {
+                      "context": "srcEffectiveExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSampledData"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-sampled-data-origin-ext-inner",
+                  "source": [
+                    {
+                      "context": "srcEffectiveExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffModExt",
+                      "element": "extension",
+                      "variable": "vSampledDataInner",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-sampled-data-inner-url",
+                      "source": [
+                        {
+                          "context": "srcEffectiveExt"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vSampledDataInner",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-extension-url-valueSampledData"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-sampled-data-origin-value",
+                      "source": [
+                        {
+                          "context": "srcEffectiveExt",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vSampledDataInner",
+                          "element": "valueQuantity",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-vEffModExt-url-fix",
+                  "source": [
+                    {
+                      "context": "srcEffectiveExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSampledData"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-effective-modifier-extension-signature-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcSigExt"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffectiveSig",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-sig-modifier-extension",
+              "source": [
+                {
+                  "context": "srcSigExt"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffectiveSig",
+                  "element": "modifier",
+                  "variable": "vEffSigModExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-sig-mod-ext-url-signature",
+                  "source": [
+                    {
+                      "context": "srcSigExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffSigModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-signature-inner-ext-type",
+                  "source": [
+                    {
+                      "context": "srcSigExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffSigModExt",
+                      "element": "extension",
+                      "variable": "vSigInnerType",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-sig-inner-type-url",
+                      "source": [
+                        {
+                          "context": "srcSigExt"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vSigInnerType",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-extension-url-type"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-sig-inner-type-coding-value",
+                      "source": [
+                        {
+                          "context": "srcSigExt",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vSigInnerType",
+                          "element": "valueCoding",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-vEffSigModExt-url-fix",
+                  "source": [
+                    {
+                      "context": "srcSigExt"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffSigModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-who",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcSigWho"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffectiveWho",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-who-modifier-extension",
+              "source": [
+                {
+                  "context": "srcSigWho"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffectiveWho",
+                  "element": "modifier",
+                  "variable": "vEffWhoModExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-who-mod-ext-url-signature-who",
+                  "source": [
+                    {
+                      "context": "srcSigWho"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffWhoModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-sig-who-inner-ext-ref",
+                  "source": [
+                    {
+                      "context": "srcSigWho"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffWhoModExt",
+                      "element": "extension",
+                      "variable": "vWhoInnerRef",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-who-inner-ref-url",
+                      "source": [
+                        {
+                          "context": "srcSigWho"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vWhoInnerRef",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-extension-url-who"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-who-inner-ref-value-reference",
+                      "source": [
+                        {
+                          "context": "srcSigWho",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vWhoInnerRef",
+                          "element": "valueReference",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-vEffWhoModExt-url-fix",
+                  "source": [
+                    {
+                      "context": "srcSigWho"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffWhoModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.who> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-effective-modifier-extension-usage-context-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcUseCtx"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffectiveUseCtx",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-use-ctx-modifier-extension",
+              "source": [
+                {
+                  "context": "srcUseCtx"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffectiveUseCtx",
+                  "element": "modifier",
+                  "variable": "vEffUseCtxModExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-use-ctx-mod-ext-url-usage-context",
+                  "source": [
+                    {
+                      "context": "srcUseCtx"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffUseCtxModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueUsageContext"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-usage-context-inner-ext-code",
+                  "source": [
+                    {
+                      "context": "srcUseCtx"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffUseCtxModExt",
+                      "element": "extension",
+                      "variable": "vUseCtxInnerCode",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-use-ctx-inner-code-url",
+                      "source": [
+                        {
+                          "context": "srcUseCtx"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vUseCtxInnerCode",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-extension-url-code"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-use-ctx-inner-coding-value",
+                      "source": [
+                        {
+                          "context": "srcUseCtx",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vUseCtxInnerCode",
+                          "element": "valueCoding",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-vEffUseCtxModExt-url-fix",
+                  "source": [
+                    {
+                      "context": "srcUseCtx"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vEffUseCtxModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueUsageContext"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "resourceType": "StructureMap",
+  "id": "patientpseudonymisiert-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureMap/PatientPseudonymisiert-map",
+  "name": "PatientPseudonymisiertMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-person",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_person",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapIdentifier",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "vIdent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setIdentValueFromPatientId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patientId",
+                  "variable": "vPid"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vIdent",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vPid"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "vGen",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vGen"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-person/ConceptMap/cm-gender-14fc1b65"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapBirthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "vBD"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "vBD"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Transform table specified 'copy', but source type is string and target is date. Using cast to ensure valid FHIR date value."
+        }
+      ]
+    }
+  ]
+}

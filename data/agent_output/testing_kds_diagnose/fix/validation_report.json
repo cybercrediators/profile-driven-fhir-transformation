@@ -1,0 +1,92 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "onset[x] choice element has three parallel mapping rules (dateTime, Age, Period) that will all execute when source onsetDateTime exists - only one should be selected based on data content",
+        "note field creates Annotation structure but no transformation rules populate text/author/time/content from src-note variable"
+      ],
+      "improvements": [
+        "Add conditional logic to onset mapping to select appropriate choice type (dateTime vs Age vs Period) based on source data format",
+        "Complete note mapping with actual content extraction rules for Annotation.text field",
+        "Validate ConceptMap URLs used in clinicalStatus and verificationStatus translations exist and contain necessary mappings before deployment"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "onset[x] choice element has three parallel mapping rules (dateTime, Age, Period) that will all execute when source onsetDateTime exists - only one should be selected based on data content",
+          "note field creates Annotation structure but no transformation rules populate text/author/time/content from src-note variable"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 7,
+          "denominator": 8,
+          "percent": 87.5,
+          "unmapped": [
+            "code.text"
+          ]
+        },
+        "finding_classes": {
+          "onset[x] choice element has three parallel mapping rules (dateTime, Age, Period) that will all execute when source onsetDateTime exists - only one should be selected based on data content": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "note field creates Annotation structure but no transformation rules populate text/author/time/content from src-note variable": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose",
+      "rule_name": "TODO-resolve-reference-Condition-encounter",
+      "target_element": "encounter",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "src-encounter",
+        "target_identifier_path": "reference",
+        "identifier_system": null,
+        "notes": "No Encounter profile available in input - placeholder must remain unresolved"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureDefinition/Diagnose",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "src-subject",
+        "target_identifier_path": "reference",
+        "identifier_system": null,
+        "notes": "No Patient/Group profile available in input - placeholder must remain unresolved per Static Check Results"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 1,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "1 unconditional / 0 demotion-reliant / 0 invalid (of 1)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

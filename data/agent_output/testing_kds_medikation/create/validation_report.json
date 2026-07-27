@@ -1,0 +1,400 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "PZN coding system placeholder 'TODO-system' should be replaced with actual value (e.g., http://fhir.de/CodeSystem/bfarm/pzn)",
+        "Medication.assigner reference placeholder remains unresolved - no candidate profile provided in input"
+      ],
+      "improvements": [
+        "Extract medication CodeableConcept creation into a reusable named group since it's referenced by multiple resources",
+        "Consider mapping ingredient.item.identifier with system to enable consistent cross-resource identification"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "PZN coding system placeholder 'TODO-system' should be replaced with actual value (e.g., http://fhir.de/CodeSystem/bfarm/pzn)",
+          "Medication.assigner reference placeholder remains unresolved - no candidate profile provided in input"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 6,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "PZN coding system placeholder 'TODO-system' should be replaced with actual value (e.g., http://fhir.de/CodeSystem/bfarm/pzn)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Medication.assigner reference placeholder remains unresolved - no candidate profile provided in input": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Rule 'TODO-resolve-reference-MedicationAdministration-medication' targets incorrect element: medicationReference should be medication[x] per FHIR R4 MedicationAdministration specification"
+      ],
+      "warnings": [
+        "Status mapping uses direct copy without ConceptMap translation - differs from MedicationStatement approach",
+        "Subject and medication placeholders use generic TODO-findSource pattern - lacks specific identifier reference path"
+      ],
+      "improvements": [
+        "Align status transformation approach with MedicationStatement (use translate transform) for consistency",
+        "Use medication CodeableConcept text-only mapping consistently or implement full code-based identification across all resources"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'TODO-resolve-reference-MedicationAdministration-medication' targets incorrect element: medicationReference should be medication[x] per FHIR R4 MedicationAdministration specification",
+          "Status mapping uses direct copy without ConceptMap translation - differs from MedicationStatement approach",
+          "Subject and medication placeholders use generic TODO-findSource pattern - lacks specific identifier reference path"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 5,
+          "percent": 80.0,
+          "unmapped": [
+            "medication[x].text"
+          ]
+        },
+        "finding_classes": {
+          "Rule 'TODO-resolve-reference-MedicationAdministration-medication' targets incorrect element: medicationReference should be medication[x] per FHIR R4 MedicationAdministration specification": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Status mapping uses direct copy without ConceptMap translation - differs from MedicationStatement approach": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Subject and medication placeholders use generic TODO-findSource pattern - lacks specific identifier reference path": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "medication[x] mapped as valueString while MedicationAdministration and MedicationStatement use CodeableConcept - semantic inconsistency",
+        "Subject reference placeholder remains unresolved"
+      ],
+      "improvements": [
+        "Convert medication mapping from valueString to CodeableConcept for consistency with other resources",
+        "Consider reusing the medication creation pattern from MedicationAdministration or Statement"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "medication[x] mapped as valueString while MedicationAdministration and MedicationStatement use CodeableConcept - semantic inconsistency",
+          "Subject reference placeholder remains unresolved"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 4,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 6,
+          "percent": 50.0,
+          "unmapped": [
+            "medication[x]",
+            "medication[x].text",
+            "substitution.allowed[x]"
+          ]
+        },
+        "finding_classes": {
+          "medication[x] mapped as valueString while MedicationAdministration and MedicationStatement use CodeableConcept - semantic inconsistency": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Subject reference placeholder remains unresolved": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform target.status = translate(vStatus, 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc', 'code') on Rule \"MedicationStatementMap|TransformMedicationStatement|mapStatus\": Unable to find ConceptMap 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc'"
+      ],
+      "warnings": [
+        "Two TODO placeholders for medication and subject references that could potentially be consolidated into a single reusable group",
+        "Subject reference uses generic TODO-findSource pattern without specific identifier path"
+      ],
+      "improvements": [
+        "Status translation should use the same ConceptMap URL pattern as medikationsliste map (cm-mode-75f575e7 or cm-status-a262bf53) for system-wide consistency",
+        "Consider extracting medication CodeableConcept creation into shared named group used by Administration, Request, and Statement"
+      ],
+      "residual_summary": {
+        "action_needed": [
+          "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform target.status = translate(vStatus, 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc', 'code') on Rule \"MedicationStatementMap|TransformMedicationStatement|mapStatus\": Unable to find ConceptMap 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc'"
+        ],
+        "known_gap": [],
+        "advisory": [
+          "Two TODO placeholders for medication and subject references that could potentially be consolidated into a single reusable group",
+          "Subject reference uses generic TODO-findSource pattern without specific identifier path"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 2,
+          "denominator": 5,
+          "percent": 40.0,
+          "unmapped": [
+            "effective[x]",
+            "medication[x]",
+            "medication[x].text"
+          ]
+        },
+        "finding_classes": {
+          "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform target.status = translate(vStatus, 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc', 'code') on Rule \"MedicationStatementMap|TransformMedicationStatement|mapStatus\": Unable to find ConceptMap 'http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc'": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "processing"
+          },
+          "Two TODO placeholders for medication and subject references that could potentially be consolidated into a single reusable group": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Subject reference uses generic TODO-findSource pattern without specific identifier path": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): List.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)",
+        "Matchbox engine ($validate, no-source gap): List.mode: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)",
+        "Matchbox engine ($validate, pending bundle assembly): List.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): List.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)",
+          "Matchbox engine ($validate, no-source gap): List.mode: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 1,
+        "mapped_target_leaves": 3,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): List.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): List.mode: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): List.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): List.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)",
+          "Matchbox engine ($validate, no-source gap): List.mode: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)",
+          "Matchbox engine ($validate, pending bundle assembly): List.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste|2026.0.1) (at List)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+      ],
+      "severity": "error",
+      "description": "Medication identification is inconsistent across resources: Medication uses PZN coding with TODO-system placeholder, while Administration and Statement use text-only CodeableConcepts, and Request uses valueString instead of CodeableConcept entirely",
+      "fix_recommendation": "Standardize medication representation to CodeableConcept with PZN coding system (http://fhir.de/CodeSystem/bfarm/pzn) across all four resource types"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+      ],
+      "severity": "warning",
+      "description": "Subject reference patterns use identical TODO-findSource placeholder but lack consistent identifier system specification. All three maps would benefit from a shared patient resolution pattern.",
+      "fix_recommendation": "Create reusable named group for subject resolution that includes proper identifier value and system extraction, referenced by all resource-type-specific maps"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+      ],
+      "severity": "warning",
+      "description": "Status transformation is inconsistent: MedicationAdministration uses direct copy transform while MedicationStatement uses translate with ConceptMap. The medikationsliste map digest shows available status ConceptMaps (cm-status-a262bf53).",
+      "fix_recommendation": "Update MedicationAdministration status mapping to use translate transform with the same ConceptMap pattern as MedicationStatement"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+      "rule_name": "TODO-resolve-reference-MedicationAdministration-medication",
+      "target_element": "medication[x]",
+      "candidate_map": "MedicationMap",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vPzn",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pzn"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement",
+      "rule_name": "TODO-resolve-reference-MedicationStatement-medication",
+      "target_element": "medication[x]",
+      "candidate_map": "MedicationMap",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vPzn",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pzn"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest",
+      "rule_name": "TODO-resolve-reference-MedicationRequest-subject",
+      "target_element": "subject",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "copy_placeholder",
+        "source_variable": "vPatientId",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pkv"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+      "rule_name": "TODO-resolve-reference-MedicationAdministration-subject",
+      "target_element": "subject",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "copy_placeholder",
+        "source_variable": "vPatientId",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pkv"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement",
+      "rule_name": "TODO-resolve-reference-MedicationStatement-subject",
+      "target_element": "subject",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "copy_placeholder",
+        "source_variable": "vPatientId",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pkv"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication",
+      "rule_name": "set-coding-system",
+      "target_element": "vCoding.system",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "copy_literal",
+        "source_variable": null,
+        "target_identifier_path": "coding[0].system",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/pzn"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication",
+      "rule_name": "TODO-resolve-reference-Medication-assigner",
+      "target_element": "vIdent.assigner",
+      "candidate_map": null,
+      "resolution": {
+        "transform": "copy_placeholder",
+        "source_variable": "vPractitionerId",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://fhir.de/CodeSystem/bfarm/san"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+    ],
+    "all_valid": false,
+    "deterministically_forced": [
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+    ]
+  },
+  "validity_summary": {
+    "unconditionally_valid": 2,
+    "demotion_reliant": 1,
+    "invalid": 2,
+    "headline": "2 unconditional / 1 demotion-reliant / 2 invalid (of 5)",
+    "demotion_reliant_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/medikationsliste"
+    ],
+    "invalid_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationAdministration",
+      "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationStatement"
+    ]
+  }
+}

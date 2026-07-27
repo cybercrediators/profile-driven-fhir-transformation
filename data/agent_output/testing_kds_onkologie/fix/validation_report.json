@@ -1,0 +1,256 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-befund",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Media mapping creates BackboneElement without child elements mapped - may result in empty media entries"
+      ],
+      "improvements": [
+        "Reference placeholders for encounter, specimen, link, and subject correctly remain as TODO due to missing input profiles"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Media mapping creates BackboneElement without child elements mapped - may result in empty media entries"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 5,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Media mapping creates BackboneElement without child elements mapped - may result in empty media entries": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Extension URL 'ReferenzPrimaerdiagnose' should use full canonical URI instead of relative name for consistency with other extensions (e.g., morphology-behavior-icdo3)",
+        "map-onset rule creates three paths (dateTime, Age, Period) from same source element without conditional logic to determine which path applies based on source data type"
+      ],
+      "improvements": [
+        "extension:occurredFollowing should reference Condition resources (primaertumor or fruehere-tumorerkrankung) - currently has TODO value source",
+        "Multiple extension value sources remain as TODO-VALUE-SOURCE placeholders that need actual source field mappings"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Extension URL 'ReferenzPrimaerdiagnose' should use full canonical URI instead of relative name for consistency with other extensions (e.g., morphology-behavior-icdo3)",
+          "map-onset rule creates three paths (dateTime, Age, Period) from same source element without conditional logic to determine which path applies based on source data type"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 15,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 5,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Extension URL 'ReferenzPrimaerdiagnose' should use full canonical URI instead of relative name for consistency with other extensions (e.g., morphology-behavior-icdo3)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "map-onset rule creates three paths (dateTime, Age, Period) from same source element without conditional logic to determine which path applies based on source data type": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fruehere-tumorerkrankung",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Multiple extension value sources (bodySite, clinicalStatus, morphology-behavior-icdo3, assertedDate) remain as TODO placeholders requiring source field mappings"
+      ],
+      "improvements": [
+        "Extension bodySite mapping references element 'TODO-SOURCE-FOR-BODYSITE' - should map to actual source field from kds_onkologie definition",
+        "Consider adding occurredFollowing extension reference to link back to primary tumor Condition when applicable"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Multiple extension value sources (bodySite, clinicalStatus, morphology-behavior-icdo3, assertedDate) remain as TODO placeholders requiring source field mappings"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 17,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Multiple extension value sources (bodySite, clinicalStatus, morphology-behavior-icdo3, assertedDate) remain as TODO placeholders requiring source field mappings": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Only 33% of required fields mapped - significant field coverage gap compared to other resource profiles",
+        "Dosage mapping only includes timing child element without mapping other standard dosage fields"
+      ],
+      "improvements": [
+        "reasonReference TODO placeholder should be resolved to reference Condition resources (primaertumor or fruehere-tumorerkrankung) that are available in input - unlike subject/informationSource which lack Patient profiles",
+        "Multiple extension value sources and core fields (category, dateAsserted, reasonCode, dosage details) have TODO placeholders needing source field mappings"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Only 33% of required fields mapped - significant field coverage gap compared to other resource profiles",
+          "Dosage mapping only includes timing child element without mapping other standard dosage fields"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 9,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 6,
+          "percent": 66.7,
+          "unmapped": [
+            "medication[x]",
+            "medication[x].text"
+          ]
+        },
+        "finding_classes": {
+          "Only 33% of required fields mapped - significant field coverage gap compared to other resource profiles": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Dosage mapping only includes timing child element without mapping other standard dosage fields": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fruehere-tumorerkrankung"
+      ],
+      "severity": "warning",
+      "description": "Inconsistent ConceptMap identifiers used for clinicalStatus translations: primaertumor uses cm-clinicalStatus-ce519496 while fruehere-tumorerkrankung uses cm-clinicalStatus-db46ac08. Same semantic concept should use same ConceptMap.",
+      "fix_recommendation": "Align both Condition maps to use the same ConceptMap URL for clinicalStatus translation (either cm-clinicalStatus-ce519496 or cm-clinicalStatus-db46ac08) to ensure consistent FHIR terminology mapping"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fruehere-tumorerkrankung"
+      ],
+      "severity": "info",
+      "description": "Inconsistent ConceptMap identifiers used for verificationStatus translations: primaertumor uses cm-verificationStatus-0a3b1317 while fruehere-tumorerkrankung uses cm-verificationStatus-7aedebda. Same semantic concept should use same ConceptMap.",
+      "fix_recommendation": "Align both Condition maps to use the same ConceptMap URL for verificationStatus translation"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor"
+      ],
+      "severity": "warning",
+      "description": "MedicationStatement.reasonReference references Condition type which has available maps in input (primaertumor/fruehere-tumorerkrankung), but remains as TODO placeholder unlike other condition-referencing fields that correctly reference existing profiles",
+      "fix_recommendation": "Resolve MedicationStatement reasonReference to map to one of the available Condition resources by connecting source variable to appropriate target identifier path"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-fruehere-tumorerkrankung"
+      ],
+      "severity": "info",
+      "description": "Condition extension:occurredFollowing in primaertumor should reference another Condition (fruehere-tumorerkrankung) to establish tumor disease history relationship, but source field is marked as TODO-VALUE-SOURCE",
+      "fix_recommendation": "Map occurredFollowing extension value to reference the appropriate previous tumor diagnosis Condition resource identifier"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation",
+      "rule_name": "TODO-resolve-reference-MedicationStatement-reasonReference",
+      "target_element": "reasonReference",
+      "candidate_map": "sm-mii-pr-onko-diagnose-primaertumor-49b9d26f",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "src-reasonReference",
+        "target_identifier_path": "id",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-systemische-therapie-medikation",
+      "rule_name": "TODO-resolve-reference-MedicationStatement-reasonReference",
+      "target_element": "reasonReference",
+      "candidate_map": "sm-mii-pr-onko-fruehere-tumorerkrankung-b6fbaecf",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "src-reasonReference",
+        "target_identifier_path": "id",
+        "identifier_system": null
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureDefinition/mii-pr-onko-diagnose-primaertumor",
+      "rule_name": "map-extension-occurredFollowing",
+      "target_element": "extension:occurredFollowing.valueReference",
+      "candidate_map": "sm-mii-pr-onko-fruehere-tumorerkrankung-b6fbaecf",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "src-occurredFollowing",
+        "target_identifier_path": "id",
+        "identifier_system": null
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 4,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "4 unconditional / 0 demotion-reliant / 0 invalid (of 4)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

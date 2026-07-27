@@ -1,0 +1,574 @@
+{
+  "resourceType": "StructureMap",
+  "id": "specimencore-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/SpecimenCore-map",
+  "name": "SpecimenCoreMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Specimen",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformSpecimen",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Specimen",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-2d9386a6"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "variable": "vType",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vType",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "specimenTypeCode",
+                      "variable": "vCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-type-system"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-collection",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collection",
+              "variable": "vCollection",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-collection-collected",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "specimenCollected",
+                  "variable": "vCollected"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "collected",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vCollected"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-collection-quantity-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "quantity",
+                  "variable": "vQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-collection.quantity.system-collection.quantity.system",
+                  "documentation": "Inject profile-fixed value for collection.quantity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vQuantity",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-bodySite-coding-system-TODO",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "bodySite",
+                  "variable": "vBodySite",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Required field Specimen.collection.bodySite.coding.system has no source mapping - TODO placeholder for nested structure"
+            },
+            {
+              "name": "map-assigner-reference-TODO",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "collector",
+                  "variable": "vCollector",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Reference<Specimen.collection.collector.identifier.assigner> -> Resource — resolve via bundle assembler"
+            },
+            {
+              "name": "map-bodiesite-coding-system-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "bodySite",
+                  "variable": "vBodySite2",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: bodySite.coding.system nested rule - requires source mapping"
+            },
+            {
+              "name": "map-bodiesite-coding-code-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "bodySite",
+                  "variable": "vBodySite3",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: bodySite.coding.code nested rule - requires source mapping"
+            },
+            {
+              "name": "map-quantity-code-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "quantity",
+                  "variable": "vQuantityCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: collection.quantity.code nested rule - requires source mapping"
+            },
+            {
+              "name": "map-quantity-unit-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "quantity",
+                  "variable": "vQuantityUnit",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: collection.quantity.unit nested rule - requires source mapping"
+            },
+            {
+              "name": "map-quantity-value-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "quantity",
+                  "variable": "vQuantityValue",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: collection.quantity.value nested rule - requires source mapping"
+            },
+            {
+              "name": "map-assigner-id-todo-parent",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "collector",
+                  "variable": "vCollectorId",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "TODO: collection.collector.identifier.assigner nested rule - requires source mapping"
+            }
+          ]
+        },
+        {
+          "name": "TODO-findSource-bodySite-coding-code",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "bodySite",
+              "variable": "vBodySiteRoot",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Specimen.collection.bodySite.coding.code has no source mapping - TODO placeholder"
+        },
+        {
+          "name": "TODO-findSource-bodySite-coding-system",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "bodySite",
+              "variable": "vBodySiteSystem",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Specimen.collection.bodySite.coding.system has no source mapping - TODO placeholder"
+        },
+        {
+          "name": "TODO-findSource-collection-quantity-code",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "quantity",
+              "variable": "vQuantityCodeRoot",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Specimen.collection.quantity.code has no source mapping - TODO placeholder"
+        },
+        {
+          "name": "TODO-findSource-collection-quantity-unit",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "quantity",
+              "variable": "vQuantityUnitRoot",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Specimen.collection.quantity.unit has no source mapping - TODO placeholder"
+        },
+        {
+          "name": "TODO-findSource-collection-quantity-value",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "quantity",
+              "variable": "vQuantityValueRoot",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Specimen.collection.quantity.value has no source mapping - TODO placeholder"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-assigner",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collector",
+              "variable": "vCollectorAssigner",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.assigner> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+{
+  "resourceType": "StructureMap",
+  "id": "anamnese-herzkreislauf-map",
+  "url": "http://example.org/StructureMap/anamnese-herzkreislauf-map",
+  "name": "anamneseHerzkreislaufMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-clinical-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueString": "active"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field - no source data available, using default 'active' from condition-clinical ValueSet"
+        },
+        {
+          "name": "map-existence-extension",
+          "source": [
+            {
+              "context": "source",
+              "element": "herzkreislauferkrankung",
+              "variable": "vExist"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtExist",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-existence",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExist",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/yes-no-unknown-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-existence-value-code",
+              "source": [
+                {
+                  "context": "vExist"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExist",
+                  "element": "valueCode",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vExist"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Source string cast to code type per yes-no-unknown-extension definition requiring valueCode"
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-extension-other-requirements",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "Condition.extension requires 1..* extensions - source data for additional extensions not available"
+        }
+      ]
+    }
+  ]
+}

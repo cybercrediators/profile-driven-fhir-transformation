@@ -1,0 +1,1808 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-person-patient-89137f04",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-person-mii-pr-person-patient",
+  "name": "004_structure_map_testing_kds_person-mii-pr-person-patient",
+  "title": "Structure Map for testing_kds_person - mii-pr-person-patient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-person-patient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-person",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "mii-pr-person-patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-person-patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_person",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient"
+        },
+        {
+          "name": "map-address-Strassenanschrift",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "address",
+              "variable": "tgt-address-Strassenanschrift",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-address-Strassenanschrift-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address-Strassenanschrift",
+                  "element": "type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "both"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-address-Strassenanschrift-city",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "city",
+                  "variable": "src-address-Strassenanschrift-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address-Strassenanschrift",
+                  "element": "city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-address-Strassenanschrift-city"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-address-Strassenanschrift-postalCode",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "postalCode",
+                  "variable": "src-address-Strassenanschrift-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address-Strassenanschrift",
+                  "element": "postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-address-Strassenanschrift-postalCode"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice Strassenanschrift of Patient.address (type Address)"
+        },
+        {
+          "name": "map-extension-Stadtteil",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-STADTTEIL_SOURCE",
+              "variable": "src-Stadtteil"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Stadtteil",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Stadtteil",
+              "source": [
+                {
+                  "context": "src-Stadtteil"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Stadtteil",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Stadtteil"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Stadtteil"
+            },
+            {
+              "name": "set-extension-value-Stadtteil",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Stadtteil",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Stadtteil | Type: Extension | Path: Patient.address:Stadtteil"
+        },
+        {
+          "name": "map-extension-Stadtteil",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-STADTTEIL_SOURCE",
+              "variable": "src-Stadtteil"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Stadtteil",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Stadtteil",
+              "source": [
+                {
+                  "context": "src-Stadtteil"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Stadtteil",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Stadtteil"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Stadtteil"
+            },
+            {
+              "name": "set-extension-value-Stadtteil",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Stadtteil",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Stadtteil | Type: Extension | Path: Patient.address:Stadtteil"
+        },
+        {
+          "name": "map-extension-gemeindeschluessel",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GEMEINDESCHLUESSEL_SOURCE",
+              "variable": "src-gemeindeschluessel"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-gemeindeschluessel",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-gemeindeschluessel",
+              "source": [
+                {
+                  "context": "src-gemeindeschluessel"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-gemeindeschluessel",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "gemeindeschluessel"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to gemeindeschluessel"
+            },
+            {
+              "name": "set-extension-value-gemeindeschluessel",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-gemeindeschluessel",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: gemeindeschluessel | Type: Extension | Path: Patient.address:gemeindeschluessel"
+        },
+        {
+          "name": "map-extension-gemeindeschluessel",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GEMEINDESCHLUESSEL_SOURCE",
+              "variable": "src-gemeindeschluessel"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-gemeindeschluessel",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-gemeindeschluessel",
+              "source": [
+                {
+                  "context": "src-gemeindeschluessel"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-gemeindeschluessel",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "gemeindeschluessel"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to gemeindeschluessel"
+            },
+            {
+              "name": "set-extension-value-gemeindeschluessel",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-gemeindeschluessel",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: gemeindeschluessel | Type: Extension | Path: Patient.address:gemeindeschluessel"
+        },
+        {
+          "name": "map-extension-Strasse",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-STRASSE_SOURCE",
+              "variable": "src-Strasse"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Strasse",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Strasse",
+              "source": [
+                {
+                  "context": "src-Strasse"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Strasse",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Strasse"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Strasse"
+            },
+            {
+              "name": "set-extension-value-Strasse",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Strasse",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Strasse | Type: Extension | Path: Patient.address:Strasse"
+        },
+        {
+          "name": "map-extension-Hausnummer",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HAUSNUMMER_SOURCE",
+              "variable": "src-Hausnummer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Hausnummer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Hausnummer",
+              "source": [
+                {
+                  "context": "src-Hausnummer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Hausnummer",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Hausnummer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Hausnummer"
+            },
+            {
+              "name": "set-extension-value-Hausnummer",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Hausnummer",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Hausnummer | Type: Extension | Path: Patient.address:Hausnummer"
+        },
+        {
+          "name": "map-extension-Adresszusatz",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ADRESSZUSATZ_SOURCE",
+              "variable": "src-Adresszusatz"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Adresszusatz",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Adresszusatz",
+              "source": [
+                {
+                  "context": "src-Adresszusatz"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Adresszusatz",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Adresszusatz"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Adresszusatz"
+            },
+            {
+              "name": "set-extension-value-Adresszusatz",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Adresszusatz",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Adresszusatz | Type: Extension | Path: Patient.address:Adresszusatz"
+        },
+        {
+          "name": "map-extension-Postfach",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-POSTFACH_SOURCE",
+              "variable": "src-Postfach"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-Postfach",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Postfach",
+              "source": [
+                {
+                  "context": "src-Postfach"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Postfach",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "Postfach"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to Postfach"
+            },
+            {
+              "name": "set-extension-value-Postfach",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Postfach",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: Postfach | Type: Extension | Path: Patient.address:Postfach"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-data-absent-reason",
+              "source": [
+                {
+                  "context": "src-birthDate",
+                  "element": "TODO-MAP-DATA-ABSENT-REASON_SOURCE",
+                  "variable": "src-data-absent-reason"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-birthDate",
+                  "element": "extension",
+                  "variable": "ext-data-absent-reason",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-data-absent-reason",
+                  "source": [
+                    {
+                      "context": "src-data-absent-reason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-data-absent-reason",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO_EXTENSION_URL"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to TODO_EXTENSION_URL"
+                },
+                {
+                  "name": "set-extension-value-data-absent-reason",
+                  "source": [
+                    {
+                      "context": "src-birthDate",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-data-absent-reason",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: TODO_EXTENSION_URL | Type: [{'code': 'Extension', 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Patient.birthDate.extension"
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.communication | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-deceased",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-deceased"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-deceased-boolean",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_DECEASED",
+                  "variable": "src-deceased"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "deceasedBoolean",
+                  "variable": "tgt-deceased-boolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-deceased"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-deceased-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_DECEASED",
+                  "variable": "src-deceased"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "deceasedDateTime",
+                  "variable": "tgt-deceased-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-deceased"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.deceased[x] | Type: choice | Cardinality: 0..1 | Choice types: boolean, dateTime"
+        },
+        {
+          "name": "map-gender-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-person/ConceptMap/cm-gender-14fc1b65"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Patient.gender using http://example.org/StructureMap/source-definition-testing-kds-person/ConceptMap/cm-gender-14fc1b65"
+        },
+        {
+          "name": "map-identifier-pid",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier-pid",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-pid-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-pid",
+                  "element": "type",
+                  "variable": "tgt-identifier-pid-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-pid-type-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-pid-type",
+                      "element": "coding",
+                      "variable": "tgt-identifier-pid-type-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-pid-type-coding-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-pid-type-coding",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-pid-type-coding-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-pid-type-coding",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "MR"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-pid-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patientId",
+                  "variable": "src-identifier-pid-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-pid",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-pid-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice pid of Patient.identifier (type Identifier)"
+        },
+        {
+          "name": "map-link",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-link"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "link",
+              "variable": "tgt-link",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-link",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Patient-other",
+              "source": [
+                {
+                  "context": "src-link",
+                  "variable": "src-other"
+                }
+              ],
+              "target": [
+                {
+                  "element": "other"
+                }
+              ],
+              "documentation": "Reference<Patient.link.other> → Patient|RelatedPerson — resolve via bundle assembler"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-link",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.link.type | Type: [{'code': 'code'}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.link | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-name-name",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "tgt-name-name",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-name-name-use",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name-name",
+                  "element": "use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "official"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-name-name-family",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "familyName",
+                  "variable": "src-name-name-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name-name",
+                  "element": "family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-name-name-family"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-name-name-given",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "givenName",
+                  "variable": "src-name-name-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name-name",
+                  "element": "given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-name-name-given"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice name of Patient.name (type HumanName)"
+        },
+        {
+          "name": "map-extension-namenszusatz",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NAMENSZUSATZ_SOURCE",
+              "variable": "src-namenszusatz"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-namenszusatz",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-namenszusatz",
+              "source": [
+                {
+                  "context": "src-namenszusatz"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-namenszusatz",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "namenszusatz"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to namenszusatz"
+            },
+            {
+              "name": "set-extension-value-namenszusatz",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-namenszusatz",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: namenszusatz | Type: Extension | Path: Patient.name:namenszusatz"
+        },
+        {
+          "name": "map-extension-nachname",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NACHNAME_SOURCE",
+              "variable": "src-nachname"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-nachname",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nachname",
+              "source": [
+                {
+                  "context": "src-nachname"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nachname",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "nachname"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to nachname"
+            },
+            {
+              "name": "set-extension-value-nachname",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nachname",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: nachname | Type: Extension | Path: Patient.name:nachname"
+        },
+        {
+          "name": "map-extension-vorsatzwort",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VORSATZWORT_SOURCE",
+              "variable": "src-vorsatzwort"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-vorsatzwort",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-vorsatzwort",
+              "source": [
+                {
+                  "context": "src-vorsatzwort"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vorsatzwort",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "vorsatzwort"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to vorsatzwort"
+            },
+            {
+              "name": "set-extension-value-vorsatzwort",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vorsatzwort",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: vorsatzwort | Type: Extension | Path: Patient.name:vorsatzwort"
+        },
+        {
+          "name": "map-extension-namenszusatz",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NAMENSZUSATZ_SOURCE",
+              "variable": "src-namenszusatz"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-namenszusatz",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-namenszusatz",
+              "source": [
+                {
+                  "context": "src-namenszusatz"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-namenszusatz",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "namenszusatz"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to namenszusatz"
+            },
+            {
+              "name": "set-extension-value-namenszusatz",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-namenszusatz",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: namenszusatz | Type: Extension | Path: Patient.name:namenszusatz"
+        },
+        {
+          "name": "map-extension-nachname",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NACHNAME_SOURCE",
+              "variable": "src-nachname"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-nachname",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nachname",
+              "source": [
+                {
+                  "context": "src-nachname"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nachname",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "nachname"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to nachname"
+            },
+            {
+              "name": "set-extension-value-nachname",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nachname",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: nachname | Type: Extension | Path: Patient.name:nachname"
+        },
+        {
+          "name": "map-extension-vorsatzwort",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VORSATZWORT_SOURCE",
+              "variable": "src-vorsatzwort"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-vorsatzwort",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-vorsatzwort",
+              "source": [
+                {
+                  "context": "src-vorsatzwort"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vorsatzwort",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "vorsatzwort"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to vorsatzwort"
+            },
+            {
+              "name": "set-extension-value-vorsatzwort",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vorsatzwort",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: vorsatzwort | Type: Extension | Path: Patient.name:vorsatzwort"
+        },
+        {
+          "name": "map-extension-prefix-qualifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PREFIX-QUALIFIER_SOURCE",
+              "variable": "src-prefix-qualifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-prefix-qualifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-prefix-qualifier",
+              "source": [
+                {
+                  "context": "src-prefix-qualifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-prefix-qualifier",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "prefix-qualifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to prefix-qualifier"
+            },
+            {
+              "name": "set-extension-value-prefix-qualifier",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-prefix-qualifier",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: prefix-qualifier | Type: Extension | Path: Patient.name:prefix-qualifier"
+        },
+        {
+          "name": "map-extension-prefix-qualifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PREFIX-QUALIFIER_SOURCE",
+              "variable": "src-prefix-qualifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-prefix-qualifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-prefix-qualifier",
+              "source": [
+                {
+                  "context": "src-prefix-qualifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-prefix-qualifier",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "prefix-qualifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to prefix-qualifier"
+            },
+            {
+              "name": "set-extension-value-prefix-qualifier",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-prefix-qualifier",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: prefix-qualifier | Type: Extension | Path: Patient.name:prefix-qualifier"
+        }
+      ]
+    }
+  ]
+}

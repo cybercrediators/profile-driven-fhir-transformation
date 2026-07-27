@@ -1,0 +1,102 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-behandlungsempfehlung-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-behandlungsempfehlung-map",
+  "name": "MiiPrBildgebungBehandlungsempfehlungMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/CarePlan",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCarePlan",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CarePlan",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-source-for-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-source-for-intent"
+                }
+              ]
+            }
+          ],
+          "documentation": "CarePlan.intent required (1..1) but no corresponding source field found — manual mapping needed"
+        },
+        {
+          "name": "TODO-source-for-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-source-for-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "CarePlan.status required (1..1) but no corresponding source field found — manual mapping needed"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<CarePlan.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

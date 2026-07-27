@@ -1,0 +1,409 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-semistrukt-befundbericht-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-semistrukt-befundbericht-map",
+  "name": "mii-pr-bildgebung-semistrukt-befundberichtMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Composition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformComposition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Composition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-map-status-with-ConceptMap",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vReportStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vReportStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-5c34e8ef"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Transform status via ConceptMap - source field mapped to reportStatus"
+        },
+        {
+          "name": "TODO-resolve-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportEffective",
+              "variable": "vReportEffective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "date",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vReportEffective"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Composition.date> -> dateTime - source field mapped to reportEffective"
+        },
+        {
+          "name": "TODO-resolve-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportCategory",
+              "variable": "vReportCategory"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vReportCategory"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Composition.title> -> string - source field mapped to reportCategory"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Composition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-author",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "author",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Composition.author> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "variable": "vTypeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vTypeCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "TODO-set-coding-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reportCode",
+                      "variable": "vReportCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vReportCode"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Code from doc-typecodes ValueSet - source field mapped to reportCode"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-section",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "section",
+              "variable": "vSection"
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-section-diagRep-slice",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSection",
+                  "element": "extension",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice Composition.section:diagRep - create section extension slice marker"
+            },
+            {
+              "name": "map-section-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSection",
+                  "element": "code",
+                  "variable": "vCodeCC",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-section-code-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCC",
+                      "element": "coding",
+                      "variable": "vCodeCoding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-code-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodeCoding",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "TODO-set-section-code-value",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "reportCode",
+                          "variable": "vReportCode"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodeCoding",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "vReportCode"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Section code from doc-section-codes ValueSet - source field mapped to reportCode"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-section-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSection",
+                  "element": "text",
+                  "transform": "copy"
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-entry",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vSection",
+                  "element": "entry",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-findSource"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Reference<Composition.entry> → Resource — resolve via bundle assembler"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

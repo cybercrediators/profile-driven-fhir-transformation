@@ -1,0 +1,247 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Condition.subject reference cannot be resolved to specific identifier path - uses generic 'subject' element without patientId variable"
+      ],
+      "improvements": [
+        "Subject reference should use Patient.identifier.value from patientId source field for consistent cross-resource linking"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Condition.subject reference cannot be resolved to specific identifier path - uses generic 'subject' element without patientId variable"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 0,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Condition.subject reference cannot be resolved to specific identifier path - uses generic 'subject' element without patientId variable": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Standard Patient map does not include identifier mapping - creates inconsistency with PatientPseudonymisiert map"
+      ],
+      "improvements": [
+        "Add patientId → identifier mapping for consistency with pseudonymized variant",
+        "Consider extending a shared base group to reduce duplication with PatientPseudonymisiert"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Standard Patient map does not include identifier mapping - creates inconsistency with PatientPseudonymisiert map"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 2,
+        "coverage": {
+          "mapped": 2,
+          "denominator": 7,
+          "percent": 28.6,
+          "unmapped": [
+            "address.city",
+            "address.postalCode",
+            "identifier.value",
+            "name.family",
+            "name.given"
+          ]
+        },
+        "finding_classes": {
+          "Standard Patient map does not include identifier mapping - creates inconsistency with PatientPseudonymisiert map": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Multiple critical fields remain as TODO placeholders (category, code, effectiveDateTime, value[x], subject)",
+        "Observation.component.code identified as unmapped required field in static checks"
+      ],
+      "improvements": [
+        "Resolve all TODO-findSource elements to actual source field names from person profile",
+        "Use same patientId → identifier mapping pattern as PatientPseudonymisiert for subject consistency"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Multiple critical fields remain as TODO placeholders (category, code, effectiveDateTime, value[x], subject)",
+          "Observation.component.code identified as unmapped required field in static checks"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 6,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 7,
+          "percent": 71.4,
+          "unmapped": [
+            "component.code",
+            "value[x]"
+          ]
+        },
+        "finding_classes": {
+          "Multiple critical fields remain as TODO placeholders (category, code, effectiveDateTime, value[x], subject)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Observation.component.code identified as unmapped required field in static checks": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Shares 50% of mapping logic with Patient map (gender, birthDate) - potential for refactoring"
+      ],
+      "improvements": [
+        "Extract shared gender/birthDate/identifier rules into reusable named group",
+        "Standard map should include identifier mapping to maintain consistency across patient variants"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Shares 50% of mapping logic with Patient map (gender, birthDate) - potential for refactoring"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 3,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 8,
+          "percent": 50.0,
+          "unmapped": [
+            "address.city",
+            "address.postalCode",
+            "name.family",
+            "name.given"
+          ]
+        },
+        "finding_classes": {
+          "Shares 50% of mapping logic with Patient map (gender, birthDate) - potential for refactoring": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert"
+      ],
+      "severity": "warning",
+      "description": "Todesursache Condition.subject cannot resolve to Patient identifier because source variable not defined - should reference patientId from source profile matching PatientPseudonymisiert's identifier mapping",
+      "fix_recommendation": "Update Todesursache subject rule to use copy transform on source.patientId with create reference pointing to Patient.identifier.value"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert"
+      ],
+      "severity": "warning",
+      "description": "Vitalstatus Observation.subject has multiple TODO placeholders preventing subject reference resolution - same patient identification logic should apply across all person-related resources",
+      "fix_recommendation": "Replace TODO-findSource in subject rule with actual source field name (likely patientId) to enable proper Patient linkage"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert"
+      ],
+      "severity": "info",
+      "description": "Two Patient profile variants exist with overlapping transformation logic but inconsistent identifier handling - standard Patient lacks identifier mapping that pseudonymized version includes",
+      "fix_recommendation": "Either add identifier mapping to standard Patient map or document intentional omission for anonymization scenarios"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus"
+      ],
+      "severity": "warning",
+      "description": "Vitalstatus Observation has 5 TODO placeholders representing critical observation fields (category, code, effectiveDateTime, value[x], subject) - incomplete mapping prevents usable output",
+      "fix_recommendation": "Map to actual source profile fields instead of using TODO-findSource/TODO-system/TODO-code placeholders"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "patientpseudonymisiert-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vPid",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://example.org/ids/person"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+      "rule_name": "TODO-resolve-reference-subject",
+      "target_element": "subject",
+      "candidate_map": "patientpseudonymisiert-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vPid",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://example.org/ids/person"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 4,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "4 unconditional / 0 demotion-reliant / 0 invalid (of 4)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

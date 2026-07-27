@@ -1,0 +1,431 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-biobank-zellinie-organoid-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/mii-pr-biobank-zellinie-organoid-map",
+  "name": "mii-pr-biobank-zellinie-organoidMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Specimen",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformSpecimen",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Specimen",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapSpecimenStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-2d9386a6"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapSpecimenTypeCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcAliasType"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "variable": "vTypeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapTypeCoding",
+              "source": [
+                {
+                  "context": "srcAliasType",
+                  "element": "specimenTypeCode",
+                  "variable": "vTypCd"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vTypeCC",
+                  "element": "coding",
+                  "variable": "vTypeCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setTypeCodingCode",
+                  "source": [
+                    {
+                      "context": "srcAliasType"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTypeCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vTypCd"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setTypeCodingSystem-fixed",
+                  "source": [
+                    {
+                      "context": "srcAliasType"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vTypeCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/ValueSet/v2-0487"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCollectionCollected",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenCollected",
+              "variable": "vCollected"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collection",
+              "variable": "vCollection",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setCollectedValue",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "collectedDateTime",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vCollected"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-fixed-collection.quantity-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCollection",
+                  "element": "quantity",
+                  "variable": "vCollQty",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-collection.quantity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCollQty",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Inject profile-fixed value for collection.quantity.system"
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-collection-bodySite-method-quantity",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collection",
+              "variable": "vCollectionMissing",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "bodySite.coding, method.coding, and quantity fields required but unmapped — need source field mapping"
+        },
+        {
+          "name": "TODO-resolve-container-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "container",
+              "variable": "vContainerMissingType",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-fixed-container.capacity-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContainerMissingType",
+                  "element": "capacity",
+                  "variable": "vContCap",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-container.capacity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vContCap",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Inject profile-fixed value for container.capacity.system"
+            },
+            {
+              "name": "map-fixed-container.specimenQuantity-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vContainerMissingType",
+                  "element": "specimen",
+                  "variable": "vContSpecQty",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-container.specimenQuantity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vContSpecQty",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Inject profile-fixed value for container.specimenQuantity.system - CORRECTED: element=quantity not specimen, nested rules for system leaf"
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-container-capacity-specimenQuantity",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "container",
+              "variable": "vContainerMissingQty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "capacity and specimenQuantity (both with .value, .unit, .system) required but unmapped"
+        }
+      ]
+    }
+  ]
+}

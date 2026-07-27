@@ -1,0 +1,135 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-bildgebungsstudie-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-bildgebungsstudie-map",
+  "name": "mii-pr-bildgebung-bildgebungsstudieMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ImagingStudy",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformImagingStudy",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ImagingStudy",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-c6deb0e2"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapStarted",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyStarted",
+              "variable": "vStarted"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "started",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vStarted"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapNumberOfSeries",
+          "source": [
+            {
+              "context": "source",
+              "element": "studyNumberOfSeries",
+              "variable": "vNumSeries",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "numberOfSeries",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vNumSeries"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

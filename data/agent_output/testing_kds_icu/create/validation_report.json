@@ -1,0 +1,190 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-icu-device",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Device manufacturer mapping relies on source element 'deviceManufacturer' which must be present in the input bundle"
+      ],
+      "improvements": [
+        "Consider adding device.identifier or device.type mapping if available in SourceDefinition to improve resource linkage"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Device manufacturer mapping relies on source element 'deviceManufacturer' which must be present in the input bundle"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 1,
+        "coverage": {
+          "mapped": 1,
+          "denominator": 1,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Device manufacturer mapping relies on source element 'deviceManufacturer' which must be present in the input bundle": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Observation.code.system is hardcoded to 'TODO-system' in map-code rule; lacks standard code system (e.g., LOINC)",
+        "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)",
+        "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)"
+      ],
+      "improvements": [
+        "Align Coding logic with mii-pr-icu-muv-herzfrequenz map to ensure consistent system handling across vital sign observations",
+        "Ensure category mapping strategy matches that of similar Observation profiles in the bundle"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Observation.code.system is hardcoded to 'TODO-system' in map-code rule; lacks standard code system (e.g., LOINC)",
+          "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)",
+          "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 8,
+          "percent": 75.0,
+          "unmapped": [
+            "value[x]",
+            "value[x].value"
+          ]
+        },
+        "finding_classes": {
+          "Observation.code.system is hardcoded to 'TODO-system' in map-code rule; lacks standard code system (e.g., LOINC)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Observation.code lacks explicit system assignment in create-code-structure rule (unlike Atemfrequenz map which sets 'TODO-system')",
+        "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)",
+        "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)"
+      ],
+      "improvements": [
+        "Standardize Category and Code system logic with mii-pr-icu-muv-atemfrequenz map to ensure bundle homogeneity",
+        "Use ConceptMap translation for Category consistently if source data supports it (current Herzfrequenz uses CM, Atemfrequenz constructs Coding manually)"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Observation.code lacks explicit system assignment in create-code-structure rule (unlike Atemfrequenz map which sets 'TODO-system')",
+          "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)",
+          "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 8,
+          "percent": 75.0,
+          "unmapped": [
+            "value[x].code",
+            "value[x].value"
+          ]
+        },
+        "finding_classes": {
+          "Observation.code lacks explicit system assignment in create-code-structure rule (unlike Atemfrequenz map which sets 'TODO-system')": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Required field effectiveDateTime has no source mapping (rule: TODO-resolve-effective)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Reference Observation.subject remains unresolved (rule: TODO-resolve-reference-Observation-subject)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "warning",
+      "description": "Inconsistent handling of Observation.code.system between Atemfrequenz and Herzfrequenz maps. Atemfrequenz explicitly sets 'TODO-system', while Herzfrequenz omits the system field in create-code-structure.",
+      "fix_recommendation": "Standardize code structure rules across both Observation maps to ensure valid CodeableConcepts with consistent System values (e.g., LOINC or SNOMED CT) or shared placeholder logic."
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "info",
+      "description": "Both Observation maps contain TODO placeholders for subject reference and effectiveDateTime due to missing Patient profile and source data in the provided input scope.",
+      "fix_recommendation": "No immediate fix required within this map generation scope; ensure external bundle assembler or upstream process resolves these references."
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-atemfrequenz",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureDefinition/mii-pr-icu-muv-herzfrequenz"
+      ],
+      "severity": "warning",
+      "description": "Inconsistent Category mapping strategy. Atemfrequenz constructs Coding manually with TODO system, Herzfrequenz uses ConceptMap translation.",
+      "fix_recommendation": "Extract common category/coding logic into a shared named group or ensure both maps apply the same strategy (ConceptMap vs Manual) for consistency."
+    }
+  ],
+  "resolvable_references": [],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 3,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "3 unconditional / 0 demotion-reliant / 0 invalid (of 3)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}
