@@ -1,0 +1,47 @@
+meta {
+  name: transform
+  type: http
+  seq: 9
+}
+
+post {
+  url: http://localhost:8080/matchboxv3/fhir/StructureMap/$transform?source=http://example.org/StructureMap/MinimalOrganization-map
+  body: json
+  auth: inherit
+}
+
+params:query {
+  source: http://example.org/StructureMap/MinimalOrganization-map
+}
+
+headers {
+  accept: application/fhir+json
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+     "resourceType": "Sourcedefinition_testing_minimal2",
+    "givenName": "Darcy",
+    "familyName": "Smith",
+    "id": 1,
+    "birthDate": "1970-01-01",
+    "gender": "MIN",
+    "identifierTypeSystem": "http://example.org/CodeSystem/minimal-identifier-type",
+    "identifierTypeCode": "MIN",
+    "managingOrganizationName": "Minimal Org A",
+    "managingOrganizationId": "org-a",
+    "observationId": "obs-a",
+    "observationStatus": "final",
+    "observationCode": "TEST-A"
+  }
+}
+
+body:file {
+  file: @file(/home/lutzseba/Desktop/repo/fsh-nifi-bridge/data/testing5.tgz)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

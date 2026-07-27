@@ -1,0 +1,338 @@
+{
+  "resourceType": "StructureMap",
+  "id": "diagnosticreportlab-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureMap/DiagnosticReportLab-map",
+  "name": "DiagnosticReportLabMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformDiagnosticReportLab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-laborbefund/ConceptMap/cm-status-a7449e24"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCode",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportCode",
+              "variable": "vReportCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCode",
+                  "element": "coding",
+                  "variable": "vCodeCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "copy-report-code-to-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reportCode",
+                      "variable": "vSrcReportCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vSrcReportCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "copy-report-code-to-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reportCode",
+                      "variable": "vSrcReportCode2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vSrcReportCode2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCategory",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vCatSrc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "vCat",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-category-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCat",
+                  "element": "coding",
+                  "variable": "vCatCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "basedOn",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.basedOn> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-result",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "result",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.result> → Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsEffective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "dateTime value for effective[x] — map from source or resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Identifier placeholder — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsEffective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "issued",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "instant value for issued — map from source or resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

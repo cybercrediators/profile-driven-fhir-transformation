@@ -1,0 +1,639 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Rule 'TODO-create-category-placeholder' creates empty CodeableConcept with placeholder variables (vCategory) that are never assigned values from source elements.",
+        "Rule 'TODO-resolve-reference-ServiceRequest-subject' relies on bundle assembler for Patient resolution; ensure input data contains linking identifiers."
+      ],
+      "improvements": [
+        "Implement explicit identifier generation or mapping to link ServiceRequest to Procedure.basedOn",
+        "Replace placeholder TODO rules with actual source field mappings where fields like 'category' and 'code' are available in the SourceDefinition"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'TODO-create-category-placeholder' creates empty CodeableConcept with placeholder variables (vCategory) that are never assigned values from source elements.",
+          "Rule 'TODO-resolve-reference-ServiceRequest-subject' relies on bundle assembler for Patient resolution; ensure input data contains linking identifiers."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 4,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 5,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Rule 'TODO-create-category-placeholder' creates empty CodeableConcept with placeholder variables (vCategory) that are never assigned values from source elements.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Rule 'TODO-resolve-reference-ServiceRequest-subject' relies on bundle assembler for Patient resolution; ensure input data contains linking identifiers.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Matchbox engine ($validate vs profile): The type of element performedString is not known - it could not be determined from the information available. Valid types at this point are dateTime, Period (at Procedure)"
+      ],
+      "warnings": [
+        "Rule 'TODO-resolve-reference-Procedure-basedOn' points to ServiceRequest but lacks logic to derive the reference from common source identifiers."
+      ],
+      "improvements": [
+        "Add mapping logic to resolve Procedure.basedOn to generated ServiceRequest ID using shared study or request identifier"
+      ],
+      "residual_summary": {
+        "action_needed": [
+          "Matchbox engine ($validate vs profile): The type of element performedString is not known - it could not be determined from the information available. Valid types at this point are dateTime, Period (at Procedure)"
+        ],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'TODO-resolve-reference-Procedure-basedOn' points to ServiceRequest but lacks logic to derive the reference from common source identifiers."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 6,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate vs profile): The type of element performedString is not known - it could not be determined from the information available. Valid types at this point are dateTime, Period (at Procedure)": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Rule 'TODO-resolve-reference-Procedure-basedOn' points to ServiceRequest but lacks logic to derive the reference from common source identifiers.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Dosage mapping creates Quantity objects but leaves value, code, system, and unit fields as 'TODO-findSource' without binding source variables."
+      ],
+      "improvements": [
+        "Map dosage fields (value, unit) to specific source elements if available in SourceDefinition"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Dosage mapping creates Quantity objects but leaves value, code, system, and unit fields as 'TODO-findSource' without binding source variables."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 7,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 5,
+          "percent": 60.0,
+          "unmapped": [
+            "effective[x]",
+            "medication[x]"
+          ]
+        },
+        "finding_classes": {
+          "Dosage mapping creates Quantity objects but leaves value, code, system, and unit fields as 'TODO-findSource' without binding source variables.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Rule 'setCodingSystem' sets Coding.system to a ValueSet URL ('http://hl7.org/fhir/ValueSet/observation-codes'); Coding.system must reference a CodeSystem canonical URL.",
+        "Placeholder rules for ModifierExtension values contain hardcoded literals ('0') instead of mapped source data."
+      ],
+      "improvements": [
+        "Correct Observation.code.coding.system to point to the appropriate CodeSystem (e.g. LOINC, SNOMED) based on source content",
+        "Replace extension value placeholders with actual variable mappings from source"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'setCodingSystem' sets Coding.system to a ValueSet URL ('http://hl7.org/fhir/ValueSet/observation-codes'); Coding.system must reference a CodeSystem canonical URL.",
+          "Placeholder rules for ModifierExtension values contain hardcoded literals ('0') instead of mapped source data."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 4,
+          "percent": 75.0,
+          "unmapped": [
+            "value[x]"
+          ]
+        },
+        "finding_classes": {
+          "Rule 'setCodingSystem' sets Coding.system to a ValueSet URL ('http://hl7.org/fhir/ValueSet/observation-codes'); Coding.system must reference a CodeSystem canonical URL.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Placeholder rules for ModifierExtension values contain hardcoded literals ('0') instead of mapped source data.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Matchbox engine ($validate vs profile): Unrecognized property 'effectiveString' (at DiagnosticReport)"
+      ],
+      "warnings": [
+        "Rule 'TODO-resolve-reference-DiagnosticReport-imagingStudy' requires resolution logic to generated ImagingStudy resources.",
+        "System URLs for category and code are set to 'TODO-findSource'; ensure consistent CodeSystem usage across DiagnosticReport."
+      ],
+      "improvements": [
+        "Add identifier mapping logic to link DiagnosticReport to the validated ImagingStudy map (mii-pr-bildgebung-bildgebungsstudie-map)"
+      ],
+      "residual_summary": {
+        "action_needed": [
+          "Matchbox engine ($validate vs profile): Unrecognized property 'effectiveString' (at DiagnosticReport)"
+        ],
+        "known_gap": [],
+        "advisory": [
+          "Rule 'TODO-resolve-reference-DiagnosticReport-imagingStudy' requires resolution logic to generated ImagingStudy resources.",
+          "System URLs for category and code are set to 'TODO-findSource'; ensure consistent CodeSystem usage across DiagnosticReport."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 9,
+        "coverage": {
+          "mapped": 9,
+          "denominator": 9,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate vs profile): Unrecognized property 'effectiveString' (at DiagnosticReport)": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Rule 'TODO-resolve-reference-DiagnosticReport-imagingStudy' requires resolution logic to generated ImagingStudy resources.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "System URLs for category and code are set to 'TODO-findSource'; ensure consistent CodeSystem usage across DiagnosticReport.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Structural pre-flight check failed: Rule 'map-section-text' (group[0].rule[6].rule[2]) uses transform 'copy' without specifying a parameter (valueId or valueString) to provide data for the target element 'text'.",
+        "Rule 'TODO-set-coding-code' attempts to map CodeableConcept.code using copy but lacks binding parameters.",
+        "Rule 'setSectionCodeSystem' hardcodes system URL; ensure this aligns with expected SNOMED CT or local code definitions.",
+        "group[0].rule[6].rule[2]: copy target on element 'text' has no parameter — bind a variable on the source element and pass it via valueId, or pass a constant via valueString",
+        "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0",
+        "Matchbox engine ($transform, empty-optional instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0"
+      ],
+      "warnings": [],
+      "improvements": [
+        "Provide source variable mapping for Composition.section.text element",
+        "Standardize concept map usage across all status fields if possible"
+      ],
+      "residual_summary": {
+        "action_needed": [
+          "group[0].rule[6].rule[2]: copy target on element 'text' has no parameter — bind a variable on the source element and pass it via valueId, or pass a constant via valueString",
+          "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0",
+          "Matchbox engine ($transform, empty-optional instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0"
+        ],
+        "known_gap": [],
+        "advisory": [
+          "Structural pre-flight check failed: Rule 'map-section-text' (group[0].rule[6].rule[2]) uses transform 'copy' without specifying a parameter (valueId or valueString) to provide data for the target element 'text'.",
+          "Rule 'TODO-set-coding-code' attempts to map CodeableConcept.code using copy but lacks binding parameters.",
+          "Rule 'setSectionCodeSystem' hardcodes system URL; ensure this aligns with expected SNOMED CT or local code definitions."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 7,
+          "denominator": 7,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Structural pre-flight check failed: Rule 'map-section-text' (group[0].rule[6].rule[2]) uses transform 'copy' without specifying a parameter (valueId or valueString) to provide data for the target element 'text'.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Rule 'TODO-set-coding-code' attempts to map CodeableConcept.code using copy but lacks binding parameters.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Rule 'setSectionCodeSystem' hardcodes system URL; ensure this aligns with expected SNOMED CT or local code definitions.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "group[0].rule[6].rule[2]: copy target on element 'text' has no parameter — bind a variable on the source element and pass it via valueId, or pass a constant via valueString": {
+            "class": "structural",
+            "severity": null,
+            "code": null
+          },
+          "Matchbox engine ($transform, filled instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "processing"
+          },
+          "Matchbox engine ($transform, empty-optional instance): HAPI-0389: Failed to call access method: org.hl7.fhir.exceptions.FHIRException: Exception executing transform vSection.text = copy() on Rule \"mii-pr-bildgebung-semistrukt-befundberichtMap|TransformComposition|map-section-text\": Index 0 out of bounds for length 0": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "processing"
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1' (at CarePlan.status)",
+        "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-status') was not found in the value set 'RequestStatus' (http://hl7.org/fhir/ValueSet/request-status|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1'; The provided code '#TODO-source-for-status' was not found in the value set 'http://hl7.org/fhir/ValueSet/request-status|4.0.1') (at CarePlan.status)",
+        "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1' (at CarePlan.intent)",
+        "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-intent') was not found in the value set 'Care Plan Intent' (http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1'; The provided code '#TODO-source-for-intent' was not found in the value set 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1') (at CarePlan.intent)",
+        "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [],
+        "expected_noise_count": 5,
+        "mapped_target_leaves": 3,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1' (at CarePlan.status)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "not-found"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-status') was not found in the value set 'RequestStatus' (http://hl7.org/fhir/ValueSet/request-status|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1'; The provided code '#TODO-source-for-status' was not found in the value set 'http://hl7.org/fhir/ValueSet/request-status|4.0.1') (at CarePlan.status)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "code-invalid"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1' (at CarePlan.intent)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "not-found"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-intent') was not found in the value set 'Care Plan Intent' (http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1'; The provided code '#TODO-source-for-intent' was not found in the value set 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1') (at CarePlan.intent)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "code-invalid"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1' (at CarePlan.status)",
+          "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-status') was not found in the value set 'RequestStatus' (http://hl7.org/fhir/ValueSet/request-status|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-status' in the ValueSet 'http://hl7.org/fhir/ValueSet/request-status|4.0.1'; The provided code '#TODO-source-for-status' was not found in the value set 'http://hl7.org/fhir/ValueSet/request-status|4.0.1') (at CarePlan.status)",
+          "Matchbox engine ($validate, unverified synthetic code): The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1' (at CarePlan.intent)",
+          "Matchbox engine ($validate, unverified synthetic code): The value provided ('TODO-source-for-intent') was not found in the value set 'Care Plan Intent' (http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1), and a code is required from this value set  (error message = The System URI could not be determined for the code 'TODO-source-for-intent' in the ValueSet 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1'; The provided code '#TODO-source-for-intent' was not found in the value set 'http://hl7.org/fhir/ValueSet/care-plan-intent|4.0.1') (at CarePlan.intent)",
+          "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.category: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.category: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 2,
+        "mapped_target_leaves": 6,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 6,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.category: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.category: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Morphologic Abnormalities' (http://hl7.org/fhir/ValueSet/bodystructure-code|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/bodystructure-code#1) (at BodyStructure.morphology)",
+        "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/bodystructure-code' (at BodyStructure.morphology.coding[0].system)",
+        "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Body Structures' (http://hl7.org/fhir/ValueSet/body-site|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/body-site#1) (at BodyStructure.location)",
+        "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/body-site' (at BodyStructure.location.coding[0].system)",
+        "Matchbox engine ($validate, pending bundle assembly): BodyStructure.patient: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur|2026.0.0) (at BodyStructure)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [],
+        "expected_noise_count": 5,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Morphologic Abnormalities' (http://hl7.org/fhir/ValueSet/bodystructure-code|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/bodystructure-code#1) (at BodyStructure.morphology)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "code-invalid"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/bodystructure-code' (at BodyStructure.morphology.coding[0].system)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "invalid"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Body Structures' (http://hl7.org/fhir/ValueSet/body-site|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/body-site#1) (at BodyStructure.location)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "code-invalid"
+          },
+          "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/body-site' (at BodyStructure.location.coding[0].system)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "invalid"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): BodyStructure.patient: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur|2026.0.0) (at BodyStructure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Morphologic Abnormalities' (http://hl7.org/fhir/ValueSet/bodystructure-code|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/bodystructure-code#1) (at BodyStructure.morphology)",
+          "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/bodystructure-code' (at BodyStructure.morphology.coding[0].system)",
+          "Matchbox engine ($validate, unverified synthetic code): None of the codings provided are in the value set 'SNOMED CT Body Structures' (http://hl7.org/fhir/ValueSet/body-site|4.0.1), and a coding from this value set is required) (codes = http://hl7.org/fhir/CodeSystem/body-site#1) (at BodyStructure.location)",
+          "Matchbox engine ($validate, unverified synthetic code): No definition could be found for URL value 'http://hl7.org/fhir/CodeSystem/body-site' (at BodyStructure.location.coding[0].system)",
+          "Matchbox engine ($validate, pending bundle assembly): BodyStructure.patient: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur|2026.0.0) (at BodyStructure)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-geraet",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 1,
+        "coverage": {
+          "mapped": 1,
+          "denominator": 2,
+          "percent": 50.0,
+          "unmapped": [
+            "deviceName.name"
+          ]
+        },
+        "finding_classes": {},
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 4,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {},
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung"
+      ],
+      "severity": "warning",
+      "description": "Procedure.basedOn references ServiceRequest, but neither map currently implements logic to resolve the reference using a shared identifier (e.g., request ID). Both rely on bundle assembler placeholder.",
+      "fix_recommendation": "Implement explicit 'copy' of a common source ID field into both ServiceRequest.identifier and Procedure.basedOn.identifier"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+        "http://example.org/StructureMap/source-definition-testing-kds-bildgebung (ImagingStudy digest map source)"
+      ],
+      "severity": "warning",
+      "description": "DiagnosticReport.imagingStudy references ImagingStudy. The validated Digest Map for ImagingStudy exists, but no cross-reference logic is implemented in the DiagnosticReport map.",
+      "fix_recommendation": "Align identifier generation rules between ImagingStudy and DiagnosticReport to allow reference resolution (e.g., using studyInstanceUID)"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung"
+      ],
+      "severity": "warning",
+      "description": "Observation.code.coding.system is set to a ValueSet URL which is semantically incorrect for the system field.",
+      "fix_recommendation": "Replace 'http://hl7.org/fhir/ValueSet/observation-codes' with the canonical CodeSystem URL used in the source data (e.g., LOINC or SNOMED)"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "rule_name": "TODO-resolve-reference-Procedure-basedOn",
+      "target_element": "basedOn",
+      "candidate_map": "mii-pr-bildgebung-anforderung-bildgebung-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vRequestID",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://example.org/source-ids"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "rule_name": "TODO-resolve-reference-DiagnosticReport-imagingStudy",
+      "target_element": "imagingStudy",
+      "candidate_map": "mii-pr-bildgebung-bildgebungsstudie-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vStudyUID",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "urn:ietf:rfc:3986"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ],
+    "all_valid": false,
+    "deterministically_forced": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ]
+  },
+  "validity_summary": {
+    "unconditionally_valid": 5,
+    "demotion_reliant": 3,
+    "invalid": 3,
+    "headline": "5 unconditional / 3 demotion-reliant / 3 invalid (of 11)",
+    "demotion_reliant_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur"
+    ],
+    "invalid_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ]
+  }
+}

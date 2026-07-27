@@ -1,0 +1,283 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-kontrastmittelgabe-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-kontrastmittelgabe-map",
+  "name": "mii-pr-bildgebung-kontrastmittelgabeMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformMedicationAdministration",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationAdministration",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-medication",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medication",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.medication> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-e296970e"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapDosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcAlias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "dosage",
+              "variable": "vDosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapDoseQuantity",
+              "source": [
+                {
+                  "context": "srcAlias",
+                  "variable": "vDoseContext"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vDosage",
+                  "element": "dose",
+                  "variable": "vDose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-dose-value-field",
+                  "source": [
+                    {
+                      "context": "vDoseContext",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vDose",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "TODO-dose-code-field",
+                  "source": [
+                    {
+                      "context": "vDoseContext",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vDose",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "TODO-dose-system-field",
+                  "source": [
+                    {
+                      "context": "vDoseContext",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vDose",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "TODO-dose-units-field",
+                  "source": [
+                    {
+                      "context": "vDoseContext",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vDose",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-route-field",
+              "source": [
+                {
+                  "context": "srcAlias"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vDosage",
+                  "element": "route",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectivePeriod",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportEffective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

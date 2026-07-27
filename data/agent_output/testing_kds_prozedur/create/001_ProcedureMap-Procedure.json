@@ -1,0 +1,319 @@
+{
+  "resourceType": "StructureMap",
+  "id": "procedure-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureMap/Procedure-map",
+  "name": "ProcedureMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-prozedur",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Procedure",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformProcedure",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_prozedur",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Procedure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "status",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-prozedur/ConceptMap/cm-status-8fa1ec71"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-performed-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "performedDateTime",
+              "variable": "vPerfDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "performedDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vPerfDate"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCodeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCodeCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "procedureCode",
+                      "variable": "vProcCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vProcCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "categoryCode",
+              "variable": "vCatCode",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vCatCode"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-prozedur/ConceptMap/cm-category-11073f8f"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-body-site",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcBodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "bodySite",
+              "variable": "vBodySiteCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-bodiesite-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vBodySiteCC",
+                  "element": "coding",
+                  "variable": "vBSCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-bs-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vBSCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-bs-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "bodySiteCode",
+                      "variable": "vBodySite"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vBSCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vBodySite"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Procedure.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,559 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-anamnese-tumor-8123d95b",
+  "url": "http://example.org/StructureMap/source-definition-testing-kfdm-profile-anamnese-tumor",
+  "name": "003-structure-map-testing-kfdm-profile-anamnese-tumor",
+  "title": "Structure Map for testing_kfdm_profile - anamnese-tumor",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-tumor). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "anamnese-tumor"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-anamnese-tumor",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/anamnese-tumor"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-clinicalStatus-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CLINICALSTATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Condition.clinicalStatus using http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "weitere_tumor_art",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Condition.code (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "map-extension-existance",
+          "source": [
+            {
+              "context": "source",
+              "element": "weitere_tumor",
+              "variable": "src-existance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-existance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-existance",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/tumor-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-YesNoUnknownExtension",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "weitere_tumor",
+                  "variable": "src-YesNoUnknownExtension"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "element": "extension",
+                  "variable": "ext-YesNoUnknownExtension",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-YesNoUnknownExtension",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoUnknownExtension",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoUnknownExtension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-YesNoUnknownExtension-valueBoolean",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "weitere_tumor",
+                      "variable": "vSrcYN"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoUnknownExtension",
+                      "element": "valueBoolean",
+                      "transform": "evaluate",
+                      "parameter": [
+                        {
+                          "valueString": "$this = 'ja' or $this = 'true'"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to extension: YesNoUnknownExtension | Type: Extension | Path: Condition.extension:existance.extension:YesNoUnknownExtension"
+            },
+            {
+              "name": "map-extension-Treatment",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "therapie_tumorerkrankung",
+                  "variable": "src-Treatment"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "element": "extension",
+                  "variable": "ext-Treatment",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-Treatment",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Treatment",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Treatment"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-Treatment-valueBoolean",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "therapie_tumorerkrankung",
+                      "variable": "vSrcTreat"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Treatment",
+                      "element": "valueBoolean",
+                      "transform": "evaluate",
+                      "parameter": [
+                        {
+                          "valueString": "$this = 'ja' or $this = 'true'"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to extension: Treatment | Type: Extension | Path: Condition.extension:existance.extension:Treatment"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/tumor-extension | Type: Extension | Path: Condition.extension:existance"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-verificationStatus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "verificationStatus",
+              "variable": "tgt-fixed-verificationStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-verificationStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-verificationStatus",
+                  "element": "coding",
+                  "variable": "tgt-fixed-verificationStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-verificationStatus-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-verificationStatus-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-verificationStatus-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-verificationStatus-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "provisional"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for verificationStatus"
+        }
+      ]
+    }
+  ]
+}

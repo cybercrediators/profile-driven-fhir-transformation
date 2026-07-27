@@ -1,0 +1,491 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-anamnese-raucher-cb0a1bec",
+  "url": "http://example.org/StructureMap/source-definition-testing-kfdm-profile-anamnese-raucher",
+  "name": "001_structure_map_testing_kfdm_profile-anamnese-raucher",
+  "title": "Structure Map for testing_kfdm_profile - anamnese-raucher",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-raucher). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "anamnese-raucher"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-anamnese-raucher",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/anamnese-raucher"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://example.org/StructureDefinition/anamnese-raucher"
+        },
+        {
+          "name": "set-fixed-category",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "tgt-fixed-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-category-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-category",
+                  "element": "coding",
+                  "variable": "tgt-fixed-category-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-category-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-category-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "social-history"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for category"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CODE",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Observation.code (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "map-extension-years",
+          "source": [
+            {
+              "context": "source",
+              "element": "rauchen_jahre",
+              "variable": "src-years"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-years",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-years",
+              "source": [
+                {
+                  "context": "src-years"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-years",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/years-of-smoking"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/years-of-smoking"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "rauchen_jahre",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-years",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.extension:years.value[x] | Type: integer | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/years-of-smoking | Type: Extension | Path: Observation.extension:years"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "element": "performer"
+            }
+          ],
+          "documentation": "Reference<Observation.performer> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "final"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CODE",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Observation.component.code (filter-based/open VS, system: http://loinc.org)"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-value-string",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "rauchen_tag",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueString",
+                  "variable": "tgt-value-string",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.component.value[x] | Type: choice | Cardinality: 0..1 | Choice types: string"
+        }
+      ]
+    }
+  ]
+}

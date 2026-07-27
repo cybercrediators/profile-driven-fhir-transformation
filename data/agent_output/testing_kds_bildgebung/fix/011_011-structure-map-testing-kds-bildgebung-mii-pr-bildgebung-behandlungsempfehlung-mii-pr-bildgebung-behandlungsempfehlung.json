@@ -1,0 +1,291 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-behandlungsempfehlung-f12d5046",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-mii-pr-bildgebung-behandlungsempfehlung",
+  "name": "011-structure-map-testing-kds-bildgebung-mii-pr-bildgebung-behandlungsempfehlung",
+  "title": "Structure Map for testing_kds_bildgebung - mii-pr-bildgebung-behandlungsempfehlung",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-behandlungsempfehlung). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/CarePlan",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-behandlungsempfehlung"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-behandlungsempfehlung",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CarePlan",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung"
+        },
+        {
+          "name": "map-activity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-activity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "activity",
+              "variable": "tgt-activity",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-activity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-detail",
+              "source": [
+                {
+                  "context": "src-activity",
+                  "variable": "src-detail"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-activity",
+                  "element": "detail",
+                  "variable": "tgt-detail",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-status",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "element": "TODO_MAP_STATUS",
+                      "variable": "src-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "element": "status",
+                      "variable": "tgt-status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-status"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to CarePlan.activity.detail.status | Type: [{'code': 'code'}] | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to CarePlan.activity.detail | Type: [{'code': 'BackboneElement'}] | Cardinality: 0..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to CarePlan.activity | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CarePlan.description | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-intent-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-INTENT",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-intent-6f8a9f02"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for CarePlan.intent using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-intent-6f8a9f02"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-STATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a11a5ec9"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for CarePlan.status using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a11a5ec9"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<CarePlan.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "supportingInfo",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<CarePlan.supportingInfo> → DiagnosticReport — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

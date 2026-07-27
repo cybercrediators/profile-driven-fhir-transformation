@@ -1,0 +1,266 @@
+{
+  "resourceType": "StructureMap",
+  "id": "anamnese-tumor-map",
+  "url": "http://example.org/StructureMap/anamnese-tumor-map",
+  "name": "anamnese-tumorMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-map-clinicalStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vSrcClinical",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrcClinical"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field - source not identified in mapping table (TODO-findSource)"
+        },
+        {
+          "name": "map-extension-existance-YesNoUnknownExtension",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcExistance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtExistance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-exist-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExistance",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "YesNoUnknownExtension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-yes-no-unknown-inner",
+              "source": [
+                {
+                  "context": "srcExistance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExistance",
+                  "element": "extension",
+                  "variable": "vExtInner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-yes-no-unknown-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInner",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoUnknownExtension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-yes-no-unknown-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "weitere_tumor",
+                      "variable": "vYesNoVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInner",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vYesNoVal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-treatment-inner",
+              "source": [
+                {
+                  "context": "srcExistance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtExistance",
+                  "element": "extension",
+                  "variable": "vExtTreatmentInner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-treatment-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtTreatmentInner",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Treatment"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-treatment-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "therapie_tumorerkrankung",
+                      "variable": "vTreatment"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtTreatmentInner",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vTreatment"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "record_id",
+              "variable": "vSubject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

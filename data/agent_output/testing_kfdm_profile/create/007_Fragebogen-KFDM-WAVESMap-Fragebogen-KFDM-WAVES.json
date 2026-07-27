@@ -1,0 +1,61 @@
+{
+  "resourceType": "StructureMap",
+  "id": "fragebogen-kfdm-waves-map",
+  "url": "http://example.org/StructureMap/Fragebogen-KFDM-WAVES-map",
+  "name": "Fragebogen-KFDM-WAVESMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Questionnaire",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformQuestionnaire",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Questionnaire",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "waves_complete",
+              "variable": "waves-complete"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "waves-complete"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

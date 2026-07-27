@@ -1,0 +1,577 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-us-core-patient-a310c7e3",
+  "url": "http://example.org/StructureMap/source-definition-testing-uscore-us-core-patient",
+  "name": "002-structure-map-testing-uscore-us-core-patient",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-uscore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "us-core-patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-us-core-patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_uscore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "address",
+              "variable": "tgt-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-gender-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-uscore/ConceptMap/cm-gender-77ac516f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "patientIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "patientId",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-link",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-link"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "link",
+              "variable": "tgt-link",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Patient-other",
+              "source": [
+                {
+                  "context": "src-link"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "element": "other",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-findSource"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Reference<Patient.other> → Patient — resolve via bundle assembler"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-link",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "familyName",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "givenName",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

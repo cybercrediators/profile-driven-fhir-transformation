@@ -1,0 +1,94 @@
+{
+  "resourceType": "StructureMap",
+  "id": "patient-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureMap/Patient-map",
+  "name": "PatientMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-person",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_person",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "vGender",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vGender"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-person/ConceptMap/cm-gender-14fc1b65"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapBirthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "vBirthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "vBirthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Source type 'string' mapped to target type 'date'; used cast for type safety despite table hinting copy"
+        }
+      ]
+    }
+  ]
+}

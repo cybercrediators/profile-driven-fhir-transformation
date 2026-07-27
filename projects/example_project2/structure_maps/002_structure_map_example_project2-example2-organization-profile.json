@@ -1,0 +1,118 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-example2-organization-profile-8cd4ed49",
+  "url": "http://example.org/StructureMap/source-definition-example-project2-example2-organization-profile",
+  "name": "002_structure_map_example_project2-example2-organization-profile",
+  "title": "Structure Map for example_project2 - example2-organization-profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: example2-organization-profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-example-project2",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://example.org/example2/StructureDefinition/Example2Organization",
+      "mode": "target",
+      "alias": "example2-organization-profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-example2-organization-profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_example_project2",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "managingOrganizationId",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Organization.identifier | Type: Identifier | Cardinality: 1..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "managingOrganizationName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

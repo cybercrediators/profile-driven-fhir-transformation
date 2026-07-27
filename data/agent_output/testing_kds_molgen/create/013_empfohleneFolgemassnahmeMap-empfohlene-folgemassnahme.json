@@ -1,0 +1,101 @@
+{
+  "resourceType": "StructureMap",
+  "id": "empfohlene-folgemassnahme-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/empfohlene-folgemassnahme-map",
+  "name": "empfohleneFolgemassnahmeMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Task",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformTask",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Task",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "setIntentFixedValue",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "proposal"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "setStatusFixedValue",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "requested"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Task-for",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "for",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Task.for> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

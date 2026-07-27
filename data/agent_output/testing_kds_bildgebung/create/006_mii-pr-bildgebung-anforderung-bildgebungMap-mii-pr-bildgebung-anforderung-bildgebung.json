@@ -1,0 +1,442 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-anforderung-bildgebung-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-anforderung-bildgebung-map",
+  "name": "mii-pr-bildgebung-anforderung-bildgebungMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ServiceRequest",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformServiceRequest",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ServiceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-create-category-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "vCategory",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-create-category-coding-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCategory",
+                  "element": "coding",
+                  "variable": "vCatCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-create-category-coding-code-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCategory",
+                  "element": "coding",
+                  "variable": "vCatCoding2",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-create-category-coding-system-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCategory",
+                  "element": "coding",
+                  "variable": "vCatCoding3",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Required CodeableConcept field - source mapping TODO-findSource for ServiceRequest.category"
+        },
+        {
+          "name": "TODO-create-code-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-create-code-coding-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCode",
+                  "element": "coding",
+                  "variable": "vCodeCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-create-code-coding-code-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCode",
+                  "element": "coding",
+                  "variable": "vCodeCoding2",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-create-code-coding-system-placeholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCode",
+                  "element": "coding",
+                  "variable": "vCodeCoding3",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Required CodeableConcept field - source mapping TODO-findSource for ServiceRequest.code"
+        },
+        {
+          "name": "mapIntent",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vIntent",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vIntent"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-intent-a82160b1"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a11a5ec9"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-create-occurrence-modifierextension-sampleddata-origin-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifier",
+              "variable": "vModExtSampledData",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-modext-sampleddata-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vModExtSampledData",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-sampleddata-origin"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-create-occurrence-modifierextension-signature-type-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifier",
+              "variable": "vModExtSignatureType",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-modext-signature-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vModExtSignatureType",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-signtype"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-modifierExtension-valueSignature-who",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.modifierExtension-valueSignature-who> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-create-occurrence-modifierextension-usagerontext-code-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifier",
+              "variable": "vModExtUsageContext",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-modext-usagext-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vModExtUsageContext",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-usage-context"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

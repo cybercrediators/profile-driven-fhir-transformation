@@ -1,0 +1,428 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-observation-dna-konzentration-8a78a463",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-mii-pr-biobank-observation-dna-konzentration",
+  "name": "001-structure-map-testing-kds-biobank-mii-pr-biobank-observation-dna-konzentration",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-observation-dna-konzentration",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-pr-biobank-observation-dna-konzentration"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "set-fixed-code",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-fixed-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-code",
+                  "element": "coding",
+                  "variable": "tgt-fixed-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-code-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "72496-3"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-coding-display",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "DNA double strand [Mass/volume] in Specimen"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "dnaEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "tgt-effective",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-effective-instant",
+          "source": [
+            {
+              "context": "source",
+              "element": "dnaEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveInstant",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-effective"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "focus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "dnaStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "tgt-value",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-value",
+                  "element": "dnaUnit",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-value",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-value",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-decimal",
+              "source": [
+                {
+                  "context": "src-value",
+                  "element": "dnaValue",
+                  "variable": "src-quant",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-value",
+                  "element": "value",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-quant"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

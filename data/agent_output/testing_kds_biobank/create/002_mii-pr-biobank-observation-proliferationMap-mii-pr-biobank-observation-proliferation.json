@@ -1,0 +1,209 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-biobank-observation-proliferation-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/mii-pr-biobank-observation-proliferation-map",
+  "name": "mii-pr-biobank-observation-proliferationMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vSrc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Source field not provided in mapping table. Uses cc() to construct CodeableConcept structure."
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vSrcStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrcStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translation requires source data; ConceptMap provided in mapping table details."
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource",
+              "variable": "vSrcValue"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "http://snomed.info/sct"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Source field not provided. Uses cc() with system from mapping table details."
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "focus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-who",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifierExtension",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.who> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-usage-context-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifierExtension",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field with no source mapping. Extension structure requires explicit slice URL."
+        },
+        {
+          "name": "TODO-map-sampled-data-origin",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "modifierExtension",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field with no source mapping. Extension structure requires explicit slice URL."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=FSH NiFi Bridge – FHIR StructureMap transformation socket service
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/Desktop/repo/fsh-nifi-bridge
+# Adjust the config path and virtualenv as needed
+ExecStart=%h/Desktop/repo/fsh-nifi-bridge/venv/bin/python src/main.py -c conf/fp_conf.json server start
+Restart=on-failure
+RestartSec=5
+
+# Load .env for credentials (API tokens etc.)
+EnvironmentFile=-%h/Desktop/repo/fsh-nifi-bridge/.env
+
+[Install]
+WantedBy=default.target

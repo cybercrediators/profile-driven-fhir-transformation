@@ -1,0 +1,1360 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-specimen-041d6e49",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-mii-pr-biobank-specimen",
+  "name": "003-structure-map-testing-kds-biobank-mii-pr-biobank-specimen",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Specimen",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-specimen",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Specimen",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Specimen"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-collection",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-collection"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collection",
+              "variable": "tgt-collection",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-bodySite",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "variable": "src-bodySite"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "bodySite",
+                  "variable": "tgt-bodySite",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-bodySite-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-bodySite",
+                      "element": "coding",
+                      "variable": "vCodingBodySite",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-bodySite-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingBodySite",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-bodySite-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-bodySite-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingBodySite",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-bodySite-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-collected",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "specimenCollected",
+                  "variable": "src-collected"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "collected",
+                  "variable": "tgt-collected",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-collected"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-method",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-method"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "method",
+                  "variable": "tgt-method",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-method-coding",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-method",
+                      "element": "coding",
+                      "variable": "vCodingMethod",
+                      "listMode": [
+                        "share"
+                      ],
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-method-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingMethod",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-method-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-method-code",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "srcCodeMethod"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingMethod",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcCodeMethod"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-quantity",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-quantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "quantity",
+                  "variable": "tgt-quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-quantity-system-fixed",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-quantity-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-qCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-qCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-quantity-unit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO_MAP_UNIT",
+                      "variable": "src-qUnit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-qUnit"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-quantity-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-qValue",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-qValue"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-fastingStatus",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-fastingStatus"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "fastingStatus",
+                  "variable": "tgt-fastingStatus",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-fastingStatus-coding",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-fsCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fastingStatus",
+                      "element": "coding",
+                      "variable": "vCodingFs",
+                      "listMode": [
+                        "share"
+                      ],
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-fastingSystem",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingFs",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-fastingSystem"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-fastingCode",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "srcFastingCode"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingFs",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcFastingCode"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-einstellungBlutversorgung",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-EINSTELLUNGBLUTVERSORGUNG_SOURCE",
+                  "variable": "src-einstellungBlutversorgung"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "element": "extension",
+                  "variable": "ext-einstellungBlutversorgung",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-einstellungBlutversorgung",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-einstellungBlutversorgung",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-extension-value-einstellungBlutversorgung",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValueEinstellung"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-einstellungBlutversorgung",
+                      "element": "valueDateTime",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValueEinstellung"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-container",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-container"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "container",
+              "variable": "tgt-container",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Specimen-additive",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-additive"
+                }
+              ],
+              "target": [
+                {
+                  "element": "additive",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-findSource"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Reference<Specimen.container.additive> → Substance — resolve via bundle assembler"
+            },
+            {
+              "name": "map-capacity",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-capacity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "element": "capacity",
+                  "variable": "tgt-capacity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-capacity-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-capacity-code",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-capCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-capCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-capacity-unit",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "TODO_MAP_UNIT",
+                      "variable": "src-capUnit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-capUnit"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "map-capacity-value",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-capValue",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-capValue"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-type-coding",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-typeCoding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type",
+                      "element": "coding",
+                      "variable": "vCodingType",
+                      "listMode": [
+                        "share"
+                      ],
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-container-type-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingType",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-resolve-container-type-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-container-type-code",
+                      "source": [
+                        {
+                          "context": "src-type",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "srcTypeCode"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vCodingType",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcTypeCode"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-fixed-container-quantity-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "element": "quantity",
+                  "variable": "vfix-contQty",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-container-quantity-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vfix-contQty",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-fixed-container.specimenQuantity-container.specimenQuantity.system",
+              "documentation": "Create container.specimenQuantity (Quantity) for fixed constant",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "element": "specimen",
+                  "transform": "create",
+                  "variable": "vfix-specimenQuantity-container.specimenQuantity.system",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ],
+                  "listMode": [
+                    "share"
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-container.specimenQuantity.system-container.specimenQuantity.system",
+                  "documentation": "Inject profile-fixed value for container.specimenQuantity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vfix-specimenQuantity-container.specimenQuantity.system",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-fixed-container.specimenQuantity-container.specimenQuantity.system",
+              "documentation": "Create container.specimenQuantity (Quantity) for fixed constant",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "element": "specimen",
+                  "transform": "create",
+                  "variable": "vfix-specimenQuantity-container.specimenQuantity.system",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ],
+                  "listMode": [
+                    "share"
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-container.specimenQuantity.system-container.specimenQuantity.system",
+                  "documentation": "Inject profile-fixed value for container.specimenQuantity.system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vfix-specimenQuantity-container.specimenQuantity.system",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-parent",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-parent"
+            }
+          ],
+          "target": [
+            {
+              "element": "parent",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.parent> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-temperaturbedingungen",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TEMPERATURBEDINGUNGEN_SOURCE",
+              "variable": "src-temperaturbedingungen"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-temperaturbedingungen",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-temperaturbedingungen",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-temperaturbedingungen",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Temperaturbedingungen"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-extension-temperature-miabis",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TEMPERATURE-MIABIS_SOURCE",
+              "variable": "src-temperature-miabis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-temperature-miabis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-temperature-miabis",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-temperature-miabis",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "temperature-miabis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-extension-value-temperature-miabis",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcTempValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-temperature-miabis",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcTempValue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-receivedTime",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_RECEIVEDTIME",
+              "variable": "src-receivedTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "receivedTime",
+              "variable": "tgt-receivedTime",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-receivedTime"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.receivedTime | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-request",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-request"
+            }
+          ],
+          "target": [
+            {
+              "element": "request",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.request> → ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenStatus",
+              "variable": "src-status",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-2d9386a6"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenTypeCode",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-type-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/v2-0487"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-type-f513479a"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

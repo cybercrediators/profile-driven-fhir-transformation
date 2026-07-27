@@ -1,0 +1,457 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-anamnese-other-disease-40c8b80b",
+  "url": "http://example.org/StructureMap/source-definition-testing-kfdm-profile-anamnese-other-disease",
+  "name": "004-structure-map-testing-kfdm-profile-anamnese-other-disease",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-anamnese-other-disease",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/anamnese-other-disease"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-clinicalStatus-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CLINICALSTATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/condition-clinical"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-clinicalStatus-ce519496"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-extension-other",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-other",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-other",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-other",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/other-disease-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-YesNoExtension",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "weitere_erkrankungen",
+                  "variable": "src-YesNoExtension"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-other",
+                  "element": "extension",
+                  "variable": "ext-YesNoExtension",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-YesNoExtension",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoExtension",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoExtension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-YesNoExtension-value",
+                  "source": [
+                    {
+                      "context": "src-YesNoExtension"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoExtension",
+                      "element": "valueBoolean",
+                      "transform": "evaluate",
+                      "parameter": [
+                        {
+                          "valueString": "$this != '' and ($this = '1' or $this = 'ja')"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-Disease",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "weitere_erkrankungen_art",
+                  "variable": "src-Disease"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-other",
+                  "element": "extension",
+                  "variable": "ext-Disease",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-Disease",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Disease",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Disease"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-Disease-value",
+                  "source": [
+                    {
+                      "context": "src-Disease"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Disease",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-Disease"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-verificationStatus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "verificationStatus",
+              "variable": "tgt-fixed-verificationStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-verificationStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-verificationStatus",
+                  "element": "coding",
+                  "variable": "tgt-fixed-verificationStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-verificationStatus-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-verificationStatus-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "provisional"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-verificationStatus-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-verificationStatus-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/condition-ver-status"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

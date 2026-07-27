@@ -1,0 +1,38 @@
+{
+  "project_path": "/app/projects/testing_kfdm_profile/",
+  "profile_path": "",
+  "resource_cache_path": "/app/data/resource_cache/",
+  "input_source_example": "source_data.json",
+  "base_profile_url": "http://example.org",
+  "simplifier_api_url": "https://fhir.simplifier.net/R4/",
+  "bundled_output": false,
+  "external_cache_service": "VALKEY",
+  "cache_args": {
+    "valkey_host": "valkey",
+    "valkey_port": "6379",
+    "valkey_db": "0"
+  },
+  "matchbox_connection": {
+    "url": "http://matchbox:8080/matchboxv3/",
+    "preload_location": ""
+  },
+  "socket_connection": {
+    "path": "/bridge-socket/fsh_nifi_bridge.sock",
+    "max_workers": 8,
+    "worker_processes": 1,
+    "validation_interval": 120
+  },
+  "terminology_server_uri": "https://tx.fhir.org/r4/",
+  "root_resources": [],
+  "plugins": [
+    {
+      "type": "redcap",
+      "source": "api",
+      "api_url": "${REDCAP_API_URL}",
+      "api_token": "${REDCAP_API_TOKEN}",
+      "api_verify_ssl": false,
+      "base_url": "http://example.org",
+      "fhir_code_mapping": "projects/testing_kfdm_profile/source_data/fhir_code_mapping.json"
+    }
+  ]
+}

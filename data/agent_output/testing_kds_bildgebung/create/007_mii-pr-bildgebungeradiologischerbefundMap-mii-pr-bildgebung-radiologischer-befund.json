@@ -1,0 +1,334 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-radiologischer-befund-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-radiologischer-befund-map",
+  "name": "mii-pr-bildgebungeradiologischerbefundMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformDiagnosticReport",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a7449e24"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCategory",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcCat"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "vCategory",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapCategoryCoding",
+              "source": [
+                {
+                  "context": "srcCat"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCategory",
+                  "element": "coding",
+                  "variable": "vCategoryCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setCategoryCodingSystem",
+                  "source": [
+                    {
+                      "context": "srcCat"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCategoryCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setCategoryCode",
+                  "source": [
+                    {
+                      "context": "srcCat",
+                      "element": "reportCategory",
+                      "variable": "vCatCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCategoryCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vCatCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapCodeCoding",
+              "source": [
+                {
+                  "context": "srcCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCode",
+                  "element": "coding",
+                  "variable": "vCodeCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setCodeCodingSystem",
+                  "source": [
+                    {
+                      "context": "srcCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setCodeValue",
+                  "source": [
+                    {
+                      "context": "srcCode",
+                      "element": "reportCode",
+                      "variable": "vRepCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vRepCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapConclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportConclusion",
+              "variable": "vConc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "conclusion",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vConc"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveDateTime",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportEffective",
+              "variable": "vEff"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vEff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-imagingStudy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "imagingStudy",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.imagingStudy> → ImagingStudy — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

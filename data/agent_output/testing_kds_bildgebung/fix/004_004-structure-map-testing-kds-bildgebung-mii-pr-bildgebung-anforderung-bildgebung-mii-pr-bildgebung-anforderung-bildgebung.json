@@ -1,0 +1,570 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-anforderung-bildgebung-aab24071",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-mii-pr-bildgebung-anforderung-bildgebung",
+  "name": "004-structure-map-testing-kds-bildgebung-mii-pr-bildgebung-anforderung-bildgebung",
+  "title": "Structure Map for testing_kds_bildgebung - mii-pr-bildgebung-anforderung-bildgebung",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-anforderung-bildgebung). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ServiceRequest",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-anforderung-bildgebung"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-anforderung-bildgebung",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ServiceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AUTHOREDON",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.authoredOn | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-category-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "tgt-category-cc",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-cc",
+                  "element": "coding",
+                  "variable": "tgt-category-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-cc-coding0",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-cc-coding0",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "363679005"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-coding0-display",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-cc-coding0",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Imaging (procedure)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for ServiceRequest.category"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-CODE",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for ServiceRequest.code (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "encounter",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-intent-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-INTENT",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-intent-a82160b1"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for ServiceRequest.intent using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-intent-a82160b1"
+        },
+        {
+          "name": "map-reasonCode-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-REASONCODE",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "reasonCode",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-reasonCode-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reasonCode-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-reasonCode-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for ServiceRequest.reasonCode (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "reasonReference",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.reasonReference> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-requester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-requester"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "requester",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.requester> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-STATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a11a5ec9"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for ServiceRequest.status using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-a11a5ec9"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "supportingInfo",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.supportingInfo> → DiagnosticReport — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

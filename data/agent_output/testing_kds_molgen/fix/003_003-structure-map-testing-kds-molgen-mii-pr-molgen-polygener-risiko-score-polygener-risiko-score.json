@@ -1,0 +1,502 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-polygener-risiko-score-8df4c7c4",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-mii-pr-molgen-polygener-risiko-score",
+  "name": "003-structure-map-testing-kds-molgen-mii-pr-molgen-polygener-risiko-score",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/RiskAssessment",
+      "mode": "target",
+      "alias": "mii-pr-molgen-polygener-risiko-score"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-polygener-risiko-score",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "RiskAssessment",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/polygener-risiko-score"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/polygener-risiko-score"
+        },
+        {
+          "name": "TODO-resolve-reference-RiskAssessment-basis",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basis"
+            }
+          ],
+          "target": [
+            {
+              "element": "basis"
+            }
+          ],
+          "documentation": "Reference<RiskAssessment.basis> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RiskAssessment.code | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-RiskAssessment-condition",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-condition"
+            }
+          ],
+          "target": [
+            {
+              "element": "condition"
+            }
+          ],
+          "documentation": "Reference<RiskAssessment.condition> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-RiskAssessment-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "target": [
+            {
+              "element": "encounter"
+            }
+          ],
+          "documentation": "Reference<RiskAssessment.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RiskAssessment.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-occurrence",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-occurrence"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-occurrence-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_OCCURRENCE",
+                  "variable": "src-occurrence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "occurrenceDateTime",
+                  "variable": "tgt-occurrence-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-occurrence"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-occurrence-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_OCCURRENCE",
+                  "variable": "src-occurrence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "occurrence",
+                  "variable": "tgt-occurrence-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RiskAssessment.occurrence[x] | Type: choice | Cardinality: 0..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "map-prediction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-prediction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "prediction",
+              "variable": "tgt-prediction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-prediction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-whenCodeableConcept",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "element": "TODO-MAP-WHENCODEABLECONCEPT_SOURCE",
+                  "variable": "src-whenCodeableConcept"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "extension",
+                  "variable": "ext-whenCodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-whenCodeableConcept",
+                  "source": [
+                    {
+                      "context": "src-whenCodeableConcept"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-whenCodeableConcept",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/risk-assessment-einflussfaktor"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/risk-assessment-einflussfaktor"
+                },
+                {
+                  "name": "set-extension-value-whenCodeableConcept",
+                  "source": [
+                    {
+                      "context": "src-prediction",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-whenCodeableConcept",
+                      "element": "value",
+                      "transform": "create"
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/risk-assessment-einflussfaktor | Type: Extension | Path: RiskAssessment.prediction.extension"
+            },
+            {
+              "name": "map-outcome",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "variable": "src-outcome"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "outcome",
+                  "variable": "tgt-outcome",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to RiskAssessment.prediction.outcome | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-probability",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "element": "TODO_MAP_PROBABILITY",
+                  "variable": "src-probability"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "probability",
+                  "variable": "tgt-probability",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-probability"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to RiskAssessment.prediction.probability[x] | Type: decimal or Range | Cardinality: 0..1"
+            },
+            {
+              "name": "map-qualitativeRisk",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "variable": "src-qualitativeRisk"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "qualitativeRisk",
+                  "variable": "tgt-qualitativeRisk",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to RiskAssessment.prediction.qualitativeRisk | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-relativeRisk",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "element": "TODO_MAP_RELATIVERISK",
+                  "variable": "src-relativeRisk"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "relativeRisk",
+                  "variable": "tgt-relativeRisk",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-relativeRisk"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to RiskAssessment.prediction.relativeRisk | Type: decimal | Cardinality: 0..1"
+            },
+            {
+              "name": "map-when",
+              "source": [
+                {
+                  "context": "src-prediction",
+                  "variable": "src-when"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-prediction",
+                  "element": "when",
+                  "variable": "tgt-when",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to RiskAssessment.prediction.when[x] | Type: Period or Range | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to RiskAssessment.prediction | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "riskStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for RiskAssessment.status using http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+        },
+        {
+          "name": "TODO-resolve-reference-RiskAssessment-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<RiskAssessment.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

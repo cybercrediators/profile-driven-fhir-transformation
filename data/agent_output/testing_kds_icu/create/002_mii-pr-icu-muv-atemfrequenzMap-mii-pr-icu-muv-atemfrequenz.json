@@ -1,0 +1,402 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-icu-muv-atemfrequenz-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-icu/StructureMap/mii-pr-icu-muv-atemfrequenz-map",
+  "name": "mii-pr-icu-muv-atemfrequenzMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-icu",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_icu",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "rrStatus",
+              "variable": "v-rstatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "v-rstatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-icu/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "rrCode",
+              "variable": "v-rcode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "v-ccode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "v-ccode",
+                  "element": "coding",
+                  "variable": "v-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "v-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "rrCode",
+                      "variable": "v-rcode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "v-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "v-rcode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "element": "rrValue",
+              "variable": "v-rvalue",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "v-qty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-value-val",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "rrValue",
+                  "variable": "v-rvalue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "v-qty",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "v-rvalue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-origin-extension",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "v-ext-ori",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-origin-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "v-ext-ori",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-resolve-extension-url-origin"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-origin-value-placeholder",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSource"
+                }
+              ],
+              "target": [
+                {
+                  "context": "v-ext-ori",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-origin-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field value[x].origin has no mapping and is non-standard on Quantity. Created as extension placeholder."
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "v-cat-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-category-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "v-cat-cc",
+                  "element": "coding",
+                  "variable": "v-cat-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "v-cat-code",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "v-cat-code",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,588 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-genotyp-3b92b2d9",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-mii-pr-molgen-genotyp",
+  "name": "015_structure_map_testing_kds_molgen-mii-pr-molgen-genotyp",
+  "title": "Structure Map for testing_kds_molgen - mii-pr-molgen-genotyp",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-molgen-genotyp). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "mii-pr-molgen-genotyp"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-genotyp",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/genotyp"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/genotyp"
+        },
+        {
+          "name": "map-category-labCategory",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "tgt-category-labCategory",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-category-labCategory-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-labCategory",
+                  "element": "coding",
+                  "variable": "tgt-category-labCategory-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-labCategory-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-labCategory-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-labCategory-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-labCategory-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "laboratory"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice labCategory of Observation.category (type CodeableConcept)"
+        },
+        {
+          "name": "map-category-geCategory",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "tgt-category-geCategory",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-category-geCategory-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-geCategory",
+                  "element": "coding",
+                  "variable": "tgt-category-geCategory-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-geCategory-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-geCategory-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/v2-0074"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-geCategory-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-geCategory-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "GE"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice geCategory of Observation.category (type CodeableConcept)"
+        },
+        {
+          "name": "set-fixed-code",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-fixed-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-code",
+                  "element": "coding",
+                  "variable": "tgt-fixed-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-code-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-coding-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "84413-4"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for code"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-derivedFrom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-derivedFrom"
+            }
+          ],
+          "target": [
+            {
+              "element": "derivedFrom"
+            }
+          ],
+          "documentation": "Reference<Observation.derivedFrom> → DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveDateTime",
+                  "variable": "tgt-effective-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Timing",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-instant",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveInstant",
+                  "variable": "tgt-effective-instant",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: choice | Cardinality: 0..1 | Choice types: dateTime, Period, Timing, instant"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "target": [
+            {
+              "element": "encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUED",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.issued | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-STATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Observation.status using http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "tgt-value",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: CodeableConcept | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

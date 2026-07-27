@@ -1,0 +1,670 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Duplicate mapping logic detected: Rules 'mapStatus' and 'mapStudyStatus' both map source.studyStatus to target.status with identical conditions, causing ambiguity.",
+        "Duplicate mapping logic detected: Rules 'mapStarted' and 'map-started' (and variants for numberOfSeries) exist in the same group, risking inconsistent data assignments.",
+        "Multiple extension values rely on 'TODO-VALUE-SOURCE' placeholder without conditional checks for mandatory slices."
+      ],
+      "improvements": [
+        "Consolidate duplicate rules for status and started fields to a single definitive mapping rule.",
+        "Verify source availability for all extension value placeholders (e.g., CTDIvol, contrastBolus) to ensure required slice data is not lost."
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Duplicate mapping logic detected: Rules 'mapStatus' and 'mapStudyStatus' both map source.studyStatus to target.status with identical conditions, causing ambiguity.",
+          "Duplicate mapping logic detected: Rules 'mapStarted' and 'map-started' (and variants for numberOfSeries) exist in the same group, risking inconsistent data assignments.",
+          "Multiple extension values rely on 'TODO-VALUE-SOURCE' placeholder without conditional checks for mandatory slices."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 21,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Duplicate mapping logic detected: Rules 'mapStatus' and 'mapStudyStatus' both map source.studyStatus to target.status with identical conditions, causing ambiguity.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Duplicate mapping logic detected: Rules 'mapStarted' and 'map-started' (and variants for numberOfSeries) exist in the same group, risking inconsistent data assignments.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Multiple extension values rely on 'TODO-VALUE-SOURCE' placeholder without conditional checks for mandatory slices.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-geraet",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Element deviceName.type (Cardinality 1..1) maps from 'TODO_MAP_TYPE' placeholder; ensure source data exists to meet profile constraints.",
+        "Element version.value (Cardinality 1..1) maps from 'TODO_MAP_VALUE' placeholder; verify required value population."
+      ],
+      "improvements": [
+        "Update mapping logic for deviceName.type and version.value to use specific source elements instead of generic TODO placeholders if data is available in the source definition."
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Element deviceName.type (Cardinality 1..1) maps from 'TODO_MAP_TYPE' placeholder; ensure source data exists to meet profile constraints.",
+          "Element version.value (Cardinality 1..1) maps from 'TODO_MAP_VALUE' placeholder; verify required value population."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 5,
+        "coverage": {
+          "mapped": 2,
+          "denominator": 2,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Element deviceName.type (Cardinality 1..1) maps from 'TODO_MAP_TYPE' placeholder; ensure source data exists to meet profile constraints.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Element version.value (Cardinality 1..1) maps from 'TODO_MAP_VALUE' placeholder; verify required value population.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Reference rule 'TODO-resolve-reference-BodyStructure-patient' relies on bundle assembler; ensure Patient resource identifiers are accessible at resolution time."
+      ],
+      "improvements": [
+        "Verify consistency of SNOMED CT system usage in map-location-copy and map-morphology-copy compared to other resources (e.g., BodyStructure context)."
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Reference rule 'TODO-resolve-reference-BodyStructure-patient' relies on bundle assembler; ensure Patient resource identifiers are accessible at resolution time."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 7,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Reference rule 'TODO-resolve-reference-BodyStructure-patient' relies on bundle assembler; ensure Patient resource identifiers are accessible at resolution time.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht",
+      "status": "invalid",
+      "requires_fix": true,
+      "semantic_errors": [
+        "Matchbox engine ($validate vs profile): Constraint failed: cmp-1: 'A section must contain at least one of text, entries, or sub-sections' (defined in http://hl7.org/fhir/StructureDefinition/Composition) (at Composition.section[0])"
+      ],
+      "warnings": [
+        "Critical element date (1..1) relies on 'TODO_MAP_DATE' placeholder; verify source availability to prevent validation failures.",
+        "Status translation uses ConceptMap cm-status-5c34e8ef, which differs from other resources."
+      ],
+      "improvements": [
+        "Standardize status translation concept maps across Composition and ImagingStudy/Procedure resources if they represent the same workflow states."
+      ],
+      "residual_summary": {
+        "action_needed": [
+          "Matchbox engine ($validate vs profile): Constraint failed: cmp-1: 'A section must contain at least one of text, entries, or sub-sections' (defined in http://hl7.org/fhir/StructureDefinition/Composition) (at Composition.section[0])"
+        ],
+        "known_gap": [],
+        "advisory": [
+          "Critical element date (1..1) relies on 'TODO_MAP_DATE' placeholder; verify source availability to prevent validation failures.",
+          "Status translation uses ConceptMap cm-status-5c34e8ef, which differs from other resources."
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 7,
+          "denominator": 7,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate vs profile): Constraint failed: cmp-1: 'A section must contain at least one of text, entries, or sub-sections' (defined in http://hl7.org/fhir/StructureDefinition/Composition) (at Composition.section[0])": {
+            "class": "engine_error",
+            "severity": "error",
+            "code": "invariant"
+          },
+          "Critical element date (1..1) relies on 'TODO_MAP_DATE' placeholder; verify source availability to prevent validation failures.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Status translation uses ConceptMap cm-status-5c34e8ef, which differs from other resources.": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.basedOn: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 2,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 6,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.basedOn: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.basedOn: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): MedicationAdministration.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+        "Matchbox engine ($validate, no-source gap): MedicationAdministration.medication[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+        "Matchbox engine ($validate, no-source gap): MedicationAdministration.effective[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+        "Matchbox engine ($validate, no-source gap): MedicationAdministration.dosage: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+        "Matchbox engine ($validate, pending bundle assembly): MedicationAdministration.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.medication[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.effective[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.dosage: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 1,
+        "mapped_target_leaves": 16,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 5,
+          "percent": 60.0,
+          "unmapped": [
+            "effective[x]",
+            "medication[x]"
+          ]
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.medication[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.effective[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.dosage: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): MedicationAdministration.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.medication[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.effective[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, no-source gap): MedicationAdministration.dosage: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)",
+          "Matchbox engine ($validate, pending bundle assembly): MedicationAdministration.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe|2026.0.0) (at MedicationAdministration)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): ServiceRequest.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+        "Matchbox engine ($validate, no-source gap): ServiceRequest.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+        "Matchbox engine ($validate, no-source gap): ServiceRequest.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+        "Matchbox engine ($validate, pending bundle assembly): ServiceRequest.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 1,
+        "mapped_target_leaves": 16,
+        "coverage": {
+          "mapped": 5,
+          "denominator": 5,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): ServiceRequest.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+          "Matchbox engine ($validate, no-source gap): ServiceRequest.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)",
+          "Matchbox engine ($validate, pending bundle assembly): ServiceRequest.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung|2026.0.0) (at ServiceRequest)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+        "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 2,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 6,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Procedure.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, no-source gap): Procedure.performed[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)",
+          "Matchbox engine ($validate, pending bundle assembly): Procedure.report: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur|2026.0.0) (at Procedure)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): Observation.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+        "Matchbox engine ($validate, no-source gap): Observation.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+        "Matchbox engine ($validate, no-source gap): Observation.value[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+        "Matchbox engine ($validate, pending bundle assembly): Observation.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+        "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have a subject (at Observation)",
+        "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have a performer (at Observation)",
+        "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have an effective[x] () (at Observation)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): Observation.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+          "Matchbox engine ($validate, no-source gap): Observation.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+          "Matchbox engine ($validate, no-source gap): Observation.value[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 4,
+        "mapped_target_leaves": 14,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 4,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): Observation.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Observation.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): Observation.value[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): Observation.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have a subject (at Observation)": {
+            "class": "engine_warning",
+            "severity": "warning",
+            "code": "invalid"
+          },
+          "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have a performer (at Observation)": {
+            "class": "engine_warning",
+            "severity": "warning",
+            "code": "invalid"
+          },
+          "Matchbox engine ($validate): Best Practice Recommendation: In general, all observations should have an effective[x] () (at Observation)": {
+            "class": "engine_warning",
+            "severity": "warning",
+            "code": "invalid"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): Observation.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+          "Matchbox engine ($validate, no-source gap): Observation.code: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+          "Matchbox engine ($validate, no-source gap): Observation.value[x]: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)",
+          "Matchbox engine ($validate, pending bundle assembly): Observation.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung|2026.0.0) (at Observation)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, unverified synthetic code): Unknown code '1' in the CodeSystem 'http://terminology.hl7.org/CodeSystem/v2-0074' version '2.9' (at DiagnosticReport.category[0].coding[3].code)",
+        "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)",
+        "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.imagingStudy: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [],
+        "expected_noise_count": 3,
+        "mapped_target_leaves": 11,
+        "coverage": {
+          "mapped": 9,
+          "denominator": 9,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, unverified synthetic code): Unknown code '1' in the CodeSystem 'http://terminology.hl7.org/CodeSystem/v2-0074' version '2.9' (at DiagnosticReport.category[0].coding[3].code)": {
+            "class": "demotion:unverified_synthetic_code",
+            "severity": "error",
+            "code": "code-invalid"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.imagingStudy: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, unverified synthetic code): Unknown code '1' in the CodeSystem 'http://terminology.hl7.org/CodeSystem/v2-0074' version '2.9' (at DiagnosticReport.category[0].coding[3].code)",
+          "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)",
+          "Matchbox engine ($validate, pending bundle assembly): DiagnosticReport.imagingStudy: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund|2026.0.0) (at DiagnosticReport)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung",
+      "status": "valid",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Matchbox engine ($validate, no-source gap): CarePlan.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)",
+        "Matchbox engine ($validate, no-source gap): CarePlan.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)",
+        "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)"
+      ],
+      "improvements": [],
+      "validation_source": "engine (unchanged since last LLM pass)",
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [
+          "Matchbox engine ($validate, no-source gap): CarePlan.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)",
+          "Matchbox engine ($validate, no-source gap): CarePlan.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)"
+        ],
+        "advisory": [],
+        "expected_noise_count": 1,
+        "mapped_target_leaves": 7,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Matchbox engine ($validate, no-source gap): CarePlan.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, no-source gap): CarePlan.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)": {
+            "class": "demotion:no_source_gap",
+            "severity": "error",
+            "code": "structure"
+          },
+          "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)": {
+            "class": "demotion:pending_bundle_assembly",
+            "severity": "error",
+            "code": "structure"
+          }
+        },
+        "demoted_findings": [
+          "Matchbox engine ($validate, no-source gap): CarePlan.status: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)",
+          "Matchbox engine ($validate, no-source gap): CarePlan.intent: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)",
+          "Matchbox engine ($validate, pending bundle assembly): CarePlan.subject: minimum required = 1, but only found 0 (from https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung|2026.0.0) (at CarePlan)"
+        ],
+        "valid_relies_on_demotions": true
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+      ],
+      "severity": "warning",
+      "description": "Inconsistent ConceptMaps used for status field translation. ImagingStudy uses 'cm-status-c6deb0e2' while Composition uses 'cm-status-5c34e8ef'. This may lead to fragmented status values across resources.",
+      "fix_recommendation": "Align on a single shared status ConceptMap for all workflow statuses or document the distinct semantic meaning of each."
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsstudie",
+        "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur"
+      ],
+      "severity": "info",
+      "description": "ImagingStudy.procedureReference points to a Procedure resource. A validated map for 'mii-pr-bildgebung-bildgebungsprozedur' exists in the ecosystem.",
+      "fix_recommendation": "Current rule defers resolution to bundle assembler ('TODO-resolve-reference-ImagingStudy-procedureReference'). Ensure source data contains shared identifiers or bundle context allows linkage at assembly time."
+    }
+  ],
+  "resolvable_references": [],
+  "next_actions": {
+    "resources_needing_fix": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ],
+    "all_valid": false,
+    "deterministically_forced": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ]
+  },
+  "validity_summary": {
+    "unconditionally_valid": 3,
+    "demotion_reliant": 7,
+    "invalid": 1,
+    "headline": "3 unconditional / 7 demotion-reliant / 1 invalid (of 11)",
+    "demotion_reliant_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-bildgebungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-kontrastmittelgabe",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-anforderung-bildgebung",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-befundungsprozedur",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologische-beobachtung",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-behandlungsempfehlung"
+    ],
+    "invalid_resources": [
+      "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+    ]
+  }
+}

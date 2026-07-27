@@ -1,0 +1,201 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-onko-systemische-therapie-medikation-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-onko/StructureMap/mii-pr-onko-systemische-therapie-medikation-map",
+  "name": "miiPrOnkoSystemischeTherapieMedikationMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-onkologie",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformMedicationStatement",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_onkologie",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationStatement",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "medStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-onkologie/ConceptMap/cm-status-c86feccc"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-medicationText",
+          "source": [
+            {
+              "context": "source",
+              "element": "medText",
+              "variable": "vMedText"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "vCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "copyMedicationText",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCC",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vMedText"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-effectiveDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "medEffective",
+              "variable": "vMedEff"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vMedEff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-medication",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medicationReference",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.medication> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-partOf",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "partOf",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.partOf> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

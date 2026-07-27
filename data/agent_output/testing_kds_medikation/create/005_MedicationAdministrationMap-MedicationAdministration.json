@@ -1,0 +1,173 @@
+{
+  "resourceType": "StructureMap",
+  "id": "medicationadministration-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureMap/MedicationAdministration-map",
+  "name": "MedicationAdministrationMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationAdministration",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformMedicationAdministration",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationAdministration",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "administrationStatus",
+              "variable": "vStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate to MedicationAdministration.status: source codes assumed valid; replace translate with real ConceptMap if available"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "administrationEffective",
+              "variable": "vEff"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vEff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-medication-text",
+          "source": [
+            {
+              "context": "source",
+              "element": "administrationMedicationText",
+              "variable": "vMedText"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medication",
+              "variable": "vMed",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-med-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vMed",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vMedText"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-medication",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medicationReference",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.medication> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

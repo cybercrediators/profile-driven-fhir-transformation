@@ -1,0 +1,258 @@
+{
+  "resourceType": "StructureMap",
+  "id": "anamnese-bewegung-map",
+  "url": "http://example.org/StructureMap/anamnese-bewegung-map",
+  "name": "anamnese-bewegungMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-SOURCE-FOR-ClinicalStatus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field with no source mapping - manual review needed"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "mapActivityExtension",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vActExt",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setActivityUrl",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vActExt",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/physical-activity-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-YesNoUnknownExtension",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "bewegung",
+                  "variable": "vBewegung"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vActExt",
+                  "element": "extension",
+                  "variable": "vYesNoExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-YesNoUrl",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vYesNoExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoUnknownExtension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-YesNoValue",
+                  "source": [
+                    {
+                      "context": "vBewegung"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vYesNoExt",
+                      "element": "valueBoolean",
+                      "transform": "evaluate",
+                      "parameter": [
+                        {
+                          "valueString": "$this = '1'"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-HoursPerWeekExtension",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vActExt",
+                  "element": "extension",
+                  "variable": "vHoursExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-HoursUrl",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vHoursExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "HoursPerWeek"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-HoursValue",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "bewegung_std",
+                      "variable": "vBewegungStd",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vHoursExt",
+                      "element": "valueDecimal",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "vBewegungStd"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

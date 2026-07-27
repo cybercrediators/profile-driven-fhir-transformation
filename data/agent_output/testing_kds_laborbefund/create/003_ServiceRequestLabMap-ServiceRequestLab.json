@@ -1,0 +1,320 @@
+{
+  "resourceType": "StructureMap",
+  "id": "servicerequestlab-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureMap/ServiceRequestLab-map",
+  "name": "ServiceRequestLabMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/ServiceRequest",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformServiceRequest",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ServiceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "setStatusCompleted",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "setIntentOrder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "order"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapServiceCode",
+          "source": [
+            {
+              "context": "source",
+              "element": "serviceCode",
+              "variable": "vSrcCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "createCodingForServiceCode",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setCodingSystemLOINC",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setCodingCodeFromSource",
+                  "source": [
+                    {
+                      "context": "vSrcCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vSrcCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCategoryPlaceholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-placeholder-Identifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-placeholder-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "authoredOn",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-placeholder-extension-sampleddata",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "ServiceRequest.occurrence[x].modifierExtension.valueSampledData.origin - Extension URL and value undefined, creating generic extension placeholder"
+        },
+        {
+          "name": "TODO-placeholder-extension-signature",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "ServiceRequest.occurrence[x].modifierExtension.valueSignature.type/who - Extension URL and value undefined, creating generic extension placeholder"
+        },
+        {
+          "name": "TODO-placeholder-extension-usagecontext",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "documentation": "ServiceRequest.occurrence[x].modifierExtension.valueUsageContext.code - Extension URL and value undefined, creating generic extension placeholder"
+        }
+      ]
+    }
+  ]
+}

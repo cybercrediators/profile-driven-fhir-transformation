@@ -1,0 +1,537 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-semistrukt-befundbericht-1fe23058",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-mii-pr-bildgebung-semistrukt-befundbericht",
+  "name": "006_structure_map_testing_kds_bildgebung-mii-pr-bildgebung-semistrukt-befundbericht",
+  "title": "Structure Map for testing_kds_bildgebung - mii-pr-bildgebung-semistrukt-befundbericht",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-semistrukt-befundbericht). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Composition",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-semistrukt-befundbericht"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-semistrukt-befundbericht",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Composition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-semistrukt-befundbericht"
+        },
+        {
+          "name": "map-attester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-attester"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "attester",
+              "variable": "tgt-attester",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-attester",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-mode",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "element": "TODO_MAP_MODE",
+                  "variable": "src-mode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-attester",
+                  "element": "mode",
+                  "variable": "tgt-mode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-mode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.attester.mode | Type: [{'code': 'code'}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Composition.attester | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-author",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-author"
+            }
+          ],
+          "target": [
+            {
+              "element": "author"
+            }
+          ],
+          "documentation": "Reference<Composition.author> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.date | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-relatesTo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relatesTo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "relatesTo",
+              "variable": "tgt-relatesTo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-relatesTo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "element": "TODO_MAP_CODE",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relatesTo",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.relatesTo.code | Type: [{'code': 'code'}] | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-target",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "variable": "src-target"
+                }
+              ],
+              "target": [
+                {
+                  "element": "target"
+                }
+              ],
+              "documentation": "Reference<Composition.target> → Composition — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Composition.relatesTo | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-section-diagRep",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "section",
+              "variable": "tgt-section-diagRep",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-diagRep-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-diagRep",
+                  "element": "code",
+                  "variable": "tgt-section-diagRep-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-diagRep-code-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-diagRep-code",
+                      "element": "coding",
+                      "variable": "tgt-section-diagRep-code-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-diagRep-code-coding-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-diagRep-code-coding",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-diagRep-code-coding-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-diagRep-code-coding",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "18782-3"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-diagRep-code-coding-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-diagRep-code-coding",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Radiology Study observation (narrative)"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice diagRep of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-STATUS",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-5c34e8ef"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Composition.status using http://example.org/StructureMap/source-definition-testing-kds-bildgebung/ConceptMap/cm-status-5c34e8ef"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<Composition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_TITLE",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.title | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "map-type-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "variable": "tgt-type-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-type-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "element": "coding",
+                  "variable": "tgt-type-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-cc-coding0",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-cc-coding0",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "18748-4"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for Composition.type"
+        }
+      ]
+    }
+  ]
+}

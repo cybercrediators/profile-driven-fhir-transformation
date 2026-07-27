@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fsh-nifi-bridge"
+version = "0.1.0"
+description = "Generates FHIR Mapping Language StructureMaps from FSH/FHIR profiles and mapping tables, executable via a Matchbox server and exposed to ETL tools (e.g. Apache NiFi)."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.32",
+    "fhir.resources>=8.0",
+    "pydantic>=2.0",
+    "valkey>=6.0",
+    "jsonpickle>=3.0",
+    "numpy>=1.26",
+    "pandas>=2.0",
+    "rich",
+    "docker>=7.0",
+]
+
+[project.optional-dependencies]
+# GloVe embedding backend for the automapper; TF-IDF fallback works without it.
+ml = ["torch>=2.0", "torchtext==0.6.0"]
+eval = ["more-itertools"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+    "pytest-xdist>=3.5",
+    "coverage[toml]>=7.4",
+    "black>=24.0",
+    "isort>=5.13",
+    "flake8>=7.0",
+    "mypy>=1.8",
+    "pylint>=3.3",
+]
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+py-modules = ["main"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

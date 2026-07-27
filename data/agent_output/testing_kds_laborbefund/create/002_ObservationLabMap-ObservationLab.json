@@ -1,0 +1,289 @@
+{
+  "resourceType": "StructureMap",
+  "id": "observationlab-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureMap/ObservationLab-map",
+  "name": "ObservationLabMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsStatus",
+              "variable": "vStat",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStat"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-laborbefund/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-effectiveDateTime",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsEffective",
+              "variable": "vEff"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "vEff"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcCodeContext"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code-coding",
+              "source": [
+                {
+                  "context": "srcCodeContext"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCC",
+                  "element": "coding",
+                  "variable": "vCod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system-todo",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCod",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-value",
+                  "source": [
+                    {
+                      "context": "srcCodeContext",
+                      "element": "obsCode",
+                      "variable": "vobsCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCod",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vobsCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "todo-category-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "todo-identifier-placeholder",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "vId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vId",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vId",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-id-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "todo-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.subject> -> Resource - resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

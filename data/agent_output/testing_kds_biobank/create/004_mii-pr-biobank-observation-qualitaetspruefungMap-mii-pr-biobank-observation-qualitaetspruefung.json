@@ -1,0 +1,272 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-biobank-observation-qualitaetspruefung-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/mii-pr-biobank-observation-qualitaetspruefung-map",
+  "name": "mii-pr-biobank-observation-qualitaetspruefungMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapObservationCode",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "http://hl7.org/fhir/CodeSystem/observation-codes"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required CodeableConcept field - source not mapped, using placeholder code"
+        },
+        {
+          "name": "mapObservationStatus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Status translation via ConceptMap"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "focus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "mapComponent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "variable": "vComponent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapComponentCode",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vComponent",
+                  "element": "code",
+                  "transform": "cc",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/CodeSystem/observation-codes"
+                    },
+                    {
+                      "valueString": "TODO-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Component CodeableConcept - source not mapped"
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveDate",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effectiveDateTime",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required effective[x] dateTime field - source not mapped"
+        },
+        {
+          "name": "mapComponentValueOrigin",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "variable": "vCompValOrig",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setCompValOrigCode",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCompValOrig",
+                  "element": "code",
+                  "transform": "cc",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/CodeSystem/observation-codes"
+                    },
+                    {
+                      "valueString": "TODO-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Component code - required field from vCompValOrig scope"
+            }
+          ],
+          "documentation": "Component value[x].origin Quantity - source not mapped"
+        },
+        {
+          "name": "mapEffModExtSigType",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEffPeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Effective modifierExtension valueSignature.type Coding - source not mapped"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-who",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEffWho",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.who> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

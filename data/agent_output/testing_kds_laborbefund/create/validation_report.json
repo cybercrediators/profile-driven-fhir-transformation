@@ -1,0 +1,198 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Rule map-code-coding copies source element directly to Coding.system and code without validation - may create invalid CodeableConcept structure",
+        "Code mapping does not use ConceptMap like status field - inconsistent coding strategy across mapped elements"
+      ],
+      "improvements": [
+        "Consider extracting code/coding creation logic into a reusable named group for use in ObservationLab and ServiceRequestLab maps",
+        "Document which source fields contain the category value to resolve mapCategory TODO placeholder"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule map-code-coding copies source element directly to Coding.system and code without validation - may create invalid CodeableConcept structure",
+          "Code mapping does not use ConceptMap like status field - inconsistent coding strategy across mapped elements"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 9,
+        "coverage": {
+          "mapped": 9,
+          "denominator": 9,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Rule map-code-coding copies source element directly to Coding.system and code without validation - may create invalid CodeableConcept structure": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Code mapping does not use ConceptMap like status field - inconsistent coding strategy across mapped elements": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Rule map-code references undefined source context 'srcCodeContext' before it is declared - will cause runtime error",
+        "set-code-system-todo uses literal string 'TODO-system' instead of actual code system URL"
+      ],
+      "improvements": [
+        "Define srcCodeContext in the rule's source elements before referencing it in nested rules",
+        "Ensure identifier.system is consistent with DiagnosticReportLab if results reference diagnostic report identifiers",
+        "Extract common category mapping logic into shared group once source field is identified"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Rule map-code references undefined source context 'srcCodeContext' before it is declared - will cause runtime error",
+          "set-code-system-todo uses literal string 'TODO-system' instead of actual code system URL"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 6,
+          "denominator": 10,
+          "percent": 60.0,
+          "unmapped": [
+            "value[x].code",
+            "value[x].system",
+            "value[x].unit",
+            "value[x].value"
+          ]
+        },
+        "finding_classes": {
+          "Rule map-code references undefined source context 'srcCodeContext' before it is declared - will cause runtime error": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "set-code-system-todo uses literal string 'TODO-system' instead of actual code system URL": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Three extension placeholder rules create generic Extension elements without valid URLs or values - these will not produce valid FHIR extensions",
+        "authoredOn rule references 'TODO-findSource' but documentation indicates this should map to a date value"
+      ],
+      "improvements": [
+        "Remove or properly implement the three extension placeholder rules - generic Extension creation without URL is invalid FHIR",
+        "Clarify source field for authoredOn mapping (separate from obsEffective which is used in DiagnosticReportLab)"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Three extension placeholder rules create generic Extension elements without valid URLs or values - these will not produce valid FHIR extensions",
+          "authoredOn rule references 'TODO-findSource' but documentation indicates this should map to a date value"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 8,
+        "coverage": {
+          "mapped": 7,
+          "denominator": 7,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Three extension placeholder rules create generic Extension elements without valid URLs or values - these will not produce valid FHIR extensions": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "authoredOn rule references 'TODO-findSource' but documentation indicates this should map to a date value": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
+      ],
+      "severity": "error",
+      "description": "DiagnosticReport.result references Observation resources but no identifier mapping exists to link them. Both maps use different placeholder strategies for identifiers.",
+      "fix_recommendation": "Establish consistent identifier system across DiagnosticReportLab and ObservationLab before implementing result reference resolution"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"
+      ],
+      "severity": "warning",
+      "description": "All three resource maps have TODO placeholders for subject references - if Patient profile is not available in input, these must remain unresolved. However, consider if a common patient reference resolution strategy could be applied later.",
+      "fix_recommendation": "Document that all subject references require external Patient resource bundle assembly"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
+      ],
+      "severity": "info",
+      "description": "Both maps map obsEffective but to different target elements (DiagnosticReport.effectiveDateTime vs Observation.effectiveDateTime). This may be semantically correct but should be documented.",
+      "fix_recommendation": "Add documentation noting that effective[x] represents the same observation time across resources"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+      "rule_name": "TODO-resolve-reference-DiagnosticReport-result",
+      "target_element": "result",
+      "candidate_map": "observationlab-map",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "vResultRef",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://example.org/obs-ids"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 3,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "3 unconditional / 0 demotion-reliant / 0 invalid (of 3)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

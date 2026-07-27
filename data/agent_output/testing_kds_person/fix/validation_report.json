@@ -1,0 +1,274 @@
+{
+  "resource_evaluations": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "TODO placeholders for clinicalStatus and verificationStatus use translate transform but source element is 'TODO-SOURCE-FOR-CLINICALSTATUS'/'TODO-SOURCE-FOR-VERIFICATIONSTATUS' - actual source fields need to be identified",
+        "Subject reference placeholder exists but no patient identifier mapping visible in this map; will depend on PatientPseudonymisiert or Patient map for cross-resolution"
+      ],
+      "improvements": [
+        "Replace 'TODO-SOURCE-FOR-CLINICALSTATUS' and 'TODO-SOURCE-FOR-VERIFICATIONSTATUS' with actual source field names once source schema is known",
+        "Consider consolidating category mapping logic if multiple death cause concepts need to be mapped"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "TODO placeholders for clinicalStatus and verificationStatus use translate transform but source element is 'TODO-SOURCE-FOR-CLINICALSTATUS'/'TODO-SOURCE-FOR-VERIFICATIONSTATUS' - actual source fields need to be identified",
+          "Subject reference placeholder exists but no patient identifier mapping visible in this map; will depend on PatientPseudonymisiert or Patient map for cross-resolution"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 3,
+          "denominator": 3,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "TODO placeholders for clinicalStatus and verificationStatus use translate transform but source element is 'TODO-SOURCE-FOR-CLINICALSTATUS'/'TODO-SOURCE-FOR-VERIFICATIONSTATUS' - actual source fields need to be identified": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Subject reference placeholder exists but no patient identifier mapping visible in this map; will depend on PatientPseudonymisiert or Patient map for cross-resolution": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Static check reports Observation.component.code as unmapped required field, yet map-code-fixed-codings sets fixed value for Observation.code (not component.code) - this is a structural gap",
+        "TODO placeholder 'map-effective' uses 'TODO_MAP_EFFECTIVE' source element that needs actual source mapping"
+      ],
+      "improvements": [
+        "Add explicit mapping for Observation.component[] with code values if vital status observation requires components per profile definition",
+        "Replace 'TODO_MAP_EFFECTIVE' with actual effective date/time source field name from KDS schema"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Static check reports Observation.component.code as unmapped required field, yet map-code-fixed-codings sets fixed value for Observation.code (not component.code) - this is a structural gap",
+          "TODO placeholder 'map-effective' uses 'TODO_MAP_EFFECTIVE' source element that needs actual source mapping"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 7,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 7,
+          "percent": 57.1,
+          "unmapped": [
+            "component.code",
+            "effective[x]",
+            "value[x]"
+          ]
+        },
+        "finding_classes": {
+          "Static check reports Observation.component.code as unmapped required field, yet map-code-fixed-codings sets fixed value for Observation.code (not component.code) - this is a structural gap": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "TODO placeholder 'map-effective' uses 'TODO_MAP_EFFECTIVE' source element that needs actual source mapping": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Static check reports Patient.identifier as unmapped required field - only data-absent-reason extension placeholder exists but no actual identifier value mapping",
+        "Multiple extension rules use 'TODO-VALUE-SOURCE' as source variable without identifying the actual KDS source fields"
+      ],
+      "improvements": [
+        "Add Patient.identifier.value mapping with appropriate system (likely pseudonym identifier scheme distinct from MR number used in full Patient map)",
+        "Standardize placeholder naming across extension rules to make it clear which source schema fields are intended",
+        "Consider reusing named groups for the repetitive extension URL + value patterns"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Static check reports Patient.identifier as unmapped required field - only data-absent-reason extension placeholder exists but no actual identifier value mapping",
+          "Multiple extension rules use 'TODO-VALUE-SOURCE' as source variable without identifying the actual KDS source fields"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 10,
+        "coverage": {
+          "mapped": 4,
+          "denominator": 8,
+          "percent": 50.0,
+          "unmapped": [
+            "identifier",
+            "identifier.value",
+            "name.family",
+            "name.given"
+          ]
+        },
+        "finding_classes": {
+          "Static check reports Patient.identifier as unmapped required field - only data-absent-reason extension placeholder exists but no actual identifier value mapping": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Multiple extension rules use 'TODO-VALUE-SOURCE' as source variable without identifying the actual KDS source fields": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient",
+      "status": "valid_with_warnings",
+      "requires_fix": false,
+      "semantic_errors": [],
+      "warnings": [
+        "Duplicate mapping rules detected: Stadtteil extension rule appears twice (line ~90 and line ~125)",
+        "Duplicate mapping rules detected: gemeindeschluessel extension rule appears twice",
+        "Duplicate mapping rules detected: namenszusatz, nachname, vorsatzwort, prefix-qualifier extension rules each appear twice"
+      ],
+      "improvements": [
+        "Remove all duplicate mapping rules - only one instance of each extension mapping is needed",
+        "Extract common extension mapping logic into a reusable named group to avoid duplication in future generations",
+        "Fix map-extension-data-absent-reason under map-birthDate which uses 'TODO_EXTENSION_URL' instead of proper FHIR canonical URL for data-absent-reason extension"
+      ],
+      "residual_summary": {
+        "action_needed": [],
+        "known_gap": [],
+        "advisory": [
+          "Duplicate mapping rules detected: Stadtteil extension rule appears twice (line ~90 and line ~125)",
+          "Duplicate mapping rules detected: gemeindeschluessel extension rule appears twice",
+          "Duplicate mapping rules detected: namenszusatz, nachname, vorsatzwort, prefix-qualifier extension rules each appear twice"
+        ],
+        "expected_noise_count": 0,
+        "mapped_target_leaves": 18,
+        "coverage": {
+          "mapped": 7,
+          "denominator": 7,
+          "percent": 100.0,
+          "unmapped": []
+        },
+        "finding_classes": {
+          "Duplicate mapping rules detected: Stadtteil extension rule appears twice (line ~90 and line ~125)": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Duplicate mapping rules detected: gemeindeschluessel extension rule appears twice": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          },
+          "Duplicate mapping rules detected: namenszusatz, nachname, vorsatzwort, prefix-qualifier extension rules each appear twice": {
+            "class": "advisory",
+            "severity": null,
+            "code": null
+          }
+        },
+        "demoted_findings": [],
+        "valid_relies_on_demotions": false
+      }
+    }
+  ],
+  "cross_resource_issues": [
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Patient"
+      ],
+      "severity": "warning",
+      "description": "Patient resource has identifier mapping with MR type (system: http://terminology.hl7.org/CodeSystem/v2-0203, code: MR), while PatientPseudonymisiert lacks any actual identifier value mapping - only data-absent-reason extension placeholder exists. These profiles may need different identifier strategies for pseudonym vs internal patient identifiers.",
+      "fix_recommendation": "PatientPseudonymisiert should map to the pseudonym identifier (different system than MR) rather than leaving Patient.identifier unmapped, or both maps should reference a shared identifier strategy"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert"
+      ],
+      "severity": "warning",
+      "description": "Todesursache has TODO-resolve-reference-Condition-subject placeholder, but PatientPseudonymisiert lacks identifier mapping that would allow the reference to resolve properly via bundle assembler",
+      "fix_recommendation": "Once patient identifier is mapped in PatientPseudonymisiert, update Condition.subject reference rule to use correct variable pointing to Patient.identifier.value"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/PatientPseudonymisiert"
+      ],
+      "severity": "warning",
+      "description": "Vitalstatus has TODO-resolve-reference-Observation-subject placeholder, but PatientPseudonymisiert lacks identifier mapping that would allow the reference to resolve properly via bundle assembler",
+      "fix_recommendation": "Once patient identifier is mapped in PatientPseudonymisiert, update Observation.subject reference rule to use correct variable pointing to Patient.identifier.value"
+    },
+    {
+      "affected_resources": [
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+        "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus"
+      ],
+      "severity": "info",
+      "description": "Both Condition (Todesursache) and Observation (Vitalstatus) have TODO placeholders for Encounter reference, but no Encounter profile/map exists in the generated set. These cannot be resolved without an Encounter mapping.",
+      "fix_recommendation": "No fix possible - these references must remain as TODO placeholders until an Encounter map is provided or encounter context is obtained from bundle assembler"
+    }
+  ],
+  "resolvable_references": [
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Todesursache",
+      "rule_name": "TODO-resolve-reference-Condition-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-mi-pr-person-patient-pseudonymisiert-f195ed8d",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "patient_identifier_variable",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+    },
+    {
+      "resource": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+      "rule_name": "TODO-resolve-reference-Observation-subject",
+      "target_element": "subject",
+      "candidate_map": "sm-mi-pr-person-patient-pseudonymisiert-f195ed8d",
+      "resolution": {
+        "transform": "reference",
+        "source_variable": "patient_identifier_variable",
+        "target_identifier_path": "identifier.value",
+        "identifier_system": "http://terminology.hl7.org/CodeSystem/v2-0203"
+      }
+    }
+  ],
+  "next_actions": {
+    "resources_needing_fix": [],
+    "all_valid": true
+  },
+  "validity_summary": {
+    "unconditionally_valid": 4,
+    "demotion_reliant": 0,
+    "invalid": 0,
+    "headline": "4 unconditional / 0 demotion-reliant / 0 invalid (of 4)",
+    "demotion_reliant_resources": [],
+    "invalid_resources": []
+  }
+}

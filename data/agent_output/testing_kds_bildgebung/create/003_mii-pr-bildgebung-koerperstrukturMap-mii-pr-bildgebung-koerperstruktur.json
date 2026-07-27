@@ -1,0 +1,237 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-koerperstruktur-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-koerperstruktur-map",
+  "name": "mii-pr-bildgebung-koerperstrukturMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/BodyStructure",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformBodyStructure",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "BodyStructure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-resolve-reference-BodyStructure-patient",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "patient",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<BodyStructure.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-location",
+          "source": [
+            {
+              "context": "source",
+              "element": "bodyLocation",
+              "variable": "vBodyLoc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "location",
+              "variable": "vLocCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "create-location-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vLocCC",
+                  "element": "coding",
+                  "variable": "vLocCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-location-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vLocCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/CodeSystem/body-site"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "copy-location-code",
+                  "source": [
+                    {
+                      "context": "vBodyLoc"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vLocCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vBodyLoc"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-morphology",
+          "source": [
+            {
+              "context": "source",
+              "element": "bodyMorphology",
+              "variable": "vBodyMorph"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "morphology",
+              "variable": "vMorphCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "create-morphology-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vMorphCC",
+                  "element": "coding",
+                  "variable": "vMorphCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-morphology-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vMorphCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/CodeSystem/bodystructure-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "copy-morphology-code",
+                  "source": [
+                    {
+                      "context": "vBodyMorph"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vMorphCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vBodyMorph"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

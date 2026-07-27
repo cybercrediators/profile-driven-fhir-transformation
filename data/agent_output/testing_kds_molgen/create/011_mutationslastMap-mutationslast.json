@@ -1,0 +1,767 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mutationslast-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/mutationslast-map",
+  "name": "mutationslastMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-map-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "variable": "vCatCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-category-coding-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCatCC",
+                  "element": "coding",
+                  "variable": "vCatCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCatCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-code-todo",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCatCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-map-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCodeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-code-coding-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCodeCC",
+                  "element": "coding",
+                  "variable": "vCodeCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/molecular-biomarker-code-cs"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code-todo",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCodeCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteStatus",
+              "variable": "vSrcStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrcStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-effective-modifierExtension-valueSampledData-origin",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEff",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-effective-modifierExtension-sampleddata-origin",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSource"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEff",
+                  "element": "modifier",
+                  "variable": "vModExt1",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-modext-sampleddata-origin-url",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt1",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSampledData"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modext-sampleddata-origin-value",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt1",
+                      "element": "value[x]",
+                      "variable": "vValSD",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "SampledData"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-sampleddata-origin-todo",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vValSD",
+                          "element": "origin",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Quantity"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "ValueQuantity.origin field - TODO-findSource"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-map-effective-modifierExtension-valueSignature-type",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffSig",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-effective-modext-signature-type-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffSig",
+                  "element": "modifier",
+                  "variable": "vModExt2",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-modext-signature-type-url-fixed",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt2",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modext-signature-type-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt2",
+                      "element": "value[x]",
+                      "variable": "vSigVal",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Signature"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-sig-type-todo",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vSigVal",
+                          "element": "type",
+                          "variable": "vSigType",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Signature.type Coding - TODO-findSource"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-who",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffWho",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-effective-modext-who-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffWho",
+                  "element": "modifier",
+                  "variable": "vModExt3",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-modext-who-url-fixed",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt3",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueSignature"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modext-who-value-todo",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt3",
+                      "element": "value[x]",
+                      "variable": "vWhoVal",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Signature"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-sig-who-reference-todo",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vWhoVal",
+                          "element": "who",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Signature.who Reference → Resource — resolve via bundle assembler"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.who> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-map-effective-modifierExtension-valueUsageContext-code",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective[x]",
+              "variable": "vEffUC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-effective-modext-usagecontext-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffUC",
+                  "element": "modifier",
+                  "variable": "vModExt4",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-modext-usagecontext-url-fixed",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt4",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-valueUsageContext"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modext-usagecontext-value-todo",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt4",
+                      "element": "value[x]",
+                      "variable": "vUCVal",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "UsageContext"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-uc-code-todo",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO-findSource"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vUCVal",
+                          "element": "code",
+                          "variable": "vUCCode",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "UsageContext.code Coding - TODO-findSource"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-map-valueOrigin",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value[x]",
+              "variable": "vVal",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-value-origin-todo",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-findSource"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vVal",
+                  "element": "origin",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Value[Quantity].origin field - TODO-findSource"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

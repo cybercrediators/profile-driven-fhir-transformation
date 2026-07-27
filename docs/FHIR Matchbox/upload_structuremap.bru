@@ -1,0 +1,214 @@
+meta {
+  name: upload_structuremap
+  type: http
+  seq: 7
+}
+
+post {
+  url: http://localhost:8080/matchboxv3/fhir/StructureMap
+  body: json
+  auth: inherit
+}
+
+headers {
+  accept: application/fhir+json
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+    "resourceType": "StructureMap",
+    "id": "minimalpatient-map",
+    "url": "http://example.org/StructureMap/MinimalPatient-map",
+    "name": "MinimalPatientMap",
+    "status": "draft",
+    "structure": [
+      {
+        "url": "http://example.org/StructureDefinition/source-definition-testing-minimal",
+        "mode": "source",
+        "alias": "source"
+      },
+      {
+        "url": "http://example.org/StructureDefinition/MinimalPatient",
+        "mode": "target",
+        "alias": "target"
+      }
+    ],
+    "group": [
+      {
+        "name": "TransformPatient",
+        "typeMode": "none",
+        "input": [
+          {
+            "name": "source",
+            "type": "Sourcedefinition_testing_minimal",
+            "mode": "source"
+          },
+          {
+            "name": "target",
+            "type": "Patient",
+            "mode": "target"
+          }
+        ],
+        "rule": [
+          {
+            "name": "createIdentifier",
+            "source": [
+              {
+                "context": "source",
+                "element": "id",
+                "condition": "id.exists()"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "identifier",
+                "variable": "vIdentifier",
+                "transform": "create",
+                "parameter": [
+                  {
+                    "valueString": "Identifier"
+                  }
+                ]
+              }
+            ],
+            "rule": [
+              {
+                "name": "copyIdentifierValue",
+                "source": [
+                  {
+                    "context": "source",
+                    "element": "id",
+                    "listMode": "first",
+                    "variable": "vId"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "vIdentifier",
+                    "element": "value",
+                    "transform": "cast",
+                    "parameter": [
+                      {
+                        "valueId": "vId"
+                      },
+                      {
+                        "valueString": "string"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "createName",
+            "source": [
+              {
+                "context": "source",
+                "condition": "familyName.exists() or givenName.exists()"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "name",
+                "variable": "vName",
+                "transform": "create",
+                "parameter": [
+                  {
+                    "valueString": "HumanName"
+                  }
+                ]
+              }
+            ],
+            "rule": [
+              {
+                "name": "copyFamily",
+                "source": [
+                  {
+                    "context": "source",
+                    "element": "familyName",
+                    "listMode": "first",
+                    "variable": "vFamily"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "vName",
+                    "element": "family",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueId": "vFamily"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "copyGiven",
+                "source": [
+                  {
+                    "context": "source",
+                    "element": "givenName",
+                    "listMode": "first",
+                    "variable": "vGiven"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "vName",
+                    "element": "given",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueId": "vGiven"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "castBirthDate",
+            "source": [
+              {
+                "context": "source",
+                "element": "birthDate",
+                "listMode": "first",
+                "variable": "vBirth"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "birthDate",
+                "transform": "cast",
+                "parameter": [
+                  {
+                    "valueId": "vBirth"
+                  },
+                  {
+                    "valueString": "date"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+
+body:file {
+  file: @file(/home/lutzseba/Desktop/repo/fsh-nifi-bridge/data/testing5.tgz)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

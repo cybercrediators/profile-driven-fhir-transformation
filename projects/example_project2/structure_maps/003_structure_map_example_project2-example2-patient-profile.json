@@ -1,0 +1,432 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-example2-patient-profile-d00e59d0",
+  "url": "http://example.org/StructureMap/source-definition-example-project2-example2-patient-profile",
+  "name": "003_structure_map_example_project2-example2-patient-profile",
+  "title": "Structure Map for example_project2 - example2-patient-profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: example2-patient-profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-example-project2",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://example.org/example2/StructureDefinition/Example2Patient",
+      "mode": "target",
+      "alias": "example2-patient-profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-example2-patient-profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_example_project2",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/example2/StructureDefinition/Example2Patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://example.org/example2/StructureDefinition/Example2Patient"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-observation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-OBSERVATION_SOURCE",
+              "variable": "src-observation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-observation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-observation",
+              "source": [
+                {
+                  "context": "src-observation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-observation",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/example2/StructureDefinition/Example2ObservationRefExtension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/example2/StructureDefinition/Example2ObservationRefExtension"
+            },
+            {
+              "name": "set-extension-value-observation",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-observation",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/example2/StructureDefinition/Example2ObservationRefExtension | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'uri'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': None, 'is_required': True, 'fixed_value': 'http://example.org/example2/StructureDefinition/Example2ObservationRefExtension', 'options': [], 'children': []}, {'path': 'Extension.valueReference', 'id': 'Extension.valueReference', 'type': [{'code': 'Reference', 'targetProfile': ['http://example.org/example2/StructureDefinition/Example2Observation'], 'type_structure': [{'path': 'Extension.valueReference.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier.assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FH… [truncated; full structure in the registry entry for http://example.org/example2/StructureDefinition/Example2ObservationRefExtension] | Path: Patient.extension"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-fixed-code",
+                      "source": [
+                        {
+                          "context": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "MIN"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets fixed value for code"
+                    },
+                    {
+                      "name": "set-fixed-system",
+                      "source": [
+                        {
+                          "context": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://example.org/example2/CodeSystem/example2-identifier-type"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets fixed value for system"
+                    }
+                  ],
+                  "documentation": "Maps to Patient.identifier.type.coding | Type: Coding | Cardinality: 1..* | Complex type with 2 child elements"
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.type | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "id",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "familyName",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.family | Type: string"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "givenName",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.given | Type: string"
+            }
+          ],
+          "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..*"
+        }
+      ]
+    }
+  ]
+}

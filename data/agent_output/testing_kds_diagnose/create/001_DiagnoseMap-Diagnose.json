@@ -1,0 +1,369 @@
+{
+  "resourceType": "StructureMap",
+  "id": "diagnose-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-diagnose/StructureMap/Diagnose-map",
+  "name": "DiagnoseMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-diagnose",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_diagnose",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-condition-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcData"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCodeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-structure",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCodeCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-code",
+                  "source": [
+                    {
+                      "context": "srcData",
+                      "element": "snomedCode",
+                      "variable": "vSnomed"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vSnomed"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-code-text",
+              "source": [
+                {
+                  "context": "srcData",
+                  "element": "diagnoseText",
+                  "variable": "vDiagText"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCodeCC",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vDiagText"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-recorded-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "recordedDate",
+              "variable": "vRecDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "recordedDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "vRecDate"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-clinical-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "clinicalStatus",
+              "variable": "vClinStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vClinStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-diagnose/ConceptMap/cm-clinicalStatus-ce519496"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-verification-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "verificationStatus",
+              "variable": "vVerifStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "verificationStatus",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vVerifStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-diagnose/ConceptMap/cm-verificationStatus-0a3b1317"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-body-site",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcBodyData"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "bodySite",
+              "variable": "vBodyCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-body-site-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vBodyCC",
+                  "element": "coding",
+                  "variable": "vBodyCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-body-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vBodyCoding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-body-coding-code",
+                  "source": [
+                    {
+                      "context": "srcBodyData",
+                      "element": "bodySiteCode",
+                      "variable": "vBodyCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vBodyCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vBodyCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "map-onset-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "onsetDateTime",
+              "variable": "vOnset"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "onsetDateTime",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "vOnset"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

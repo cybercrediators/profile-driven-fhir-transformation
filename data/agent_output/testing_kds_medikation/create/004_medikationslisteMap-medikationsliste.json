@@ -1,0 +1,112 @@
+{
+  "resourceType": "StructureMap",
+  "id": "medikationsliste-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureMap/medikationsliste-map",
+  "name": "medikationslisteMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/List",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformList",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "List",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapMode",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "mode",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-mode-75f575e7"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-a262bf53"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-List-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<List.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

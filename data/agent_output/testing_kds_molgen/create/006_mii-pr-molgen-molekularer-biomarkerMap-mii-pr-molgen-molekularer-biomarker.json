@@ -1,0 +1,111 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-molgen-molekularer-biomarker-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/mii-pr-molgen-molekularer-biomarker-map",
+  "name": "mii-pr-molgen-molekularer-biomarkerMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                }
+              ]
+            }
+          ],
+          "documentation": "Original translate used non-existent ConceptMap; replaced with direct copy. Verify source values match Observation.status allowed codes."
+        },
+        {
+          "name": "TODO-category-mapping",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-category-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Observation.category — no source mapping available. ValueSet: http://hl7.org/fhir/ValueSet/observation-category"
+        },
+        {
+          "name": "TODO-code-mapping",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Observation.code — no source mapping available. ValueSet: http://hl7.org/fhir/uv/genomics-reporting/ValueSet/molecular-biomarker-code-vs"
+        }
+      ]
+    }
+  ]
+}

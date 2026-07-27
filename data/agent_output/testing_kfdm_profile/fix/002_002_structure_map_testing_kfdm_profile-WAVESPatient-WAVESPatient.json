@@ -1,0 +1,634 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-WAVESPatient-c68af19c",
+  "url": "http://example.org/StructureMap/source-definition-testing-kfdm-profile-WAVESPatient",
+  "name": "002_structure_map_testing_kfdm_profile-WAVESPatient",
+  "title": "Structure Map for testing_kfdm_profile - WAVESPatient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: WAVESPatient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Patient",
+      "mode": "target",
+      "alias": "WAVESPatient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-WAVESPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/WAVESPatient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://example.org/StructureDefinition/WAVESPatient"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "geburtsdatum",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 1..1"
+        },
+        {
+          "name": "map-extension-bodyweight",
+          "source": [
+            {
+              "context": "source",
+              "element": "gewicht",
+              "variable": "src-bodyweight"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-bodyweight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bodyweight",
+              "source": [
+                {
+                  "context": "src-bodyweight"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyweight",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-weight-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/body-weight-extension"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "gewicht",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyweight",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.extension:bodyweight.value[x] | Type: decimal | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/body-weight-extension | Type: Extension | Path: Patient.extension:bodyweight"
+        },
+        {
+          "name": "map-extension-bodyheight",
+          "source": [
+            {
+              "context": "source",
+              "element": "groesse",
+              "variable": "src-bodyheight"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-bodyheight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bodyheight",
+              "source": [
+                {
+                  "context": "src-bodyheight"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyheight",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-height-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/body-height-extension"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "groesse",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyheight",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.extension:bodyheight.value[x] | Type: integer | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/body-height-extension | Type: Extension | Path: Patient.extension:bodyheight"
+        },
+        {
+          "name": "map-extension-federalState",
+          "source": [
+            {
+              "context": "source",
+              "element": "bundesland",
+              "variable": "src-federalState"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-federalState",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-federalState",
+              "source": [
+                {
+                  "context": "src-federalState"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-federalState",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/country-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/country-extension"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "bundesland",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-federalState",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.extension:federalState.value[x] | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/country-extension | Type: Extension | Path: Patient.extension:federalState"
+        },
+        {
+          "name": "map-extension-current",
+          "source": [
+            {
+              "context": "source",
+              "element": "aktbefinden",
+              "variable": "src-current"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "ext-current",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-current",
+              "source": [
+                {
+                  "context": "src-current"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-current",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/current-condition-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/current-condition-extension"
+            },
+            {
+              "name": "map-valueCode-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "aktbefinden",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-current",
+                  "element": "valueCode",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-value-5225d426"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Patient.extension:current.value[x] using http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-value-5225d426"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/current-condition-extension | Type: Extension | Path: Patient.extension:current"
+        },
+        {
+          "name": "map-gender-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "geschlecht",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "gender",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-gender-77ac516f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Patient.gender using http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-gender-77ac516f"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-type",
+              "source": [
+                {
+                  "context": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "{'coding': [{'system': 'http://terminology.hl7.org/CodeSystem/v2-0203', 'code': 'ANON'}]}"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for type"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "record_id",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.value | Type: [{'code': 'string'}] | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-maritalStatus-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "familienstand",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "maritalStatus",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-maritalStatus-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-maritalStatus-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-maritalStatus-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-maritalStatus-aca56a7a"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Patient.maritalStatus using http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-maritalStatus-aca56a7a"
+        },
+        {
+          "name": "map-type-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-SOURCE-FOR-TYPE",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-type-32b6b37c"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Patient.link.type using http://example.org/StructureMap/source-definition-testing-kfdm-profile/ConceptMap/cm-type-32b6b37c"
+        }
+      ]
+    }
+  ]
+}

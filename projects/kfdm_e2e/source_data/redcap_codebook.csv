@@ -1,0 +1,49 @@
+﻿"Variable / Field Name","Form Name","Section Header","Field Type","Field Label","Choices, Calculations, OR Slider Labels","Field Note","Text Validation Type OR Show Slider Number","Text Validation Min","Text Validation Max",Identifier?,"Branching Logic (Show field only if...)","Required Field?","Custom Alignment","Question Number (surveys only)","Matrix Group Name","Matrix Ranking?","Field Annotation"
+record_id,waves,,text,"Record ID",,,,,,,,,,,,,
+geburtsdatum,waves,"Allgemeine Fragen",text,Geburtsdatum,,DD-MM-YYYY,date_dmy,,,,,,,,,," @FHIR-MAPPING='Patient/birthDate'"
+alter,waves,,calc,Alter,"rounddown(datediff([geburtsdatum], 'today', 'y'))",,,,,,,,,,,,
+geschlecht,waves,,radio,Geschlecht:,"male, männlich|female, weiblich|other, divers|unknown, keine Angabe",,,,,,,,RH,,,," @FHIR-MAPPING='Patient/gender'"
+groesse,waves,,text,Körpergröße:,,cm,integer,,,,,,,,,,
+gewicht,waves,,text,"Gewicht: ",,kg,number,,,,,,,,,,
+familienstand,waves,,radio,Familienstand:,"D, geschieden|M, verheiratet|T, Partnerschaft, aber nicht verheiratet|U, ledig|W, verwitwet",,,,,,,,LV,,,," @FHIR-MAPPING='{
+  ""type"": ""Patient"",
+  ""primaryElementPath"": ""maritalStatus/coding/code"",
+  ""primaryElementSystem"": ""http://terminology.hl7.org/CodeSystem/v3-MaritalStatus"",
+  ""additionalElements"": []
+}'"
+bundesland,waves,,dropdown,"In welchem Bundesland leben Sie?","1, Bayern|2, Baden-Württemberg|3, Berlin|4, Brandenburg|5, Bremen|6, Hamburg|7, Hessen|8, Mecklenburg-Vorpommern|9, Niedersachsen|10, Nordrhein-Westfalen|11, Rheinland-Pfalz|12, Saarland|13, Sachsen|14, Sachsen-Anhalt|15, Schleswig-Holstein|16, Thüringen",,,,,,,,RH,,,,
+aktbefinden,waves,,radio,"Aktuelles Befinden","1, sehr gut|2, gut|3, befriedigend|4, ausreichend|5, mangelhaft",,,,,,,,LH,,,,
+rauchen,waves,,yesno,"Rauchen Sie?",,,,,,,,,LH,,,,
+rauchen_tag,waves,,text,"Wie viele Zigaretten rauchen Sie durchschnittlich am Tag? Stück: ",,,integer,1,,,"[rauchen] = '1'",,LH,,,,
+rauchen_jahre,waves,,text,"Seit wie vielen Jahren rauchen Sie?",,,number,,,,"[rauchen] = '1'",,LH,,,,
+bewegung,waves,,yesno,"Bewegen Sie sich regelmäßig (Schnelles Gehen, Spazieren, Sport)?",,,,,,,,,LH,,,,
+bewegung_std,waves,,text,"Wie viele Stunden pro Woche bewegen Sie sich? ",,,number,,,,"[bewegung] = '1'",,LH,,,,
+weitere_tumor,waves,,radio,"Gab/gibt es bei Ihnen weitere bösartige Tumorerkrankungen?","1, ja|2, nein|3, unbekannt",,,,,,,,LH,,,,
+weitere_tumor_art,waves,,dropdown,"Art der Tumorerkrankung","1, Gebärmutterhalskrebs|2, Gebärmutterkrebs|3, Melanom|4, Dickdarmkrebs|5, Magenkrebs|6, Schilddrüsenkrebs|7, Leukämie|8, Lymphom|9, Sonstiges",,,,,,"[weitere_tumor] = '1'",,LH,,,,
+therapie_tumorerkrankung,waves,,yesno,"Wurde Therapie  für die andere Tumorerkrankung durchgeführt?",,,,,,,"[weitere_tumor] = '1'",,LH,,,,
+herzkreislauferkrankung,waves,,radio,"Liegen Herzkreislauferkrankungen vor (z.B. Bluthochdruck, KHK)?","1, ja|2, nein|3, unbekannt",,,,,,,,LH,,,,
+diabetes,waves,,radio,"Sind Sie am Diabetes erkrankt? 
+","1, ja|2, nein|3, unbekannt",,,,,,,,LH,,,,
+weitere_erkrankungen,waves,,yesno,"Leiden Sie an einer anderen Erkrankung? ",,,,,,,,,LH,,,,
+weitere_erkrankungen_art,waves,,text,"Wenn ja, an welcher/welchen?",,,,,,,"[weitere_erkrankungen] = '1'",,LH,,,,
+symptom,waves,,checkbox,"Erlebten Sie innerhalb der letzten 14 Tage eines oder mehrere der folgenden Symptome?","1, gedrückte Stimmung|2, Schwunglosigkeit und/oder bleierne Müdigkeit und/oder innere Unruhe|3, verminderter Appetit|4, keines der genannten Symptome","Mehrfachnennung möglich",,,,,,,LV,,,," @NONEOFTHEABOVE=4"
+erstdiagnose_durch,waves,"<div class=""rich-text-field-label""><p>Erstgespräch - Diagnosemitteilung</p> <p><br /><span style=""font-weight: normal;"">In diesem Abschnitt möchten wir gerne mehr über die Rahmenbedingungen Ihrer Gespräche im Rahmen der ersten Diagnosemitteilung erfahren, ihr Erleben dieser Situation (emotional, Eindruck des Arztes) und die Ihnen überlieferte Information.</span></p></div>",radio,"Wer hat Sie als Erstes über Ihre Diagnose Brustkrebs aufgeklärt?","1, Hausarzt|2, Radiologe|3, Mein Frauenarzt|4, Frauenarzt einer Klinik|5, Onkologe in der Niederlassung|6, Onkologe einer Klinik|7, unbekannt",,,,,,,,LV,,,,
+diagnose_per,waves,,radio,"In welcher Form wurden Sie über die Diagnose informiert?","1, in einem persönlichen Gespräch|2, telefonisch|3, in schriftlicher Form (Brief)|4, per Email|5, unbekannt",,,,,,,,LV,,,,
+fanden,waves,,slider,"Wie fanden Sie die Mitteilung der Diagnose ?","0 | 5 | 10","0:sehr schlecht; 10:sehr gut",number,,10,,,,RH,,,,
+krebserkankung_in_familie,waves,,yesno,"Ist in Ihrer Familie eine Krebserkrankung bekannt?",,,,,,,,,LV,,,,
+erste_reaktion_auf_befund,waves,"Erleben während des Gespräches",checkbox,"Was war Ihre erste Reaktion auf den Befund? ","1, Ich war geschockt|2, Ich fühlte mich hilflos|3, Ich hatte es geahnt / befürchtet|4, Ich hatte Angst|5, Ich war wütend|6, Ich fühlte mich überfordert und alleingelassen|7, Ich schaff das, egal wie|8, Ich war nicht aufnahmefähig|9, Anderes vorherrschendes Gefühl","Mehrfachnennung möglich",,,,,,,LV,,,,
+bewertung_arzt_sachlich,waves,"Wie erlebten Sie Ihren Arzt während des Diagnosegesprächs? 
+(1=trifft gar nicht zu, 5=trifft voll und ganz zu)
+",radio,Sachlich:,"1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_arzt_gestresst,waves,,radio,Gestresst:,"1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_arzt_besorgt,waves,,radio,Besorgt,"1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_arzt_klar,waves,,radio,Klar,"1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_arzt_hilfsbereit_unterst_tzend,waves,,radio,"Hilfsbereit, unterstützend","1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_arzt_einf_hlsam_mitf_hlend,waves,,radio,"Einfühlsam, mitfühlend","1, 1|2, 2|3, 3|4, 4|5, 5",,,,,,,,,,bewertung_arzt,,
+bewertung_umfang_aufkl_rung,waves,,radio,"Wie gut haben Sie sich im Allgemeinen aufgeklärt gefühlt bei der Erstdiagnose? ","1, sehr gut | 2, gut | 3, befriedigend | 4, ausreichend | 5, mangelhaft",,,,,,,,LV,,,,
+erstgespr_ch_dauer,waves,,radio,"Wie lange dauerte das Erstgespräch ungefähr?","1, 10 min|2, 15 min|3, 20 min|4, 30 min|5, >30 min",,,,,,"[diagnose_per] = '1' or [diagnose_per] = '2'",,LV,,,,
+verst_ndlichkeit_aufkl_rung,waves,,radio,"Konnte der behandelnde Arzt Ihnen den Befund verständlich erklären?","1, Ja, ich hatte den Befund vollständig verstanden|2, Ja, ich hatte das Wesentliche verstanden|3, Nein, ich konnte den Befund nur teilweise verstehen|4, Nein, ich habe nichts verstanden|5, Ich war mir unsicher, ob ich alles verstanden hatte",,,,,,,,LV,,,,
+emotionen_aufkl_rung,waves,,checkbox,"Welche Emotionen hatten Sie während des ärztlichen Aufklärungsgesprächs?","1, es hat mich verwirrt|2, ich fühlte mich gut beraten|3, ich empfand es ermutigend|4, ich empfand es richtungsweisend|5, es hat mich verängstigt","Mehrfachnennung möglich",,,,,,,LV,,,,
+wunsch_besseres_verstndnis,waves,,checkbox,"Wenn Sie die Befundmitteilung als unverständlich erlebt haben, was hätten Sie sich gewünscht, um den Befund besser zu verstehen? ","1, Ich hatte den Befund vollständig verstanden|2, Verwendung weniger Fremdwörter|3, Der Arzt hätte langsamer sprechen können|4, Ich hätte mir mehr Zeit zum Überlegen gewünscht|5, Ich hätte mir mehr Anschauungsmaterial gewünscht|6, Sonstiges","Mehrfachantworten möglich",,,,,,,LV,,,,
+wunsch_besseres_verstndnis_sonstiges,waves,,text,"Sonstiges bitte hier eintragen:",,,,,,,"[wunsch_besseres_verstndnis(6)] = '1'",,LV,,,,
+aufnhamef_higkeit_patient,waves,,slider,"Wie aufnahmefähig waren Sie nach Ihrer eigenen Einschätzung zum Zeitpunkt der Mitteilung der Diagnose und weiteren empfohlenen Schritte auf einer Skala von 0-10 ","0 |  | 10","0: nicht aufnahmefähig; 10: sehr gut aufnahmefähig",number,,10,,,,RH,,,,

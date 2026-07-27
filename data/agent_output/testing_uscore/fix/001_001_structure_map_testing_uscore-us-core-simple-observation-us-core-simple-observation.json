@@ -1,0 +1,695 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-us-core-simple-observation-a8cf4d64",
+  "url": "http://example.org/StructureMap/source-definition-testing-uscore-us-core-simple-observation",
+  "name": "001_structure_map_testing_uscore-us-core-simple-observation",
+  "title": "Structure Map for testing_uscore - us-core-simple-observation",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: us-core-simple-observation). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-uscore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "us-core-simple-observation"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-us-core-simple-observation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_uscore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org/fhir/us/core/StructureDefinition/us-core-simple-observation"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsCode",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Observation.code (filter-based/open VS, system: http://loinc.org)"
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.code | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Observation.component.code.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Observation.component.code.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.code.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.code.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.code.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.code.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.component.code.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Observation.component | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveDateTime",
+                  "variable": "tgt-effective-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Timing",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-instant",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_EFFECTIVE",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveInstant",
+                  "variable": "tgt-effective-instant",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: choice | Cardinality: 0..1 | Choice types: dateTime, Period, Timing, instant"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "element": "performer"
+            }
+          ],
+          "documentation": "Reference<Observation.performer> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsStatus",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-uscore/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Observation.status using http://example.org/StructureMap/source-definition-testing-uscore/ConceptMap/cm-status-e6034a1f"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "element": "subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-value-Quantity",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-Quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-CodeableConcept",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-string",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueString",
+                  "variable": "tgt-value-string",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-boolean",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueBoolean",
+                  "variable": "tgt-value-boolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-integer",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueInteger",
+                  "variable": "tgt-value-integer",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-Range",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-Range",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-Ratio",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-Ratio",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-SampledData",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-SampledData",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "SampledData"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-time",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueTime",
+                  "variable": "tgt-value-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "time"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "valueDateTime",
+                  "variable": "tgt-value-dateTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-value-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "value",
+                  "variable": "tgt-value-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: choice | Cardinality: 0..1 | Choice types: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period"
+        },
+        {
+          "name": "TODO-SOURCE-FOR-Category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Observation.category — no source mapping available, needs manual review"
+        }
+      ]
+    }
+  ]
+}

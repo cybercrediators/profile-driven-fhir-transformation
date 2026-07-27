@@ -1,0 +1,469 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-observation-morphologie-ea41c9e6",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-mii-pr-biobank-observation-morphologie",
+  "name": "008-structure-map-testing-kds-biobank-mii-pr-biobank-observation-morphologie",
+  "title": "Structure Map for testing_kds_biobank - mii-pr-biobank-observation-morphologie",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-biobank-observation-morphologie). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "mii-pr-biobank-observation-morphologie"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-observation-morphologie",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-pr-biobank-observation-morphologie"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-pr-biobank-observation-morphologie"
+        },
+        {
+          "name": "set-fixed-code",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "tgt-fixed-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-code-coding",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "morphCode",
+                  "variable": "src-morphCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-code",
+                  "element": "coding",
+                  "variable": "tgt-fixed-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-code-coding-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://purl.obolibrary.org/obo/pato.owl"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-coding-code",
+                  "source": [
+                    {
+                      "context": "src-morphCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "PATO:0010006"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-coding-display",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code-coding",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "cell morphology"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for code"
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.code | Type: [{'code': 'CodeableConcept', ...}] | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Observation.component | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-Period",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "morphEffective",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-Timing",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "morphEffective",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effective",
+                  "variable": "tgt-effective-Timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-effective-instant",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "morphEffective",
+                  "variable": "src-effective"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "effectiveInstant",
+                  "variable": "tgt-effective-instant",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-effective"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: choice | Cardinality: 0..1 | Choice types: dateTime, Period, Timing, instant"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "focus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "morphStatus",
+              "variable": "src-status",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Observation.status using http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-e6034a1f"
+        },
+        {
+          "name": "map-value-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "morphValueCode",
+              "variable": "src-morphValue"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-value-coding",
+              "source": [
+                {
+                  "context": "src-morphValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-value-system",
+                  "source": [
+                    {
+                      "context": "src-morphValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-code",
+                  "source": [
+                    {
+                      "context": "src-morphValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-morphValue"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Observation.value[x] (filter-based/open VS, system: http://snomed.info/sct)"
+        }
+      ]
+    }
+  ]
+}

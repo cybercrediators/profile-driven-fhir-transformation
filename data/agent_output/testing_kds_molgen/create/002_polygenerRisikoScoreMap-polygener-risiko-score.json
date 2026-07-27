@@ -1,0 +1,90 @@
+{
+  "resourceType": "StructureMap",
+  "id": "polygener-risiko-score-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/polygener-risiko-score-map",
+  "name": "polygenerRisikoScoreMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/RiskAssessment",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformRiskAssessment",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "RiskAssessment",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "translateRiskStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "riskStatus",
+              "variable": "vRiskStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vRiskStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-RiskAssessment-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<RiskAssessment.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

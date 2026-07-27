@@ -1,0 +1,645 @@
+{
+  "resourceType": "StructureMap",
+  "id": "variante-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/variante-map",
+  "name": "varianteMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Observation",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformObservation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteStatus",
+              "variable": "vSrc",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrc"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-e6034a1f"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCategory",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteStatus",
+              "variable": "vSrcCat"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "http://hl7.org/fhir/CodeSystem/observation-category"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Mapping table says 'copy' but target is CodeableConcept; using cc with TODO placeholder"
+        },
+        {
+          "name": "mapCode",
+          "source": [
+            {
+              "context": "source",
+              "element": "varianteCode",
+              "variable": "vSrcCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "http://hl7.org/fhir/CodeSystem/observation-codes"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ],
+          "documentation": "Mapping table says 'copy' but target is CodeableConcept; using cc with TODO placeholder"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "mapEffectiveModifierExt",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEff",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapModExtSampledDataOrigin",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEff",
+                  "element": "modifier",
+                  "variable": "vModExt",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setModExtUrlSampledData",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-sampleddata"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setModExtValueOrigin",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExt",
+                      "element": "value",
+                      "variable": "vValSD",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "SampledData"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "setValueOriginPlaceholder",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vValSD",
+                          "element": "origin",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Quantity"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Required field origin (1..1) with no source mapping; structure created but value not populated"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveModifierExtSignatureType",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEffSig",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapModExtSignatureType",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffSig",
+                  "element": "modifier",
+                  "variable": "vModExtSig",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setSignatureUrlPlaceholder",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtSig",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-signaturetype"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setValueSignatureType",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtSig",
+                      "element": "value",
+                      "variable": "vValSig",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Signature"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "setSignatureTypePlaceholder",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vValSig",
+                          "element": "type",
+                          "transform": "cc",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/CodeSystem/signature-type"
+                            },
+                            {
+                              "valueString": "TODO-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveModifierExtWho",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEffWho",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapModExtSignatureWho",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffWho",
+                  "element": "modifier",
+                  "variable": "vModExtWho",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setSignatureWhoUrlPlaceholder",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtWho",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-signaturewho"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setValueSignatureWho",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtWho",
+                      "element": "value",
+                      "variable": "vValSig2",
+                      "listMode": [
+                        "collate"
+                      ],
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Signature"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "setSignatureWhoPlaceholder",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vValSig2",
+                          "element": "who",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "TODO-findSource"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Reference<Observation.effective[x].modifierExtension.valueSignature.who> → Resource — resolve via bundle assembler"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapEffectiveModifierExtUsageContext",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "variable": "vEffUse",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapModExtUsageContext",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vEffUse",
+                  "element": "modifier",
+                  "variable": "vModExtUse",
+                  "listMode": [
+                    "collate"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setUsageContextUrlPlaceholder",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtUse",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-resolve-extension-url-usagecontext"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "setValueUsageContextCode",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vModExtUse",
+                      "element": "value",
+                      "variable": "vValUC",
+                      "listMode": [
+                        "collate"
+                      ],
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "UsageContext"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "setUsageCodePlaceholder",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "vValUC",
+                          "element": "code",
+                          "transform": "cc",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+                            },
+                            {
+                              "valueString": "TODO-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapValueOrigin",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "value",
+              "variable": "vVal",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setValueOriginPlaceholder",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vVal",
+                  "element": "origin",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Required field origin (1..1) with no source mapping; structure created but value not populated"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

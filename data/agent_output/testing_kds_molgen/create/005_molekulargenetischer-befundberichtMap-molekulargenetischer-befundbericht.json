@@ -1,0 +1,203 @@
+{
+  "resourceType": "StructureMap",
+  "id": "molekulargenetischer-befundbericht-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureMap/molekulargenetischer-befundbericht-map",
+  "name": "molekulargenetischer-befundberichtMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/DiagnosticReport",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformDiagnosticReport",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "vStatusSrc",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatusSrc"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen/ConceptMap/cm-status-a7449e24"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcAlias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "code",
+              "variable": "vCodeCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapCodeCoding",
+              "source": [
+                {
+                  "context": "srcAlias"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCodeCC",
+                  "element": "coding",
+                  "variable": "vCoding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "mapCodeCodeValue",
+                  "source": [
+                    {
+                      "context": "srcAlias",
+                      "element": "reportCode",
+                      "variable": "vReportCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCoding",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vReportCode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapConclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportConclusion",
+              "variable": "vConc"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "conclusion",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vConc"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCategory",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "category",
+              "transform": "cc",
+              "parameter": [
+                {
+                  "valueString": "TODO-system"
+                },
+                {
+                  "valueString": "TODO-code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapSubject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> -> Resource - resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

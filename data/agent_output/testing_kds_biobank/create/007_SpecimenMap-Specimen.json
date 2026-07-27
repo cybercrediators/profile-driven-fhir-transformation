@@ -1,0 +1,578 @@
+{
+  "resourceType": "StructureMap",
+  "id": "specimen-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureMap/Specimen-map",
+  "name": "SpecimenMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Specimen",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformSpecimen",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Specimen",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenStatus",
+              "variable": "vSrcStat",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrcStat"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-status-2d9386a6"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapType",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenTypeCode",
+              "variable": "vSrcTyp",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "type",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vSrcTyp"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank/ConceptMap/cm-type-f513479a"
+                },
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapCollection",
+          "source": [
+            {
+              "context": "source",
+              "variable": "vSrcColl"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "collection",
+              "variable": "vColl",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapCollectionCollected",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "specimenCollected",
+                  "variable": "vCollected"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "element": "collected",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "vCollected"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mapCollectionQuantity",
+              "source": [
+                {
+                  "context": "vSrcColl"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vColl",
+                  "element": "quantity",
+                  "variable": "vQtyColl",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setCollectionQuantitySystem",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vQtyColl",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapCollectionQuantityValue",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vQtyColl",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapCollectionQuantityUnit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vQtyColl",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapCollectionQuantityCode",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vQtyColl",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mapCollectionBodySite",
+              "source": [
+                {
+                  "context": "vSrcColl"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vColl",
+                  "element": "bodySite",
+                  "transform": "cc",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-system"
+                    },
+                    {
+                      "valueString": "TODO-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mapCollectionMethod",
+              "source": [
+                {
+                  "context": "vSrcColl"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vColl",
+                  "element": "method",
+                  "transform": "cc",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-system"
+                    },
+                    {
+                      "valueString": "TODO-code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapContainer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "vSrcCont"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "container",
+              "variable": "vCont",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "mapContainerType",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCont",
+                  "element": "type",
+                  "transform": "cc",
+                  "parameter": [
+                    {
+                      "valueString": "TODO-system"
+                    },
+                    {
+                      "valueString": "TODO-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mapContainerCapacity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCont",
+                  "element": "capacity",
+                  "variable": "vCap",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setContainerCapacitySystem",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCap",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerCapacityValue",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCap",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerCapacityUnit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCap",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerCapacityCode",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vCap",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mapContainerSpecimenQuantity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCont",
+                  "element": "specimen",
+                  "variable": "vSQty",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "setContainerSpecimenQuantitySystem",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vSQty",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerSpecimenQuantityValue",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vSQty",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerSpecimenQuantityUnit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vSQty",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "mapContainerSpecimenQuantityCode",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-findSource"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vSQty",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "TODO-findSource"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Specimen.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

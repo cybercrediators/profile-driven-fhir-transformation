@@ -1,0 +1,179 @@
+{
+  "resourceType": "StructureMap",
+  "id": "medicationstatement-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureMap/MedicationStatement-map",
+  "name": "MedicationStatementMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/MedicationStatement",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformMedicationStatement",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationStatement",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "mapStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "statementStatus",
+              "variable": "vStatus",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "status",
+              "transform": "translate",
+              "parameter": [
+                {
+                  "valueId": "vStatus"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation/ConceptMap/cm-status-c86feccc"
+                },
+                {
+                  "valueString": "code"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "mapMedicationText",
+          "source": [
+            {
+              "context": "source",
+              "element": "statementMedicationText",
+              "variable": "vMedText"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medication",
+              "variable": "vCC",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "setMedicationText",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vCC",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "vMedText"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-medication",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "medication",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.medication> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "mapEffective",
+          "source": [
+            {
+              "context": "source",
+              "element": "statementEffective",
+              "variable": "vEff"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "effective",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vEff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-subject",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-findSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.subject> → Resource — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

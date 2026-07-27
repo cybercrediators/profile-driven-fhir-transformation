@@ -1,0 +1,61 @@
+{
+  "resourceType": "StructureMap",
+  "id": "mii-pr-bildgebung-geraet-map",
+  "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureMap/mii-pr-bildgebung-geraet-map",
+  "name": "mii-pr-bildgebung-geraetMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Device",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformDevice",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Device",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "map-manufacturer",
+          "source": [
+            {
+              "context": "source",
+              "element": "deviceManufacturer",
+              "variable": "vSrcDeviceManufacturer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "manufacturer",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "vSrcDeviceManufacturer"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

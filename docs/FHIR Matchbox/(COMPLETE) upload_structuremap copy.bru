@@ -1,0 +1,244 @@
+meta {
+  name: (COMPLETE) upload_structuremap copy
+  type: http
+  seq: 10
+}
+
+post {
+  url: http://localhost:8080/matchboxv3/fhir/StructureMap
+  body: json
+  auth: inherit
+}
+
+headers {
+  accept: application/fhir+json
+  Content-Type: application/fhir+json
+}
+
+body:json {
+  {
+    "resourceType": "StructureMap",
+    "id": "c40793c4-485a-4eaa-8583-74784b32e33a",
+    "url": "http://example.org/StructureMap/source-definition-testing-minimal",
+    "name": "structure_map_testing_minimal",
+    "title": "Structure Map for testing_minimal",
+    "status": "draft",
+    "description": "Auto-generated StructureMap for given profile mappable fields. Placeholders have to be set (or use auto-mapping)",
+    "structure": [
+      {
+        "url": "http://example.org/StructureDefinition/source-definition-testing-minimal",
+        "mode": "source",
+        "alias": "Source"
+      },
+      {
+        "url": "http://example.org/StructureDefinition/MinimalPatient",
+        "mode": "target",
+        "alias": "minimal-patient-profile"
+      }
+    ],
+    "group": [
+      {
+        "name": "Transformminimal_patient_profile",
+        "typeMode": "none",
+        "input": [
+          {
+            "name": "source",
+            "type": "Sourcedefinitiontesting_minimal",
+            "mode": "source"
+          },
+          {
+            "name": "target",
+            "type": "Patient",
+            "mode": "target"
+          }
+        ],
+        "rule": [
+          {
+            "name": "map-birthDate",
+            "source": [
+              {
+                "context": "source",
+                "element": "birthDate",
+                "listMode": "first",
+                "variable": "src-birthDate"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "birthDate",
+                "variable": "tgt-birthDate",
+                "transform": "cast",
+                "parameter": [
+                  {
+                    "valueId": "src-birthDate"
+                  },
+                  {
+                    "valueString": "date"
+                  }
+                ]
+              }
+            ],
+            "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1"
+          },
+          {
+            "name": "map-name",
+            "source": [
+              {
+                "context": "source",
+                "variable": "src-name"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "name",
+                "variable": "tgt-name",
+                "transform": "create",
+                "parameter": [
+                  {
+                    "valueString": "HumanName"
+                  }
+                ]
+              }
+            ],
+            "rule": [
+              {
+                "name": "map-family",
+                "source": [
+                  {
+                    "context": "src-name",
+                    "element": "familyName",
+                    "variable": "src-family"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "tgt-name",
+                    "element": "family",
+                    "variable": "tgt-family",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueId": "src-family"
+                      }
+                    ]
+                  }
+                ],
+                "documentation": "Maps to Patient.name.family | Type: Annotated"
+              },
+              {
+                "name": "map-given",
+                "source": [
+                  {
+                    "context": "src-name",
+                    "element": "givenName",
+                    "variable": "src-given"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "tgt-name",
+                    "element": "given",
+                    "variable": "tgt-given",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueId": "src-given"
+                      }
+                    ]
+                  }
+                ],
+                "documentation": "Maps to Patient.name.given | Type: List"
+              }
+            ],
+            "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..*"
+          },
+  {
+            "name": "map-identifier",
+            "source": [
+              {
+                "context": "source",
+                "element": "pid",
+                "listMode": "first",
+                "variable": "src-identifier"
+              }
+            ],
+            "target": [
+              {
+                "context": "target",
+                "element": "identifier",
+                "variable": "tgt-identifier",
+                "transform": "create",
+                "parameter": [
+                  {
+                    "valueString": "Identifier"
+                  }
+                ]
+              }
+            ],
+            "rule": [
+              {
+                "name": "map-system",
+                "source": [
+                  {
+                    "context": "src-identifier",
+                    "variable": "src-system"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "tgt-identifier",
+                    "element": "system",
+                    "variable": "tgt-system",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueString": "http://example.org/sid/patient-id"
+                      }
+                    ]
+                  }
+                ],
+                "documentation": "Maps to Patient.identifier.system | Type: Annotated"
+              },
+              {
+                "name": "map-value",
+                "source": [
+                  {
+                    "context": "src-identifier",
+                    "variable": "src-value"
+                  }
+                ],
+                "target": [
+                  {
+                    "context": "tgt-identifier",
+                    "element": "value",
+                    "variable": "tgt-value",
+                    "transform": "copy",
+                    "parameter": [
+                      {
+                        "valueId": "src-value"
+                      }
+                    ]
+                  }
+                ],
+                "documentation": "Maps to Patient.identifier.value | Type: Annotated"
+              }
+            ],
+            "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..*"
+          }
+        ]
+      }
+    ]
+  }
+  
+}
+
+body:file {
+  file: @file(/home/lutzseba/Desktop/repo/fsh-nifi-bridge/data/testing5.tgz)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

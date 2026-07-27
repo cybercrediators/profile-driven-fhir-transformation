@@ -1,0 +1,257 @@
+{
+  "resourceType": "StructureMap",
+  "id": "anamnese-other-disease-map",
+  "url": "http://example.org/StructureMap/anamnese-other-disease-map",
+  "name": "AnamneseOtherDiseaseMap",
+  "status": "draft",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kfdm-profile",
+      "mode": "source",
+      "alias": "src"
+    },
+    {
+      "url": "http://hl7.org/fhir/StructureDefinition/Condition",
+      "mode": "target",
+      "alias": "tgt"
+    }
+  ],
+  "group": [
+    {
+      "name": "TransformCondition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kfdm_profile",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "TODO-SOURCE-CLINICAL-STATUS",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "clinicalStatus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Required field Condition.clinicalStatus - no source mapping available. Required binding to condition-clinical ValueSet."
+        },
+        {
+          "name": "map-extension-other",
+          "source": [
+            {
+              "context": "source",
+              "variable": "srcOther"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "extension",
+              "variable": "vExtOther",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-other-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtOther",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/other-disease-extension"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-YesNoExtension",
+              "source": [
+                {
+                  "context": "srcOther"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtOther",
+                  "element": "extension",
+                  "variable": "vExtInnerYesNo",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-YesNoExtension-url",
+                  "source": [
+                    {
+                      "context": "srcOther"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInnerYesNo",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoExtension"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-YesNoExtension-value",
+                  "source": [
+                    {
+                      "context": "srcOther",
+                      "element": "weitere_erkrankungen",
+                      "variable": "vYesNoValue",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInnerYesNo",
+                      "element": "valueCode",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vYesNoValue"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "map-extension-Disease",
+              "source": [
+                {
+                  "context": "srcOther"
+                }
+              ],
+              "target": [
+                {
+                  "context": "vExtOther",
+                  "element": "extension",
+                  "variable": "vExtInnerDisease",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-Disease-url",
+                  "source": [
+                    {
+                      "context": "srcOther"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInnerDisease",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Disease"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-Disease-value",
+                  "source": [
+                    {
+                      "context": "srcOther",
+                      "element": "weitere_erkrankungen_art",
+                      "variable": "vDiseaseValue",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "vExtInnerDisease",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "vDiseaseValue"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "element": "subject",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "TODO-findSource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}
