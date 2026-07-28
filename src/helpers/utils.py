@@ -1,6 +1,7 @@
 """Shared utility helpers: JSON I/O and fhir.resources model conversion."""
 
 import json
+import re
 import pkgutil
 import importlib
 from functools import lru_cache
@@ -122,6 +123,17 @@ def resource_identity(data, registry_url: str = "") -> str:
         return res_id
     canonical = getattr(data, "url", None) or registry_url or ""
     return canonical.rstrip("/").split("/")[-1].split("|")[0] or "unnamed_resource"
+
+
+def fhir_id_token(value: str, max_len: int = 50) -> str:
+    """Make a string usable as (part of) a FHIR resource id.
+
+    ``Resource.id`` is restricted to ``[A-Za-z0-9-.]``; identities derived from a
+    canonical url may carry other characters (Capable.repository's profiles are named
+    ``Communication_Profile``), which a FHIR server rejects. Only ids are sanitized —
+    map names and mapping-table prefixes keep the profile's real name.
+    """
+    return re.sub(r"[^A-Za-z0-9.-]", "-", value or "")[:max_len]
 
 
 def get_value_from_element(element, attr_names):

@@ -57,3 +57,20 @@ def test_two_same_type_profiles_get_distinct_identities():
     lab = _data(id="acme-base-observation-lab")
     smoking = _data(url="https://fake-acme.org/fhir/StructureDefinition/ACME-base-smoking-status")
     assert resource_identity(lab) != resource_identity(smoking)
+
+
+def test_fhir_id_token_replaces_characters_a_fhir_id_cannot_hold():
+    """Capable.repository names its profiles `Communication_Profile`; `_` is not legal in an id."""
+    from helpers.utils import fhir_id_token
+    assert fhir_id_token("Communication_Profile") == "Communication-Profile"
+
+
+def test_fhir_id_token_leaves_a_legal_identity_untouched():
+    from helpers.utils import fhir_id_token
+    assert fhir_id_token("mii-pr-diagnose-condition") == "mii-pr-diagnose-condition"
+    assert fhir_id_token("ca-on-ps-profile-patient.v2") == "ca-on-ps-profile-patient.v2"
+
+
+def test_fhir_id_token_truncates_to_the_id_budget():
+    from helpers.utils import fhir_id_token
+    assert len(fhir_id_token("x" * 120)) == 50

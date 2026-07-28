@@ -13,7 +13,7 @@ from fhir.resources.R4B.structuremap import (
 from mapping.fml_creator.fml_factory import FMLRuleFactory
 from mapping.fml_creator.fml_helper import flatten_profile_fields
 from mapping.fml_creator.fml_automapper import FMLAutomapper
-from helpers.utils import get_value_from_element, resource_identity
+from helpers.utils import get_value_from_element, resource_identity, fhir_id_token
 
 from typing import List, Any, Dict, Optional, Set, Tuple
 import logging
@@ -133,7 +133,7 @@ class StructureMapGenerator:
             )
             # Deterministic ID (like ConceptMaps) so repeated runs produce identical files
             url_hash = hashlib.md5(sm_url.encode("utf-8")).hexdigest()[:8]
-            sm.id = f"sm-{profile_identity[:50]}-{url_hash}"
+            sm.id = f"sm-{fhir_id_token(profile_identity)}-{url_hash}"
             sm.description = (
                 "Auto-generated StructureMap for given profile mappable fields "
                 f"(Resource: {profile_identity}). Placeholders have to be set (or use auto-mapping)"
