@@ -28,6 +28,13 @@ import hashlib
 
 from fhir.resources.R4B.structuredefinition import StructureDefinition
 from mapping.fml_creator.fml_questionnaire import QuestionnaireMapCreator
+from mapping.rule_ir import (
+    CollectionRuleSpec,
+    SOURCE_LIST_MODES,
+    TARGET_LIST_MODES,
+    mapping_target_path,
+    parse_collection_rule,
+)
 from data_handling.app_state import AppState
 
 
@@ -222,6 +229,13 @@ class StructureMapGenerator:
 
         def _walk(rules):
             for rule in rules or []:
+                for source in getattr(rule, "source", None) or []:
+                    source_mode = getattr(source, "listMode", None)
+                    if source_mode and source_mode not in SOURCE_LIST_MODES:
+                        raise ValueError(
+                            f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
+                            f"has unsupported source list mode {source_mode!r}"
+                        )
                 for target in getattr(rule, "target", None) or []:
                     context = getattr(target, "context", None)
                     element = getattr(target, "element", None)
@@ -232,6 +246,19 @@ class StructureMapGenerator:
                         )
                     if context and not getattr(target, "contextType", None):
                         target.contextType = "variable"
+                    target_modes = list(getattr(target, "listMode", None) or [])
+                    invalid_modes = sorted(set(target_modes) - TARGET_LIST_MODES)
+                    if invalid_modes:
+                        raise ValueError(
+                            f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
+                            f"has unsupported target list modes {invalid_modes!r}"
+                        )
+                    list_rule_id = getattr(target, "listRuleId", None)
+                    if list_rule_id and "share" not in target_modes:
+                        raise ValueError(
+                            f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
+                            "has listRuleId without target list mode 'share'"
+                        )
                 _walk(getattr(rule, "rule", None))
 
         for group in getattr(structure_map, "group", None) or []:
@@ -256,6 +283,8 @@ class StructureMapGenerator:
                 **details,
             }
         )
+        if not hasattr(self, "mapping_diagnostics"):
+            self.mapping_diagnostics = []
         if diagnostic not in self.mapping_diagnostics:
             self.mapping_diagnostics.append(diagnostic)
         return diagnostic
@@ -431,8 +460,9 @@ class StructureMapGenerator:
 
         if self.custom_mapping_table:
             for v in self.custom_mapping_table.values():
-                if isinstance(v, str) and "." in v:
-                    active_types.add(v.split(".")[0])
+                target_path = mapping_target_path(v)
+                if target_path and "." in target_path:
+                    active_types.add(target_path.split(".")[0])
 
         source_field_types = self._build_source_field_types(source_fields)
         self.factory.source_field_types = source_field_types
@@ -924,7 +954,7 @@ class StructureMapGenerator:
 
     def _apply_custom_mapping_table(
         self,
-        mapping_table: Dict[str, str],
+        mapping_table: Dict[str, Any],
         source_fields: List[Dict[str, Any]],
         target_fields: List[Dict[str, Any]],
         res_type: str,
@@ -937,6 +967,12 @@ class StructureMapGenerator:
             logger.warning("Custom mapping table is not a dict. Skipping.")
             return automapped_paths, automapped_mappings
 
+        if not hasattr(self, "mapping_diagnostics"):
+            self.mapping_diagnostics = []
+        # Collection declarations are scoped to the target profile currently
+        # being generated.
+        self.factory.collection_rules = {}
+
         source_index = {}
         for field in source_fields or []:
             field_id = field.get("id")
@@ -947,6 +983,7 @@ class StructureMapGenerator:
                 source_index[field_path] = field_id or field_path
 
         target_index = {}
+        target_cardinality = {}
 
         def _flatten_targets(fields, parent_virtual_path=None):
             flat = []
@@ -960,7 +997,13 @@ class StructureMapGenerator:
                     if parent_virtual_path
                     else field_path
                 )
-                flat.append({"path": field_path, "virtual_path": virtual_path})
+                flat.append(
+                    {
+                        "path": field_path,
+                        "virtual_path": virtual_path,
+                        "field": f,
+                    }
+                )
                 if "[x]" in field_path:
                     base = field_path.replace("[x]", "")
                     cts = list(f.get("choice_types") or [])
@@ -1049,11 +1092,14 @@ class StructureMapGenerator:
         for entry in _flatten_targets(target_fields or []):
             field_path = entry["path"]
             virtual_path = entry["virtual_path"]
+            cardinality = (entry.get("field") or {}).get("cardinality") or {}
 
             target_index[field_path] = field_path
+            target_cardinality[field_path] = cardinality
             target_index[virtual_path] = (
                 virtual_path if ":" in virtual_path else field_path
             )
+            target_cardinality[virtual_path] = cardinality
 
             if field_path.startswith(f"{res_type}."):
                 clean_path = field_path[len(f"{res_type}.") :]
@@ -1064,17 +1110,33 @@ class StructureMapGenerator:
                     virtual_path if ":" in clean_virtual else field_path
                 )
 
-        for source_key, target_value in mapping_table.items():
-            if not isinstance(target_value, str) or not target_value:
+        collection_candidates = {}
+        # Process typed collection parents before their legacy descendants so
+        # inferred ancestor providers cannot overwrite the intended source
+        # iteration context. Legacy-only tables retain their insertion order.
+        ordered_entries = sorted(
+            mapping_table.items(),
+            key=lambda entry: 0 if isinstance(entry[1], dict) else 1,
+        )
+
+        for source_key, target_value in ordered_entries:
+            target_text = mapping_target_path(target_value)
+            if not target_text:
+                if isinstance(target_value, dict):
+                    self._append_diagnostic(
+                        "invalid-collection-rule",
+                        "collection rule requires a non-empty string 'target'",
+                        source=source_key,
+                    )
                 continue
 
-            prefix = target_value.split(".")[0] if "." in target_value else target_value
+            prefix = target_text.split(".")[0] if "." in target_text else target_text
             if prefix != res_type and prefix != res_id:
                 continue
             if prefix == res_id and prefix != res_type:
-                normalized_target = f"{res_type}.{target_value[len(prefix)+1:]}"
+                normalized_target = f"{res_type}.{target_text[len(prefix)+1:]}"
             else:
-                normalized_target = target_value
+                normalized_target = target_text
 
             source_id = source_index.get(source_key, source_key)
 
@@ -1105,9 +1167,36 @@ class StructureMapGenerator:
                     "Custom mapping target not found in %s (id=%s): %s",
                     res_type,
                     res_id,
-                    target_value,
+                    target_text,
                 )
                 continue
+
+            if isinstance(target_value, dict):
+                try:
+                    spec = parse_collection_rule(source_key, target_value)
+                except ValueError as exc:
+                    self._append_diagnostic(
+                        "invalid-collection-rule",
+                        str(exc),
+                        source=source_key,
+                        target=target_text,
+                    )
+                    spec = CollectionRuleSpec(
+                        source=source_key,
+                        target=target_text,
+                        invalid=True,
+                    )
+                if spec:
+                    collection_candidates[target_path] = CollectionRuleSpec(
+                        source=source_id,
+                        target=target_path,
+                        source_list_mode=spec.source_list_mode,
+                        target_list_modes=spec.target_list_modes,
+                        list_rule_id=spec.list_rule_id,
+                        source_key=spec.source_key,
+                        target_key=spec.target_key,
+                        invalid=spec.invalid,
+                    )
 
             automapped_paths.add(target_path)
             previous_source = automapped_mappings.get(target_path)
@@ -1147,6 +1236,90 @@ class StructureMapGenerator:
                 if not skip_add and ancestor not in automapped_mappings:
                     automapped_mappings[ancestor] = source_id
                     automapped_paths.add(ancestor)
+
+        for target_path, spec in collection_candidates.items():
+            invalid = spec.invalid
+            source_field = next(
+                (
+                    field
+                    for field in source_fields or []
+                    if spec.source in (field.get("id"), field.get("path"))
+                ),
+                None,
+            )
+            source_base = (
+                source_field.get("path") if source_field is not None else spec.source
+            )
+
+            def _known_non_repeating(maximum):
+                if maximum is None:
+                    return False
+                if maximum in ("*", "n"):
+                    return False
+                try:
+                    return int(maximum) <= 1
+                except (TypeError, ValueError):
+                    return False
+
+            source_max = source_field.get("max") if source_field else None
+            if _known_non_repeating(source_max):
+                invalid = True
+                self._append_diagnostic(
+                    "collection-source-not-repeating",
+                    "A collection rule requires a repeating source element in "
+                    "the representative source snapshot.",
+                    source=spec.source,
+                    source_max=source_max,
+                    target=target_path,
+                )
+            target_max = (target_cardinality.get(target_path) or {}).get("max")
+            if _known_non_repeating(target_max):
+                invalid = True
+                self._append_diagnostic(
+                    "collection-target-not-repeating",
+                    "A collection rule requires a repeating target element.",
+                    source=spec.source,
+                    target=target_path,
+                    target_max=target_max,
+                )
+            if spec.source_key:
+                source_key_path = f"{source_base}.{spec.source_key}"
+                expected_source = source_index.get(source_key_path)
+                if expected_source is None:
+                    invalid = True
+                    self._append_diagnostic(
+                        "collection-source-key-not-found",
+                        "The declared correlation source key is absent from the "
+                        "representative source snapshot.",
+                        source=spec.source,
+                        source_key=spec.source_key,
+                        target=target_path,
+                    )
+                if spec.target_key:
+                    target_key_path = f"{target_path}.{spec.target_key}"
+                    mapped_source = automapped_mappings.get(target_key_path)
+                    if expected_source is not None and mapped_source != expected_source:
+                        invalid = True
+                        self._append_diagnostic(
+                            "collection-target-key-not-mapped",
+                            "The declared source correlation key is not mapped to "
+                            "the declared target key in the same collection.",
+                            source_key=source_key_path,
+                            target_key=target_key_path,
+                            mapped_source=mapped_source,
+                        )
+            if invalid:
+                spec = CollectionRuleSpec(
+                    source=spec.source,
+                    target=spec.target,
+                    source_list_mode=spec.source_list_mode,
+                    target_list_modes=spec.target_list_modes,
+                    list_rule_id=spec.list_rule_id,
+                    source_key=spec.source_key,
+                    target_key=spec.target_key,
+                    invalid=True,
+                )
+            self.factory.collection_rules[target_path] = spec
 
         return automapped_paths, automapped_mappings
 

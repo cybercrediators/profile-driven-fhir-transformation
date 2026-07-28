@@ -356,6 +356,13 @@ class _SliceRulesMixin:
     ):
         """emit a rule that creates and populates a slice instance (BackboneElement or similar)"""
         slice_path = self._slice_identity(parent_field, slice_field)
+        collection = (getattr(self, "collection_rules", None) or {}).get(slice_path)
+        if collection is not None and collection.invalid:
+            logger.warning(
+                "Omitting %s because its collection correlation declaration is invalid.",
+                slice_path,
+            )
+            return None
         slice_name = slice_field.get("sliceName", "") or slice_path.rsplit(":", 1)[-1]
         last_seg = slice_path.split(".")[-1]  # name:name
         base_element = last_seg.split(":")[0]  # name
@@ -432,12 +439,29 @@ class _SliceRulesMixin:
         )
         src = StructureMapGroupRuleSource.model_construct(context=parent_source_context)
         rule.source = [src]
+        if collection is not None and root_provider:
+            src.element = self._as_local_element(root_provider)
+            src.variable = "src-slice"
+            if collection.source_key:
+                src.check = f"{collection.source_key}.count() = 1"
+        nested_source_context = (
+            src.variable if collection is not None and src.variable else parent_source_context
+        )
 
         if is_primitive_type(slice_type):
             tgt = StructureMapGroupRuleTarget.model_construct(
                 context=parent_target_context, element=base_element
             )
-            tgt.listMode = ["share"]
+            if collection is not None:
+                self._apply_repeating_list_modes(
+                    slice_field.get("cardinality") or {},
+                    src,
+                    tgt,
+                    rule.name,
+                    field_path=slice_path,
+                )
+            else:
+                tgt.listMode = ["share"]
             primitive_provider = root_provider or (subs[0][1] if subs else None)
             if primitive_provider:
                 src.element = self._as_local_element(primitive_provider)
@@ -452,19 +476,27 @@ class _SliceRulesMixin:
         if root_provider and not subs:
             src.element = self._as_local_element(root_provider)
             src.variable = "src-slice"
-            rule.target = [
-                StructureMapGroupRuleTarget.model_construct(
-                    context=parent_target_context,
-                    element=base_element,
-                    transform="copy",
-                    parameter=[
-                        StructureMapGroupRuleTargetParameter.model_construct(
-                            valueId="src-slice"
-                        )
-                    ],
-                    listMode=["share"],
+            tgt = StructureMapGroupRuleTarget.model_construct(
+                context=parent_target_context,
+                element=base_element,
+                transform="copy",
+                parameter=[
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueId="src-slice"
+                    )
+                ],
+            )
+            if collection is not None:
+                self._apply_repeating_list_modes(
+                    slice_field.get("cardinality") or {},
+                    src,
+                    tgt,
+                    rule.name,
+                    field_path=slice_path,
                 )
-            ]
+            else:
+                tgt.listMode = ["share"]
+            rule.target = [tgt]
             return rule
 
         var = f"tgt-{nm}"
@@ -475,12 +507,21 @@ class _SliceRulesMixin:
         tgt.parameter = [
             StructureMapGroupRuleTargetParameter.model_construct(valueString=slice_type)
         ]
-        tgt.listMode = ["share"]
+        if collection is not None:
+            self._apply_repeating_list_modes(
+                slice_field.get("cardinality") or {},
+                src,
+                tgt,
+                rule.name,
+                field_path=slice_path,
+            )
+        else:
+            tgt.listMode = ["share"]
         rule.target = [tgt]
 
         nested = []
         if isinstance(fixed, dict):
-            nested += self._fixed_pattern_rules(var, fixed, parent_source_context, nm)
+            nested += self._fixed_pattern_rules(var, fixed, nested_source_context, nm)
         base_depth = len((slice_field.get("path", "") or "").split("."))
         slice_children = slice_field.get("children") or []
         direct_children = [
@@ -495,7 +536,7 @@ class _SliceRulesMixin:
         nested += self._slice_child_fixed_rules(
             direct_children,
             var,
-            parent_source_context,
+            nested_source_context,
             nm,
             mapped_roots,
             slice_eid=slice_eid,
@@ -538,7 +579,7 @@ class _SliceRulesMixin:
                     src_local,
                     slice_type,
                     nm,
-                    parent_source_context,
+                    nested_source_context,
                     root_children=slice_children,
                 )
                 if deep:
@@ -550,7 +591,7 @@ class _SliceRulesMixin:
                     sub,
                     var,
                     nm,
-                    parent_source_context,
+                    nested_source_context,
                     automapped_mappings,
                     src_local=src_local,
                 )
@@ -597,7 +638,7 @@ class _SliceRulesMixin:
                 )
                 ref_rule.source = [
                     StructureMapGroupRuleSource.model_construct(
-                        context=parent_source_context,
+                        context=nested_source_context,
                         variable=f"src-{nm}-{clean_field_name(sub)}",
                     )
                 ]
@@ -610,7 +651,7 @@ class _SliceRulesMixin:
                 continue
             sub_var = f"src-{nm}-{clean_field_name(sub)}"
             s = StructureMapGroupRuleSource.model_construct(
-                context=parent_source_context, element=src_local, variable=sub_var
+                context=nested_source_context, element=src_local, variable=sub_var
             )
             sr = StructureMapGroupRule.model_construct(
                 name=f"set-{nm}-{clean_field_name(sub)}"

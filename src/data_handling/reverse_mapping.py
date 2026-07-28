@@ -6,6 +6,7 @@ from pathlib import Path
 
 from helpers import utils
 import data_handling.instance_validation as iv
+from mapping.rule_ir import mapping_target_path
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +122,10 @@ def reverse_map_resources(
 
     record = {}
     notes = {}
-    for source_field, target_path in mapping_table.items():
+    for source_field, target_value in mapping_table.items():
+        target_path = mapping_target_path(target_value)
+        if not target_path:
+            continue
         flat_field = (
             source_field.split(".", 1)[1]
             if source_field.startswith("Sourcedefinition_")

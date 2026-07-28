@@ -2,6 +2,7 @@ import re
 from typing import Dict, List, Optional
 from parser.resource_parser.value_expander import expand_valueset
 from mapping.fml_creator.fml_helper import local_element_name
+from mapping.rule_ir import mapping_target_path
 from data_handling.registry.registry_object import RegistryObject
 
 import logging
@@ -33,8 +34,9 @@ class QuestionnaireMapCreator:
         if not mapping_table:
             return result
         pattern = re.compile(r"^QuestionnaireResponse\.item\[([^\]]+)\]")
-        for source_field_id, target_path in mapping_table.items():
-            if not isinstance(target_path, str):
+        for source_field_id, target_value in mapping_table.items():
+            target_path = mapping_target_path(target_value)
+            if not target_path:
                 continue
             m = pattern.match(target_path)
             if m:
@@ -46,7 +48,8 @@ class QuestionnaireMapCreator:
         """Return the source field ID mapped to QuestionnaireResponse.status."""
         if not mapping_table:
             return None
-        for source_field_id, target_path in mapping_table.items():
+        for source_field_id, target_value in mapping_table.items():
+            target_path = mapping_target_path(target_value)
             if target_path == "QuestionnaireResponse.status":
                 return source_field_id
         return None

@@ -79,6 +79,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         self.plugins = plugins or []
         self.source_field_types: dict = {}
         self.source_field_max: dict = {}
+        self.collection_rules: dict = {}
         self._target_tree_cache = (None, None)
         self.diagnostics = []
 
@@ -173,7 +174,18 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         """
         return local_element_name(source_id)
 
-    def _apply_repeating_list_modes(self, cardinality, source, target, rule_name):
+    def _apply_repeating_list_modes(
+        self, cardinality, source, target, rule_name, field_path=None
+    ):
+        collection = (getattr(self, "collection_rules", None) or {}).get(field_path)
+        if collection is not None:
+            if collection.source_list_mode:
+                source.listMode = collection.source_list_mode
+            if collection.target_list_modes:
+                target.listMode = list(collection.target_list_modes)
+            if collection.list_rule_id:
+                target.listRuleId = collection.list_rule_id
+            return
         if cardinality.get("max") in ["*", "n"]:
             target.listMode = ["share"]
             target.listRuleId = rule_name
@@ -419,6 +431,13 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
     ):
         """create a StructureMapGroupRule for a field that can be mapped (non-slice, non-choice)"""
         path = field["path"]
+        collection = (getattr(self, "collection_rules", None) or {}).get(path)
+        if collection is not None and collection.invalid:
+            logger.warning(
+                "Omitting %s because its collection correlation declaration is invalid.",
+                path,
+            )
+            return None
         field_type = field.get("type", "string")
         children = field.get("children", [])
         cardinality = field.get("cardinality", {})
@@ -660,7 +679,9 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         target.element = display_name
         target.variable = f"tgt-{var_suffix}"
 
-        self._apply_repeating_list_modes(cardinality, source, target, rule_name)
+        self._apply_repeating_list_modes(
+            cardinality, source, target, rule_name, field_path=path
+        )
         if is_slice:
             target.listMode = ["share"]
 
@@ -728,13 +749,36 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             field_type, target, display_name, source.variable, is_choice=is_choice
         )
         rule.target = [target]
-        if not suppress_source_element:
+        # Complex targets normally use a context-only source because their
+        # legacy descendants are flat source fields. A collection parent is
+        # different: binding its repeated source element is what establishes
+        # one nested source/target context pair per repetition.
+        if collection is not None or not suppress_source_element:
             source.element = source_element
+        if collection is not None and collection.source_key:
+            # The enclosing source iteration provides the correlation scope.
+            # Requiring one key per selected item prevents silently emitting an
+            # unidentifiable repetition when a key was declared.
+            source.check = f"{collection.source_key}.count() = 1"
 
         # Add documentation (enhanced for slices)
         rule.documentation = self.generate_rule_documentation(
             field, is_slice, slice_info
         )
+        if collection is not None:
+            key_doc = (
+                f"; key {collection.source_key} -> {collection.target_key}"
+                if collection.source_key and collection.target_key
+                else (
+                    f"; key {collection.source_key}"
+                    if collection.source_key
+                    else ""
+                )
+            )
+            rule.documentation = (
+                f"{rule.documentation} | Collection correlation: "
+                f"{collection.source} -> {collection.target}{key_doc}"
+            )
 
         has_choice_provider = bool(
             automapped_mappings
@@ -1168,7 +1212,11 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             choice_target.variable = f"tgt-{var_suffix}-{clean_field_name(choice_type)}"
 
             self._apply_repeating_list_modes(
-                cardinality, choice_source, choice_target, choice_rule.name
+                cardinality,
+                choice_source,
+                choice_target,
+                choice_rule.name,
+                field_path=field_path,
             )
 
             if transform_info:

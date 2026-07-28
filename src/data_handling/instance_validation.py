@@ -97,9 +97,12 @@ def _applicable_target(target_path, resource_type: str, profile_ids=None):
 
 def reverse_extract(instance: dict, mapping_table: dict, profile_ids=None) -> dict:
     """build a flat source object from a FHIR instance using an inverted mapping table"""
+    from mapping.rule_ir import mapping_target_path
+
     resource_type = instance.get("resourceType")
     flat = {}
-    for source_field, target_path in mapping_table.items():
+    for source_field, target_value in mapping_table.items():
+        target_path = mapping_target_path(target_value)
         normalized = _applicable_target(target_path, resource_type, profile_ids)
         if normalized is None:
             continue
@@ -115,11 +118,14 @@ def compare_instance(
 ) -> dict:
     """compare an ``actual`` resource against an ``expected`` ground-truth instance over
     the mapped target paths (base-type- or ``profile_ids``-rooted)"""
+    from mapping.rule_ir import mapping_target_path
+
     resource_type = expected.get("resourceType")
     matched = 0
     total = 0
     diffs = []
-    for source_field, target_path in mapping_table.items():
+    for source_field, target_value in mapping_table.items():
+        target_path = mapping_target_path(target_value)
         normalized = _applicable_target(target_path, resource_type, profile_ids)
         if normalized is None:
             continue
