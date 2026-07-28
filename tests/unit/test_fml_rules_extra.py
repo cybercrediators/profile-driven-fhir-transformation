@@ -323,7 +323,7 @@ def test_raw_primitive_code_retains_scalar_route(factory, monkeypatch):
     assert rule.target[0].transform == "copy"
 
 
-def test_exact_only_raw_choice_mapping_retains_existing_scalar_route(factory):
+def test_exact_only_raw_choice_mapping_emits_concrete_primitive_target(factory):
     field = {
         "path": "MedicationStatement.effective[x]",
         "type": [{"code": "dateTime"}],
@@ -340,8 +340,142 @@ def test_exact_only_raw_choice_mapping_retains_existing_scalar_route(factory):
     )
 
     assert rule.name == "map-effective"
-    assert rule.target[0].element == "effective"
-    assert rule.target[0].transform == "cast"
+    assert rule.target == []
+    assert rule.rule[0].target[0].element == "effectiveDateTime"
+    assert rule.rule[0].target[0].transform == "cast"
+
+
+def test_direct_raw_choice_mapping_narrows_from_source_primitive(factory):
+    factory.source_field_types = {"allowed": "boolean"}
+    field = {
+        "path": "MedicationRequest.substitution.allowed[x]",
+        "type": [{"code": "boolean"}, {"code": "CodeableConcept"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "MedicationRequest",
+        "source",
+        "target",
+        automapped_mappings={
+            "MedicationRequest.substitution.allowed[x]": "Source.allowed"
+        },
+        parent_path="MedicationRequest.substitution",
+    )
+
+    assert rule.rule[0].target[0].element == "allowedBoolean"
+    assert rule.rule[0].target[0].transform == "copy"
+
+
+def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factory):
+    factory.source_field_types = {"allowed": "string"}
+    field = {
+        "path": "MedicationRequest.substitution.allowed[x]",
+        "type": [{"code": "boolean"}, {"code": "CodeableConcept"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "MedicationRequest",
+        "source",
+        "target",
+        automapped_mappings={
+            "MedicationRequest.substitution.allowed[x]:allowedBoolean": "Source.allowed"
+        },
+        parent_path="MedicationRequest.substitution",
+    )
+
+    assert rule.rule[0].target[0].element == "allowedBoolean"
+    assert rule.rule[0].target[0].transform == "copy"
+
+
+def test_direct_raw_choice_mapping_rejects_ambiguous_source_type(factory, caplog):
+    factory.source_field_types = {"allowed": "string"}
+    field = {
+        "path": "MedicationRequest.substitution.allowed[x]",
+        "type": [{"code": "boolean"}, {"code": "CodeableConcept"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "MedicationRequest",
+        "source",
+        "target",
+        automapped_mappings={
+            "MedicationRequest.substitution.allowed[x]": "Source.allowed"
+        },
+        parent_path="MedicationRequest.substitution",
+    )
+
+    assert rule is None
+    assert "ambiguous" in caplog.text
+
+
+def test_choice_resolution_uses_snapshot_narrowing_not_base_candidate_list(factory):
+    factory._current_profile_sd = {
+        "type": "Observation",
+        "snapshot": {
+            "element": [
+                {"id": "Observation", "path": "Observation"},
+                {
+                    "id": "Observation.value[x]",
+                    "path": "Observation.value[x]",
+                    "type": [{"code": "Quantity"}],
+                },
+            ]
+        },
+    }
+    factory._target_tree_cache = (None, None)
+    field = {
+        "id": "Observation.value[x]",
+        "path": "Observation.value[x]",
+        "type": [
+            {"code": "string"},
+            {"code": "boolean"},
+            {"code": "Quantity"},
+        ],
+        "cardinality": {"min": 0, "max": "1"},
+        "children": [],
+    }
+
+    assert (
+        factory._resolve_choice_element(
+            field,
+            "value",
+            "Observation.value[x]",
+            {"Observation.value[x]": "Source.result"},
+        )
+        == "valueQuantity"
+    )
+
+
+@pytest.mark.parametrize(
+    ("field_type", "fixed_value", "literal"),
+    [("boolean", False, "false"), ("integer", 0, "0"), ("decimal", 0, "0")],
+)
+def test_falsy_fixed_primitive_is_emitted(
+    factory, field_type, fixed_value, literal
+):
+    rule = factory.create_mappable_field_rule(
+        {
+            "path": "Observation.value[x]",
+            "type": field_type,
+            "fixed_value": fixed_value,
+            "cardinality": {"min": 1, "max": "1"},
+        },
+        "Observation",
+        "source",
+        "target",
+    )
+
+    assert rule.target[0].element == f"value{factory._choice_suffix(field_type)}"
+    assert rule.target[0].parameter[0].valueString == literal
 
 
 def test_raw_constrained_coded_choice_merges_coding_leaf_rules(factory):

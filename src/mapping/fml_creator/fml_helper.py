@@ -19,6 +19,20 @@ BASE_META_SUFFIXES = (
 )
 
 
+def has_fixed_value(value) -> bool:
+    """Whether a parsed ``fixed[x]``/``pattern[x]`` value is present.
+
+    ``False`` and numeric zero are valid FHIR constraints.  The parser historically
+    used empty containers as its "not fixed" sentinel, so keep treating those (and an
+    empty string, which is not a valid populated FHIR primitive) as absent.
+    """
+    if value is None:
+        return False
+    if isinstance(value, (list, dict, str)) and len(value) == 0:
+        return False
+    return True
+
+
 def is_meaningful_modifier_extension(field):
     """check if a field is a profile-defined modifierExtension slice (not the empty base element)"""
     if not isinstance(field, dict):
@@ -135,7 +149,7 @@ def flatten_profile_fields(app_state, res_type, fields):
                         if (
                             isinstance(nested, dict)
                             and nested.get("path", "").endswith(".url")
-                            and nested.get("fixed_value")
+                            and has_fixed_value(nested.get("fixed_value"))
                         ):
                             conv["extension_url"] = nested["fixed_value"]
                             break

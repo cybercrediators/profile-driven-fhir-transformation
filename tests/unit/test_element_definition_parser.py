@@ -128,6 +128,26 @@ def test_fixed_value_still_captured_and_wins_over_default():
     assert fi["default_value"] == {"type": "Code", "value": "male"}
 
 
+@pytest.mark.parametrize(
+    ("type_code", "fixed_kw", "expected"),
+    [
+        ("boolean", {"fixedBoolean": False}, False),
+        ("integer", {"fixedInteger": 0}, 0),
+        ("decimal", {"fixedDecimal": 0}, 0),
+    ],
+)
+def test_falsy_fixed_values_are_retained(type_code, fixed_kw, expected):
+    elem = _elem(
+        "Patient.multipleBirth[x]",
+        min=0,
+        max="1",
+        type=[ElementDefinitionType(code=type_code)],
+        **fixed_kw,
+    )
+    fi = edp.parse_element_definition({}, elem, _sd_obj([elem]), _app_state())
+    assert fi["fixed_value"] == expected
+
+
 def test_create_field_info_includes_slice_name_when_present():
     fi = edp.create_field_info(_elem("Patient.identifier", min=0, max="1", sliceName="mrn"), [{"code": "Identifier"}])
     assert fi["sliceName"] == "mrn"

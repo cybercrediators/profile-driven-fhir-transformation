@@ -136,6 +136,19 @@ def fhir_id_token(value: str, max_len: int = 50) -> str:
     return re.sub(r"[^A-Za-z0-9.-]", "-", value or "")[:max_len]
 
 
+def fhir_name_token(value: str, max_len: int = 255) -> str:
+    """Return an invariant-safe FHIR ``name`` value.
+
+    ``name`` is stricter than ``id``: it starts with an uppercase letter and then
+    contains only letters, digits, and underscores.
+    """
+    token = re.sub(r"[^A-Za-z0-9_]", "_", value or "")
+    if not token or not token[0].isalpha():
+        token = f"Map_{token}"
+    token = token[0].upper() + token[1:]
+    return token[:max_len]
+
+
 def get_value_from_element(element, attr_names):
     """
     Extracts value[x] from a given element

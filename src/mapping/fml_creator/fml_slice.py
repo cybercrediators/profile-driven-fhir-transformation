@@ -80,6 +80,28 @@ class _SliceRulesMixin:
             rule.target = [tgt]
             return rule
 
+        # A concrete complex choice can also be copied as a whole.  This is distinct
+        # from descendant mappings, where the datatype must be created and populated.
+        if sub_field_maps and sub_field_maps[0][0] == "":
+            src = StructureMapGroupRuleSource.model_construct(
+                context=parent_source_context,
+                element=sub_field_maps[0][1],
+                variable="src-choiceval",
+            )
+            tgt = StructureMapGroupRuleTarget.model_construct(
+                context=parent_target_context,
+                element=f"{base_name}{self._choice_suffix(choice_type)}",
+                transform="copy",
+                parameter=[
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueId="src-choiceval"
+                    )
+                ],
+            )
+            rule.source = [src]
+            rule.target = [tgt]
+            return rule
+
         # Complex choice type: create then populate direct sub-fields.
         var = f"tgt-{bn}-{ct}"
         src = StructureMapGroupRuleSource.model_construct(context=parent_source_context)

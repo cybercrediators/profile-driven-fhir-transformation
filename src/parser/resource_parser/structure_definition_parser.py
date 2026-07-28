@@ -21,6 +21,15 @@ def parse_structure_definition(sd, app_state: AppState, p_prefix=None):
         return sd, app_state
     logger.info(f"Processing: {sd.data.name}")
 
+    snapshot = getattr(sd.data, "snapshot", None)
+    if not snapshot or not getattr(snapshot, "element", None):
+        identity = getattr(sd.data, "url", None) or getattr(sd.data, "name", "unknown")
+        raise ValueError(
+            f"StructureDefinition {identity} has no usable snapshot. "
+            "Compile/expand snapshots before StructureMap generation; "
+            "differential expansion is intentionally out of scope."
+        )
+
     # set structuredefinition to processed
     sd.set_processed()
 
@@ -66,12 +75,6 @@ def parse_structure_definition(sd, app_state: AppState, p_prefix=None):
     # if hasattr(sd.template, 'meta'):
     #     sd.template.meta = Meta.construct(profile=[sd.data.url])
     #     logger.info("Setting meta for template class!")
-
-    if not sd.data.snapshot:
-        print(
-            f"Warning: No snapshot found for {sd.data.url}. Template will be minimal."
-        )
-        return sd, app_state
 
     # processed needed for slicing
     elem_list = list(

@@ -91,7 +91,9 @@ def parse_element_definition(res_dict, elem, sd, app_state):
         return field_info
 
     attr, value = get_value_from_element(elem, ("fixed", "pattern"))
-    if value:
+    if value is not None and not (
+        isinstance(value, (list, dict, str)) and len(value) == 0
+    ):
         is_pattern = bool(attr) and attr.startswith("pattern")
         logger.info(
             "%s has a %s value. Setting pre-defined value...",

@@ -164,7 +164,7 @@ def test_subject_placeholder_rule_shape(creator):
     # documentation must match BundleService._collect_todo_refs' regex contract
     assert rule.documentation.startswith("Reference<QuestionnaireResponse.subject>")
     assert "Patient" in rule.documentation  # default when no subjectType declared
-    assert rule.target[0].element == "subject"
+    assert rule.target is None
     assert rule.source[0].context == "Source"
 
 

@@ -19,6 +19,7 @@ from mapping.fml_creator.fml_helper import (
     clean_field_name,
     fhir_type_suffix,
     fixed_scalar_literal,
+    has_fixed_value,
     type_codes,
     attr as _attr,
 )
@@ -329,7 +330,7 @@ class _CodedRulesMixin:
         resolved_source = self._resolve_coded_source(field, automapped_mappings)
         has_source = resolved_source is not None
 
-        if fixed_value:
+        if has_fixed_value(fixed_value):
             is_pattern = bool(field.get("is_pattern"))
             min_c = int((field.get("cardinality") or {}).get("min", 0) or 0)
             is_req = min_c > 0 or bool(field.get("is_required"))

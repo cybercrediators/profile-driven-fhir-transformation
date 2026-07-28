@@ -94,12 +94,63 @@ def test_choice_child_is_addressable_via_the_x_form():
 
 def test_choice_child_is_addressable_via_the_concrete_form():
     mappings = _resolve({"src.smokCode": "Observation.valueCodeableConcept.coding.code"})
-    assert mappings.get("Observation.value[x].coding.code") == "smokCode"
+    assert (
+        mappings.get("Observation.value[x]:valueCodeableConcept.coding.code")
+        == "smokCode"
+    )
 
 
 def test_a_second_candidate_types_children_resolve_too():
     mappings = _resolve({"src.weight": "Observation.valueQuantity.value"})
-    assert mappings.get("Observation.value[x].value") == "weight"
+    assert mappings.get("Observation.value[x]:valueQuantity.value") == "weight"
+
+
+def test_concrete_primitive_choice_root_preserves_selected_type():
+    gen = _generator()
+    field = conv_mappable(
+        None,
+        {
+            "path": "Observation.value[x]",
+            "type": [{"code": "boolean"}, {"code": "CodeableConcept"}],
+        },
+    )
+    _, mappings = gen._apply_custom_mapping_table(
+        {"src.flag": "Observation.valueBoolean"},
+        [{"id": "flag", "path": "src.flag"}],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+    assert mappings.get("Observation.value[x]:valueBoolean") == "flag"
+
+
+def test_duplicate_target_assignments_are_diagnosed(caplog):
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    _, mappings = gen._apply_custom_mapping_table(
+        {
+            "src.first": "Observation.value[x].text",
+            "src.second": "Observation.value[x].text",
+        },
+        [
+            {"id": "first", "path": "src.first"},
+            {"id": "second", "path": "src.second"},
+        ],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert mappings["Observation.value[x].text"] == "second"
+    assert gen.mapping_diagnostics == [
+        {
+            "code": "duplicate-target-assignment",
+            "target": "Observation.value[x].text",
+            "previous_source": "first",
+            "source": "second",
+        }
+    ]
+    assert "Duplicate custom mapping target" in caplog.text
 
 
 def test_unknown_child_of_a_known_base_is_accepted_verbatim():

@@ -11,9 +11,14 @@ from fhir.resources.R4B.structuremap import (
 )
 
 from mapping.fml_creator.fml_factory import FMLRuleFactory
-from mapping.fml_creator.fml_helper import flatten_profile_fields
+from mapping.fml_creator.fml_helper import flatten_profile_fields, has_fixed_value
 from mapping.fml_creator.fml_automapper import FMLAutomapper
-from helpers.utils import get_value_from_element, resource_identity, fhir_id_token
+from helpers.utils import (
+    get_value_from_element,
+    resource_identity,
+    fhir_id_token,
+    fhir_name_token,
+)
 
 from typing import List, Any, Dict, Optional, Set, Tuple
 import logging
@@ -58,6 +63,8 @@ class StructureMapGenerator:
         self.overwrite = overwrite
         self.plugins = plugins or []
         self.current_profile_name = "unknown"
+        self.mapping_diagnostics = []
+        self._generated_structure_map_files = set()
         # {profile_id: {required_total, required_unmapped, unmapped_required_paths}}
         # per-profile required-element coverage report written alongside the maps.
         self._coverage = {}
@@ -129,7 +136,7 @@ class StructureMapGenerator:
             sm_title = f"{self.map_title} - {profile_identity}"
 
             sm = self.factory.create_base_structure_map(
-                sm_url, sm_name, sm_title, self.status
+                sm_url, fhir_name_token(sm_name), sm_title, self.status
             )
             # Deterministic ID (like ConceptMaps) so repeated runs produce identical files
             url_hash = hashlib.md5(sm_url.encode("utf-8")).hexdigest()[:8]
@@ -165,6 +172,7 @@ class StructureMapGenerator:
 
             groups = [res_group]
             sm.group = groups
+            self._normalize_and_validate_structure_map(sm)
 
             self.app_state.dataIO.store_project_file(
                 self.app_state.dataIO.ProjectFolders.STRUCTURE_MAPS,
@@ -173,6 +181,7 @@ class StructureMapGenerator:
                 mode="STR",
                 overwrite=self.overwrite,
             )
+            self._generated_structure_map_files.add(f"{sm_name}.json")
             structure_maps.append(sm)
 
         self.structure_maps = structure_maps
@@ -191,13 +200,40 @@ class StructureMapGenerator:
         sm_dir = self.app_state.dataIO.project_dir / folder.value
         if not sm_dir.is_dir():
             return
-        current = {f"{sm.name}.json" for sm in structure_maps}
+        current = getattr(self, "_generated_structure_map_files", None) or {
+            f"{sm.name}.json" for sm in structure_maps
+        }
         generated_name = re.compile(rf"^\d{{3}}_{re.escape(self.map_name)}-.+\.json$")
         for f in sm_dir.iterdir():
             if f.name in current or not generated_name.match(f.name):
                 continue
             logger.info(f"Removing stale StructureMap: {f.name}")
             self.app_state.dataIO.delete_file(folder.value + "/" + f.name)
+
+    @staticmethod
+    def _normalize_and_validate_structure_map(structure_map):
+        """Populate required target context types and reject malformed targets."""
+        name = getattr(structure_map, "name", "") or ""
+        if not re.fullmatch(r"[A-Z][A-Za-z0-9_]{0,254}", name):
+            raise ValueError(f"StructureMap.name is not invariant-safe: {name!r}")
+
+        def _walk(rules):
+            for rule in rules or []:
+                for target in getattr(rule, "target", None) or []:
+                    context = getattr(target, "context", None)
+                    element = getattr(target, "element", None)
+                    if element and not context:
+                        raise ValueError(
+                            f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
+                            f"targets element {element!r} without a context"
+                        )
+                    if context and not getattr(target, "contextType", None):
+                        target.contextType = "variable"
+                _walk(getattr(rule, "rule", None))
+
+        for group in getattr(structure_map, "group", None) or []:
+            _walk(getattr(group, "rule", None))
+        return structure_map
 
     def _cleanup_stale_concept_maps(self, structure_maps):
         """Delete cm-*.json files in source_data/concept_maps that no current map references"""
@@ -460,7 +496,7 @@ class StructureMapGenerator:
 
             def _has_fixed(field):
                 value = field.get("fixed_value")
-                if value is not None and value != []:
+                if has_fixed_value(value):
                     return True
                 return any(
                     isinstance(child, dict) and _has_fixed(child)
@@ -560,6 +596,7 @@ class StructureMapGenerator:
                 ),
             },
             "profiles": self._coverage,
+            "mapping_diagnostics": list(self.mapping_diagnostics),
         }
         try:
             self.app_state.dataIO.store_project_file(
@@ -789,7 +826,13 @@ class StructureMapGenerator:
                     for ct in cts:
                         suffix = self.factory._choice_suffix(ct)
                         concrete_path = f"{base}{suffix}"
-                        target_index[concrete_path] = field_path
+                        # Keep the author's concrete choice selection.  Mapping it back to
+                        # the raw ``value[x]`` path discards the only type information a
+                        # primitive ``copy`` transform has (N3).
+                        concrete_head = concrete_path.rsplit(".", 1)[-1]
+                        target_index[concrete_path] = (
+                            f"{field_path}:{concrete_head}"
+                        )
                     # children of each candidate type, so a mapping table can address
                     # inside an unsliced multi-type choice (`value[x].coding.code`).
                     # Registered under both the `[x]` form (the parser's own child
@@ -812,7 +855,10 @@ class StructureMapGenerator:
                             child_path = child["path"]
                             if child_path.startswith(f"{field_path}."):
                                 tail = child_path[len(field_path) :]
-                                target_index[f"{base}{suffix}{tail}"] = child_path
+                                concrete_head = f"{base}{suffix}".rsplit(".", 1)[-1]
+                                target_index[f"{base}{suffix}{tail}"] = (
+                                    f"{field_path}:{concrete_head}{tail}"
+                                )
                 if f.get("children"):
                     flat.extend(_flatten_targets(f.get("children"), virtual_path))
                 if f.get("type_structure"):
@@ -910,6 +956,23 @@ class StructureMapGenerator:
                 continue
 
             automapped_paths.add(target_path)
+            previous_source = automapped_mappings.get(target_path)
+            if previous_source and previous_source != source_id:
+                diagnostic = {
+                    "code": "duplicate-target-assignment",
+                    "target": target_path,
+                    "previous_source": previous_source,
+                    "source": source_id,
+                }
+                if not hasattr(self, "mapping_diagnostics"):
+                    self.mapping_diagnostics = []
+                self.mapping_diagnostics.append(diagnostic)
+                logger.warning(
+                    "Duplicate custom mapping target %s: %s is overwritten by %s.",
+                    target_path,
+                    previous_source,
+                    source_id,
+                )
             automapped_mappings[target_path] = source_id
             ancestor = target_path
             skip_add = False
@@ -1052,7 +1115,10 @@ class StructureMapGenerator:
             must_support = bool(field.get("must_support"))
 
             should_keep = (
-                is_req or min_c >= 1 or bool(field.get("fixed_value")) or must_support
+                is_req
+                or min_c >= 1
+                or has_fixed_value(field.get("fixed_value"))
+                or must_support
             )
 
             if not should_keep and self.create_references:
@@ -1155,7 +1221,7 @@ class StructureMapGenerator:
             for entry in nested_entries:
                 entry_path = entry.get("path")
                 keep = self._should_keep_path(entry_path, allowed_paths)
-                if not keep and entry.get("fixed_value"):
+                if not keep and has_fixed_value(entry.get("fixed_value")):
                     keep = True
                 if not keep and entry_path:
                     ep = _norm(entry_path)

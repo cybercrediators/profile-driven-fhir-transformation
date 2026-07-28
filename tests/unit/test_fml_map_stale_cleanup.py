@@ -11,6 +11,7 @@ from types import SimpleNamespace
 import pytest
 
 from mapping.fml_map import StructureMapGenerator
+from helpers.utils import fhir_name_token
 
 pytestmark = pytest.mark.unit
 
@@ -56,3 +57,29 @@ def test_stale_generated_maps_are_deleted_current_and_foreign_kept(tmp_path):
 def test_cleanup_is_noop_without_structure_maps_dir(tmp_path):
     smg = _generator(tmp_path)
     smg._cleanup_stale_structure_maps([SimpleNamespace(name="001_structure_map_proj-a")])
+
+
+def test_fhir_name_token_and_structure_map_invariant_normalization():
+    target = SimpleNamespace(
+        context="target", contextType=None, element="active"
+    )
+    rule = SimpleNamespace(name="map-active", target=[target], rule=[])
+    sm = SimpleNamespace(
+        name=fhir_name_token("001_structure-map-profile"),
+        group=[SimpleNamespace(rule=[rule])],
+    )
+
+    StructureMapGenerator._normalize_and_validate_structure_map(sm)
+
+    assert sm.name == "Map_001_structure_map_profile"
+    assert target.contextType == "variable"
+
+
+def test_structure_map_invariant_rejects_target_element_without_context():
+    bad = SimpleNamespace(
+        name="bad", target=[SimpleNamespace(context=None, element="active")], rule=[]
+    )
+    sm = SimpleNamespace(name="ValidMap", group=[SimpleNamespace(rule=[bad])])
+
+    with pytest.raises(ValueError, match="without a context"):
+        StructureMapGenerator._normalize_and_validate_structure_map(sm)

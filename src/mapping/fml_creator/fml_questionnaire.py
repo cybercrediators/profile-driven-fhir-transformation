@@ -196,7 +196,7 @@ class QuestionnaireMapCreator:
                     context=source_alias, variable="src-subject"
                 )
             ],
-            target=[StructureMapGroupRuleTarget.model_construct(element="subject")],
+            target=None,
             documentation=(
                 f"Reference<QuestionnaireResponse.subject> → {subject_types} "
                 f"— resolve via bundle assembler"

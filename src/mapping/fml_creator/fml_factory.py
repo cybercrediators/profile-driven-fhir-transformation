@@ -27,6 +27,7 @@ from mapping.fml_creator.fml_helper import (
     type_codes,
     attr as _attr,
     BASE_META_SUFFIXES,
+    has_fixed_value,
     is_meaningful_modifier_extension,
 )
 from parser.resource_parser.fhir_type_introspection import get_complex_type_fields
@@ -115,7 +116,18 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         source field's declared type. Several candidates left means the author has to say
         which one — guessing produced the wrong variant (backlog item 25).
         """
-        candidates = [c for c in (type_codes(field.get("type")) or []) if c and c != "N/A"]
+        tree = self.profile_tree()
+        tree_key = field.get("id") or path
+        candidates = [
+            c for c in ((tree.effective_types(tree_key) if tree else []) or [])
+            if c and c != "N/A"
+        ]
+        if not candidates:
+            candidates = [
+                c
+                for c in (type_codes(field.get("type")) or [])
+                if c and c != "N/A"
+            ]
         if not candidates:
             candidates = [c for c in (field.get("choice_types") or []) if c]
         if len(candidates) > 1 and automapped_mappings:
@@ -197,7 +209,11 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 child_copy["type_structure"] = nested
             elif child.get("children") is not None:
                 child_copy["children"] = nested
-            if _provided(child.get("path")) or child.get("fixed_value") or nested:
+            if (
+                _provided(child.get("path"))
+                or has_fixed_value(child.get("fixed_value"))
+                or nested
+            ):
                 kept.append(child_copy)
         return kept
 
@@ -423,7 +439,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
 
         # Handle fixed values for all types (primitives, etc.)
         fixed_value = field.get("fixed_value")
-        if fixed_value:
+        if has_fixed_value(fixed_value):
             # N2: a dot left in clean_path means this leaf sits below the element the
             # current target context represents, i.e. its parent chain was never
             # materialised. Attaching the leaf here would write it at the wrong level —
@@ -671,17 +687,19 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             field, is_slice, slice_info
         )
 
-        has_choice_descendant_provider = bool(
+        has_choice_provider = bool(
             automapped_mappings
             and any(
-                key.startswith(path + ".") or key.startswith(path + ":")
+                key == path
+                or key.startswith(path + ".")
+                or key.startswith(path + ":")
                 for key in automapped_mappings
             )
         )
         if (
             field.get("is_type_choice")
             or field_type == "choice"
-            or ("[x]" in path and has_choice_descendant_provider)
+            or ("[x]" in path and has_choice_provider)
         ):
             return self._choice_field_rule(
                 field,
@@ -760,9 +778,10 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             f"TODO-resolve-reference{type_part}-{clean_field_name(base_field_name)}"
         )
         rule.documentation = f"Reference<{res_type}.{full_rel_path}> → {reference_target} — resolve via bundle assembler"
-        placeholder_target = StructureMapGroupRuleTarget.model_construct()
-        placeholder_target.element = display_name
-        rule.target = [placeholder_target]
+        # This is an instruction for the post-transform bundle assembler, not an
+        # executable target assignment.  A target element without a context violates
+        # StructureMap's target invariants.
+        rule.target = None
         return rule
 
     def _reference_source_rule(
@@ -898,7 +917,13 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         rule.name = f"map-{clean_field_name(base_name)}"  # CT-2: use clean base name
         rule.target = []  # CT-1: no outer target element for choice types
         field_path = field.get("path", "")
-        choice_types = list(field.get("choice_types") or [])
+        tree = self.profile_tree()
+        tree_key = field.get("id") or field_path
+        choice_types = list(
+            (tree.effective_types(tree_key) if tree else [])
+            or field.get("choice_types")
+            or []
+        )
         derived_raw_choice_types = False
         if not choice_types and automapped_mappings:
             has_choice_provider = any(
@@ -914,7 +939,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
 
         if choice_types and automapped_mappings:
             src_id = automapped_mappings.get(field.get("path", ""), "")
-            src_field_name = src_id.split(".")[-1] if src_id and "." in src_id else ""
+            src_field_name = src_id.split(".")[-1] if src_id else ""
             src_type = (
                 self.source_field_types.get(src_field_name, "")
                 if src_field_name
@@ -991,6 +1016,14 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         if not chosen_type and len(choice_types) == 1 and sub_field_maps:
             chosen_type = choice_types[0]
 
+        # A direct provider for the raw choice root carries no target-type suffix.
+        # It is safe only after the profile/source narrowing above leaves exactly one
+        # candidate.  Preserve the source for the concrete primitive/complex copy rule.
+        direct_source = (automapped_mappings or {}).get(field_path)
+        if direct_source and not sub_field_maps and len(choice_types) == 1:
+            chosen_type = choice_types[0]
+            sub_field_maps.append(("", self._as_local_element(direct_source)))
+
         if chosen_type and chosen_type not in choice_types:
             match = next(
                 (ct for ct in choice_types if ct.lower() == chosen_type.lower()), None
@@ -1011,13 +1044,24 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 rule.rule = [narrowed_rule]
                 return rule
 
+        if direct_source and len(choice_types) != 1:
+            logger.warning(
+                "Direct mapping to choice %s is ambiguous across [%s]; map to a "
+                "concrete target element such as %s%s.",
+                field_path,
+                ", ".join(choice_types) or "unknown types",
+                base_name,
+                self._choice_suffix(choice_types[0]) if choice_types else "<Type>",
+            )
+            return None
+
         if derived_raw_choice_types and len(choice_types) > 1:
             logger.warning(
                 "Mapped choice %s does not identify one concrete target type; "
                 "leaving it unresolved.",
                 field_path,
             )
-            return rule
+            return None
 
         nested_rules = []
         for choice_type in choice_types:

@@ -193,6 +193,24 @@ def test_parse_marks_processed_and_records_base_definition_used_by():
     assert (ro.data.baseDefinition, ro.data.url) in state.used_by
 
 
+def test_parse_rejects_profile_without_usable_snapshot():
+    sd = StructureDefinition(
+        url="http://example.org/sd/DifferentialOnly",
+        name="DifferentialOnly",
+        status="active",
+        kind="resource",
+        abstract=False,
+        type="Patient",
+        baseDefinition="http://hl7.org/fhir/StructureDefinition/Patient",
+    )
+    ro = RegistryObject(sd, "StructureDefinition")
+
+    with pytest.raises(ValueError, match="Compile/expand snapshots"):
+        sdp.parse_structure_definition(ro, _app_state())
+
+    assert not ro.is_processed()
+
+
 def test_parse_builds_mappable_field_hierarchy():
     elements = [
         _elem("Patient.active", min=0, max="1", type=[ElementDefinitionType(code="boolean")]),
