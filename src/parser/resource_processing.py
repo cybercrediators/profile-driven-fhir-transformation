@@ -103,6 +103,15 @@ def process_files(files, app_state: AppState, overwrite=False):
     # TODO: process other resources (in case there are other mappable fields to keep in mind)
 
 
+def _result_filename(url: str, val) -> str:
+    """on-disk name for a processed resource (avoid using potentially optional id field)"""
+    res_id = getattr(val.data, "id", None)
+    if res_id:
+        return res_id
+    canonical = getattr(val.data, "url", None) or url or ""
+    return canonical.rstrip("/").split("/")[-1].split("|")[0] or "unnamed_resource"
+
+
 def store_results(app_state: AppState):
     """Store results from the analyzation process on-disk in the corresponding project folder(s)"""
     for url, val in app_state.registry.registry_objects.items():
@@ -112,7 +121,7 @@ def store_results(app_state: AppState):
         # utils.store_json(res_json, res_dir)
         app_state.dataIO.store_project_file(
             app_state.dataIO.ProjectFolders.PROCESSED_RESOURCES,
-            val.data.id,
+            _result_filename(url, val),
             res_json,
             overwrite=True,
         )
@@ -131,6 +140,6 @@ def load_results(app_state: AppState):
         # res_json = utils.get_json(res_dir)
         # app_state.registry.registry_objects[url] = jsonpickle.decode(res_json)
         res_json = app_state.dataIO.load_project_file(
-            app_state.dataIO.ProjectFolders.PROCESSED_RESOURCES, val.data.id
+            app_state.dataIO.ProjectFolders.PROCESSED_RESOURCES, _result_filename(url, val)
         )
         app_state.registry.registry_objects[url] = jsonpickle.decode(res_json)
