@@ -58,6 +58,127 @@ def test_get_slices_matches_root_path_and_named():
     assert sdp.get_slices([a, b], "Patient.identifier") == [a]
 
 
+def test_get_slices_uses_exact_path_not_substring():
+    exact = _elem(
+        "Patient.identifier",
+        id="Patient.identifier:mrn",
+        sliceName="mrn",
+    )
+    collision = _elem(
+        "Patient.identifierHistory",
+        id="Patient.identifierHistory:old",
+        sliceName="old",
+    )
+    assert sdp.get_slices([exact, collision], "Patient.identifier") == [exact]
+
+
+def test_multiple_discriminators_do_not_duplicate_slices():
+    elements = [
+        _elem(
+            "Patient.identifier",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="Identifier")],
+            slicing={
+                "discriminator": [
+                    {"type": "value", "path": "system"},
+                    {"type": "value", "path": "type"},
+                ],
+                "ordered": True,
+                "rules": "closed",
+            },
+        ),
+        _elem(
+            "Patient.identifier",
+            id="Patient.identifier:mrn",
+            sliceName="mrn",
+            min=0,
+            max="1",
+            type=[ElementDefinitionType(code="Identifier")],
+        ),
+    ]
+    ro = _sd_ro(elements)
+    sdp.parse_structure_definition(ro, _app_state())
+    identifier = next(f for f in ro.mappable_fields if f["path"] == "Patient.identifier")
+
+    assert len(identifier["slices"]) == 1
+    assert identifier["slicing"] == {
+        "discriminators": [
+            {"path": "system", "type": "value"},
+            {"path": "type", "type": "value"},
+        ],
+        "ordered": True,
+        "rules": "closed",
+    }
+
+
+def test_reslices_are_nested_by_element_definition_identity():
+    elements = [
+        _elem(
+            "Patient.identifier",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="Identifier")],
+            slicing={
+                "discriminator": [{"type": "value", "path": "system"}],
+                "rules": "open",
+            },
+        ),
+        _elem(
+            "Patient.identifier",
+            id="Patient.identifier:national",
+            sliceName="national",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="Identifier")],
+        ),
+        _elem(
+            "Patient.identifier",
+            id="Patient.identifier:national/ssn",
+            sliceName="national/ssn",
+            min=0,
+            max="1",
+            type=[ElementDefinitionType(code="Identifier")],
+        ),
+        _elem(
+            "Patient.identifier.system",
+            id="Patient.identifier:national.system",
+            min=1,
+            max="1",
+            type=[ElementDefinitionType(code="uri")],
+            fixedUri="urn:national",
+        ),
+        _elem(
+            "Patient.identifier.value",
+            id="Patient.identifier:national/ssn.value",
+            min=1,
+            max="1",
+            type=[ElementDefinitionType(code="string")],
+        ),
+    ]
+    ro = _sd_ro(elements)
+    sdp.parse_structure_definition(ro, _app_state())
+    identifier = next(f for f in ro.mappable_fields if f["path"] == "Patient.identifier")
+
+    assert [s["slice_identity"] for s in identifier["slices"]] == [
+        "Patient.identifier:national"
+    ]
+    assert [s["slice_identity"] for s in identifier["slices"][0]["slices"]] == [
+        "Patient.identifier:national/ssn"
+    ]
+    ssn = identifier["slices"][0]["slices"][0]
+    assert {
+        child["id"] for child in ssn["children"]
+    } == {
+        "Patient.identifier:national/ssn.system",
+        "Patient.identifier:national/ssn.value",
+    }
+    inherited_system = next(
+        child for child in ssn["children"] if child["path"].endswith(".system")
+    )
+    assert inherited_system["fixed_value"] == "urn:national"
+
+
 # --------------------------------------------------------------------------- #
 # slice descendants (sub-elements under a slice — discriminator / value types)
 # --------------------------------------------------------------------------- #
@@ -96,6 +217,47 @@ def test_parse_attaches_slice_descendants_as_slice_children():
     assert "Patient.identifier.system" in child_paths
     # the descendant must NOT also bind to the unsliced identifier field's children
     assert all("system" not in c.get("path", "") for c in ident.get("children", []))
+
+
+def test_parse_retains_prohibited_slice_child_for_exists_discriminator():
+    elements = [
+        _elem(
+            "Patient.identifier",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="Identifier")],
+            slicing={
+                "discriminator": [{"type": "exists", "path": "period"}],
+                "rules": "open",
+            },
+        ),
+        _elem(
+            "Patient.identifier",
+            id="Patient.identifier:without-period",
+            sliceName="without-period",
+            min=0,
+            max="1",
+            type=[ElementDefinitionType(code="Identifier")],
+        ),
+        _elem(
+            "Patient.identifier.period",
+            id="Patient.identifier:without-period.period",
+            min=0,
+            max="0",
+            type=[ElementDefinitionType(code="Period")],
+        ),
+    ]
+    ro = _sd_ro(elements)
+
+    sdp.parse_structure_definition(ro, _app_state())
+
+    identifier = next(
+        field for field in ro.mappable_fields if field["path"] == "Patient.identifier"
+    )
+    period = identifier["slices"][0]["children"][0]
+    assert period["id"] == "Patient.identifier:without-period.period"
+    assert period["cardinality"]["max"] == "0"
+    assert period["is_prohibited"] is True
 
 
 # --------------------------------------------------------------------------- #
@@ -225,3 +387,35 @@ def test_parse_builds_mappable_field_hierarchy():
     contact = next(f for f in ro.mappable_fields if f["path"] == "Patient.contact")
     child_paths = {c["path"] for c in contact["children"]}
     assert "Patient.contact.gender" in child_paths
+
+
+def test_content_reference_inherits_and_rebases_target_children():
+    elements = [
+        _elem(
+            "Patient.contact",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="BackboneElement")],
+        ),
+        _elem(
+            "Patient.contact.gender",
+            min=0,
+            max="1",
+            type=[ElementDefinitionType(code="code")],
+        ),
+        _elem(
+            "Patient.link",
+            min=0,
+            max="*",
+            contentReference="#Patient.contact",
+        ),
+    ]
+    ro = _sd_ro(elements)
+    sdp.parse_structure_definition(ro, _app_state())
+    link = next(f for f in ro.mappable_fields if f["path"] == "Patient.link")
+
+    assert link["content_reference_resolved"] is True
+    assert link["content_reference_target"] == "Patient.contact"
+    assert link["type"][0]["code"] == "BackboneElement"
+    assert link["children"][0]["path"] == "Patient.link.gender"
+    assert link["children"][0]["id"] == "Patient.link.gender"

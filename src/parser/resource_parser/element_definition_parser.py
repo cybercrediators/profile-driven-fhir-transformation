@@ -18,7 +18,8 @@ def parse_element_definition(res_dict, elem, sd, app_state):
     extension URL (for Extension slices), a reference target, and the mustSupport / comment /
     min-maxValue / maxLength / contentReference facets.
 
-    NOT flattened: constraint (FHIRPath invariants, validated elsewhere), mapping, isModifier/isSummary (hierarchy kept)
+    Constraints and other non-generative facets are retained for compiler diagnostics;
+    they are not treated as source values.
     """
     logger.info("Processing element: %s", elem.id)
     if len(elem.path.split(".")) == 1 or elem.max == "0":
@@ -39,6 +40,7 @@ def parse_element_definition(res_dict, elem, sd, app_state):
             if t.targetProfile:
                 tmp["targetProfile"] = t.targetProfile
             if t.profile:
+                tmp["profile_canonical"] = list(t.profile)
                 tmp["profile"] = []
                 for pf in t.profile:
                     profile_sd = app_state.registry.get_obj_by_name(pf)
@@ -106,6 +108,9 @@ def parse_element_definition(res_dict, elem, sd, app_state):
         if is_pattern:
             field_info["is_pattern"] = True
             field_info["pattern_value"] = value
+            field_info["fixed_kind"] = "pattern"
+        else:
+            field_info["fixed_kind"] = "fixed"
         return _attach_binding_facets(field_info)
 
     child_url = get_ref_profile(elem)
@@ -147,6 +152,30 @@ def create_field_info(elem, elem_type, fixed_value=[]):
         base_info["max_length"] = elem.maxLength
     if elem.contentReference:
         base_info["content_reference"] = elem.contentReference
+    if elem.condition:
+        base_info["conditions"] = list(elem.condition)
+    if elem.constraint:
+        base_info["constraints"] = [
+            c.model_dump(exclude_none=True) if hasattr(c, "model_dump") else c
+            for c in elem.constraint
+        ]
+    if elem.mapping:
+        base_info["mappings"] = [
+            m.model_dump(exclude_none=True) if hasattr(m, "model_dump") else m
+            for m in elem.mapping
+        ]
+    if elem.isModifier is not None:
+        base_info["is_modifier"] = bool(elem.isModifier)
+    if elem.isSummary is not None:
+        base_info["is_summary"] = bool(elem.isSummary)
+    if elem.requirements:
+        base_info["requirements"] = elem.requirements
+    if elem.alias:
+        base_info["aliases"] = list(elem.alias)
+    if elem.meaningWhenMissing:
+        base_info["meaning_when_missing"] = elem.meaningWhenMissing
+    if elem.orderMeaning:
+        base_info["order_meaning"] = elem.orderMeaning
 
     default_attr, default_val = get_value_from_element(elem, ("defaultValue",))
     if default_attr and "__" not in default_attr and default_val is not None:

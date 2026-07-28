@@ -7,8 +7,11 @@ files this run did not produce — and nothing else.
 """
 
 from types import SimpleNamespace
+import json
 
 import pytest
+
+from fhir.resources.R4B.quantity import Quantity
 
 from mapping.fml_map import StructureMapGenerator
 from helpers.utils import fhir_name_token
@@ -83,3 +86,108 @@ def test_structure_map_invariant_rejects_target_element_without_context():
 
     with pytest.raises(ValueError, match="without a context"):
         StructureMapGenerator._normalize_and_validate_structure_map(sm)
+
+
+def test_todo_sanitizer_moves_executable_placeholder_to_diagnostics():
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "PatientProfile"
+    generator.mapping_diagnostics = []
+    executable_todo = SimpleNamespace(
+        name="map-required",
+        source=[SimpleNamespace(element="TODO_MAP_REQUIRED")],
+        target=[],
+        rule=[],
+    )
+    deferred_reference = SimpleNamespace(
+        name="TODO-resolve-reference-Patient-generalPractitioner",
+        documentation="Reference<Patient.generalPractitioner> -> Practitioner",
+        source=[SimpleNamespace(element=None)],
+        target=None,
+        rule=[],
+    )
+    valid = SimpleNamespace(
+        name="map-active",
+        source=[SimpleNamespace(element="active")],
+        target=[SimpleNamespace(element="active", parameter=None)],
+        rule=[executable_todo],
+    )
+    group = SimpleNamespace(name="Transform-Patient", rule=[valid, deferred_reference])
+    structure_map = SimpleNamespace(group=[group])
+
+    generator._sanitize_todo_rules(structure_map)
+
+    assert group.rule == [valid, deferred_reference]
+    assert valid.rule is None
+    assert {item["code"] for item in generator.mapping_diagnostics} == {
+        "unresolved-map-placeholder",
+        "deferred-reference",
+    }
+
+
+def test_profile_facets_become_json_safe_diagnostics():
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "ObservationProfile"
+    generator.mapping_diagnostics = []
+    obj = SimpleNamespace(
+        mappable_fields=[
+            {
+                "path": "Observation.value[x]",
+                "id": "Observation.value[x]",
+                "default_value": {
+                    "type": "Quantity",
+                    "value": Quantity(value=2, unit="mg"),
+                },
+                "constraints": [
+                    {
+                        "key": "obs-1",
+                        "severity": "error",
+                        "expression": "dataAbsentReason.empty() or value.empty()",
+                    }
+                ],
+                "is_modifier": True,
+            }
+        ]
+    )
+
+    generator._record_profile_facet_diagnostics(obj)
+
+    json.dumps(generator.mapping_diagnostics)
+    assert {item["code"] for item in generator.mapping_diagnostics} == {
+        "target-default-value",
+        "target-fhirpath-constraint",
+        "target-modifier-element",
+    }
+    assert all(
+        item["profile"] == "ObservationProfile"
+        for item in generator.mapping_diagnostics
+    )
+
+
+def test_coverage_report_is_written_when_only_diagnostics_exist():
+    stored = {}
+    generator = object.__new__(StructureMapGenerator)
+    generator._coverage = {}
+    generator.mapping_diagnostics = [
+        {
+            "code": "ambiguous-slice-selection",
+            "message": "explicit selection required",
+        }
+    ]
+    generator.map_name = "diagnostic-map"
+    generator.app_state = SimpleNamespace(
+        dataIO=SimpleNamespace(
+            ProjectFolders=SimpleNamespace(SOURCE_DATA="source_data"),
+            store_project_file=lambda folder, name, body, **kwargs: stored.update(
+                {"folder": folder, "name": name, "body": body}
+            ),
+        )
+    )
+
+    generator._save_coverage_report()
+
+    assert stored["name"] == "diagnostic-map_coverage.json"
+    report = json.loads(stored["body"])
+    assert report["summary"]["profiles"] == 0
+    assert report["mapping_diagnostics"][0]["code"] == (
+        "ambiguous-slice-selection"
+    )

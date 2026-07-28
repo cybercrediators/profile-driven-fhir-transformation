@@ -125,3 +125,92 @@ def test_include_filter_emits_filter_marker(monkeypatch):
     out = ve.expand_valueset("http://vs/x", [], _state())
     assert len(out) == 1
     assert out[0]["code"].startswith("FILTER:")
+
+
+def test_nested_codesystem_concepts_are_flattened(monkeypatch):
+    vs = _vs([ValueSetComposeInclude(system="http://cs/nested")])
+    cs = CodeSystem(
+        status="active",
+        content="complete",
+        url="http://cs/nested",
+        concept=[
+            CodeSystemConcept(
+                code="parent",
+                display="Parent",
+                concept=[CodeSystemConcept(code="child", display="Child")],
+            )
+        ],
+    )
+    resolved = {"http://vs/x": vs, "http://cs/nested": cs}
+    monkeypatch.setattr(ve, "resolve_url", lambda url, st: resolved.get(url))
+
+    out = ve.expand_valueset("http://vs/x", [], _state())
+
+    assert [option["code"] for option in out] == ["parent", "child"]
+
+
+def test_compose_excludes_explicit_concepts_and_deduplicates(monkeypatch):
+    include = ValueSetComposeInclude(
+        system="http://cs/x",
+        version="1",
+        concept=[
+            ValueSetComposeIncludeConcept(code="a", display="A"),
+            ValueSetComposeIncludeConcept(code="a", display="A duplicate"),
+            ValueSetComposeIncludeConcept(code="b", display="B"),
+        ],
+    )
+    exclude = ValueSetComposeInclude(
+        system="http://cs/x",
+        concept=[ValueSetComposeIncludeConcept(code="b")],
+    )
+    vs = ValueSet(
+        status="active",
+        url="http://vs/x",
+        compose=ValueSetCompose(include=[include], exclude=[exclude]),
+    )
+    monkeypatch.setattr(ve, "resolve_url", lambda url, st: vs)
+
+    out = ve.expand_valueset("http://vs/x", [], _state())
+
+    assert out == [
+        {
+            "code": "a",
+            "display": "A",
+            "system": "http://cs/x",
+            "version": "1",
+        }
+    ]
+
+
+def test_compose_excludes_imported_valueset(monkeypatch):
+    inner = _vs(
+        [
+            ValueSetComposeInclude(
+                system="http://cs/x",
+                concept=[ValueSetComposeIncludeConcept(code="b")],
+            )
+        ],
+        url="http://vs/inner",
+    )
+    outer = ValueSet(
+        status="active",
+        url="http://vs/outer",
+        compose=ValueSetCompose(
+            include=[
+                ValueSetComposeInclude(
+                    system="http://cs/x",
+                    concept=[
+                        ValueSetComposeIncludeConcept(code="a"),
+                        ValueSetComposeIncludeConcept(code="b"),
+                    ],
+                )
+            ],
+            exclude=[ValueSetComposeInclude(valueSet=["http://vs/inner"])],
+        ),
+    )
+    resolved = {"http://vs/outer": outer, "http://vs/inner": inner}
+    monkeypatch.setattr(ve, "resolve_url", lambda url, st: resolved.get(url))
+
+    out = ve.expand_valueset("http://vs/outer", [], _state())
+
+    assert [option["code"] for option in out] == ["a"]

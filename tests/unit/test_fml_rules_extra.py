@@ -393,6 +393,53 @@ def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factor
     assert rule.rule[0].target[0].transform == "copy"
 
 
+def test_explicit_concrete_complex_choice_can_be_copied_as_a_whole(factory):
+    factory.source_field_types = {"period": "string"}
+    field = {
+        "path": "Observation.effective[x]",
+        "type": [{"code": "dateTime"}, {"code": "Period"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "Observation",
+        "source",
+        "target",
+        automapped_mappings={
+            "Observation.effective[x]:effectivePeriod": "Source.period"
+        },
+    )
+
+    target = rule.rule[0].target[0]
+    assert target.element == "effectivePeriod"
+    assert target.transform == "copy"
+    assert target.parameter[0].valueId == "src-choiceval"
+
+
+def test_explicit_choice_mapping_rejects_type_not_allowed_by_profile(factory, caplog):
+    field = {
+        "path": "Observation.effective[x]",
+        "type": [{"code": "dateTime"}, {"code": "Period"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "Observation",
+        "source",
+        "target",
+        automapped_mappings={
+            "Observation.effective[x]:effectiveQuantity": "Source.value"
+        },
+    )
+
+    assert rule is None
+    assert "unsupported choice type Quantity" in caplog.text
+
+
 def test_direct_raw_choice_mapping_rejects_ambiguous_source_type(factory, caplog):
     factory.source_field_types = {"allowed": "string"}
     field = {
@@ -657,10 +704,24 @@ def test_fixed_coding_from_leaves_requires_both_system_and_code(factory):
 # ── Correctness-D: type-aware discriminator hint ──────────────────────────────
 @pytest.mark.parametrize("disc_type", ["value", "pattern"])
 def test_discriminator_hint_emitted_for_value_based(factory, disc_type):
-    slice_info = {"discriminator": {"path": "system", "type": disc_type}}
+    slice_info = {
+        "discriminator": {
+            "path": "system",
+            "type": disc_type,
+            "value": "http://example.org/system",
+        }
+    }
     rule = factory.create_discriminator_hint_rule(slice_info, "src", "tgt")
     assert rule is not None
     assert rule.target[0].element == "system"
+    assert rule.target[0].parameter[0].valueString == "http://example.org/system"
+    assert rule.source[0].element is None
+
+
+def test_discriminator_hint_without_value_is_diagnostic_not_todo(factory):
+    slice_info = {"discriminator": {"path": "system", "type": "value"}}
+    assert factory.create_discriminator_hint_rule(slice_info, "src", "tgt") is None
+    assert factory.diagnostics[-1]["code"] == "missing-discriminator-provider"
 
 
 @pytest.mark.parametrize("disc_type", ["type", "exists", "profile", "position"])

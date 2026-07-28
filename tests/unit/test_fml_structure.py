@@ -10,8 +10,6 @@ using a minimal in-memory DataIO fake so the tests never touch the real filesyst
 structure.
 """
 
-from pathlib import Path
-
 import pytest
 
 from data_handling.app_state import AppState
@@ -208,6 +206,57 @@ def test_generate_helper_map_empty_list_input_raises(tmp_path):
     app_state = _app_state(tmp_path, processed=False)
     with pytest.raises(ValueError):
         FS.generate_helper_map(input_json, app_state, "model4", "http://x/model4", "model4")
+
+
+def test_generate_helper_map_warns_that_only_first_top_level_example_is_used(
+    tmp_path, caplog
+):
+    input_json = tmp_path / "records.json"
+    input_json.write_text('[{"first": 1}, {"second": 2}]')
+    app_state = _app_state(tmp_path, processed=False)
+
+    sd = FS.generate_helper_map(
+        input_json, app_state, "model-array", "http://x/model-array", "model-array"
+    )
+
+    paths = {element.path for element in sd.snapshot.element}
+    assert "Model-array.first" in paths
+    assert "Model-array.second" not in paths
+    assert "only the first representative object" in caplog.text
+
+
+@pytest.mark.parametrize(
+    ("payload", "message"),
+    [
+        ('{"value": null}', "null carries no type"),
+        ('{"items": []}', "representative array is empty"),
+    ],
+)
+def test_generate_helper_map_rejects_untyped_representative_values(
+    tmp_path, payload, message
+):
+    input_json = tmp_path / "untyped.json"
+    input_json.write_text(payload)
+    app_state = _app_state(tmp_path, processed=False)
+
+    with pytest.raises(ValueError, match=message):
+        FS.generate_helper_map(
+            input_json, app_state, "model-untyped", "http://x/model-untyped", "model-untyped"
+        )
+
+
+def test_primitive_array_uses_representative_item_type(tmp_path):
+    input_json = tmp_path / "array.json"
+    input_json.write_text('{"scores": [1]}')
+    app_state = _app_state(tmp_path, processed=False)
+
+    sd = FS.generate_helper_map(
+        input_json, app_state, "model-array", "http://x/model-array", "model-array"
+    )
+    scores = next(e for e in sd.snapshot.element if e.path == "Model-array.scores")
+
+    assert scores.max == "*"
+    assert scores.type[0].code == "integer"
 
 
 def test_generate_helper_map_scalar_input_raises_type_error(tmp_path):

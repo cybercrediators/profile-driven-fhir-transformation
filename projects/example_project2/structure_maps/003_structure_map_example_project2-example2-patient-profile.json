@@ -2,7 +2,7 @@
   "resourceType": "StructureMap",
   "id": "sm-example2-patient-profile-d00e59d0",
   "url": "http://example.org/StructureMap/source-definition-example-project2-example2-patient-profile",
-  "name": "003_structure_map_example_project2-example2-patient-profile",
+  "name": "Map_003_structure_map_example_project2_example2_patient_profile",
   "title": "Structure Map for example_project2 - example2-patient-profile",
   "status": "draft",
   "description": "Auto-generated StructureMap for given profile mappable fields (Resource: example2-patient-profile). Placeholders have to be set (or use auto-mapping)",
@@ -45,6 +45,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "meta",
               "variable": "tgt-meta",
               "transform": "create",
@@ -66,6 +67,7 @@
               "target": [
                 {
                   "context": "tgt-meta",
+                  "contextType": "variable",
                   "element": "profile",
                   "transform": "copy",
                   "parameter": [
@@ -91,6 +93,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "birthDate",
               "variable": "tgt-birthDate",
               "transform": "cast",
@@ -107,76 +110,6 @@
           "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1"
         },
         {
-          "name": "map-extension-observation",
-          "source": [
-            {
-              "context": "source",
-              "element": "TODO-MAP-OBSERVATION_SOURCE",
-              "variable": "src-observation"
-            }
-          ],
-          "target": [
-            {
-              "context": "target",
-              "element": "extension",
-              "variable": "ext-observation",
-              "transform": "create",
-              "parameter": [
-                {
-                  "valueString": "Extension"
-                }
-              ]
-            }
-          ],
-          "rule": [
-            {
-              "name": "set-extension-url-observation",
-              "source": [
-                {
-                  "context": "src-observation"
-                }
-              ],
-              "target": [
-                {
-                  "context": "ext-observation",
-                  "element": "url",
-                  "transform": "copy",
-                  "parameter": [
-                    {
-                      "valueString": "http://example.org/example2/StructureDefinition/Example2ObservationRefExtension"
-                    }
-                  ]
-                }
-              ],
-              "documentation": "Sets the extension URL to http://example.org/example2/StructureDefinition/Example2ObservationRefExtension"
-            },
-            {
-              "name": "set-extension-value-observation",
-              "source": [
-                {
-                  "context": "source",
-                  "element": "TODO-VALUE-SOURCE",
-                  "variable": "srcValue"
-                }
-              ],
-              "target": [
-                {
-                  "context": "ext-observation",
-                  "element": "value",
-                  "transform": "create",
-                  "parameter": [
-                    {
-                      "valueString": "Extension"
-                    }
-                  ]
-                }
-              ],
-              "documentation": "Sets the extension value (type: valueExtension)"
-            }
-          ],
-          "documentation": "Maps to extension: http://example.org/example2/StructureDefinition/Example2ObservationRefExtension | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'uri'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': None, 'is_required': True, 'fixed_value': 'http://example.org/example2/StructureDefinition/Example2ObservationRefExtension', 'options': [], 'children': []}, {'path': 'Extension.valueReference', 'id': 'Extension.valueReference', 'type': [{'code': 'Reference', 'targetProfile': ['http://example.org/example2/StructureDefinition/Example2Observation'], 'type_structure': [{'path': 'Extension.valueReference.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.valueReference.identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.valueReference.identifier.assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FH… [truncated; full structure in the registry entry for http://example.org/example2/StructureDefinition/Example2ObservationRefExtension] | Path: Patient.extension"
-        },
-        {
           "name": "map-gender",
           "source": [
             {
@@ -188,6 +121,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "gender",
               "variable": "tgt-gender",
               "transform": "copy",
@@ -211,6 +145,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "identifier",
               "variable": "tgt-identifier",
               "listMode": [
@@ -237,6 +172,7 @@
               "target": [
                 {
                   "context": "tgt-identifier",
+                  "contextType": "variable",
                   "element": "type",
                   "variable": "tgt-type",
                   "transform": "create",
@@ -259,6 +195,7 @@
                   "target": [
                     {
                       "context": "tgt-type",
+                      "contextType": "variable",
                       "element": "coding",
                       "variable": "tgt-coding",
                       "listMode": [
@@ -284,6 +221,7 @@
                       "target": [
                         {
                           "context": "tgt-coding",
+                          "contextType": "variable",
                           "element": "code",
                           "transform": "copy",
                           "parameter": [
@@ -305,6 +243,7 @@
                       "target": [
                         {
                           "context": "tgt-coding",
+                          "contextType": "variable",
                           "element": "system",
                           "transform": "copy",
                           "parameter": [
@@ -334,6 +273,7 @@
               "target": [
                 {
                   "context": "tgt-identifier",
+                  "contextType": "variable",
                   "element": "value",
                   "variable": "tgt-value",
                   "transform": "copy",
@@ -360,6 +300,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "name",
               "variable": "tgt-name",
               "listMode": [
@@ -387,6 +328,7 @@
               "target": [
                 {
                   "context": "tgt-name",
+                  "contextType": "variable",
                   "element": "family",
                   "variable": "tgt-family",
                   "transform": "copy",
@@ -411,6 +353,7 @@
               "target": [
                 {
                   "context": "tgt-name",
+                  "contextType": "variable",
                   "element": "given",
                   "variable": "tgt-given",
                   "transform": "copy",

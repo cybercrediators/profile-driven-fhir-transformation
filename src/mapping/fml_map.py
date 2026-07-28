@@ -79,6 +79,7 @@ class StructureMapGenerator:
         self.factory = FMLRuleFactory(
             self.app_state, self.overwrite, map_url=self.map_url, plugins=self.plugins
         )
+        self.factory.diagnostics = self.mapping_diagnostics
 
         # check if structure map(s) already exists
         if check_exist := self.app_state.dataIO.check_processed_structure_maps():
@@ -130,6 +131,7 @@ class StructureMapGenerator:
             automapped_mappings = self._process_resource_mapping(
                 obj, res_type, source_fields, active_types
             )
+            self._record_profile_facet_diagnostics(obj)
 
             sm_url = f"{self.map_url}-{profile_identity}"
             sm_name = f"{res_idx + 1:03d}_{self.map_name}-{profile_identity}"
@@ -172,6 +174,7 @@ class StructureMapGenerator:
 
             groups = [res_group]
             sm.group = groups
+            self._sanitize_todo_rules(sm)
             self._normalize_and_validate_structure_map(sm)
 
             self.app_state.dataIO.store_project_file(
@@ -235,6 +238,146 @@ class StructureMapGenerator:
             _walk(getattr(group, "rule", None))
         return structure_map
 
+    def _append_diagnostic(self, code, message, **details):
+        def _plain(value):
+            if hasattr(value, "model_dump"):
+                return _plain(value.model_dump(exclude_none=True))
+            if isinstance(value, dict):
+                return {key: _plain(item) for key, item in value.items()}
+            if isinstance(value, (list, tuple, set)):
+                return [_plain(item) for item in value]
+            return value
+
+        diagnostic = _plain(
+            {
+                "code": code,
+                "message": message,
+                "profile": getattr(self, "current_profile_name", "unknown"),
+                **details,
+            }
+        )
+        if diagnostic not in self.mapping_diagnostics:
+            self.mapping_diagnostics.append(diagnostic)
+        return diagnostic
+
+    def _record_profile_facet_diagnostics(self, obj):
+        """Surface profile facets that constrain output but do not invent source values."""
+
+        def _walk(fields):
+            for field in fields or []:
+                if not isinstance(field, dict):
+                    continue
+                path = field.get("id") or field.get("path")
+                if field.get("content_reference") and not field.get(
+                    "content_reference_resolved"
+                ):
+                    self._append_diagnostic(
+                        "unresolved-content-reference",
+                        f"Could not resolve {field['content_reference']} for {path}.",
+                        path=path,
+                        severity="error",
+                    )
+                for constraint in field.get("constraints") or []:
+                    self._append_diagnostic(
+                        "target-fhirpath-constraint",
+                        f"Target constraint {constraint.get('key', '<unnamed>')} "
+                        f"must be validated for {path}.",
+                        path=path,
+                        severity=constraint.get("severity", "error"),
+                        expression=constraint.get("expression"),
+                    )
+                if field.get("conditions"):
+                    self._append_diagnostic(
+                        "target-condition",
+                        f"Target conditions apply to {path}.",
+                        path=path,
+                        conditions=list(field["conditions"]),
+                        severity="information",
+                    )
+                for facet in ("default_value", "min_value", "max_value", "max_length"):
+                    if facet in field:
+                        self._append_diagnostic(
+                            f"target-{facet.replace('_', '-')}",
+                            f"{facet} constrains {path}; it is validator-enforced "
+                            "and is not invented as source data.",
+                            path=path,
+                            value=field[facet],
+                            severity="information",
+                        )
+                if field.get("is_modifier"):
+                    self._append_diagnostic(
+                        "target-modifier-element",
+                        f"{path} is a modifier element and requires explicit mapping intent.",
+                        path=path,
+                        severity="warning",
+                    )
+                _walk(field.get("children"))
+                _walk(field.get("slices"))
+
+        _walk(getattr(obj, "mappable_fields", None))
+
+    def _sanitize_todo_rules(self, structure_map):
+        """Move non-executable TODO placeholders into diagnostics."""
+
+        def _contains_todo(value):
+            if isinstance(value, str):
+                return "TODO" in value
+            if isinstance(value, dict):
+                return any(_contains_todo(v) for v in value.values())
+            if isinstance(value, list):
+                return any(_contains_todo(v) for v in value)
+            if hasattr(value, "model_dump"):
+                return _contains_todo(value.model_dump(exclude_none=True))
+            return False
+
+        def _sanitize(rules, group_name):
+            kept = []
+            for rule in rules or []:
+                name = getattr(rule, "name", "") or ""
+                if name.startswith("TODO-resolve-reference"):
+                    self._append_diagnostic(
+                        "deferred-reference",
+                        getattr(rule, "documentation", None)
+                        or f"Reference rule {name} requires BundleService resolution.",
+                        group=group_name,
+                        rule=name,
+                        severity="warning",
+                    )
+                    kept.append(rule)
+                    continue
+                executable = {
+                    "source": [
+                        getattr(source, "element", None)
+                        for source in (getattr(rule, "source", None) or [])
+                    ],
+                    "target": [
+                        {
+                            "element": getattr(target, "element", None),
+                            "parameter": getattr(target, "parameter", None),
+                        }
+                        for target in (getattr(rule, "target", None) or [])
+                    ],
+                }
+                if _contains_todo(executable):
+                    self._append_diagnostic(
+                        "unresolved-map-placeholder",
+                        f"Rule {name} was omitted because it contains an "
+                        "unresolved executable TODO placeholder.",
+                        group=group_name,
+                        rule=name,
+                        severity="warning",
+                    )
+                    continue
+                rule.rule = _sanitize(getattr(rule, "rule", None), group_name) or None
+                kept.append(rule)
+            return kept
+
+        for group in getattr(structure_map, "group", None) or []:
+            group.rule = _sanitize(
+                getattr(group, "rule", None), getattr(group, "name", "<unnamed>")
+            )
+        return structure_map
+
     def _cleanup_stale_concept_maps(self, structure_maps):
         """Delete cm-*.json files in source_data/concept_maps that no current map references"""
         sm_folder = self.app_state.dataIO.ProjectFolders.CONCEPT_MAPS
@@ -293,6 +436,11 @@ class StructureMapGenerator:
 
         source_field_types = self._build_source_field_types(source_fields)
         self.factory.source_field_types = source_field_types
+        self.factory.source_field_max = {
+            field["path"].split(".")[-1]: field.get("max", "1")
+            for field in source_fields
+            if field.get("path") and "." in field["path"]
+        }
 
         return resources, source_fields, active_types
 
@@ -560,7 +708,7 @@ class StructureMapGenerator:
     def _save_coverage_report(self):
         """persist the aggregated required-element coverage report to the project's source_data folder"""
 
-        if not self._coverage:
+        if not self._coverage and not self.mapping_diagnostics:
             return
         import json
 
@@ -723,6 +871,7 @@ class StructureMapGenerator:
                         "path": elem.path,
                         "description": elem.short or elem.definition or "",
                         "type": elem_type,
+                        "max": elem.max,
                     }
                 )
         return source_fields
@@ -818,9 +967,11 @@ class StructureMapGenerator:
                     if not cts:
                         t = f.get("type")
                         if isinstance(t, list) and t:
-                            tc = t[0].get("code") if isinstance(t[0], dict) else t[0]
-                            if tc:
-                                cts = [tc]
+                            cts = [
+                                item.get("code") if isinstance(item, dict) else item
+                                for item in t
+                                if (item.get("code") if isinstance(item, dict) else item)
+                            ]
                         elif isinstance(t, str):
                             cts = [t]
                     for ct in cts:
@@ -882,7 +1033,10 @@ class StructureMapGenerator:
                     slice_name = sl.get("sliceName", "")
                     if not slice_name:
                         continue
-                    if "." in field_path:
+                    slice_identity = sl.get("slice_identity") or sl.get("id")
+                    if slice_identity and ":" in slice_identity:
+                        slice_path = slice_identity
+                    elif "." in field_path:
                         prefix, last_seg = field_path.rsplit(".", 1)
                         slice_path = f"{prefix}.{last_seg}:{slice_name}"
                     else:

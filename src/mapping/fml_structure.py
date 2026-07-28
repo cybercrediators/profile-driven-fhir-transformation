@@ -73,7 +73,16 @@ def generate_helper_map(
 
     if isinstance(data, list):
         if not data:
-            raise ValueError("Input JSON is an empty list!")
+            raise ValueError(
+                "Input JSON is an empty top-level array; a representative object "
+                "containing every source field is required."
+            )
+        if len(data) > 1:
+            logger.warning(
+                "Source input contains %d top-level examples; only the first "
+                "representative object is inspected.",
+                len(data),
+            )
         # create the structure for only one/the first element
         data = data[0]
 
@@ -147,6 +156,12 @@ def create_json_element_definition(
     """
     e_id = path
 
+    if data is None:
+        raise ValueError(
+            f"Cannot infer a source type for {path}: null carries no type. "
+            "Provide a representative non-null value."
+        )
+
     # check if nested object
     if isinstance(data, dict):
         parent_elem = construct_element_definition(
@@ -159,25 +174,31 @@ def create_json_element_definition(
 
     # check if array -> max should be '*'
     elif isinstance(data, list):
+        if not data:
+            raise ValueError(
+                f"Cannot infer an item type for {path}: the representative array "
+                "is empty. Include one representative item."
+            )
+        sample = data[0]
+        array_type = (
+            "Element"
+            if isinstance(sample, dict)
+            else map_fhir_type(sample)
+        )
         parent_elem = construct_element_definition(
             e_id,
             path,
-            ElementDefinitionType.model_construct(code="Element"),
+            ElementDefinitionType.model_construct(code=array_type),
             e_min=0,
             e_max="*",
         )
         element_definitions.append(parent_elem)
-        if data:
-            sample = data[0]
-            if isinstance(sample, dict):
-                for key, value in sample.items():
-                    child_path = f"{path}.{key}"
-                    create_json_element_definition(
-                        child_path, value, element_definitions
-                    )
-            else:
-                # primitive list elements are represented by the parent path
-                pass
+        if isinstance(sample, dict):
+            for key, value in sample.items():
+                child_path = f"{path}.{key}"
+                create_json_element_definition(
+                    child_path, value, element_definitions
+                )
 
     # just a value
     else:

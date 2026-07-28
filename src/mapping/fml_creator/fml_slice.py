@@ -9,6 +9,7 @@ from mapping.fml_creator.fml_helper import (
     get_transform_for_type,
     clean_field_name,
     fixed_scalar_literal,
+    has_fixed_value,
     type_codes,
     fhir_type_suffix,
 )
@@ -47,6 +48,185 @@ def _append_or_merge(rules, candidate):
 
 
 class _SliceRulesMixin:
+    @staticmethod
+    def _slice_identity(parent_field, slice_field):
+        identity = slice_field.get("slice_identity") or slice_field.get("id")
+        if identity and ":" in identity:
+            return identity
+        base_path = parent_field.get("path") or slice_field.get("path", "")
+        slice_name = slice_field.get("sliceName") or slice_field.get(
+            "slice_selector", ""
+        )
+        return f"{base_path}:{slice_name}" if slice_name else base_path
+
+    @staticmethod
+    def _slice_discriminator_field(slice_field, discriminator_path):
+        """Find a discriminator field relative to the slice root."""
+        if discriminator_path in ("", "$this"):
+            return slice_field
+
+        parts = [
+            part.replace("[x]", "")
+            for part in discriminator_path.split(".")
+            if part and part not in ("$this", "resolve()")
+        ]
+        current = slice_field
+        for part in parts:
+            current = next(
+                (
+                    child
+                    for child in (current.get("children") or [])
+                    if (child.get("path", "") or "")
+                    .split(".")[-1]
+                    .replace("[x]", "")
+                    == part
+                ),
+                None,
+            )
+            if current is None:
+                return None
+        return current
+
+    def _profile_defines_discriminator(
+        self, parent_field, slice_field, discriminator
+    ):
+        """Whether target constraints distinguish the slice without source policy."""
+        disc_type = discriminator.get("type")
+        disc_path = discriminator.get("path", "")
+        target_field = self._slice_discriminator_field(slice_field, disc_path)
+
+        if disc_type in ("value", "pattern"):
+            return bool(
+                target_field and has_fixed_value(target_field.get("fixed_value"))
+            )
+
+        if disc_type == "type":
+            slice_codes = type_codes(slice_field.get("type"))
+            parent_codes = type_codes(parent_field.get("type"))
+            return len(slice_codes) == 1 and (
+                "[x]" in str(parent_field.get("path", ""))
+                or len(parent_codes) > 1
+                or slice_codes != parent_codes
+            )
+
+        if disc_type == "profile":
+            # A profile declaration constrains the selected value but does not
+            # manufacture a conforming source value or reference target.
+            return False
+
+        if disc_type == "exists":
+            if target_field is None:
+                return False
+            cardinality = target_field.get("cardinality") or {}
+            if cardinality.get("max") == "0":
+                return True
+            return bool(
+                (cardinality.get("min", 0) or 0) > 0
+                and has_fixed_value(target_field.get("fixed_value"))
+            )
+
+        # position depends on source order. A resolve() path depends on reference
+        # provider policy. Both therefore need an explicit slice-qualified rule.
+        return False
+
+    def _slice_selection_is_safe(
+        self,
+        parent_field,
+        slice_field,
+        explicit_provider,
+        source_providers=None,
+    ):
+        slicing = slice_field.get("slicing") or parent_field.get("slicing") or {}
+        discriminators = slicing.get("discriminators") or []
+        if not discriminators:
+            legacy = slice_field.get("discriminator") or parent_field.get(
+                "discriminator"
+            )
+            discriminators = [legacy] if legacy else []
+
+        identity = self._slice_identity(parent_field, slice_field)
+        rules = slicing.get("rules", "open")
+        ordered = bool(slicing.get("ordered"))
+        allowed = {"value", "pattern", "type", "profile", "exists", "position"}
+        unknown = [
+            disc.get("type")
+            for disc in discriminators
+            if disc.get("type") not in allowed
+        ]
+        if unknown:
+            self.record_diagnostic(
+                "unsupported-slice-discriminator",
+                f"Slice {identity} uses unsupported discriminator type(s): "
+                f"{', '.join(str(value) for value in unknown)}.",
+                path=identity,
+                severity="error",
+            )
+            return False
+
+        if any(disc.get("type") == "position" for disc in discriminators) and not ordered:
+            self.record_diagnostic(
+                "invalid-position-slicing",
+                f"Slice {identity} uses a position discriminator but "
+                "slicing.ordered is false.",
+                path=identity,
+                severity="error",
+            )
+            return False
+        if any(disc.get("type") == "position" for disc in discriminators):
+            source_max = getattr(self, "source_field_max", {}) or {}
+            ambiguous_sources = [
+                provider
+                for provider in (source_providers or [])
+                if source_max.get(str(provider).split(".")[-1]) not in ("1", 1)
+            ]
+            if not explicit_provider or ambiguous_sources:
+                self.record_diagnostic(
+                    "ambiguous-position-source",
+                    f"Position slice {identity} requires an explicit, non-repeating "
+                    "source provider for each selected position.",
+                    path=identity,
+                    source_providers=list(source_providers or []),
+                    severity="error",
+                )
+                return False
+
+        unresolved = [
+            disc
+            for disc in discriminators
+            if "resolve()" in str(disc.get("path", ""))
+            or not self._profile_defines_discriminator(
+                parent_field, slice_field, disc
+            )
+        ]
+        if unresolved and not explicit_provider:
+            rendered = ", ".join(
+                f"{disc.get('type')}:{disc.get('path')}" for disc in unresolved
+            )
+            self.record_diagnostic(
+                "ambiguous-slice-selection",
+                f"Slice {identity} cannot be selected from profile constraints alone "
+                f"({rendered}). Add a slice-qualified mapping rule.",
+                path=identity,
+                slicing_rules=rules,
+                ordered=ordered,
+                discriminators=discriminators,
+                severity="error",
+            )
+            return False
+
+        if unresolved:
+            self.record_diagnostic(
+                "explicit-slice-selection",
+                f"Slice {identity} relies on its slice-qualified mapping rule for "
+                "selection.",
+                path=identity,
+                slicing_rules=rules,
+                ordered=ordered,
+                discriminators=discriminators,
+                severity="information",
+            )
+        return True
+
     def _create_choice_populate_rule(
         self,
         base_name,
@@ -175,7 +355,7 @@ class _SliceRulesMixin:
         automapped_mappings,
     ):
         """emit a rule that creates and populates a slice instance (BackboneElement or similar)"""
-        slice_path = slice_field.get("path", "")  # e.g. Patient.name:name
+        slice_path = self._slice_identity(parent_field, slice_field)
         slice_name = slice_field.get("sliceName", "") or slice_path.rsplit(":", 1)[-1]
         last_seg = slice_path.split(".")[-1]  # name:name
         base_element = last_seg.split(":")[0]  # name
@@ -221,6 +401,7 @@ class _SliceRulesMixin:
             for k, v in (automapped_mappings or {}).items()
             if (rest := _sub_of(k))
         ]
+        root_provider = (automapped_mappings or {}).get(slice_path)
         _sub_paths = {s for s, _ in subs}
         subs = [
             (s, v)
@@ -229,7 +410,19 @@ class _SliceRulesMixin:
         ]
 
         min_c = (slice_field.get("cardinality") or {}).get("min", 0) or 0
-        if not subs and min_c == 0:
+        explicit_provider = bool(root_provider or subs)
+        if not explicit_provider and min_c == 0:
+            return None
+        if not self._slice_selection_is_safe(
+            parent_field,
+            slice_field,
+            explicit_provider,
+            source_providers=[
+                provider
+                for provider in [root_provider, *(value for _, value in subs)]
+                if provider
+            ],
+        ):
             return None
 
         nm = f"{clean_field_name(base_element)}-{clean_field_name(slice_name)}"
@@ -245,14 +438,33 @@ class _SliceRulesMixin:
                 context=parent_target_context, element=base_element
             )
             tgt.listMode = ["share"]
-            if subs:
-                src.element = subs[0][1]
+            primitive_provider = root_provider or (subs[0][1] if subs else None)
+            if primitive_provider:
+                src.element = self._as_local_element(primitive_provider)
                 src.variable = "src-slice"
                 info = get_transform_for_type(slice_type, "src-slice")
                 tgt.transform = info.get("transform")
                 if info.get("parameters"):
                     tgt.parameter = info["parameters"]
             rule.target = [tgt]
+            return rule
+
+        if root_provider and not subs:
+            src.element = self._as_local_element(root_provider)
+            src.variable = "src-slice"
+            rule.target = [
+                StructureMapGroupRuleTarget.model_construct(
+                    context=parent_target_context,
+                    element=base_element,
+                    transform="copy",
+                    parameter=[
+                        StructureMapGroupRuleTargetParameter.model_construct(
+                            valueId="src-slice"
+                        )
+                    ],
+                    listMode=["share"],
+                )
+            ]
             return rule
 
         var = f"tgt-{nm}"
@@ -373,6 +585,10 @@ class _SliceRulesMixin:
                     _rel_base = slice_path[len(res_type) + 1 :]
                 else:
                     _rel_base = base_element
+                _rel_base = ".".join(
+                    segment.split(":", 1)[0]
+                    for segment in _rel_base.split(".")
+                )
                 ref_rule = StructureMapGroupRule.model_construct(
                     name=(
                         f"TODO-resolve-reference-{clean_field_name(res_type)}"
@@ -385,9 +601,7 @@ class _SliceRulesMixin:
                         variable=f"src-{nm}-{clean_field_name(sub)}",
                     )
                 ]
-                ref_rule.target = [
-                    StructureMapGroupRuleTarget.model_construct(element=sub)
-                ]
+                ref_rule.target = None
                 ref_rule.documentation = (
                     f"Reference<{res_type}.{_rel_base}.{sub}> → {_ref_target} "
                     f"— resolve via bundle assembler"

@@ -25,6 +25,7 @@ from mapping.fml_creator.fml_helper import (
     is_extension_type,
     is_reference_type,
     type_codes,
+    fixed_scalar_literal,
     attr as _attr,
     BASE_META_SUFFIXES,
     has_fixed_value,
@@ -77,7 +78,23 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         self.map_url = map_url
         self.plugins = plugins or []
         self.source_field_types: dict = {}
+        self.source_field_max: dict = {}
         self._target_tree_cache = (None, None)
+        self.diagnostics = []
+
+    def record_diagnostic(self, code, message, **details):
+        if not hasattr(self, "diagnostics"):
+            self.diagnostics = []
+        diagnostic = {
+            "code": code,
+            "message": message,
+            "profile": getattr(self, "_current_profile_id", "unknown"),
+            **details,
+        }
+        if diagnostic not in self.diagnostics:
+            self.diagnostics.append(diagnostic)
+        logger.warning("%s: %s", code, message)
+        return diagnostic
 
     def profile_tree(self):
         """Profile-constrained target tree for the profile currently being emitted.
@@ -134,7 +151,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             src_id = automapped_mappings.get(path) or ""
             src_name = src_id.split(".")[-1] if src_id else ""
             src_type = self.source_field_types.get(src_name, "") if src_name else ""
-            preferred = canonical_primitive(src_type) if src_type else None
+            preferred = (canonical_primitive(src_type) or src_type) if src_type else None
             if preferred:
                 narrowed = [c for c in candidates if c.lower() == preferred.lower()]
                 if narrowed:
@@ -271,6 +288,28 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         parent_path=None,
     ):
         rules = []
+
+        def _iter_slices(slice_fields):
+            for candidate in slice_fields or []:
+                if not isinstance(candidate, dict):
+                    continue
+                yield candidate
+                yield from _iter_slices(candidate.get("slices"))
+
+        def _has_direct_slice_provider(parent, candidate):
+            identity = self._slice_identity(parent, candidate)
+            return any(
+                key == identity or key.startswith(identity + ".")
+                for key in (automapped_mappings or {})
+            )
+
+        def _reslice_satisfies_parent(parent, candidate):
+            return any(
+                ((child.get("cardinality") or {}).get("min", 0) or 0) > 0
+                or _has_direct_slice_provider(parent, child)
+                for child in _iter_slices(candidate.get("slices"))
+            )
+
         for field in fields:
             logger.info("Creating rule for field %s", field.get("id"))
 
@@ -314,9 +353,19 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 return t
 
             field_type_code = _tc(field)
-            slices = [] if is_choice_field else field.get("slices", [])
+            slices = (
+                []
+                if is_choice_field
+                else list(_iter_slices(field.get("slices", [])))
+            )
             for slice_field in slices:
-                if not isinstance(slice_field, dict):
+                if (
+                    slice_field.get("slices")
+                    and not _has_direct_slice_provider(field, slice_field)
+                    and _reslice_satisfies_parent(field, slice_field)
+                ):
+                    # A required/emitted reslice is already an instance of its parent
+                    # slice. Do not create a second unconditional parent instance.
                     continue
                 sl_tc = _tc(slice_field)
                 if (
@@ -946,7 +995,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 else ""
             )
             if src_type:
-                preferred = canonical_primitive(src_type)
+                preferred = canonical_primitive(src_type) or src_type
                 if preferred:
                     narrowed = [
                         ct for ct in choice_types if ct.lower() == preferred.lower()
@@ -974,7 +1023,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             for k, v in automapped_mappings.items():
                 ctype = None
                 sub = None
-                primitive_leaf = False
+                concrete_root = False
                 if k.startswith(field_path + ":"):
                     rest = k[len(field_path) + 1 :]  # e.g. "valueQuantity.value"
                     head, dot, sub = rest.partition(
@@ -985,10 +1034,10 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                         if head.lower().startswith(base_name.lower())
                         else head
                     )
-                    primitive_leaf = bool(not dot and canonical_primitive(ctype))
+                    concrete_root = bool(not dot and ctype)
                 elif k.startswith(field_path + "."):
                     sub = k[len(field_path) + 1 :]
-                if sub or primitive_leaf:
+                if sub or concrete_root:
                     if ctype and not chosen_type:
                         chosen_type = ctype
                     sub_field_maps.append((sub, self._as_local_element(v)))
@@ -1030,6 +1079,18 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             )
             if match:
                 chosen_type = match
+            else:
+                self.record_diagnostic(
+                    "unsupported-choice-type",
+                    f"Concrete mapping for {field_path} selects unsupported choice "
+                    f"type {chosen_type}; allowed types are "
+                    f"[{', '.join(choice_types)}].",
+                    path=field_path,
+                    selected_type=chosen_type,
+                    allowed_types=choice_types,
+                    severity="error",
+                )
+                return None
 
         if chosen_type and chosen_type in choice_types:
             narrowed_rule = self._create_choice_populate_rule(
@@ -1045,21 +1106,30 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 return rule
 
         if direct_source and len(choice_types) != 1:
-            logger.warning(
-                "Direct mapping to choice %s is ambiguous across [%s]; map to a "
-                "concrete target element such as %s%s.",
-                field_path,
-                ", ".join(choice_types) or "unknown types",
-                base_name,
-                self._choice_suffix(choice_types[0]) if choice_types else "<Type>",
+            example = (
+                f"{base_name}{self._choice_suffix(choice_types[0])}"
+                if choice_types
+                else f"{base_name}<Type>"
+            )
+            self.record_diagnostic(
+                "ambiguous-choice-type",
+                f"Direct mapping to choice {field_path} is ambiguous across "
+                f"[{', '.join(choice_types) or 'unknown types'}]; map to a "
+                f"concrete target element such as {example}.",
+                path=field_path,
+                allowed_types=choice_types,
+                severity="error",
             )
             return None
 
         if derived_raw_choice_types and len(choice_types) > 1:
-            logger.warning(
-                "Mapped choice %s does not identify one concrete target type; "
-                "leaving it unresolved.",
-                field_path,
+            self.record_diagnostic(
+                "ambiguous-choice-type",
+                f"Mapped choice {field_path} does not identify one concrete target "
+                "type; it was left unresolved.",
+                path=field_path,
+                allowed_types=choice_types,
+                severity="error",
             )
             return None
 
@@ -1249,22 +1319,33 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             )
             return None
 
+        value = disc.get("value")
+        if not has_fixed_value(value) or isinstance(value, (dict, list)):
+            self.record_diagnostic(
+                "missing-discriminator-provider",
+                f"Discriminator {disc_type}:{disc_path} has no scalar profile value; "
+                "no executable placeholder was emitted.",
+                path=disc_path,
+                severity="warning",
+            )
+            return None
+
         rule = StructureMapGroupRule.model_construct()
         rule.name = f"set-discriminator-{disc_path}"
         rule.documentation = f"Set {disc_path} to distinguish this slice (discriminator type: {disc_type})."
 
-        source = StructureMapGroupRuleSource.model_construct()
-        source.context = source_context
-        source.element = "TODO-DISCRIMINATOR-VALUE"
-        source.variable = "discValue"
-        rule.source = [source]
+        rule.source = [
+            StructureMapGroupRuleSource.model_construct(context=source_context)
+        ]
 
         target = StructureMapGroupRuleTarget.model_construct()
         target.context = target_context
         target.element = disc_path
         target.transform = "copy"
         target.parameter = [
-            StructureMapGroupRuleTargetParameter.model_construct(valueId="discValue")
+            StructureMapGroupRuleTargetParameter.model_construct(
+                valueString=fixed_scalar_literal(value)
+            )
         ]
         rule.target = [target]
 

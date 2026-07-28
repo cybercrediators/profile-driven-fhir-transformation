@@ -58,7 +58,7 @@ def _maps_by_suffix(project_dir: Path) -> dict:
         content = json.loads(f.read_text())
         # the map's `name` embeds the same order-dependent numeric prefix as the filename
         if isinstance(content.get("name"), str):
-            content["name"] = re.sub(r"^\d{3}_", "", content["name"])
+            content["name"] = re.sub(r"^(Map_)?\d{3}_", r"\1", content["name"])
         out[suffix] = content
     return out
 

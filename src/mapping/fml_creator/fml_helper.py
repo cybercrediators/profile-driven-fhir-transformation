@@ -215,7 +215,12 @@ def process_slice(app_state, field, slice):
     slice_name = slice.get("sliceName", "unknown")
     base_path = field["path"]
     field_name = base_path.split(".")[-1]
-    sliced_path = base_path.replace(field_name, f"{field_name}:{slice_name}")
+    slice_identity = slice.get("slice_identity") or slice.get("id")
+    sliced_path = (
+        slice_identity
+        if slice_identity and ":" in slice_identity
+        else base_path.replace(field_name, f"{field_name}:{slice_name}")
+    )
 
     inline_profile = None
     for t in slice.get("type") or []:
@@ -233,18 +238,31 @@ def process_slice(app_state, field, slice):
     # if profile_structure := conv_slice.get("profile_structure"):
     #     if res_conv := process_profile_structure(app_state, profile_structure, conv_slice, sliced_path):
     #         result.extend(res_conv)
-    if field.get("slicing_type") or field.get("discriminator_path"):
-        conv_slice["slicing"] = {
-            "discriminator": [
+    if field.get("slicing") or field.get("slicing_type") or field.get("discriminator_path"):
+        slicing = field.get("slicing") or {
+            "discriminators": [
                 {
                     "path": field.get("discriminator_path", "url"),
                     "type": field.get("slicing_type", "value"),
                 }
-            ]
+            ],
+            "ordered": False,
+            "rules": "open",
         }
+        slicing = dict(slicing)
+        discriminators = (
+            slicing.get("discriminators") or slicing.get("discriminator") or []
+        )
+        if isinstance(discriminators, dict):
+            discriminators = [discriminators]
+        slicing["discriminators"] = list(discriminators)
+        # Compatibility for existing consumers and persisted intermediate data.
+        slicing["discriminator"] = list(discriminators)
+        conv_slice["slicing"] = slicing
         # Store discriminator info at field level too
-        conv_slice["discriminator_path"] = field.get("discriminator_path", "url")
-        conv_slice["slicing_type"] = field.get("slicing_type", "value")
+        if discriminators:
+            conv_slice["discriminator_path"] = discriminators[0].get("path", "url")
+            conv_slice["slicing_type"] = discriminators[0].get("type", "value")
 
     # Extract extension URL from slice profile structure
     if conv_slice.get("profile_structure"):
@@ -406,11 +424,20 @@ def parse_slice_info(field_name, field):
         slice_info = {"base_info": base_name, "slice_name": slice_name}
 
         if field.get("slicing"):
-            slice_info["discriminator"] = {
-                "path": field["slicing"]["discriminator"][0].get("path", "url"),
-                "type": field["slicing"]["discriminator"][0].get("type", "value"),
-                "value": field.get("fixed_value"),
-            }
+            discriminators = (
+                field["slicing"].get("discriminators")
+                or field["slicing"].get("discriminator")
+                or []
+            )
+            if isinstance(discriminators, dict):
+                discriminators = [discriminators]
+            slice_info["discriminators"] = list(discriminators)
+            if discriminators:
+                slice_info["discriminator"] = {
+                    "path": discriminators[0].get("path", "url"),
+                    "type": discriminators[0].get("type", "value"),
+                    "value": field.get("fixed_value"),
+                }
 
     return is_slice, slice_info
 

@@ -124,6 +124,23 @@ def test_concrete_primitive_choice_root_preserves_selected_type():
     assert mappings.get("Observation.value[x]:valueBoolean") == "flag"
 
 
+def test_nested_raw_choice_indexes_every_candidate_not_only_first():
+    gen = _generator()
+    nested = {
+        "path": "Claim.diagnosis.diagnosis[x]",
+        "type": [{"code": "CodeableConcept"}, {"code": "Reference"}],
+    }
+    _, mappings = gen._apply_custom_mapping_table(
+        {"src.ref": "Claim.diagnosis.diagnosisReference"},
+        [{"id": "ref", "path": "src.ref"}],
+        [nested],
+        "Claim",
+        "claim-profile",
+    )
+
+    assert mappings["Claim.diagnosis.diagnosis[x]:diagnosisReference"] == "ref"
+
+
 def test_duplicate_target_assignments_are_diagnosed(caplog):
     gen = _generator()
     field = conv_mappable(None, _choice_field())

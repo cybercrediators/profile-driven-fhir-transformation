@@ -21,7 +21,12 @@ pytestmark = pytest.mark.unit
 def factory():
     # The slice/choice mixin methods under test read no instance state beyond the pure
     # helpers they call, so bypass __init__.
-    return object.__new__(FMLRuleFactory)
+    instance = object.__new__(FMLRuleFactory)
+    instance.diagnostics = []
+    instance.source_field_types = {}
+    instance.source_field_max = {}
+    instance._target_tree_cache = (None, None)
+    return instance
 
 
 # ── _create_choice_populate_rule: primitive choice type ────────────────────────
@@ -578,8 +583,301 @@ def test_slice_instance_reference_leaf_emits_resolve_reference(factory):
     #   Reference<Composition.section.entry> → <target> — resolve via bundle assembler
     assert "Reference<Composition.section.entry>" in er.documentation
     assert target_profile in er.documentation
-    assert er.target[0].element == "entry"
+    assert er.target is None
     # it must NOT also be emitted as a plain create('Reference') set rule
     assert not any(
         r.name == "set-section-diagRep-entry" for r in (rule.rule or [])
     )
+
+
+def test_required_slice_with_unresolved_discriminator_is_omitted(factory):
+    parent = {
+        "path": "Observation.component",
+        "type": [{"code": "BackboneElement"}],
+        "slicing": {
+            "discriminators": [{"type": "value", "path": "code"}],
+            "ordered": False,
+            "rules": "closed",
+        },
+    }
+    slice_field = {
+        "path": "Observation.component",
+        "id": "Observation.component:heart-rate",
+        "sliceName": "heart-rate",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [
+            {
+                "path": "Observation.component.code",
+                "type": [{"code": "CodeableConcept"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "fixed_value": [],
+            }
+        ],
+    }
+
+    assert (
+        factory._create_slice_instance_rule(
+            parent, slice_field, "Observation", "src", "tgt", {}
+        )
+        is None
+    )
+    assert factory.diagnostics[-1]["code"] == "ambiguous-slice-selection"
+    assert factory.diagnostics[-1]["slicing_rules"] == "closed"
+
+
+def test_multiple_discriminators_are_checked_together(factory):
+    parent = {
+        "path": "Patient.identifier",
+        "type": [{"code": "Identifier"}],
+        "slicing": {
+            "discriminators": [
+                {"type": "value", "path": "system"},
+                {"type": "exists", "path": "period"},
+            ],
+            "ordered": False,
+            "rules": "open",
+        },
+    }
+    slice_field = {
+        "path": "Patient.identifier",
+        "id": "Patient.identifier:mrn",
+        "sliceName": "mrn",
+        "type": [{"code": "Identifier"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [
+            {
+                "path": "Patient.identifier.system",
+                "type": [{"code": "uri"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "fixed_value": "http://example.org/mrn",
+            },
+            {
+                "path": "Patient.identifier.period",
+                "type": [{"code": "Period"}],
+                "cardinality": {"min": 0, "max": "0"},
+                "is_prohibited": True,
+                "fixed_value": [],
+            },
+        ],
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Patient", "src", "tgt", {}
+    )
+
+    assert rule is not None
+    assert not factory.diagnostics
+
+
+def test_position_discriminator_requires_ordered_and_explicit_rule(factory):
+    factory.source_field_max = {"firstValue": "1"}
+    parent = {
+        "path": "Observation.component",
+        "type": [{"code": "BackboneElement"}],
+        "slicing": {
+            "discriminators": [{"type": "position", "path": "$this"}],
+            "ordered": True,
+            "rules": "open",
+        },
+    }
+    slice_field = {
+        "path": "Observation.component",
+        "id": "Observation.component:first",
+        "sliceName": "first",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "children": [],
+    }
+
+    assert (
+        factory._create_slice_instance_rule(
+            parent, slice_field, "Observation", "src", "tgt", {}
+        )
+        is None
+    )
+    rule = factory._create_slice_instance_rule(
+        parent,
+        slice_field,
+        "Observation",
+        "src",
+        "tgt",
+        {"Observation.component:first.value": "firstValue"},
+    )
+    assert rule is not None
+    assert factory.diagnostics[-1]["code"] == "explicit-slice-selection"
+
+    parent["slicing"]["ordered"] = False
+    assert (
+        factory._create_slice_instance_rule(
+            parent,
+            slice_field,
+            "Observation",
+            "src",
+            "tgt",
+            {"Observation.component:first.value": "firstValue"},
+        )
+        is None
+    )
+    assert factory.diagnostics[-1]["code"] == "invalid-position-slicing"
+
+
+def test_position_discriminator_rejects_repeating_source(factory):
+    factory.source_field_max = {"components": "*"}
+    parent = {
+        "path": "Observation.component",
+        "type": [{"code": "BackboneElement"}],
+        "slicing": {
+            "discriminators": [{"type": "position", "path": "$this"}],
+            "ordered": True,
+            "rules": "open",
+        },
+    }
+    slice_field = {
+        "path": "Observation.component",
+        "id": "Observation.component:first",
+        "sliceName": "first",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "children": [],
+    }
+
+    assert (
+        factory._create_slice_instance_rule(
+            parent,
+            slice_field,
+            "Observation",
+            "src",
+            "tgt",
+            {"Observation.component:first.value": "components"},
+        )
+        is None
+    )
+    assert factory.diagnostics[-1]["code"] == "ambiguous-position-source"
+
+
+def test_type_profile_exists_and_resolve_discriminator_boundaries(factory):
+    choice_parent = {
+        "path": "Observation.value[x]",
+        "type": [{"code": "string"}, {"code": "Quantity"}],
+    }
+    typed_slice = {
+        "path": "Observation.value[x]",
+        "type": [{"code": "Quantity"}],
+    }
+    assert factory._profile_defines_discriminator(
+        choice_parent, typed_slice, {"type": "type", "path": "$this"}
+    )
+
+    profiled_slice = {
+        "path": "Observation.subject",
+        "type": [
+            {
+                "code": "Reference",
+                "targetProfile": ["http://example.org/StructureDefinition/MyPatient"],
+            }
+        ],
+    }
+    assert not factory._profile_defines_discriminator(
+        {"path": "Observation.subject", "type": [{"code": "Reference"}]},
+        profiled_slice,
+        {"type": "profile", "path": "$this"},
+    )
+
+    exists_slice = {
+        "path": "Observation.component",
+        "children": [
+            {
+                "path": "Observation.component.value[x]",
+                "cardinality": {"min": 0, "max": "0"},
+            }
+        ],
+    }
+    assert factory._profile_defines_discriminator(
+        {"path": "Observation.component"},
+        exists_slice,
+        {"type": "exists", "path": "value[x]"},
+    )
+
+    resolving_parent = {
+        "path": "Observation.subject",
+        "slicing": {
+            "discriminators": [
+                {"type": "profile", "path": "resolve()"}
+            ],
+            "ordered": False,
+            "rules": "open",
+        },
+    }
+    assert not factory._slice_selection_is_safe(
+        resolving_parent, profiled_slice, explicit_provider=False
+    )
+    assert factory._slice_selection_is_safe(
+        resolving_parent, profiled_slice, explicit_provider=True
+    )
+
+
+def test_create_field_rules_emits_reslice_once_by_exact_identity(factory):
+    parent = {
+        "path": "Patient.identifier",
+        "type": [{"code": "Identifier"}],
+        "slicing": {
+            "discriminators": [{"type": "value", "path": "system"}],
+            "ordered": False,
+            "rules": "open",
+        },
+        "slices": [
+            {
+                "path": "Patient.identifier",
+                "id": "Patient.identifier:national",
+                "slice_identity": "Patient.identifier:national",
+                "sliceName": "national",
+                "type": [{"code": "Identifier"}],
+                "cardinality": {"min": 1, "max": "*"},
+                "children": [],
+                "slices": [
+                    {
+                        "path": "Patient.identifier",
+                        "id": "Patient.identifier:national/ssn",
+                        "slice_identity": "Patient.identifier:national/ssn",
+                        "sliceName": "national/ssn",
+                        "type": [{"code": "Identifier"}],
+                        "cardinality": {"min": 1, "max": "1"},
+                        "slicing": {
+                            "discriminators": [
+                                {"type": "value", "path": "system"}
+                            ],
+                            "ordered": False,
+                            "rules": "open",
+                        },
+                        "children": [
+                            {
+                                "path": "Patient.identifier.system",
+                                "type": [{"code": "uri"}],
+                                "cardinality": {"min": 1, "max": "1"},
+                                "fixed_value": "urn:ssn",
+                            },
+                            {
+                                "path": "Patient.identifier.value",
+                                "type": [{"code": "string"}],
+                                "cardinality": {"min": 1, "max": "1"},
+                                "fixed_value": [],
+                            },
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+
+    rules = factory.create_field_rules(
+        "Patient",
+        [parent],
+        "src",
+        "tgt",
+        automapped_mappings={
+            "Patient.identifier:national/ssn.value": "ssn"
+        },
+    )
+
+    assert [rule.name for rule in rules] == ["map-identifier-national-ssn"]

@@ -7,6 +7,46 @@ from fhir.resources.R4B.codesystem import CodeSystem
 from fhir.resources.R4B.valueset import ValueSet
 
 
+def _concept_options(concepts, system, version=None):
+    """Flatten a CodeSystem concept hierarchy while retaining system/version."""
+    options = []
+    for concept in concepts or []:
+        option = {
+            "code": concept.code,
+            "display": concept.display,
+            "system": system,
+        }
+        if version:
+            option["version"] = version
+        options.append(option)
+        options.extend(
+            _concept_options(
+                getattr(concept, "concept", None), system, version=version
+            )
+        )
+    return options
+
+
+def _option_key(option):
+    return (
+        option.get("system"),
+        option.get("version"),
+        option.get("code"),
+    )
+
+
+def _dedupe_options(options):
+    result = []
+    seen = set()
+    for option in options:
+        key = _option_key(option)
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(option)
+    return result
+
+
 def expand_valueset(vs_url, processed_vs_urls, app_state):
     logger.info(f"Processing {vs_url}")
     if tmp_vs := app_state.registry.get_obj_by_name(vs_url):
@@ -62,22 +102,22 @@ def expand_valueset(vs_url, processed_vs_urls, app_state):
                     and cs.content == "complete"
                     and cs.concept
                 ):
-                    for concept in cs.concept:
-                        tmp_options.append(
-                            {
-                                "code": concept.code,
-                                "display": concept.display,
-                                "system": cs.url,
-                            }
+                    tmp_options.extend(
+                        _concept_options(
+                            cs.concept,
+                            cs.url,
+                            version=include.version or cs.version,
                         )
-                else:
-                    tmp_options.append(
-                        {
-                            "code": "FROM_CS",
-                            "display": f"from system: {include.system}",
-                            "system": include.system,
-                        }
                     )
+                else:
+                    placeholder = {
+                        "code": "FROM_CS",
+                        "display": f"from system: {include.system}",
+                        "system": include.system,
+                    }
+                    if include.version:
+                        placeholder["version"] = include.version
+                    tmp_options.append(placeholder)
                 if cs:
                     cs_url = cs.url if isinstance(cs, CodeSystem) else cs.get("url")
                     if cs_url and (
@@ -89,13 +129,14 @@ def expand_valueset(vs_url, processed_vs_urls, app_state):
             if include.concept:
                 logger.info("ValueSet includes a Concept")
                 for concept in include.concept:
-                    options.append(
-                        {
-                            "code": concept.code,
-                            "display": concept.display,
-                            "system": include.system,
-                        }
-                    )
+                    option = {
+                        "code": concept.code,
+                        "display": concept.display,
+                        "system": include.system,
+                    }
+                    if include.version:
+                        option["version"] = include.version
+                    options.append(option)
                 app_state.registry.add_to_used_by(include.system, vs_url)
             if include.valueSet:
                 logger.info(f"ValueSet {vs_url} includes another ValueSet(s)")
@@ -109,16 +150,60 @@ def expand_valueset(vs_url, processed_vs_urls, app_state):
             if include.filter:
                 logger.info(f"ValueSet {vs_url} includes a filter")
                 for f in include.filter:
-                    options.append(
-                        {
-                            "code": f"FILTER: op='{f.op}', value='{f.value}'",
-                            "display": "Code must be selected from this filter (terminology server)",
-                            "system": include.system,
-                        }
-                    )
+                    marker = {
+                        "code": (
+                            f"FILTER: property='{f.property}', "
+                            f"op='{f.op}', value='{f.value}'"
+                        ),
+                        "display": (
+                            "Code must be selected from this filter "
+                            "(terminology server)"
+                        ),
+                        "system": include.system,
+                    }
+                    if include.version:
+                        marker["version"] = include.version
+                    options.append(marker)
                 app_state.registry.add_to_used_by(include.system, vs_url)
-        if tmp_vs:
-            tmp_vs.expanded_values = options
+
+    excluded_keys = set()
+    excluded_systems = set()
+    for exclude in (vs.compose.exclude or []):
+        if exclude.system and not exclude.concept and not exclude.filter and not exclude.valueSet:
+            excluded_systems.add((exclude.system, exclude.version))
+        for concept in exclude.concept or []:
+            excluded_keys.add((exclude.system, exclude.version, concept.code))
+        for excluded_vs_url in exclude.valueSet or []:
+            app_state.registry.add_to_used_by(excluded_vs_url, vs_url)
+            for option in expand_valueset(
+                excluded_vs_url, processed_vs_urls, app_state
+            ):
+                excluded_keys.add(_option_key(option))
+        for f in exclude.filter or []:
+            logger.warning(
+                "ValueSet %s has an exclusion filter (%s %s %s) that requires "
+                "terminology-server evaluation; local compose expansion leaves "
+                "the affected codes unresolved.",
+                vs_url,
+                f.property,
+                f.op,
+                f.value,
+            )
+
+    def _excluded(option):
+        key = _option_key(option)
+        unversioned_key = (option.get("system"), None, option.get("code"))
+        if key in excluded_keys or unversioned_key in excluded_keys:
+            return True
+        return any(
+            option.get("system") == system
+            and (version is None or option.get("version") == version)
+            for system, version in excluded_systems
+        )
+
+    options = _dedupe_options([option for option in options if not _excluded(option)])
+    if tmp_vs:
+        tmp_vs.expanded_values = options
     # print(options)
     processed_vs_urls.pop()
     return options

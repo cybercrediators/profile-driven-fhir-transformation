@@ -94,6 +94,42 @@ def test_create_field_info_omits_absent_facets():
         assert absent not in fi
 
 
+def test_create_field_info_retains_non_generative_element_facets():
+    elem = _elem(
+        "Patient.identifier",
+        min=0,
+        max="*",
+        condition=["pat-1"],
+        constraint=[
+            {
+                "key": "local-1",
+                "severity": "error",
+                "human": "Must be populated",
+                "expression": "value.exists()",
+            }
+        ],
+        mapping=[{"identity": "v2", "map": "PID-3"}],
+        isModifier=True,
+        isSummary=True,
+        requirements="Needed for matching",
+        alias=["MRN"],
+        meaningWhenMissing="Unknown",
+        orderMeaning="Preferred first",
+    )
+
+    fi = edp.create_field_info(elem, [{"code": "Identifier"}])
+
+    assert fi["conditions"] == ["pat-1"]
+    assert fi["constraints"][0]["key"] == "local-1"
+    assert fi["mappings"][0] == {"identity": "v2", "map": "PID-3"}
+    assert fi["is_modifier"] is True
+    assert fi["is_summary"] is True
+    assert fi["requirements"] == "Needed for matching"
+    assert fi["aliases"] == ["MRN"]
+    assert fi["meaning_when_missing"] == "Unknown"
+    assert fi["order_meaning"] == "Preferred first"
+
+
 # --------------------------------------------------------------------------- #
 # fixed / pattern / defaultValue separation (Correctness-C)
 # --------------------------------------------------------------------------- #
