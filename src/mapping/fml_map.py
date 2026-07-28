@@ -13,7 +13,7 @@ from fhir.resources.R4B.structuremap import (
 from mapping.fml_creator.fml_factory import FMLRuleFactory
 from mapping.fml_creator.fml_helper import flatten_profile_fields
 from mapping.fml_creator.fml_automapper import FMLAutomapper
-from helpers.utils import get_value_from_element
+from helpers.utils import get_value_from_element, resource_identity
 
 from typing import List, Any, Dict, Optional, Set, Tuple
 import logging
@@ -113,28 +113,30 @@ class StructureMapGenerator:
         for res_idx, res in enumerate(resources):
             url = next(iter(res))
             obj = self.app_state.registry.get_obj_by_name(url)
-            self.current_profile_name = (
-                obj.data.id if obj and obj.data and obj.data.id else "unknown"
+            # identity, not necessarily `id`: profiles without one are named by canonical
+            profile_identity = (
+                resource_identity(obj.data, url) if obj and obj.data else "unknown"
             )
+            self.current_profile_name = profile_identity
             res_type = obj.res_type if not hasattr(obj.data, "type") else obj.data.type
 
             automapped_mappings = self._process_resource_mapping(
                 obj, res_type, source_fields, active_types
             )
 
-            sm_url = f"{self.map_url}-{obj.data.id}"
-            sm_name = f"{res_idx + 1:03d}_{self.map_name}-{obj.data.id}"
-            sm_title = f"{self.map_title} - {obj.data.id}"
+            sm_url = f"{self.map_url}-{profile_identity}"
+            sm_name = f"{res_idx + 1:03d}_{self.map_name}-{profile_identity}"
+            sm_title = f"{self.map_title} - {profile_identity}"
 
             sm = self.factory.create_base_structure_map(
                 sm_url, sm_name, sm_title, self.status
             )
             # Deterministic ID (like ConceptMaps) so repeated runs produce identical files
             url_hash = hashlib.md5(sm_url.encode("utf-8")).hexdigest()[:8]
-            sm.id = f"sm-{obj.data.id[:50]}-{url_hash}"
+            sm.id = f"sm-{profile_identity[:50]}-{url_hash}"
             sm.description = (
                 "Auto-generated StructureMap for given profile mappable fields "
-                f"(Resource: {obj.data.id}). Placeholders have to be set (or use auto-mapping)"
+                f"(Resource: {profile_identity}). Placeholders have to be set (or use auto-mapping)"
             )
 
             # For Questionnaire resources the transform target is QuestionnaireResponse,
@@ -149,7 +151,7 @@ class StructureMapGenerator:
                     url=self.helper_map.url, mode="source", alias="Source"
                 ),
                 StructureMapStructure.model_construct(
-                    url=target_sd_url, mode="target", alias=f"{obj.data.id}"
+                    url=target_sd_url, mode="target", alias=f"{profile_identity}"
                 ),
             ]
 
@@ -246,8 +248,7 @@ class StructureMapGenerator:
                     # Also add the canonical URL and id
                     if hasattr(obj.data, "url") and obj.data.url:
                         active_types.add(obj.data.url)
-                    if hasattr(obj.data, "id") and obj.data.id:
-                        active_types.add(obj.data.id)
+                    active_types.add(resource_identity(obj.data))
 
         if self.custom_mapping_table:
             for v in self.custom_mapping_table.values():
@@ -289,7 +290,7 @@ class StructureMapGenerator:
             source_fields,
             automap_source_list,
             res_type,
-            obj.data.id,
+            resource_identity(obj.data),
         )
 
         self._record_coverage(obj, res_type, automapped_paths)
@@ -518,7 +519,7 @@ class StructureMapGenerator:
             "latent_required_paths": [entry["id"] for entry in latent],
             "requirement_manifest": manifest,
         }
-        self._coverage[obj.data.id] = profile_coverage
+        self._coverage[resource_identity(obj.data)] = profile_coverage
 
     def _save_coverage_report(self):
         """persist the aggregated required-element coverage report to the project's source_data folder"""
@@ -606,7 +607,7 @@ class StructureMapGenerator:
                 src_id = source_field.get("id") or source_field.get("path", "")
                 if src_id not in best or score > best[src_id]["score"]:
                     target_path = match.get("path") or match.get("_virtual_path")
-                    res_id = obj.data.id
+                    res_id = resource_identity(obj.data)
                     if (
                         target_path
                         and res_id
@@ -789,6 +790,21 @@ class StructureMapGenerator:
                         suffix = self.factory._choice_suffix(ct)
                         concrete_path = f"{base}{suffix}"
                         target_index[concrete_path] = field_path
+                    # children of each candidate type, so a mapping table can address
+                    # inside an unsliced multi-type choice (`value[x].coding.code`).
+                    # Registered under both the `[x]` form (the parser's own child
+                    # paths) and the concrete form (`valueCodeableConcept.coding.code`).
+                    for ct, structure in (f.get("choice_structures") or {}).items():
+                        child_entries = _flatten_targets(structure, virtual_path)
+                        flat.extend(child_entries)
+                        suffix = self.factory._choice_suffix(ct)
+                        if not suffix:
+                            continue
+                        for child in child_entries:
+                            child_path = child["path"]
+                            if child_path.startswith(f"{field_path}."):
+                                tail = child_path[len(field_path) :]
+                                target_index[f"{base}{suffix}{tail}"] = child_path
                 if f.get("children"):
                     flat.extend(_flatten_targets(f.get("children"), virtual_path))
                 if f.get("type_structure"):
@@ -919,14 +935,14 @@ class StructureMapGenerator:
             creator = QuestionnaireMapCreator(res_obj, factory=self.factory)
             return creator.generate_group(
                 source_alias="Source",
-                target_alias=res_obj.data.id,
+                target_alias=resource_identity(res_obj.data),
                 mapping_table=self.custom_mapping_table,
             )
 
         logger.info("Creating group for resource %s", res_obj.data.id)
         source_type = source_obj.type if source_obj else "SourceData"
         group = StructureMapGroup.model_construct(
-            name=f"Transform-{res_obj.data.id}", typeMode="none"
+            name=f"Transform-{resource_identity(res_obj.data)}", typeMode="none"
         )
         group.input = [
             StructureMapGroupInput.model_construct(

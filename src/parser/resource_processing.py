@@ -105,11 +105,7 @@ def process_files(files, app_state: AppState, overwrite=False):
 
 def _result_filename(url: str, val) -> str:
     """on-disk name for a processed resource (avoid using potentially optional id field)"""
-    res_id = getattr(val.data, "id", None)
-    if res_id:
-        return res_id
-    canonical = getattr(val.data, "url", None) or url or ""
-    return canonical.rstrip("/").split("/")[-1].split("|")[0] or "unnamed_resource"
+    return utils.resource_identity(val.data, url)
 
 
 def store_results(app_state: AppState):

@@ -109,6 +109,21 @@ def get_resource_type(fname):
     return None
 
 
+def resource_identity(data, registry_url: str = "") -> str:
+    """Stable identity for a conformance resource.
+
+    ``id`` is optional in FHIR — the canonical url is the identity — and published IGs
+    do ship StructureDefinitions without one. Fall back to the canonical's last segment
+    so such a profile still gets an on-disk name, a StructureMap name and, above all, a
+    string a mapping table can target when a sibling profile shares its resource type.
+    """
+    res_id = getattr(data, "id", None)
+    if res_id:
+        return res_id
+    canonical = getattr(data, "url", None) or registry_url or ""
+    return canonical.rstrip("/").split("/")[-1].split("|")[0] or "unnamed_resource"
+
+
 def get_value_from_element(element, attr_names):
     """
     Extracts value[x] from a given element

@@ -55,6 +55,14 @@ def conv_mappable(app_state, field):
         conv["type"] = "choice"
         conv["choice_types"] = [t.get("code") for t in type_list]
         conv["is_type_choice"] = True
+        # keep each candidate's expanded children (the parser built them per type).
+        # Without this a mapping table cannot address anything *inside* an unsliced
+        # multi-type choice — `value[x].coding.code` has no target to bind to.
+        conv["choice_structures"] = {
+            t.get("code"): t["type_structure"]
+            for t in type_list
+            if isinstance(t, dict) and t.get("code") and t.get("type_structure")
+        }
     elif isinstance(type_list, list) and type_list:
         type_info = type_list[0]
         conv["type"] = type_info.get("code", "string")
