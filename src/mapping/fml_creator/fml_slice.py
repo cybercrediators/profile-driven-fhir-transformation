@@ -257,8 +257,14 @@ class _SliceRulesMixin:
         mapped_roots = {
             sub.split(".", 1)[0].split(":", 1)[0].replace("[x]", "") for sub, _ in subs
         }
+        slice_eid = slice_path if ":" in slice_path else f"{slice_path}:{slice_name}"
         nested += self._slice_child_fixed_rules(
-            direct_children, var, parent_source_context, nm, mapped_roots
+            direct_children,
+            var,
+            parent_source_context,
+            nm,
+            mapped_roots,
+            slice_eid=slice_eid,
         )
 
         root_fixed_keys = set(fixed) if isinstance(fixed, dict) else set()
@@ -388,7 +394,7 @@ class _SliceRulesMixin:
             ]
             sr.target = [stt]
             nested.append(sr)
-        rule.rule = nested
+        rule.rule = _drop_empty_duplicate_creates(nested)
         return rule
 
     def _slice_sub_extension_rule(
@@ -456,8 +462,70 @@ class _SliceRulesMixin:
         _suffix_names(rule)
         return rule
 
+    def _fixed_container_rule(self, child, elem, leaves, slice_var, src_ctx, nm):
+        """Create a complex child and copy the profile-fixed leaves the tree found (N1)."""
+        tc = type_codes(child.get("type"))
+        ctype = tc[0] if tc else "CodeableConcept"
+        cvar = f"{slice_var}-{clean_field_name(elem)}"
+        rule = StructureMapGroupRule.model_construct(
+            name=f"set-{nm}-{clean_field_name(elem)}"
+        )
+        rule.source = [StructureMapGroupRuleSource.model_construct(context=src_ctx)]
+        target = StructureMapGroupRuleTarget.model_construct(
+            context=slice_var, element=elem, variable=cvar, transform="create"
+        )
+        target.parameter = [
+            StructureMapGroupRuleTargetParameter.model_construct(valueString=ctype)
+        ]
+        rule.target = [target]
+        leaf_rules = []
+        for leaf in leaves:
+            value = leaf.fixed_value
+            if isinstance(value, (dict, list)):
+                continue  # complex fixed content is handled by _fixed_pattern_rules
+            leaf_rule = StructureMapGroupRule.model_construct(
+                name=f"set-{nm}-{clean_field_name(elem)}-{clean_field_name(leaf.name)}"
+            )
+            leaf_rule.source = [
+                StructureMapGroupRuleSource.model_construct(context=src_ctx)
+            ]
+            leaf_target = StructureMapGroupRuleTarget.model_construct(
+                context=cvar, element=leaf.name, transform="copy"
+            )
+            leaf_target.parameter = [
+                StructureMapGroupRuleTargetParameter.model_construct(
+                    valueString=fixed_scalar_literal(value)
+                )
+            ]
+            leaf_rule.target = [leaf_target]
+            leaf_rules.append(leaf_rule)
+        rule.rule = leaf_rules
+        return rule
+
+    def _tree_fixed_children(self, container_eid):
+        """Direct children of `container_eid` that the profile fixes (N1).
+
+        A slice may carry no fixed value of its own while its *grandchildren* are fixed —
+        hmb pins `category:obstetrics.coding.system|code|display`, and looking only one
+        level down emitted an empty Coding, so the element serialised away entirely.
+        """
+        if not container_eid:
+            return []
+        tree_fn = getattr(self, "profile_tree", None)
+        tree = tree_fn() if callable(tree_fn) else None
+        if tree is None:
+            return []
+        node = tree.node(container_eid)
+        if node is None:
+            return []
+        return [
+            child
+            for child in node.children.values()
+            if child.fixed_value is not None and not child.prohibited
+        ]
+
     def _slice_child_fixed_rules(
-        self, slice_children, slice_var, src_ctx, nm, mapped_roots=None
+        self, slice_children, slice_var, src_ctx, nm, mapped_roots=None, slice_eid=None
     ):
         """create fixed-pattern rules for a slice's child elements that carry a fixed/pattern value"""
         mapped_roots = mapped_roots or set()
@@ -475,9 +543,24 @@ class _SliceRulesMixin:
                         e,
                     )
                     fv = None
-            if fv is None or (isinstance(fv, (list, dict, str)) and len(fv) == 0):
-                continue
             elem = child.get("path", "").split(".")[-1]
+            if fv is None or (isinstance(fv, (list, dict, str)) and len(fv) == 0):
+                # N1: no fixed value on the child itself, but the profile may fix its
+                # children (`category:obstetrics.coding.system|code|display`). Create the
+                # container and copy those leaves in; otherwise the container serialises
+                # empty and the whole element — and its required slice — disappears.
+                leaves = (
+                    self._tree_fixed_children(f"{slice_eid}.{elem}")
+                    if slice_eid and elem
+                    else []
+                )
+                if leaves:
+                    out.append(
+                        self._fixed_container_rule(
+                            child, elem, leaves, slice_var, src_ctx, nm
+                        )
+                    )
+                continue
             if not elem:
                 continue
             tc = type_codes(child.get("type"))
@@ -615,3 +698,44 @@ class _SliceRulesMixin:
         return build(
             parent_var, sub_path.split("."), root_type, name_prefix, root_children
         )
+
+
+def _drop_empty_duplicate_creates(rules):
+    """Keep the populated rule when two rules create the same child element.
+
+    The N1 repair emits a container together with its profile-fixed leaves, while the
+    generic child walk may already have emitted a bare `create` for the same element.
+    Both would run, producing two codings against a `max=1` element — keep whichever
+    actually carries content.
+    """
+    def _key(rule):
+        target = (rule.target or [None])[0]
+        if target is None:
+            return None
+        return (getattr(target, "context", None), getattr(target, "element", None))
+
+    best = {}
+    order = []
+    for rule in rules:
+        key = _key(rule)
+        if key is None or key[1] is None:
+            order.append(rule)
+            continue
+        previous = best.get(key)
+        if previous is None:
+            best[key] = rule
+            order.append(rule)
+            continue
+        previous_empty = not (previous.rule or [])
+        current_empty = not (rule.rule or [])
+        # Only an *empty* create is a duplicate worth dropping. Repeated populated rules
+        # are legitimate: person's `category:todesDiagnose` requires two codings (SNOMED
+        # and LOINC, `coding` min=2), and collapsing them cost a resource.
+        if previous_empty and not current_empty:
+            order[order.index(previous)] = rule
+            best[key] = rule
+        elif current_empty and not previous_empty:
+            continue
+        else:
+            order.append(rule)
+    return order

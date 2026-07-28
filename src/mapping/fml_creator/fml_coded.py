@@ -74,6 +74,7 @@ class _CodedRulesMixin:
         code_transform,
         code_params,
         guard_empty,
+        element_path=None,
     ):
         """analyze nested rule list populating system and code rules"""
 
@@ -124,6 +125,21 @@ class _CodedRulesMixin:
             return _leaf_rules()
 
         # CodeableConcept: outer create, then a coding rule that creates Coding + leaf rules.
+        # N4: a profile may forbid the coding child (capable's Goal.description allows only
+        # text). Expanding it anyway emitted `coding: max allowed = 0, but found 1`.
+        if element_path and getattr(self, "is_prohibited_target", None):
+            if self.is_prohibited_target(f"{element_path}.coding"):
+                logger.info(
+                    "Not expanding %s.coding: the profile prohibits it (max=0).",
+                    element_path,
+                )
+                outer_target.variable = "tgt-cc"
+                outer_target.parameter = [
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueString="CodeableConcept"
+                    )
+                ]
+                return []
         outer_target.variable = "tgt-cc"
         outer_target.parameter = [
             StructureMapGroupRuleTargetParameter.model_construct(
@@ -226,6 +242,7 @@ class _CodedRulesMixin:
                     code_transform="translate",
                     code_params=_translate_params("src", cm_url),
                     guard_empty=guard_empty,
+                    element_path=field.get("path"),
                 )
             rule.target = [target]
 
@@ -813,6 +830,7 @@ class _CodedRulesMixin:
                     StructureMapGroupRuleTargetParameter.model_construct(valueId="src")
                 ],
                 guard_empty=False,
+                element_path=field.get("path"),
             )
             rule.target = [target]
 

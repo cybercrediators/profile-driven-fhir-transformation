@@ -35,6 +35,7 @@ from functools import lru_cache
 from mapping.fml_creator.fml_extension import _ExtensionRulesMixin
 from mapping.fml_creator.fml_slice import _SliceRulesMixin
 from mapping.fml_creator.fml_coded import _CodedRulesMixin
+from mapping.target_tree import TargetTree
 
 
 @lru_cache(maxsize=None)
@@ -75,6 +76,35 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         self.map_url = map_url
         self.plugins = plugins or []
         self.source_field_types: dict = {}
+        self._target_tree_cache = (None, None)
+
+    def profile_tree(self):
+        """Profile-constrained target tree for the profile currently being emitted.
+
+        Built without datatype introspection: prohibition and parentage come from the
+        snapshot alone, and introspecting every complex type on every profile is far too
+        expensive for the big modules (icu has 69 profiles).
+        """
+        sd = getattr(self, "_current_profile_sd", None)
+        if sd is None:
+            return None
+        cached_sd, cached_tree = self._target_tree_cache
+        if cached_sd is sd:
+            return cached_tree
+        try:
+            tree = TargetTree.from_snapshot(sd)
+        except Exception as exc:
+            logger.debug("target tree unavailable (%s: %s)", type(exc).__name__, exc)
+            tree = None
+        self._target_tree_cache = (sd, tree)
+        return tree
+
+    def is_prohibited_target(self, path: str) -> bool:
+        """True when the profile forbids this element (``max = 0``) — see N4."""
+        if not path:
+            return False
+        tree = self.profile_tree()
+        return bool(tree and tree.is_prohibited(path))
 
     def _resolve_choice_element(
         self, field, base_name: str, path: str, automapped_mappings

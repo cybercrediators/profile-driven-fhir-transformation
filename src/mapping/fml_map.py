@@ -794,7 +794,15 @@ class StructureMapGenerator:
                     # inside an unsliced multi-type choice (`value[x].coding.code`).
                     # Registered under both the `[x]` form (the parser's own child
                     # paths) and the concrete form (`valueCodeableConcept.coding.code`).
-                    for ct, structure in (f.get("choice_structures") or {}).items():
+                    # `choice_structures` is only populated for top-level fields (conv_mappable);
+                    # a choice nested in a backbone (`Claim.diagnosis.diagnosis[x]`) still has
+                    # each candidate's children under `type[i].type_structure`.
+                    structures = f.get("choice_structures") or {
+                        t.get("code"): t.get("type_structure")
+                        for t in (f.get("type") or [])
+                        if isinstance(t, dict) and t.get("code") and t.get("type_structure")
+                    }
+                    for ct, structure in structures.items():
                         child_entries = _flatten_targets(structure, virtual_path)
                         flat.extend(child_entries)
                         suffix = self.factory._choice_suffix(ct)
@@ -809,6 +817,19 @@ class StructureMapGenerator:
                     flat.extend(_flatten_targets(f.get("children"), virtual_path))
                 if f.get("type_structure"):
                     flat.extend(_flatten_targets(f.get("type_structure"), virtual_path))
+                else:
+                    # F4: a complex element nested in a backbone keeps its datatype children
+                    # under `type[0].type_structure` — only top-level fields get them lifted
+                    # to field level by conv_mappable. The snapshot's own children are a
+                    # *partial* view (evo13's `participant.type` lists extension and text but
+                    # not coding), so merge rather than choose: without this,
+                    # `reaction.substance.coding.code` has no target to bind to while its
+                    # sibling `reaction.manifestation.coding.code` resolves fine.
+                    raw_types = f.get("type")
+                    if isinstance(raw_types, list) and len(raw_types) == 1:
+                        nested = raw_types[0].get("type_structure") if isinstance(raw_types[0], dict) else None
+                        if nested:
+                            flat.extend(_flatten_targets(nested, virtual_path))
                 for sl in f.get("slices") or []:
                     if not isinstance(sl, dict):
                         continue
