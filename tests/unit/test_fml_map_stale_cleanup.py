@@ -88,14 +88,62 @@ def test_structure_map_invariant_rejects_target_element_without_context():
         StructureMapGenerator._normalize_and_validate_structure_map(sm)
 
 
-def test_todo_sanitizer_moves_executable_placeholder_to_diagnostics():
+def test_todo_sanitizer_keeps_source_scaffolds_and_removes_unsafe_todos():
     generator = object.__new__(StructureMapGenerator)
     generator.current_profile_name = "PatientProfile"
     generator.mapping_diagnostics = []
-    executable_todo = SimpleNamespace(
+    source_scaffold = SimpleNamespace(
         name="map-required",
-        source=[SimpleNamespace(element="TODO_MAP_REQUIRED")],
-        target=[],
+        source=[
+            SimpleNamespace(
+                context="source",
+                element="TODO_MAP_REQUIRED",
+                variable="src-required",
+            )
+        ],
+        target=[
+            SimpleNamespace(
+                context="target",
+                element="status",
+                transform="copy",
+                parameter=None,
+            )
+        ],
+        dependent=None,
+        rule=[],
+    )
+    unsafe_target_todo = SimpleNamespace(
+        name="map-unsafe-target",
+        source=[SimpleNamespace(context="source", element="status")],
+        target=[
+            SimpleNamespace(
+                context="target",
+                element="TODO_TARGET_STATUS",
+                transform="copy",
+                parameter=None,
+            )
+        ],
+        dependent=None,
+        rule=[],
+    )
+    unsafe_source_expression = SimpleNamespace(
+        name="map-unsafe-check",
+        source=[
+            SimpleNamespace(
+                context="source",
+                element="status",
+                check="TODO_DEFINE_SOURCE_CHECK",
+            )
+        ],
+        target=[
+            SimpleNamespace(
+                context="target",
+                element="status",
+                transform="copy",
+                parameter=None,
+            )
+        ],
+        dependent=None,
         rule=[],
     )
     deferred_reference = SimpleNamespace(
@@ -103,13 +151,15 @@ def test_todo_sanitizer_moves_executable_placeholder_to_diagnostics():
         documentation="Reference<Patient.generalPractitioner> -> Practitioner",
         source=[SimpleNamespace(element=None)],
         target=None,
+        dependent=None,
         rule=[],
     )
     valid = SimpleNamespace(
         name="map-active",
         source=[SimpleNamespace(element="active")],
         target=[SimpleNamespace(element="active", parameter=None)],
-        rule=[executable_todo],
+        dependent=None,
+        rule=[source_scaffold, unsafe_target_todo, unsafe_source_expression],
     )
     group = SimpleNamespace(name="Transform-Patient", rule=[valid, deferred_reference])
     structure_map = SimpleNamespace(group=[group])
@@ -117,7 +167,8 @@ def test_todo_sanitizer_moves_executable_placeholder_to_diagnostics():
     generator._sanitize_todo_rules(structure_map)
 
     assert group.rule == [valid, deferred_reference]
-    assert valid.rule is None
+    assert valid.rule == [source_scaffold]
+    assert source_scaffold.source[0].element == "TODO_MAP_REQUIRED"
     assert {item["code"] for item in generator.mapping_diagnostics} == {
         "unresolved-map-placeholder",
         "deferred-reference",

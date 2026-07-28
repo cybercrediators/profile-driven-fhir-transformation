@@ -99,6 +99,201 @@ def test_coding_slice_of_codeableconcept_is_deferred(factory):
     )
 
 
+def _sliced_coding_field(rules="open"):
+    slicing = {
+        "discriminators": [{"type": "pattern", "path": "$this"}],
+        "ordered": False,
+        "rules": rules,
+    }
+    code_child = {
+        "path": "Condition.code.coding.code",
+        "id": "Condition.code.coding.code",
+        "type": [{"code": "code"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "fixed_value": [],
+    }
+    unrelated_extension = {
+        "path": "Condition.code.coding.display",
+        "id": "Condition.code.coding.display",
+        "type": [{"code": "string"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "fixed_value": [],
+        "children": [
+            {
+                "path": "Condition.code.coding.display.extension",
+                "id": "Condition.code.coding.display.extension:translation",
+                "sliceName": "translation",
+                "type": [{"code": "Extension"}],
+                "cardinality": {"min": 0, "max": "1"},
+                "fixed_value": [],
+                "children": [
+                    {
+                        "path": "Condition.code.coding.display.extension.url",
+                        "id": (
+                            "Condition.code.coding.display.extension:"
+                            "translation.url"
+                        ),
+                        "type": [{"code": "uri"}],
+                        "fixed_value": (
+                            "http://hl7.org/fhir/StructureDefinition/translation"
+                        ),
+                    }
+                ],
+            }
+        ],
+    }
+    coding_slice = {
+        "path": "Condition.code.coding",
+        "id": "Condition.code.coding:icd10",
+        "slice_identity": "Condition.code.coding:icd10",
+        "sliceName": "icd10",
+        "type": [{"code": "Coding"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "fixed_value": [],
+        "slicing": slicing,
+        "children": [dict(code_child)],
+    }
+    flattened_descendant_slice = dict(unrelated_extension["children"][0])
+    flattened_descendant_slice.update(
+        {
+            "path": "Condition.code.coding.display.extension",
+            "id": "Condition.code.coding.display.extension:translation",
+            "slice_identity": (
+                "Condition.code.coding.display.extension:translation"
+            ),
+            "sliceName": "translation",
+        }
+    )
+    return {
+        "path": "Condition.code.coding",
+        "id": "Condition.code.coding",
+        "type": [{"code": "Coding"}],
+        "cardinality": {"min": 0, "max": "*"},
+        "fixed_value": [],
+        "slicing": slicing,
+        "children": [code_child, unrelated_extension],
+        # The second entry mirrors the parser's flattened descendant slice.
+        # It belongs below display.extension and must not be hoisted here.
+        "slices": [coding_slice, flattened_descendant_slice],
+    }
+
+
+def test_open_slicing_emits_one_generic_entry_for_unsliced_provider(factory):
+    """An unqualified Coding mapping is a valid non-slice entry in open slicing."""
+    field = _sliced_coding_field()
+
+    rules = factory.create_field_rules(
+        "Condition",
+        [field],
+        "src-code",
+        "tgt-code",
+        automapped_mappings={
+            "Condition.code.coding.code": "Source.problemCode",
+        },
+        parent_path="Condition.code",
+    )
+
+    assert [rule.name for rule in rules] == ["map-coding"]
+    assert rules[0].target[0].element == "coding"
+    assert rules[0].target[0].parameter[0].valueString == "Coding"
+    assert [child.name for child in rules[0].rule] == ["map-code"]
+    assert rules[0].rule[0].source[0].element == "problemCode"
+    assert rules[0].rule[0].target[0].element == "code"
+    assert not factory.diagnostics
+
+
+def test_open_unsliced_entry_keeps_base_fixed_leaf_but_not_slice_fixed_leaf(factory):
+    field = _sliced_coding_field()
+    field["children"].append(
+        {
+            "path": "Condition.code.coding.system",
+            "id": "Condition.code.coding.system",
+            "type": [{"code": "uri"}],
+            "cardinality": {"min": 1, "max": "1"},
+            "fixed_value": "http://example.org/base-system",
+        }
+    )
+    # A named-slice constraint can appear in the flattened parser tree with the
+    # same path. It must not constrain the ordinary open-slicing entry.
+    field["children"].append(
+        {
+            "path": "Condition.code.coding.version",
+            "id": "Condition.code.coding:icd10.version",
+            "type": [{"code": "string"}],
+            "cardinality": {"min": 0, "max": "1"},
+            "fixed_value": "slice-only-version",
+        }
+    )
+
+    rules = factory.create_field_rules(
+        "Condition",
+        [field],
+        "src-code",
+        "tgt-code",
+        automapped_mappings={
+            "Condition.code.coding.code": "Source.problemCode",
+        },
+        parent_path="Condition.code",
+    )
+
+    assert len(rules) == 1
+    assert [child.target[0].element for child in rules[0].rule] == [
+        "code",
+        "system",
+    ]
+
+
+def test_open_at_end_places_generic_entry_after_selected_slices(factory):
+    field = _sliced_coding_field("openAtEnd")
+
+    rules = factory.create_field_rules(
+        "Condition",
+        [field],
+        "src-code",
+        "tgt-code",
+        automapped_mappings={
+            "Condition.code.coding:icd10.code": "Source.icd10Code",
+            "Condition.code.coding.code": "Source.problemCode",
+        },
+        parent_path="Condition.code",
+    )
+
+    assert [rule.name for rule in rules] == ["map-coding-icd10", "map-coding"]
+    assert rules[0].rule[-1].source[0].element == "icd10Code"
+    assert rules[1].rule[0].source[0].element == "problemCode"
+
+
+def test_closed_slicing_rejects_unsliced_provider_with_diagnostic(factory):
+    field = _sliced_coding_field("closed")
+
+    rules = factory.create_field_rules(
+        "Condition",
+        [field],
+        "src-code",
+        "tgt-code",
+        automapped_mappings={
+            "Condition.code.coding.code": "Source.problemCode",
+        },
+        parent_path="Condition.code",
+    )
+
+    assert rules == []
+    assert factory.diagnostics == [
+        {
+            "code": "unsliced-provider-for-closed-slicing",
+            "message": (
+                "Unsliced mapping target Condition.code.coding cannot create an "
+                "entry in closed slicing. Use a slice-qualified mapping target."
+            ),
+            "profile": "unknown",
+            "path": "Condition.code.coding",
+            "provider_keys": ["Condition.code.coding.code"],
+            "slicing_rules": "closed",
+            "severity": "error",
+        }
+    ]
+
+
 def test_primitive_slice_optional_without_subs_is_dropped(factory):
     slice_field = {
         "path": "Patient.name.given:first",
@@ -668,6 +863,112 @@ def test_multiple_discriminators_are_checked_together(factory):
 
     assert rule is not None
     assert not factory.diagnostics
+
+
+def test_value_discriminator_accepts_profile_fixed_descendants(factory):
+    """HMB fixes Coding leaves below its value:coding discriminator (N1)."""
+    factory._current_profile_sd = {
+        "resourceType": "StructureDefinition",
+        "type": "Observation",
+        "snapshot": {
+            "element": [
+                {
+                    "id": "Observation",
+                    "path": "Observation",
+                    "min": 0,
+                    "max": "*",
+                },
+                {
+                    "id": "Observation.category",
+                    "path": "Observation.category",
+                    "min": 1,
+                    "max": "*",
+                    "type": [{"code": "CodeableConcept"}],
+                },
+                {
+                    "id": "Observation.category:obstetrics",
+                    "path": "Observation.category",
+                    "sliceName": "obstetrics",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "CodeableConcept"}],
+                },
+                {
+                    "id": "Observation.category:obstetrics.coding",
+                    "path": "Observation.category.coding",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "Coding"}],
+                },
+                {
+                    "id": "Observation.category:obstetrics.coding.system",
+                    "path": "Observation.category.coding.system",
+                    "min": 0,
+                    "max": "1",
+                    "type": [{"code": "uri"}],
+                    "fixedUri": "http://terminology.hl7.org/CodeSystem/observation-category",
+                },
+                {
+                    "id": "Observation.category:obstetrics.coding.code",
+                    "path": "Observation.category.coding.code",
+                    "min": 0,
+                    "max": "1",
+                    "type": [{"code": "code"}],
+                    "patternCode": "social-history",
+                },
+                {
+                    "id": "Observation.category:obstetrics.coding.display",
+                    "path": "Observation.category.coding.display",
+                    "min": 0,
+                    "max": "1",
+                    "type": [{"code": "string"}],
+                    "patternString": "Social History",
+                },
+            ]
+        },
+    }
+    parent = {
+        "path": "Observation.category",
+        "type": [{"code": "CodeableConcept"}],
+        "slicing": {
+            "discriminators": [{"type": "value", "path": "coding"}],
+            "ordered": False,
+            "rules": "open",
+        },
+    }
+    slice_field = {
+        "path": "Observation.category",
+        "id": "Observation.category:obstetrics",
+        "sliceName": "obstetrics",
+        "type": [{"code": "CodeableConcept"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [
+            {
+                "path": "Observation.category.coding",
+                "id": "Observation.category:obstetrics.coding",
+                "type": [{"code": "Coding"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "fixed_value": [],
+            }
+        ],
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Observation", "src", "tgt", {}
+    )
+
+    assert rule is not None
+    assert not factory.diagnostics
+    coding = next(child for child in rule.rule if child.target[0].element == "coding")
+    fixed_leaves = {
+        child.target[0].element: child.target[0].parameter[0].valueString
+        for child in coding.rule
+    }
+    assert fixed_leaves == {
+        "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+        "code": "social-history",
+        "display": "Social History",
+    }
 
 
 def test_position_discriminator_requires_ordered_and_explicit_rule(factory):

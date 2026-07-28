@@ -96,9 +96,38 @@ class _SliceRulesMixin:
         target_field = self._slice_discriminator_field(slice_field, disc_path)
 
         if disc_type in ("value", "pattern"):
-            return bool(
-                target_field and has_fixed_value(target_field.get("fixed_value"))
+            if not target_field:
+                return False
+            if has_fixed_value(target_field.get("fixed_value")):
+                return True
+
+            # A complex discriminator can be generatively constrained by fixed
+            # or pattern values on its descendants. HMB, for example, slices
+            # Observation.category on ``coding`` while fixing
+            # ``coding.system``, ``coding.code`` and ``coding.display``. N1 can
+            # emit those values from the target tree, so rejecting the slice
+            # here would undo that emission.
+            def _has_fixed_descendant(field):
+                for child in field.get("children") or []:
+                    if has_fixed_value(child.get("fixed_value")):
+                        return True
+                    if _has_fixed_descendant(child):
+                        return True
+                return False
+
+            if _has_fixed_descendant(target_field):
+                return True
+
+            tree_fn = getattr(self, "profile_tree", None)
+            tree = tree_fn() if callable(tree_fn) else None
+            if tree is None:
+                return False
+            target_key = (
+                target_field.get("id")
+                or target_field.get("slice_identity")
+                or target_field.get("path")
             )
+            return bool(target_key and tree.fixed_descendants(target_key))
 
         if disc_type == "type":
             slice_codes = type_codes(slice_field.get("type"))

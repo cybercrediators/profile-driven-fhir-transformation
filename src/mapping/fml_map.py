@@ -346,7 +346,16 @@ class StructureMapGenerator:
         _walk(getattr(obj, "mappable_fields", None))
 
     def _sanitize_todo_rules(self, structure_map):
-        """Move non-executable TODO placeholders into diagnostics."""
+        """Remove unsafe TODOs while retaining intentional source scaffolding.
+
+        A ``TODO_*`` source element is executable but safe: FHIR Mapping Language
+        treats a missing source element as a non-match, so the rule remains a
+        human-fillable skeleton without making ``$transform`` fail.  TODOs in
+        target assignments (or in other source expressions such as ``check`` and
+        ``condition``) cannot be interpreted safely and are moved to diagnostics.
+        Deferred reference rules are instructions for ``BundleService`` and must
+        remain machine-readable in the map.
+        """
 
         def _contains_todo(value):
             if isinstance(value, str):
@@ -357,6 +366,8 @@ class StructureMapGenerator:
                 return any(_contains_todo(v) for v in value)
             if hasattr(value, "model_dump"):
                 return _contains_todo(value.model_dump(exclude_none=True))
+            if hasattr(value, "__dict__"):
+                return _contains_todo(vars(value))
             return False
 
         def _sanitize(rules, group_name):
@@ -374,24 +385,30 @@ class StructureMapGenerator:
                     )
                     kept.append(rule)
                     continue
+
+                source_expressions = []
+                for source in getattr(rule, "source", None) or []:
+                    if hasattr(source, "model_dump"):
+                        source_data = source.model_dump(exclude_none=True)
+                    else:
+                        source_data = dict(vars(source))
+                    # An unresolved source element is the supported sparse-map
+                    # scaffold. All other source properties affect execution and
+                    # must be fully specified.
+                    source_data.pop("element", None)
+                    source_data.pop("element__ext", None)
+                    source_expressions.append(source_data)
+
                 executable = {
-                    "source": [
-                        getattr(source, "element", None)
-                        for source in (getattr(rule, "source", None) or [])
-                    ],
-                    "target": [
-                        {
-                            "element": getattr(target, "element", None),
-                            "parameter": getattr(target, "parameter", None),
-                        }
-                        for target in (getattr(rule, "target", None) or [])
-                    ],
+                    "source_expressions": source_expressions,
+                    "target": getattr(rule, "target", None) or [],
+                    "dependent": getattr(rule, "dependent", None) or [],
                 }
                 if _contains_todo(executable):
                     self._append_diagnostic(
                         "unresolved-map-placeholder",
                         f"Rule {name} was omitted because it contains an "
-                        "unresolved executable TODO placeholder.",
+                        "unresolved target or source-expression TODO placeholder.",
                         group=group_name,
                         rule=name,
                         severity="warning",

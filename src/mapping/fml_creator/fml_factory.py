@@ -12,7 +12,6 @@ from data_handling.url_resolver.fhir_url_resolver import resolve_url
 
 import logging
 
-logger = logging.getLogger(__name__)
 from mapping.fml_creator.fml_helper import (
     find_reference_fields,
     is_primitive_type,
@@ -38,6 +37,8 @@ from mapping.fml_creator.fml_extension import _ExtensionRulesMixin
 from mapping.fml_creator.fml_slice import _SliceRulesMixin
 from mapping.fml_creator.fml_coded import _CodedRulesMixin
 from mapping.target_tree import TargetTree
+
+logger = logging.getLogger(__name__)
 
 
 @lru_cache(maxsize=None)
@@ -213,7 +214,13 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         return normalized, codes[0]
 
     @staticmethod
-    def _provided_type_structure(fields, automapped_mappings):
+    def _provided_type_structure(
+        fields,
+        automapped_mappings,
+        *,
+        include_fixed=True,
+        unsliced_fixed_only=False,
+    ):
         """Keep only complex-type branches with an explicit provider.
 
         """
@@ -233,6 +240,8 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             nested = FMLRuleFactory._provided_type_structure(
                 child.get("type_structure") or child.get("children") or [],
                 mappings,
+                include_fixed=include_fixed,
+                unsliced_fixed_only=unsliced_fixed_only,
             )
             if child.get("type_structure") is not None:
                 child_copy["type_structure"] = nested
@@ -240,11 +249,60 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 child_copy["children"] = nested
             if (
                 _provided(child.get("path"))
-                or has_fixed_value(child.get("fixed_value"))
+                or (
+                    include_fixed
+                    and has_fixed_value(child.get("fixed_value"))
+                    and (
+                        not unsliced_fixed_only
+                        or ":" not in str(child.get("id") or "")
+                    )
+                )
                 or nested
             ):
                 kept.append(child_copy)
         return kept
+
+    @classmethod
+    def _unsliced_generation_field(cls, field, automapped_mappings):
+        """Build the base-element view used for an authored unsliced provider.
+
+        Named-slice descendants can share the same FHIR ``path`` as the base
+        element.  Once those descendants have been attached to the parser tree,
+        recursively emitting the full tree would also recreate unrelated slice
+        scaffolds (Ontario's translation extensions are the concrete example).
+        The generic entry therefore contains only explicitly addressed branches;
+        named slices are emitted separately by their slice-qualified rules.
+        """
+        base = dict(field)
+        base["slices"] = []
+        base["slicing"] = {}
+        for key in ("children", "type_structure"):
+            if field.get(key) is not None:
+                base[key] = cls._provided_type_structure(
+                    field.get(key) or [],
+                    automapped_mappings,
+                    include_fixed=True,
+                    unsliced_fixed_only=True,
+                )
+
+        raw_types = field.get("type")
+        if isinstance(raw_types, list):
+            normalized_types = []
+            for raw_type in raw_types:
+                if not isinstance(raw_type, dict):
+                    normalized_types.append(raw_type)
+                    continue
+                type_copy = dict(raw_type)
+                if raw_type.get("type_structure") is not None:
+                    type_copy["type_structure"] = cls._provided_type_structure(
+                        raw_type.get("type_structure") or [],
+                        automapped_mappings,
+                        include_fixed=True,
+                        unsliced_fixed_only=True,
+                    )
+                normalized_types.append(type_copy)
+            base["type"] = normalized_types
+        return base
 
     @staticmethod
     def _has_descendant_slices(field):
@@ -266,6 +324,38 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             pending.extend(child.get("children") or [])
             pending.extend(child.get("type_structure") or [])
         return False
+
+    @staticmethod
+    def _unsliced_provider_keys(field, automapped_mappings):
+        """Return providers addressed to the unsliced element or its descendants.
+
+        A key below ``Condition.code.coding`` is intentionally distinct from
+        ``Condition.code.coding:icd10``.  The former may populate an ordinary entry
+        when slicing is open; the latter explicitly selects a named slice.
+        """
+        path = field.get("path")
+        if not path:
+            return []
+        return [
+            key
+            for key in (automapped_mappings or {})
+            if key == path or key.startswith(path + ".")
+        ]
+
+    @staticmethod
+    def _slicing_rules(field):
+        """Return the FHIR slicing rule, accepting parser variants on child slices."""
+        slicing = field.get("slicing") or {}
+        if not slicing:
+            slicing = next(
+                (
+                    candidate.get("slicing")
+                    for candidate in (field.get("slices") or [])
+                    if isinstance(candidate, dict) and candidate.get("slicing")
+                ),
+                {},
+            )
+        return slicing.get("rules", "open")
 
     def _reference_base_type(self, url):
         """Resolve a canonical profile URL to its FHIR base type (e.g. a MinimalCondition3
@@ -341,9 +431,23 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 for s in (field.get("slices") or [])
             )
 
-            if not has_nonext_slices:
+            unsliced_provider_keys = (
+                self._unsliced_provider_keys(field, automapped_mappings)
+                if has_nonext_slices
+                else []
+            )
+            slicing_rules = (
+                self._slicing_rules(field) if has_nonext_slices else None
+            )
+
+            def _append_base_rule():
+                base_field = (
+                    self._unsliced_generation_field(field, automapped_mappings)
+                    if has_nonext_slices
+                    else field
+                )
                 rule = self.create_mappable_field_rule(
-                    field,
+                    base_field,
                     res_type,
                     parent_source_context,
                     parent_target_context,
@@ -353,6 +457,40 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 )
                 if rule:
                     rules.append(rule)
+
+            # FHIR open slicing permits entries that do not match a named slice.
+            # Preserve an explicitly authored unsliced provider as exactly one base
+            # entry instead of dropping it or broadcasting it into every slice.
+            # openAtEnd has the same semantics but constrains its output order.
+            if not has_nonext_slices or (
+                unsliced_provider_keys and slicing_rules == "open"
+            ):
+                _append_base_rule()
+            elif unsliced_provider_keys and slicing_rules == "closed":
+                identity = field.get("id") or field.get("path")
+                self.record_diagnostic(
+                    "unsliced-provider-for-closed-slicing",
+                    f"Unsliced mapping target {identity} cannot create an entry in "
+                    "closed slicing. Use a slice-qualified mapping target.",
+                    path=identity,
+                    provider_keys=unsliced_provider_keys,
+                    slicing_rules=slicing_rules,
+                    severity="error",
+                )
+            elif unsliced_provider_keys and slicing_rules not in (
+                "open",
+                "openAtEnd",
+            ):
+                identity = field.get("id") or field.get("path")
+                self.record_diagnostic(
+                    "unsupported-slicing-rules",
+                    f"Unsliced mapping target {identity} uses unsupported slicing "
+                    f"rules {slicing_rules!r}.",
+                    path=identity,
+                    provider_keys=unsliced_provider_keys,
+                    slicing_rules=slicing_rules,
+                    severity="error",
+                )
 
             def _tc(v):
                 t = v.get("type")
@@ -371,6 +509,25 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 else list(_iter_slices(field.get("slices", [])))
             )
             for slice_field in slices:
+                if (
+                    slice_field.get("path")
+                    and field.get("path")
+                    and slice_field.get("path") != field.get("path")
+                ):
+                    # Some parser trees retain descendant slices in an ancestor's
+                    # flattened slice collection as well as below their real
+                    # element. Emitting one here hoists it to the wrong target
+                    # context (e.g. Coding.display.extension under
+                    # CodeableConcept). Its owning child will handle it when that
+                    # child branch is actually selected.
+                    logger.info(
+                        "Skipping descendant slice %s while emitting %s; "
+                        "its element path is %s.",
+                        slice_field.get("id") or slice_field.get("sliceName"),
+                        field.get("path"),
+                        slice_field.get("path"),
+                    )
+                    continue
                 if (
                     slice_field.get("slices")
                     and not _has_direct_slice_provider(field, slice_field)
@@ -416,6 +573,13 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                     )
                 if slice_rule:
                     rules.append(slice_rule)
+
+            if (
+                has_nonext_slices
+                and unsliced_provider_keys
+                and slicing_rules == "openAtEnd"
+            ):
+                _append_base_rule()
 
         return rules
 
