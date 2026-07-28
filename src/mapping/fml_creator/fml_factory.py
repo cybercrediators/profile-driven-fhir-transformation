@@ -76,6 +76,32 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         self.plugins = plugins or []
         self.source_field_types: dict = {}
 
+    def _resolve_choice_element(
+        self, field, base_name: str, path: str, automapped_mappings
+    ):
+        """Concrete element name for a polymorphic element, or ``None`` if ambiguous.
+
+        Resolution order: the profile's own narrowing to a single type, then the mapped
+        source field's declared type. Several candidates left means the author has to say
+        which one — guessing produced the wrong variant (backlog item 25).
+        """
+        candidates = [c for c in (type_codes(field.get("type")) or []) if c and c != "N/A"]
+        if not candidates:
+            candidates = [c for c in (field.get("choice_types") or []) if c]
+        if len(candidates) > 1 and automapped_mappings:
+            src_id = automapped_mappings.get(path) or ""
+            src_name = src_id.split(".")[-1] if src_id else ""
+            src_type = self.source_field_types.get(src_name, "") if src_name else ""
+            preferred = canonical_primitive(src_type) if src_type else None
+            if preferred:
+                narrowed = [c for c in candidates if c.lower() == preferred.lower()]
+                if narrowed:
+                    candidates = narrowed
+        if len(candidates) != 1:
+            return None
+        suffix = self._choice_suffix(candidates[0])
+        return f"{base_name}{suffix}" if suffix else base_name
+
     def _choice_suffix(self, choice_type: str) -> str:
         if not isinstance(choice_type, str):
             return ""
@@ -368,6 +394,19 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         # Handle fixed values for all types (primitives, etc.)
         fixed_value = field.get("fixed_value")
         if fixed_value:
+            # N2: a dot left in clean_path means this leaf sits below the element the
+            # current target context represents, i.e. its parent chain was never
+            # materialised. Attaching the leaf here would write it at the wrong level —
+            # `Procedure.reasonReference.type` (fixedUri "Task") became `Procedure.type`,
+            # which R4 does not define, and the engine aborted the whole transform.
+            # A nested fixed leaf may only be emitted once its parent owns a context.
+            if "." in clean_path:
+                logger.info(
+                    "Not emitting fixed value for %s: its parent chain has no target "
+                    "context (optional parent without a provider).",
+                    path,
+                )
+                return None
             is_pattern = bool(field.get("is_pattern"))
             min_c = int((cardinality or {}).get("min", 0) or 0)
             is_req = min_c > 0 or bool(field.get("is_required"))
