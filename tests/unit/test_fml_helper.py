@@ -6,6 +6,7 @@ preserving change is provably behaviour-preserving and an intended spec-correcti
 only thing that moves an assertion.
 """
 
+from decimal import Decimal
 from types import SimpleNamespace
 
 import pytest
@@ -159,6 +160,28 @@ def test_clean_field_name(name, expected):
 def test_fixed_scalar_literal(value, expected):
     # Booleans must take FHIR lexical form, not Python's str() capitalization.
     assert H.fixed_scalar_literal(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value,field_type,attribute,expected",
+    [
+        (False, "boolean", "valueBoolean", False),
+        (0, [{"code": "integer"}], "valueInteger", 0),
+        (7, "positiveInt", "valueInteger", 7),
+        (Decimal("1.25"), "decimal", "valueDecimal", Decimal("1.25")),
+        (True, None, "valueBoolean", True),
+        (3, None, "valueInteger", 3),
+        (2.5, None, "valueDecimal", Decimal("2.5")),
+        (3, "string", "valueString", "3"),
+    ],
+)
+def test_fixed_scalar_parameter_preserves_fhir_literal_type(
+    value, field_type, attribute, expected
+):
+    parameter = H.fixed_scalar_parameter(value, field_type)
+    assert getattr(parameter, attribute) == expected
+    populated = parameter.model_dump(exclude_none=True)
+    assert list(populated) == [attribute]
 
 
 # ── factory pure helpers (_choice_suffix / _as_local_element) ─────────────────

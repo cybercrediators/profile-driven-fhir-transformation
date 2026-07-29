@@ -1079,13 +1079,33 @@ class StructureMapGenerator:
         self.factory.collection_rules = {}
 
         source_index = {}
+        relative_source_candidates = {}
         for field in source_fields or []:
             field_id = field.get("id")
             field_path = field.get("path")
+            resolved_id = field_id or field_path
             if field_id:
                 source_index[field_id] = field_id
             if field_path:
-                source_index[field_path] = field_id or field_path
+                source_index[field_path] = resolved_id
+            # Mapping tables historically address source elements relative to the
+            # generated logical model root (`givenName`, `contact.value`, ...).
+            # Retain that documented shorthand, but only when it resolves
+            # uniquely; exact full paths always take precedence.
+            for candidate in {field_id, field_path} - {None}:
+                if "." not in candidate:
+                    continue
+                relative = candidate.split(".", 1)[1]
+                relative_source_candidates.setdefault(relative, set()).add(resolved_id)
+
+        ambiguous_source_paths = set()
+        for relative, candidates in relative_source_candidates.items():
+            if relative in source_index:
+                continue
+            if len(candidates) == 1:
+                source_index[relative] = next(iter(candidates))
+            else:
+                ambiguous_source_paths.add(relative)
 
         target_index = {}
         target_cardinality = {}
@@ -1245,37 +1265,60 @@ class StructureMapGenerator:
             else:
                 normalized_target = target_text
 
-            source_id = source_index.get(source_key, source_key)
+            source_id = source_index.get(source_key)
+            source_is_todo = isinstance(source_key, str) and source_key.startswith(
+                ("TODO_", "TODO-")
+            )
+            source_valid = source_id is not None or source_is_todo
+            if source_is_todo:
+                # Sparse mapping tables deliberately use non-matching TODO source
+                # elements as human-fillable scaffolds.
+                source_id = source_key
+            elif source_key in ambiguous_source_paths:
+                self._append_diagnostic(
+                    "mapping-source-path-ambiguous",
+                    "Relative custom mapping source matches multiple elements in "
+                    "the representative source structure. Use the full source path.",
+                    source=source_key,
+                    target=target_text,
+                )
+                logger.warning(
+                    "Relative custom mapping source is ambiguous; use a full path: %s",
+                    source_key,
+                )
+            elif source_id is None:
+                self._append_diagnostic(
+                    "mapping-source-path-not-found",
+                    "Custom mapping source is absent from the representative "
+                    "source structure.",
+                    source=source_key,
+                    target=target_text,
+                )
+                logger.warning(
+                    "Custom mapping source not found in representative source: %s",
+                    source_key,
+                )
 
             target_path = target_index.get(normalized_target)
             if not target_path and not normalized_target.startswith(f"{res_type}."):
                 target_path = target_index.get(f"{res_type}.{normalized_target}")
 
             if not target_path:
-                base_candidate = (
-                    normalized_target.split(":")[0]
-                    if ":" in normalized_target
-                    else normalized_target.rsplit(".", 1)[0]
+                self._append_diagnostic(
+                    "mapping-target-path-not-found",
+                    "Custom mapping target is absent from the target profile snapshot. "
+                    "Use an exact element, choice variant, or slice path.",
+                    source=source_key,
+                    target=target_text,
                 )
-                if base_candidate in target_index:
-                    # If the base resolves to a choice element (value[x]) keyed under its
-                    # concrete name (valueQuantity), rewrite the whole target to the value[x]
-                    # form so a sub-leaf mapping (valueQuantity.value) matches the actual field
-                    # path (value[x].value) — otherwise the leaf's source never resolves.
-                    resolved_base = target_index[base_candidate]
-                    sub = normalized_target[len(base_candidate):]
-                    if "[x]" in str(resolved_base) and resolved_base != base_candidate:
-                        target_path = f"{resolved_base}{sub}"
-                    else:
-                        target_path = normalized_target
-
-            if not target_path:
                 logger.warning(
                     "Custom mapping target not found in %s (id=%s): %s",
                     res_type,
                     res_id,
                     target_text,
                 )
+
+            if not source_valid or not target_path:
                 continue
 
             if isinstance(target_value, dict):

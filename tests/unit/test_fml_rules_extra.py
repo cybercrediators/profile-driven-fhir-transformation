@@ -2,6 +2,7 @@
 exercise: meta.profile stamping (A), type-aware discriminator hints (D), and the
 required-element coverage report (E)."""
 
+from decimal import Decimal
 from types import SimpleNamespace
 
 import pytest
@@ -667,11 +668,15 @@ def test_choice_resolution_uses_snapshot_narrowing_not_base_candidate_list(facto
 
 
 @pytest.mark.parametrize(
-    ("field_type", "fixed_value", "literal"),
-    [("boolean", False, "false"), ("integer", 0, "0"), ("decimal", 0, "0")],
+    ("field_type", "fixed_value", "attribute", "literal"),
+    [
+        ("boolean", False, "valueBoolean", False),
+        ("integer", 0, "valueInteger", 0),
+        ("decimal", 0, "valueDecimal", Decimal("0")),
+    ],
 )
 def test_falsy_fixed_primitive_is_emitted(
-    factory, field_type, fixed_value, literal
+    factory, field_type, fixed_value, attribute, literal
 ):
     rule = factory.create_mappable_field_rule(
         {
@@ -686,7 +691,9 @@ def test_falsy_fixed_primitive_is_emitted(
     )
 
     assert rule.target[0].element == f"value{factory._choice_suffix(field_type)}"
-    assert rule.target[0].parameter[0].valueString == literal
+    parameter = rule.target[0].parameter[0]
+    assert getattr(parameter, attribute) == literal
+    assert parameter.valueString is None
 
 
 def test_raw_constrained_coded_choice_merges_coding_leaf_rules(factory):

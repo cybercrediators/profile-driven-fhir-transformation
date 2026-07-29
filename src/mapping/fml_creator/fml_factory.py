@@ -24,7 +24,7 @@ from mapping.fml_creator.fml_helper import (
     is_extension_type,
     is_reference_type,
     type_codes,
-    fixed_scalar_literal,
+    fixed_scalar_parameter,
     attr as _attr,
     BASE_META_SUFFIXES,
     has_fixed_value,
@@ -854,6 +854,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                     field_name,
                     parent_target_context,
                     parent_source_context,
+                    field=field,
                 )
 
         var_suffix = clean_field_name(base_field_name)
@@ -1711,11 +1712,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         target.context = target_context
         target.element = disc_path
         target.transform = "copy"
-        target.parameter = [
-            StructureMapGroupRuleTargetParameter.model_construct(
-                valueString=fixed_scalar_literal(value)
-            )
-        ]
+        target.parameter = [fixed_scalar_parameter(value)]
         rule.target = [target]
 
         return rule

@@ -5,6 +5,7 @@ Only self-contained helpers that can be exercised with small dict fixtures are
 covered here -- full map-generation is exercised by tests/integration/test_golden_regen.py.
 """
 
+from decimal import Decimal
 from types import SimpleNamespace
 
 import pytest
@@ -357,7 +358,7 @@ def test_fixed_coding_raw_type_list_is_created_not_stringified(factory):
     assert str(fixed) not in str(rule.model_dump())
 
 
-def test_unsupported_fixed_complex_value_is_omitted_not_stringified(factory):
+def test_fixed_quantity_is_emitted_recursively_not_stringified(factory):
     rule = factory._create_fixed_value_rule(
         [{"code": "Quantity"}],
         {"value": 12, "unit": "mg"},
@@ -366,7 +367,108 @@ def test_unsupported_fixed_complex_value_is_omitted_not_stringified(factory):
         "source",
     )
 
-    assert rule is None
+    target = rule.target[0]
+    assert target.transform == "create"
+    assert target.parameter[0].valueString == "Quantity"
+    children = {child.target[0].element: child.target[0] for child in rule.rule}
+    assert children["value"].parameter[0].valueDecimal == Decimal("12")
+    assert children["unit"].parameter[0].valueString == "mg"
+    assert str({"value": 12, "unit": "mg"}) not in str(rule.model_dump())
+
+
+def test_fixed_identifier_emits_nested_period(factory):
+    rule = factory._create_fixed_value_rule(
+        [{"code": "Identifier"}],
+        {
+            "use": "official",
+            "system": "urn:example",
+            "value": "123",
+            "period": {"start": "2020-01-01"},
+        },
+        "identifier",
+        "target",
+        "source",
+    )
+
+    children = {child.target[0].element: child for child in rule.rule}
+    period = children["period"]
+    assert period.target[0].transform == "create"
+    assert period.target[0].parameter[0].valueString == "Period"
+    assert period.rule[0].target[0].element == "start"
+    assert period.rule[0].target[0].parameter[0].valueString == "2020-01-01"
+
+
+def test_fixed_repeating_primitive_children_get_distinct_rules(factory):
+    rule = factory._create_fixed_value_rule(
+        [{"code": "HumanName"}],
+        {"family": "Smith", "given": ["Alice", "A"]},
+        "name",
+        "target",
+        "source",
+    )
+
+    given = [child for child in rule.rule if child.target[0].element == "given"]
+    assert [child.name for child in given] == [
+        "add-fixed-name-given-0",
+        "add-fixed-name-given-1",
+    ]
+    assert [child.target[0].parameter[0].valueString for child in given] == [
+        "Alice",
+        "A",
+    ]
+
+
+def test_profile_prohibited_complex_child_is_not_emitted(factory):
+    factory.diagnostics = []
+    field = {
+        "type": [
+            {
+                "code": "Identifier",
+                "type_structure": [
+                    {
+                        "path": "Identifier.system",
+                        "type": "uri",
+                        "cardinality": {"min": 0, "max": "0"},
+                    }
+                ],
+            }
+        ]
+    }
+    rule = factory._create_fixed_value_rule(
+        field["type"],
+        {"system": "urn:forbidden", "value": "123"},
+        "identifier",
+        "target",
+        "source",
+        field=field,
+    )
+
+    assert {child.target[0].element for child in rule.rule} == {"value"}
+    assert factory.diagnostics[0]["code"] == "complex-fixed-child-prohibited"
+
+
+@pytest.mark.parametrize(
+    "field_type,value,attribute,expected",
+    [
+        ("boolean", False, "valueBoolean", False),
+        ("integer", 0, "valueInteger", 0),
+        ("decimal", 1.5, "valueDecimal", Decimal("1.5")),
+    ],
+)
+def test_profile_fixed_scalar_rule_uses_typed_parameter(
+    factory, field_type, value, attribute, expected
+):
+    rule = factory._create_fixed_value_rule(
+        [{"code": field_type}],
+        value,
+        "value",
+        "target",
+        "source",
+    )
+
+    parameter = rule.target[0].parameter[0]
+    assert getattr(parameter, attribute) == expected
+    assert parameter.valueString is None
 
 
 # ── _infer_pattern_type ────────────────────────────────────────────────────────

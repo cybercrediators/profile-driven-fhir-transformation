@@ -170,13 +170,107 @@ def test_duplicate_target_assignments_are_diagnosed(caplog):
     assert "Duplicate custom mapping target" in caplog.text
 
 
-def test_unknown_child_of_a_known_base_is_accepted_verbatim():
-    """Documents PRE-EXISTING looseness, unchanged by choice-children support.
+def test_unknown_child_of_a_known_base_is_rejected():
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"src.bogus": "Observation.value[x].notAChild"},
+        [{"id": "bogus", "path": "src.bogus"}],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
 
-    ``_apply_custom_mapping_table`` falls back to accepting any sub-path whose base
-    resolves, so a target no candidate type owns (a typo, say) is passed through
-    rather than warned about. Tightening it would touch every sliced/choice field,
-    so it is recorded here rather than changed.
-    """
-    mappings = _resolve({"src.bogus": "Observation.value[x].notAChild"})
-    assert mappings.get("Observation.value[x].notAChild") == "bogus"
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-target-path-not-found"
+    assert gen.mapping_diagnostics[0]["target"] == "Observation.value[x].notAChild"
+
+
+def test_unknown_source_path_is_rejected():
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"src.missing": "Observation.value[x].text"},
+        [{"id": "present", "path": "src.present"}],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-source-path-not-found"
+    assert gen.mapping_diagnostics[0]["source"] == "src.missing"
+
+
+def test_unique_root_relative_source_path_is_accepted():
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"value": "Observation.value[x].text"},
+        [{"id": "Source.value", "path": "Source.value"}],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert "Observation.value[x].text" in paths
+    assert mappings["Observation.value[x].text"] == "Source.value"
+    assert gen.mapping_diagnostics == []
+
+
+def test_ambiguous_root_relative_source_path_requires_full_path():
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"value": "Observation.value[x].text"},
+        [
+            {"id": "First.value", "path": "First.value"},
+            {"id": "Second.value", "path": "Second.value"},
+        ],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-source-path-ambiguous"
+
+
+@pytest.mark.parametrize("source", ["TODO_MAP_VALUE", "TODO-MAP-VALUE"])
+def test_todo_source_scaffolds_remain_valid(source):
+    gen = _generator()
+    field = conv_mappable(None, _choice_field())
+    paths, mappings = gen._apply_custom_mapping_table(
+        {source: "Observation.value[x].text"},
+        [],
+        [field],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert "Observation.value[x].text" in paths
+    assert mappings["Observation.value[x].text"] == source
+    assert gen.mapping_diagnostics == []
+
+
+def test_unknown_slice_is_rejected_even_when_unsliced_base_exists():
+    gen = _generator()
+    target = {
+        "path": "Observation.component",
+        "type": "BackboneElement",
+        "cardinality": {"min": 0, "max": "*"},
+    }
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"src.value": "Observation.component:not-a-slice"},
+        [{"id": "value", "path": "src.value"}],
+        [target],
+        "Observation",
+        "obs-profile",
+    )
+
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-target-path-not-found"

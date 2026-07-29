@@ -260,6 +260,88 @@ def test_parse_retains_prohibited_slice_child_for_exists_discriminator():
     assert period["is_prohibited"] is True
 
 
+def test_parse_indexes_extension_slice_below_backbone_slice():
+    """A slice below a sliced backbone child belongs to that child, not the root."""
+
+    canonical = "http://example.org/StructureDefinition/contact-role"
+    elements = [
+        _elem(
+            "Patient.contact",
+            min=0,
+            max="*",
+            type=[ElementDefinitionType(code="BackboneElement")],
+            slicing={
+                "discriminator": [{"type": "value", "path": "extension.url"}],
+                "rules": "open",
+            },
+        ),
+        _elem(
+            "Patient.contact",
+            id="Patient.contact:research",
+            sliceName="research",
+            min=1,
+            max="1",
+            type=[ElementDefinitionType(code="BackboneElement")],
+        ),
+        _elem(
+            "Patient.contact.extension",
+            id="Patient.contact:research.extension",
+            min=1,
+            max="*",
+            type=[ElementDefinitionType(code="Extension")],
+            slicing={
+                "discriminator": [{"type": "value", "path": "url"}],
+                "rules": "open",
+            },
+        ),
+        _elem(
+            "Patient.contact.extension",
+            id="Patient.contact:research.extension:role",
+            sliceName="role",
+            min=1,
+            max="1",
+            type=[
+                ElementDefinitionType(code="Extension", profile=[canonical])
+            ],
+        ),
+        _elem(
+            "Patient.contact.extension.value[x]",
+            id="Patient.contact:research.extension:role.value[x]",
+            min=1,
+            max="1",
+            type=[ElementDefinitionType(code="string")],
+        ),
+    ]
+    ro = _sd_ro(elements)
+
+    sdp.parse_structure_definition(ro, _app_state())
+
+    contact = next(
+        field for field in ro.mappable_fields if field["path"] == "Patient.contact"
+    )
+    research = contact["slices"][0]
+    extension = next(
+        child
+        for child in research["children"]
+        if child["id"] == "Patient.contact:research.extension"
+    )
+    assert extension["slicing"]["discriminators"] == [
+        {"path": "url", "type": "value"}
+    ]
+    assert [item["slice_identity"] for item in extension["slices"]] == [
+        "Patient.contact:research.extension:role"
+    ]
+    role = extension["slices"][0]
+    assert role["extension_url"] == canonical
+    assert [child["id"] for child in role["children"]] == [
+        "Patient.contact:research.extension:role.value[x]"
+    ]
+    assert all(
+        child["id"] != "Patient.contact:research.extension:role.value[x]"
+        for child in research["children"]
+    )
+
+
 # --------------------------------------------------------------------------- #
 # minimal-mode prune keeps a slice's mapped descendants (marker/[x]-tolerant)
 # --------------------------------------------------------------------------- #

@@ -1,5 +1,4 @@
 import logging
-logger = logging.getLogger(__name__)
 
 from parser.resource_parser import structure_definition_parser
 from parser.resource_parser.value_expander import expand_valueset
@@ -9,6 +8,8 @@ from parser.resource_parser.fhir_type_introspection import (
 )
 from parser.resource_parser.template_writer import set_value_in_temp_dict
 from helpers.utils import get_value_from_element
+
+logger = logging.getLogger(__name__)
 
 
 def parse_element_definition(res_dict, elem, sd, app_state):
@@ -43,6 +44,11 @@ def parse_element_definition(res_dict, elem, sd, app_state):
                 tmp["profile_canonical"] = list(t.profile)
                 tmp["profile"] = []
                 for pf in t.profile:
+                    if t.code == "Extension" and extension_profile_url is None:
+                        # The canonical is part of the ElementDefinition itself; it
+                        # remains usable even when the referenced extension profile
+                        # is not present in the local registry.
+                        extension_profile_url = pf
                     profile_sd = app_state.registry.get_obj_by_name(pf)
                     # TODO: change this to parse_resource when its done
                     profile_sd, app_state = (
@@ -55,8 +61,6 @@ def parse_element_definition(res_dict, elem, sd, app_state):
                         tmp["profile"].append(pf)
                         continue
                     tmp["profile"].append(profile_sd.mappable_fields)
-                    if t.code == "Extension" and extension_profile_url is None:
-                        extension_profile_url = pf
 
             # expand complex types via fhir.resources
             if (

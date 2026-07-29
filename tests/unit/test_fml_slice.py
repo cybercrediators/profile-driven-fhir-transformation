@@ -648,14 +648,15 @@ def test_slice_child_fixed_rules_skips_empty_fixed_value(factory):
     assert factory._slice_child_fixed_rules(children, "tgt-mrn", "source", "identifier-mrn") == []
 
 
-def test_slice_child_fixed_rules_boolean_uses_fhir_lexical_form(factory):
-    # str(True) is "True" — a fixed boolean must serialize as FHIR-lexical "true".
+def test_slice_child_fixed_rules_boolean_uses_typed_parameter(factory):
     children = [{"path": "Patient.deceased:flag.deceasedBoolean", "type": [{"code": "boolean"}], "fixed_value": True}]
     rules = factory._slice_child_fixed_rules(children, "tgt-flag", "source", "deceased-flag")
-    assert rules[0].target[0].parameter[0].valueString == "true"
+    assert rules[0].target[0].parameter[0].valueBoolean is True
+    assert rules[0].target[0].parameter[0].valueString is None
     children[0]["fixed_value"] = False
     rules = factory._slice_child_fixed_rules(children, "tgt-flag", "source", "deceased-flag")
-    assert rules[0].target[0].parameter[0].valueString == "false"
+    assert rules[0].target[0].parameter[0].valueBoolean is False
+    assert rules[0].target[0].parameter[0].valueString is None
 
 
 # ── _emit_subpath_population in isolation ───────────────────────────────────────
@@ -832,6 +833,183 @@ def test_slice_instance_extension_slice_unresolvable_canonical_is_dropped(factor
     for r in rule.rule or []:
         for t in r.target or []:
             assert ":" not in (t.element or "")
+
+
+def test_required_nested_extension_slice_is_emitted_under_backbone_slice(factory):
+    from types import SimpleNamespace
+
+    canonical = "http://example.org/StructureDefinition/contact-role"
+    exact_id = "Organization.contact:forschungskontakt.extension:rolle"
+    factory._current_profile_sd = SimpleNamespace(
+        snapshot=SimpleNamespace(
+            element=[
+                SimpleNamespace(
+                    id=exact_id,
+                    type=[SimpleNamespace(profile=[canonical])],
+                )
+            ]
+        )
+    )
+    factory.app_state = SimpleNamespace(
+        registry=SimpleNamespace(registry_objects={}),
+        cache=SimpleNamespace(
+            get_resource_from_cache=lambda url: None,
+            add_resource_to_cache=lambda resource: None,
+        ),
+        conf={"resource_cache_path": "/nonexistent-dir-xyz"},
+        dataIO=None,
+    )
+    factory.map_url = "http://example.org/fml"
+    factory.overwrite = False
+    factory.plugins = []
+
+    parent_field = {
+        "path": "Organization.contact",
+        "type": [{"code": "BackboneElement"}],
+    }
+    slice_field = {
+        "path": "Organization.contact",
+        "id": "Organization.contact:forschungskontakt",
+        "slice_identity": "Organization.contact:forschungskontakt",
+        "sliceName": "forschungskontakt",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "*"},
+        "children": [
+            {
+                "path": "Organization.contact.extension",
+                "id": "Organization.contact:forschungskontakt.extension",
+                "type": [{"code": "Extension"}],
+                "cardinality": {"min": 1, "max": "*"},
+                "slices": [
+                    {
+                        "path": "Organization.contact.extension",
+                        "id": exact_id,
+                        "slice_identity": exact_id,
+                        "sliceName": "rolle",
+                        "type": [
+                            {
+                                "code": "Extension",
+                                "profile_canonical": [canonical],
+                            }
+                        ],
+                        "cardinality": {"min": 1, "max": "1"},
+                    }
+                ],
+            }
+        ],
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent_field, slice_field, "Organization", "src", "tgt", {}
+    )
+
+    extension = next(
+        child for child in rule.rule if child.name.startswith("map-extension-rolle")
+    )
+    assert extension.source[0].element.startswith("TODO-MAP-")
+    assert extension.target[0].context == "tgt-contact-forschungskontakt"
+    assert extension.target[0].element == "extension"
+    assert extension.rule[0].target[0].parameter[0].valueString == canonical
+    assert not any(
+        target.element == "extension"
+        for child in rule.rule
+        if child is not extension
+        for target in (child.target or [])
+    )
+
+
+def test_required_extension_below_primitive_choice_uses_primitive_context(factory):
+    from types import SimpleNamespace
+
+    canonical = "http://example.org/StructureDefinition/content-codeable-concept"
+    exact_id = (
+        "Communication.payload:responseProposalContraIndication"
+        ".content[x].extension:contentCodeableConcept"
+    )
+    factory._current_profile_sd = SimpleNamespace(
+        snapshot=SimpleNamespace(
+            element=[
+                SimpleNamespace(
+                    id=exact_id,
+                    type=[SimpleNamespace(profile=[canonical])],
+                )
+            ]
+        )
+    )
+    factory.app_state = SimpleNamespace(
+        registry=SimpleNamespace(registry_objects={}),
+        cache=SimpleNamespace(
+            get_resource_from_cache=lambda url: None,
+            add_resource_to_cache=lambda resource: None,
+        ),
+        conf={"resource_cache_path": "/nonexistent-dir-xyz"},
+        dataIO=None,
+    )
+    factory.map_url = "http://example.org/fml"
+    factory.overwrite = False
+    factory.plugins = []
+
+    parent = {
+        "path": "Communication.payload",
+        "type": [{"code": "BackboneElement"}],
+    }
+    slice_field = {
+        "path": "Communication.payload",
+        "id": "Communication.payload:responseProposalContraIndication",
+        "sliceName": "responseProposalContraIndication",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [
+            {
+                "path": "Communication.payload.content[x]",
+                "id": (
+                    "Communication.payload:responseProposalContraIndication"
+                    ".content[x]"
+                ),
+                "type": [{"code": "string"}],
+                "is_type_choice": True,
+                "cardinality": {"min": 1, "max": "1"},
+                "is_required": True,
+                "children": [
+                    {
+                        "path": "Communication.payload.content[x].extension",
+                        "id": (
+                            "Communication.payload:responseProposalContraIndication"
+                            ".content[x].extension"
+                        ),
+                        "type": [{"code": "Extension"}],
+                        "cardinality": {"min": 1, "max": "*"},
+                        "slices": [
+                            {
+                                "path": (
+                                    "Communication.payload.content[x].extension"
+                                ),
+                                "id": exact_id,
+                                "slice_identity": exact_id,
+                                "sliceName": "contentCodeableConcept",
+                                "type": [{"code": "Extension"}],
+                                "cardinality": {"min": 1, "max": "1"},
+                            }
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Communication", "src", "tgt", {}
+    )
+
+    content = next(child for child in rule.rule if child.name.endswith("-content"))
+    assert content.target[0].element == "contentString"
+    assert content.target[0].variable == (
+        "tgt-payload-responseProposalContraIndication-content"
+    )
+    extension = content.rule[0]
+    assert extension.target[0].context == content.target[0].variable
+    assert extension.target[0].element == "extension"
+    assert extension.rule[0].target[0].parameter[0].valueString == canonical
 
 
 # ── G3: sibling leaves of one repeating sub-element merge into a single entry ───

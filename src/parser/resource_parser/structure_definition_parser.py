@@ -1,13 +1,13 @@
 import uuid
 from copy import deepcopy
+import logging
 
 from data_handling.app_state import AppState
 from parser.resource_parser import element_definition_parser
-import logging
-logger = logging.getLogger(__name__)
-
 from fhir.resources.R4B import get_fhir_model_class
 from fhir.resources.R4B.meta import Meta
+
+logger = logging.getLogger(__name__)
 
 
 def parse_structure_definition(sd, app_state: AppState, p_prefix=None):
@@ -191,7 +191,37 @@ def extract_slice_descendants(elem_list):
     return out
 
 
-def _attach_slice_children(slice_info, slice_elem, descendants, res_dict, sd, app_state):
+def _slicing_info(elem):
+    """Normalize one ElementDefinition.slicing declaration for parser fields."""
+
+    slicing = getattr(elem, "slicing", None)
+    if not slicing:
+        return None
+    discriminators = [
+        {"path": discriminator.path, "type": discriminator.type}
+        for discriminator in (slicing.discriminator or [])
+    ]
+    info = {
+        "discriminators": discriminators,
+        "ordered": bool(slicing.ordered),
+        "rules": slicing.rules,
+    }
+    if discriminators:
+        info["slicing_type"] = discriminators[0]["type"]
+        info["discriminator_path"] = discriminators[0]["path"]
+        info["discriminator"] = discriminators[0]
+    return info
+
+
+def _attach_slice_children(
+    slice_info,
+    slice_elem,
+    all_slices,
+    descendants,
+    res_dict,
+    sd,
+    app_state,
+):
     """Parse the descendant ElementDefinitions of one slice and nest them under ``slice_info``
     by ``id`` (the only key that distinguishes a slice's sub-tree from the unsliced element's)."""
     slice_id = getattr(slice_elem, "id", None)
@@ -199,7 +229,20 @@ def _attach_slice_children(slice_info, slice_elem, descendants, res_dict, sd, ap
         return
     slice_info.setdefault("children", [])
     local_map = {slice_id: slice_info}
-    kids = [d for d in descendants if (d.id or "").startswith(slice_id + ".")]
+    nested_slice_ids = [
+        nested.id
+        for nested in all_slices
+        if nested.id and nested.id.startswith(slice_id + ".")
+    ]
+    kids = [
+        descendant
+        for descendant in descendants
+        if (descendant.id or "").startswith(slice_id + ".")
+        and not any(
+            (descendant.id or "").startswith(nested_id + ".")
+            for nested_id in nested_slice_ids
+        )
+    ]
     # shallow-to-deep so a parent is always present before its child is attached
     for d in sorted(kids, key=lambda e: (e.id or "").count(".")):
         child_info = element_definition_parser.parse_element_definition(
@@ -226,6 +269,35 @@ def _attach_slice_children(slice_info, slice_elem, descendants, res_dict, sd, ap
         if child_info is None:
             continue
         child_info.setdefault("children", [])
+        slicing = _slicing_info(d)
+        if slicing:
+            child_info["slicing"] = {
+                key: value
+                for key, value in slicing.items()
+                if key in {"discriminators", "ordered", "rules"}
+            }
+            for key in ("slicing_type", "discriminator_path", "discriminator"):
+                if key in slicing:
+                    child_info[key] = slicing[key]
+            child_info["slices"] = []
+            for nested_slice in get_slices(
+                all_slices,
+                d.path,
+                root_id=d.id or d.path,
+                direct_only=True,
+            ):
+                parsed = _parse_slice_tree(
+                    nested_slice,
+                    d.id or d.path,
+                    all_slices,
+                    descendants,
+                    res_dict,
+                    sd,
+                    app_state,
+                    child_info["slicing"],
+                )
+                if parsed is not None:
+                    child_info["slices"].append(parsed)
         local_map[d.id] = child_info
         parent_id = d.id.rsplit(".", 1)[0]
         parent = local_map.get(parent_id, slice_info)
@@ -288,7 +360,13 @@ def _parse_slice_tree(
     info["slice_selector"] = selector
     info["slicing"] = deepcopy(slicing)
     _attach_slice_children(
-        info, slice_elem, descendants, res_dict, sd, app_state
+        info,
+        slice_elem,
+        all_slices,
+        descendants,
+        res_dict,
+        sd,
+        app_state,
     )
     if parent_slice_info is not None:
         _inherit_reslice_constraints(parent_slice_info, info)

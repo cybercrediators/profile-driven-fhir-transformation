@@ -1,12 +1,14 @@
-from fhir.resources.R4B.structuremap import StructureMapGroupRuleTargetParameter
+from decimal import Decimal
+import logging
 import re
 from typing import Optional
 
-import logging
-logger = logging.getLogger(__name__)
+from fhir.resources.R4B.structuremap import StructureMapGroupRuleTargetParameter
 
 from data_handling.url_resolver.fhir_url_resolver import resolve_url
 from parser.resource_parser.fhir_type_introspection import PRIMITIVES
+
+logger = logging.getLogger(__name__)
 
 BASE_META_SUFFIXES = (
     ".id",
@@ -568,6 +570,38 @@ def type_codes(field_type) -> list:
                 codes.append(t)
         return codes
     return []
+
+
+def fixed_scalar_parameter(value, field_type=None):
+    """Build a typed StructureMap parameter for a profile-fixed scalar.
+
+    StructureMap has dedicated parameter choices for boolean, integer, and
+    decimal literals. Keeping those values in ``valueString`` loses their FHIR
+    type and delegates coercion to the execution engine.
+    """
+
+    codes = type_codes(field_type)
+    type_code = codes[0] if len(codes) == 1 else None
+
+    if type_code == "boolean" or (type_code is None and isinstance(value, bool)):
+        return StructureMapGroupRuleTargetParameter.model_construct(
+            valueBoolean=bool(value)
+        )
+    if type_code in {"integer", "positiveInt", "unsignedInt"} or (
+        type_code is None and isinstance(value, int) and not isinstance(value, bool)
+    ):
+        return StructureMapGroupRuleTargetParameter.model_construct(
+            valueInteger=int(value)
+        )
+    if type_code == "decimal" or (
+        type_code is None and isinstance(value, (float, Decimal))
+    ):
+        return StructureMapGroupRuleTargetParameter.model_construct(
+            valueDecimal=Decimal(str(value))
+        )
+    return StructureMapGroupRuleTargetParameter.model_construct(
+        valueString=fixed_scalar_literal(value)
+    )
 
 
 def is_extension_type(field_type) -> bool:

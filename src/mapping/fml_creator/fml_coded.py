@@ -1,8 +1,7 @@
+import json
+import logging
 from typing import Optional
 
-import logging
-
-logger = logging.getLogger(__name__)
 from fhir.resources.R4B.structuremap import (
     StructureMapGroupRule,
     StructureMapGroupRuleTarget,
@@ -18,13 +17,15 @@ from fhir.resources.R4B.conceptmap import (
 from mapping.fml_creator.fml_helper import (
     clean_field_name,
     fhir_type_suffix,
-    fixed_scalar_literal,
+    fixed_scalar_parameter,
     has_fixed_value,
     type_codes,
     attr as _attr,
 )
 from data_handling.url_resolver.fhir_url_resolver import resolve_url
-import json
+from parser.resource_parser.fhir_type_introspection import get_complex_type_fields
+
+logger = logging.getLogger(__name__)
 
 
 class _CodedRulesMixin:
@@ -346,6 +347,7 @@ class _CodedRulesMixin:
                 field_name,
                 parent_target_context,
                 parent_source_context,
+                field=field,
             )
         fixed_system = self._fixed_system_from_field(field)
 
@@ -609,7 +611,11 @@ class _CodedRulesMixin:
             ]
             cr.target = [ct]
             cr.rule = self._fixed_pattern_rules(
-                cvar, fc, parent_source_context, f"{nm}-coding{i}"
+                cvar,
+                fc,
+                parent_source_context,
+                f"{nm}-coding{i}",
+                parent_type="Coding",
             )
             nested.append(cr)
 
@@ -687,12 +693,158 @@ class _CodedRulesMixin:
             return "Coding"
         return None
 
-    def _fixed_pattern_rules(self, parent_var, fixed, src_ctx, name_prefix):
-        """create copy/create rules ppinning slice fixed-pattern values recursively"""
+    @staticmethod
+    def _fixed_structure_children(structure, parent_type=None):
+        """Return direct child schemas, preferring profile constraints.
+
+        Snapshot/parser fields may carry children in three different places.
+        Introspection fills only names that the snapshot representation omitted;
+        it never overrides a profile cardinality such as ``max=0``.
+        """
+
+        children = []
+        if isinstance(structure, list):
+            children.extend(item for item in structure if isinstance(item, dict))
+        elif isinstance(structure, dict):
+            for key in ("children", "type_structure"):
+                children.extend(
+                    item
+                    for item in (structure.get(key) or [])
+                    if isinstance(item, dict)
+                )
+            raw_types = structure.get("type")
+            if isinstance(raw_types, list):
+                for raw_type in raw_types:
+                    if isinstance(raw_type, dict):
+                        children.extend(
+                            item
+                            for item in (raw_type.get("type_structure") or [])
+                            if isinstance(item, dict)
+                        )
+
+        def _name(child):
+            path = child.get("path") or child.get("id") or ""
+            return path.rsplit(".", 1)[-1].split(":", 1)[0]
+
+        by_name = {}
+        for child in children:
+            name = _name(child)
+            if name and name not in by_name:
+                by_name[name] = child
+
+        if parent_type:
+            for child in get_complex_type_fields(parent_type) or []:
+                name = _name(child)
+                if name and name not in by_name:
+                    by_name[name] = child
+        return by_name
+
+    @staticmethod
+    def _fixed_child_schema(children, key):
+        """Resolve a fixed-value JSON property to one direct child and type."""
+
+        child = children.get(key)
+        if child is not None:
+            codes = type_codes(child.get("type"))
+            return child, codes[0] if len(codes) == 1 else None
+
+        for name, candidate in children.items():
+            if "[x]" not in name:
+                continue
+            base = name.replace("[x]", "")
+            for code in type_codes(candidate.get("type")):
+                if key == f"{base}{fhir_type_suffix(code)}":
+                    return candidate, code
+        return None, None
+
+    @staticmethod
+    def _fixed_value_dict(value):
+        if hasattr(value, "model_dump"):
+            try:
+                return value.model_dump(exclude_none=True, by_alias=True)
+            except Exception:
+                return value
+        return value
+
+    def _fixed_pattern_rules(
+        self,
+        parent_var,
+        fixed,
+        src_ctx,
+        name_prefix,
+        *,
+        parent_type=None,
+        structure=None,
+    ):
+        """Recursively emit a profile-fixed/pattern complex value."""
+
+        fixed = self._fixed_value_dict(fixed)
         rules = []
         if not isinstance(fixed, dict):
             return rules
-        for key, val in fixed.items():
+        children = self._fixed_structure_children(structure, parent_type)
+
+        def _diagnose(code, message, **details):
+            recorder = getattr(self, "record_diagnostic", None)
+            if callable(recorder):
+                recorder(code, message, **details)
+
+        def _new_rule(key, val, child, child_type, index=None):
+            suffix = clean_field_name(key)
+            if index is not None:
+                suffix = f"{suffix}-{index}"
+            rule_name = f"{name_prefix}-{suffix}"
+            val = self._fixed_value_dict(val)
+
+            r = StructureMapGroupRule.model_construct(
+                name=(
+                    f"add-{rule_name}"
+                    if index is not None
+                    else f"set-{rule_name}"
+                )
+            )
+            r.source = [
+                StructureMapGroupRuleSource.model_construct(context=src_ctx)
+            ]
+            if isinstance(val, dict):
+                if not child_type:
+                    _diagnose(
+                        "complex-fixed-type-ambiguous",
+                        f"Cannot determine the target type for complex fixed value {key}.",
+                        path=key,
+                    )
+                    return None
+                cvar = f"{parent_var}-{suffix}"
+                target = StructureMapGroupRuleTarget.model_construct(
+                    context=parent_var,
+                    element=key,
+                    variable=cvar,
+                    transform="create",
+                )
+                target.parameter = [
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueString=child_type
+                    )
+                ]
+                r.target = [target]
+                r.rule = self._fixed_pattern_rules(
+                    cvar,
+                    val,
+                    src_ctx,
+                    rule_name,
+                    parent_type=child_type,
+                    structure=child,
+                )
+                return r
+
+            target = StructureMapGroupRuleTarget.model_construct(
+                context=parent_var, element=key, transform="copy"
+            )
+            target.parameter = [fixed_scalar_parameter(val, child_type)]
+            r.target = [target]
+            return r
+
+        for key, raw_val in fixed.items():
             if (
                 not key
                 or str(key).startswith("_")
@@ -700,82 +852,35 @@ class _CodedRulesMixin:
                 or key == "fhir_comments"
             ):
                 continue
-            if isinstance(val, (bool, str, int, float)):
-                r = StructureMapGroupRule.model_construct(
-                    name=f"set-{name_prefix}-{clean_field_name(key)}"
+            child, child_type = self._fixed_child_schema(children, key)
+            if child is None:
+                _diagnose(
+                    "complex-fixed-child-not-found",
+                    f"Fixed/pattern child {key} is absent from the target type.",
+                    path=key,
+                    parent_type=parent_type,
                 )
-                r.source = [
-                    StructureMapGroupRuleSource.model_construct(context=src_ctx)
-                ]
-                t = StructureMapGroupRuleTarget.model_construct(
-                    context=parent_var, element=key, transform="copy"
+                continue
+            cardinality = child.get("cardinality") or {}
+            if str(child.get("max", cardinality.get("max", "1"))) == "0":
+                _diagnose(
+                    "complex-fixed-child-prohibited",
+                    f"Fixed/pattern child {key} is prohibited by the target profile.",
+                    path=key,
+                    parent_type=parent_type,
                 )
-                t.parameter = [
-                    StructureMapGroupRuleTargetParameter.model_construct(
-                        valueString=fixed_scalar_literal(val)
-                    )
-                ]
-                r.target = [t]
-                rules.append(r)
-            elif isinstance(val, list):
-                for item in val:
-                    if not isinstance(item, dict):
-                        continue
-                    cvar = f"{parent_var}-{clean_field_name(key)}"
-                    elem_type = (
-                        "Coding" if key == "coding" else self._infer_pattern_type(item)
-                    )
-                    if not elem_type:
-                        continue
-                    cr = StructureMapGroupRule.model_construct(
-                        name=f"add-{name_prefix}-{clean_field_name(key)}"
-                    )
-                    cr.source = [
-                        StructureMapGroupRuleSource.model_construct(context=src_ctx)
-                    ]
-                    ct = StructureMapGroupRuleTarget.model_construct(
-                        context=parent_var,
-                        element=key,
-                        variable=cvar,
-                        transform="create",
-                    )
-                    ct.parameter = [
-                        StructureMapGroupRuleTargetParameter.model_construct(
-                            valueString=elem_type
-                        )
-                    ]
-                    cr.target = [ct]
-                    cr.rule = self._fixed_pattern_rules(
-                        cvar, item, src_ctx, f"{name_prefix}-{clean_field_name(key)}"
-                    )
-                    rules.append(cr)
-            elif isinstance(val, dict):
-                elem_type = self._infer_pattern_type(val)
-                if not elem_type:
-                    logger.info(
-                        "Fixed nested pattern '%s' skipped (indeterminate type).", key
-                    )
-                    continue
-                cvar = f"{parent_var}-{clean_field_name(key)}"
-                cr = StructureMapGroupRule.model_construct(
-                    name=f"set-{name_prefix}-{clean_field_name(key)}"
-                )
-                cr.source = [
-                    StructureMapGroupRuleSource.model_construct(context=src_ctx)
-                ]
-                ct = StructureMapGroupRuleTarget.model_construct(
-                    context=parent_var, element=key, variable=cvar, transform="create"
-                )
-                ct.parameter = [
-                    StructureMapGroupRuleTargetParameter.model_construct(
-                        valueString=elem_type
-                    )
-                ]
-                cr.target = [ct]
-                cr.rule = self._fixed_pattern_rules(
-                    cvar, val, src_ctx, f"{name_prefix}-{clean_field_name(key)}"
-                )
-                rules.append(cr)
+                continue
+
+            val = self._fixed_value_dict(raw_val)
+            if isinstance(val, list):
+                for index, item in enumerate(val):
+                    rule = _new_rule(key, item, child, child_type, index)
+                    if rule is not None:
+                        rules.append(rule)
+            else:
+                rule = _new_rule(key, val, child, child_type)
+                if rule is not None:
+                    rules.append(rule)
         return rules
 
     def _create_direct_copy_rule(
@@ -998,6 +1103,7 @@ class _CodedRulesMixin:
         field_name,
         parent_target_context,
         parent_source_context="source",
+        field=None,
     ):
         """create a rule for a fixed value"""
         codes = type_codes(field_type)
@@ -1031,18 +1137,13 @@ class _CodedRulesMixin:
         target.context = parent_target_context
         target.element = field_name
 
-        def _string_param(val):
-            return StructureMapGroupRuleTargetParameter.model_construct(
-                valueString=fixed_scalar_literal(val)
-            )
-
         if field_type == "code":
             target.transform = "copy"
-            target.parameter = [_string_param(fixed_value)]
+            target.parameter = [fixed_scalar_parameter(fixed_value, field_type)]
             rule.target = [target]
             return rule
 
-        if field_type in ("Coding", "CodeableConcept"):
+        if isinstance(fixed_value, dict) and isinstance(field_type, str):
             nm = clean_field_name(field_name)
             var = f"tgt-fixed-{nm}"
             target.variable = var
@@ -1055,7 +1156,12 @@ class _CodedRulesMixin:
             rule.target = [target]
             pattern = fixed_value if isinstance(fixed_value, dict) else {}
             rule.rule = self._fixed_pattern_rules(
-                var, pattern, parent_source_context, f"fixed-{nm}"
+                var,
+                pattern,
+                parent_source_context,
+                f"fixed-{nm}",
+                parent_type=field_type,
+                structure=field,
             )
             return rule
 
@@ -1068,6 +1174,6 @@ class _CodedRulesMixin:
             return None
 
         target.transform = "copy"
-        target.parameter = [_string_param(fixed_value)]
+        target.parameter = [fixed_scalar_parameter(fixed_value, field_type)]
         rule.target = [target]
         return rule

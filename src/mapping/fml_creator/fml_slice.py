@@ -8,7 +8,7 @@ from mapping.fml_creator.fml_helper import (
     is_primitive_type,
     get_transform_for_type,
     clean_field_name,
-    fixed_scalar_literal,
+    fixed_scalar_parameter,
     has_fixed_value,
     type_codes,
     fhir_type_suffix,
@@ -507,6 +507,67 @@ class _SliceRulesMixin:
             for k, v in (automapped_mappings or {}).items()
             if (rest := _sub_of(k))
         ]
+
+        def _nested_extension_specs(owner):
+            """Required/mapped extension slices immediately below one owner."""
+
+            owner_id = (
+                owner.get("slice_identity")
+                or owner.get("id")
+                or owner.get("path")
+            )
+            specs = []
+            for extension_field in owner.get("children") or []:
+                element = (extension_field.get("path", "") or "").split(".")[-1]
+                if element not in {"extension", "modifierExtension"}:
+                    continue
+                for extension_slice in extension_field.get("slices") or []:
+                    slice_name = extension_slice.get("sliceName")
+                    if not slice_name:
+                        continue
+                    identity = (
+                        extension_slice.get("slice_identity")
+                        or extension_slice.get("id")
+                    )
+                    if not identity and owner_id:
+                        identity = f"{owner_id}.{element}:{slice_name}"
+                    mapping_source = (automapped_mappings or {}).get(identity)
+                    minimum = (
+                        extension_slice.get("cardinality") or {}
+                    ).get("min", 0) or 0
+                    if minimum < 1 and not mapping_source:
+                        continue
+                    relative = (
+                        identity[len(slice_path) + 1 :]
+                        if identity and identity.startswith(slice_path + ".")
+                        else f"{element}:{slice_name}"
+                    )
+                    specs.append(
+                        {
+                            "owner_id": owner_id,
+                            "sub": f"{element}:{slice_name}",
+                            "relative": relative,
+                            "source": mapping_source,
+                        }
+                    )
+            return specs
+
+        direct_extension_specs = _nested_extension_specs(slice_field)
+        child_extension_specs = {
+            child.get("id") or child.get("path"): _nested_extension_specs(child)
+            for child in (slice_field.get("children") or [])
+        }
+        handled_extension_paths = {
+            spec["relative"]
+            for spec in direct_extension_specs
+        }
+        for specs in child_extension_specs.values():
+            handled_extension_paths.update(spec["relative"] for spec in specs)
+        subs = [
+            (rest, source)
+            for rest, source in subs
+            if rest not in handled_extension_paths
+        ]
         root_provider = (automapped_mappings or {}).get(slice_path)
         _sub_paths = {s for s, _ in subs}
         subs = [
@@ -620,7 +681,35 @@ class _SliceRulesMixin:
 
         nested = []
         if isinstance(fixed, dict):
-            nested += self._fixed_pattern_rules(var, fixed, nested_source_context, nm)
+            nested += self._fixed_pattern_rules(
+                var,
+                fixed,
+                nested_source_context,
+                nm,
+                parent_type=slice_type,
+                structure=slice_field,
+            )
+        for extension_spec in direct_extension_specs:
+            extension_rule = self._slice_sub_extension_rule(
+                extension_spec["owner_id"],
+                extension_spec["sub"],
+                var,
+                nm,
+                nested_source_context,
+                automapped_mappings,
+                src_local=extension_spec["source"],
+            )
+            if extension_rule:
+                nested.append(extension_rule)
+            else:
+                self.record_diagnostic(
+                    "nested-extension-canonical-unresolved",
+                    f"Required or mapped nested extension "
+                    f"{extension_spec['owner_id']}.{extension_spec['sub']} "
+                    "could not be emitted because its canonical URL is absent.",
+                    path=f"{extension_spec['owner_id']}.{extension_spec['sub']}",
+                    severity="error",
+                )
         base_depth = len((slice_field.get("path", "") or "").split("."))
         slice_children = slice_field.get("children") or []
         direct_children = [
@@ -808,6 +897,41 @@ class _SliceRulesMixin:
                 StructureMapGroupRuleTargetParameter.model_construct(valueId=sub_var)
             ]
             sr.target = [stt]
+            extension_specs = child_extension_specs.get(
+                choice_child.get("id") or choice_child.get("path")
+                if choice_child
+                else None,
+                [],
+            )
+            if extension_specs:
+                primitive_var = f"{var}-{clean_field_name(logical_sub)}"
+                stt.variable = primitive_var
+                sr.rule = []
+                for extension_spec in extension_specs:
+                    extension_rule = self._slice_sub_extension_rule(
+                        extension_spec["owner_id"],
+                        extension_spec["sub"],
+                        primitive_var,
+                        f"{nm}-{clean_field_name(logical_sub)}",
+                        nested_source_context,
+                        automapped_mappings,
+                        src_local=extension_spec["source"],
+                    )
+                    if extension_rule:
+                        sr.rule.append(extension_rule)
+                    else:
+                        self.record_diagnostic(
+                            "nested-extension-canonical-unresolved",
+                            f"Required or mapped nested extension "
+                            f"{extension_spec['owner_id']}."
+                            f"{extension_spec['sub']} could not be emitted "
+                            "because its canonical URL is absent.",
+                            path=(
+                                f"{extension_spec['owner_id']}."
+                                f"{extension_spec['sub']}"
+                            ),
+                            severity="error",
+                        )
             nested.append(sr)
         rule.rule = _drop_empty_duplicate_creates(nested)
         return rule
@@ -907,11 +1031,7 @@ class _SliceRulesMixin:
             leaf_target = StructureMapGroupRuleTarget.model_construct(
                 context=cvar, element=leaf.name, transform="copy"
             )
-            leaf_target.parameter = [
-                StructureMapGroupRuleTargetParameter.model_construct(
-                    valueString=fixed_scalar_literal(value)
-                )
-            ]
+            leaf_target.parameter = [fixed_scalar_parameter(value, leaf.types)]
             leaf_rule.target = [leaf_target]
             leaf_rules.append(leaf_rule)
         rule.rule = leaf_rules
@@ -1008,7 +1128,12 @@ class _SliceRulesMixin:
                 ]
                 r.target = [t]
                 r.rule = self._fixed_pattern_rules(
-                    cvar, fv, src_ctx, f"{nm}-{clean_field_name(elem)}"
+                    cvar,
+                    fv,
+                    src_ctx,
+                    f"{nm}-{clean_field_name(elem)}",
+                    parent_type=ctype,
+                    structure=child,
                 )
                 out.append(r)
             elif isinstance(fv, (str, bool, int, float)):
@@ -1021,11 +1146,7 @@ class _SliceRulesMixin:
                 t = StructureMapGroupRuleTarget.model_construct(
                     context=slice_var, element=elem, transform="copy"
                 )
-                t.parameter = [
-                    StructureMapGroupRuleTargetParameter.model_construct(
-                        valueString=fixed_scalar_literal(fv)
-                    )
-                ]
+                t.parameter = [fixed_scalar_parameter(fv, child.get("type"))]
                 r.target = [t]
                 out.append(r)
         return out
