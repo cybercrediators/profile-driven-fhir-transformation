@@ -297,3 +297,103 @@ def test_target_profile_scopes_same_base_type_candidates():
         {id(other): "urn:uuid:other", id(wanted): "urn:uuid:wanted"},
     )
     assert obs["performer"] == {"reference": "urn:uuid:wanted"}
+
+
+def test_profile_sliced_reference_contract_wires_each_required_profile():
+    complete_profile = "http://example.org/StructureDefinition/complete"
+    measurement_profile = "http://example.org/StructureDefinition/measurement"
+    reference_profile = "http://example.org/StructureDefinition/reference-value"
+    complete = {
+        "resourceType": "Observation",
+        "meta": {"profile": [complete_profile]},
+    }
+    measurement = {
+        "resourceType": "Observation",
+        "meta": {"profile": [measurement_profile]},
+    }
+    reference = {
+        "resourceType": "Observation",
+        "meta": {"profile": [reference_profile]},
+    }
+    contract = _bundled_rule(
+        sourceType="Observation",
+        path="derivedFrom",
+        targetTypes=[measurement_profile, reference_profile],
+        targetProfiles=[measurement_profile, reference_profile],
+        match="all",
+    )
+    specs = []
+    BundleService._collect_todo_refs(
+        contract,
+        specs,
+        {
+            "measurement": "Observation",
+            "reference-value": "Observation",
+        },
+        complete_profile,
+    )
+
+    BundleService._wire_references(
+        [complete, measurement, reference],
+        specs,
+        {
+            id(measurement): "urn:uuid:measurement",
+            id(reference): "urn:uuid:reference",
+        },
+    )
+
+    assert complete["derivedFrom"] == [
+        {"reference": "urn:uuid:measurement"},
+        {"reference": "urn:uuid:reference"},
+    ]
+
+
+def test_profile_sliced_reference_contract_is_collectable_from_structure_map():
+    complete_profile = "http://example.org/StructureDefinition/complete"
+    measurement_profile = "http://example.org/StructureDefinition/measurement"
+    reference_profile = "http://example.org/StructureDefinition/reference-value"
+    contract = _bundled_rule(
+        sourceType="Observation",
+        path="derivedFrom",
+        targetTypes=[measurement_profile, reference_profile],
+        targetProfiles=[measurement_profile, reference_profile],
+        match="all",
+    )
+    structure_map = {
+        "structure": [{"mode": "target", "url": complete_profile}],
+        "group": [
+            {
+                "input": [
+                    {
+                        "name": "target",
+                        "mode": "target",
+                        "type": "Observation",
+                    }
+                ],
+                "rule": [contract],
+            }
+        ],
+    }
+
+    specs = BundleService._specs_from_structure_maps([structure_map])
+
+    assert len(specs) == 1
+    assert specs[0][10] == (measurement_profile, reference_profile)
+
+
+def test_reference_wiring_respects_prohibited_reference_child():
+    profile = "http://example.org/StructureDefinition/display-only-subject"
+    procedure = {
+        "resourceType": "Procedure",
+        "meta": {"profile": [profile]},
+    }
+    patient = {"resourceType": "Patient"}
+
+    BundleService._wire_references(
+        [procedure, patient],
+        [("Procedure", "subject", "Patient", profile)],
+        {id(patient): "urn:uuid:patient"},
+        prohibited_map={profile: {"subject.reference"}},
+    )
+
+    assert "subject" not in procedure

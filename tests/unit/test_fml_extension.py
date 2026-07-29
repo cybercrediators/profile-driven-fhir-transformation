@@ -161,6 +161,47 @@ def test_modifier_extension_targets_modifier_extension_element(factory):
     assert rule.target[0].element == "modifierExtension"
 
 
+def test_modifier_extension_definition_reroutes_plain_extension_slice(factory):
+    url = "http://example.org/StructureDefinition/modifier-by-definition"
+    factory.app_state = _app_state(
+        {
+            url: SimpleNamespace(
+                data={
+                    "snapshot": {
+                        "element": [
+                            {"id": "Extension", "isModifier": True},
+                            {
+                                "id": "Extension.value[x]",
+                                "type": [{"code": "string"}],
+                            },
+                        ]
+                    }
+                }
+            )
+        }
+    )
+    field = {
+        "path": "Procedure.extension",
+        "type": "Extension",
+        "sliceName": "PerformerAbbreviation",
+        "extension_url": url,
+    }
+
+    rule = factory.create_extension_rule(
+        field,
+        "extension:PerformerAbbreviation",
+        "src",
+        "tgt",
+        automapped_mappings={"Procedure.extension": "Source.abbreviation"},
+    )
+
+    assert rule.target[0].element == "modifierExtension"
+    assert any(
+        diagnostic["code"] == "modifier-extension-rerouted"
+        for diagnostic in factory.diagnostics
+    )
+
+
 # ── Skip / not-yet-mappable cases ──────────────────────────────────────────────
 def test_non_slice_extension_without_source_is_skipped(factory):
     # A non-slice extension with a resolvable URL but no mapped source would only ever
@@ -192,6 +233,82 @@ def test_slice_extension_proceeds_even_with_todo_source(factory):
     assert rule.name == "map-extension-myExt"
     value_rule = rule.rule[1]
     assert value_rule.source[0].element.startswith("TODO")
+
+
+def test_required_slice_without_provider_is_reported(factory):
+    field = {
+        "path": "Task.extension:InvoiceSent",
+        "type": "Extension",
+        "sliceName": "InvoiceSent",
+        "extension_url": "http://example.org/StructureDefinition/invoice-sent",
+        "value_type": "boolean",
+        "cardinality": {"min": 1, "max": "1"},
+    }
+
+    rule = factory.create_extension_rule(
+        field,
+        "extension:InvoiceSent",
+        "src",
+        "tgt",
+        automapped_mappings={},
+    )
+
+    assert rule is not None
+    assert rule.source[0].element.startswith("TODO")
+    assert factory.diagnostics == [
+        {
+            "code": "required-extension-provider-missing",
+            "message": (
+                "Required extension slice Task.extension:InvoiceSent has no "
+                "authored source provider. Its URL is known, but its semantic "
+                "value cannot be inferred from the target profile."
+            ),
+            "profile": "unknown",
+            "path": "Task.extension:InvoiceSent",
+            "extension_url": (
+                "http://example.org/StructureDefinition/invoice-sent"
+            ),
+            "severity": "error",
+        }
+    ]
+
+
+def test_required_extension_container_without_any_provider_is_reported(factory):
+    field = {
+        "id": "Procedure.extension",
+        "path": "Procedure.extension",
+        "type": "Extension",
+        "cardinality": {"min": 1, "max": "*"},
+        "slices": [
+            {
+                "id": "Procedure.extension:PerformerAbbreviation",
+                "path": "Procedure.extension",
+                "type": "Extension",
+                "sliceName": "PerformerAbbreviation",
+                "extension_url": (
+                    "http://example.org/StructureDefinition/performer-abbreviation"
+                ),
+                "value_type": "string",
+                "cardinality": {"min": 0, "max": "1"},
+            }
+        ],
+    }
+
+    factory.create_field_rules(
+        "Procedure",
+        [field],
+        "src",
+        "tgt",
+        automapped_mappings={},
+    )
+
+    diagnostic = next(
+        item
+        for item in factory.diagnostics
+        if item["code"] == "required-extension-container-provider-missing"
+    )
+    assert diagnostic["path"] == "Procedure.extension"
+    assert diagnostic["minimum"] == 1
 
 
 # ── Complex extension: sub-extension slices resolved from the extension's own SD ───

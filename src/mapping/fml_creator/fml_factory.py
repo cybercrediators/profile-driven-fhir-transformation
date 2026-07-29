@@ -33,6 +33,7 @@ from mapping.fml_creator.fml_helper import (
 from parser.resource_parser.fhir_type_introspection import get_complex_type_fields
 from functools import lru_cache
 from decimal import Decimal, InvalidOperation
+import json
 
 from mapping.fml_creator.fml_extension import _ExtensionRulesMixin
 from mapping.fml_creator.fml_slice import _SliceRulesMixin
@@ -152,6 +153,104 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             slice_ids=[entry["id"] for entry in missing],
             required_slice_ids=required,
             severity="information",
+        )
+
+    def _required_profile_reference_slices_rule(
+        self, field, res_type, parent_source_context, automapped_mappings=None
+    ):
+        """Defer a complete set of required profile-sliced references to bundling.
+
+        A ``profile:resolve()`` discriminator cannot be materialised by a
+        StructureMap from target constraints alone.  When every required slice is
+        a Reference with an explicit target profile, however, the bundle assembler
+        can select the corresponding generated resources and populate the repeating
+        reference field as one correlated set.
+        """
+
+        if not is_reference_type(field.get("type")):
+            return None
+        slicing = field.get("slicing") or {}
+        discriminators = slicing.get("discriminators") or []
+        if not discriminators:
+            legacy = field.get("discriminator")
+            discriminators = [legacy] if legacy else []
+        if not any(
+            disc
+            and disc.get("type") == "profile"
+            and "resolve()" in str(disc.get("path", ""))
+            for disc in discriminators
+        ):
+            return None
+
+        required = [
+            candidate
+            for candidate in (field.get("slices") or [])
+            if isinstance(candidate, dict)
+            and int((candidate.get("cardinality") or {}).get("min", 0) or 0) > 0
+        ]
+        if not required:
+            return None
+        identities = {
+            candidate.get("id")
+            or candidate.get("slice_identity")
+            or self._slice_identity(field, candidate)
+            for candidate in required
+        }
+        if any(
+            key == identity or key.startswith(identity + ".")
+            for identity in identities
+            if identity
+            for key in (automapped_mappings or {})
+        ):
+            return None
+
+        target_profiles = []
+        for candidate in required:
+            if not is_reference_type(candidate.get("type")):
+                return None
+            profiles = []
+            for type_ref in candidate.get("type") or []:
+                profiles.extend(_attr(type_ref, "targetProfile", []) or [])
+            fallback = candidate.get("reference_target")
+            if not profiles and isinstance(fallback, str) and fallback:
+                profiles = [fallback]
+            profiles = [
+                profile.split("|", 1)[0]
+                for profile in profiles
+                if isinstance(profile, str) and profile
+            ]
+            if len(profiles) != 1:
+                return None
+            target_profiles.append(profiles[0])
+
+        field_path = field.get("path", "")
+        relative_path = (
+            field_path[len(res_type) + 1 :]
+            if res_type and field_path.startswith(f"{res_type}.")
+            else field_path
+        )
+        contract = {
+            "sourceType": res_type,
+            "path": relative_path,
+            "targetTypes": target_profiles,
+            "targetProfiles": target_profiles,
+            "match": "all",
+            "sourceKey": None,
+            "targetKey": None,
+            "referenceMode": "urn",
+        }
+        return StructureMapGroupRule.model_construct(
+            name=(
+                "TODO-resolve-reference-"
+                f"{clean_field_name(res_type)}-{clean_field_name(relative_path)}-slices"
+            ),
+            source=[
+                StructureMapGroupRuleSource.model_construct(
+                    context=parent_source_context
+                )
+            ],
+            documentation="FHIRBRIDGE_REFERENCE:"
+            + json.dumps(contract, sort_keys=True, separators=(",", ":")),
         )
 
     def profile_tree(self):
@@ -449,21 +548,24 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             pending.extend(child.get("type_structure") or [])
         return False
 
-    @staticmethod
-    def _unsliced_provider_keys(field, automapped_mappings):
+    def _unsliced_provider_keys(self, field, automapped_mappings):
         """Return providers addressed to the unsliced element or its descendants.
 
         A key below ``Condition.code.coding`` is intentionally distinct from
         ``Condition.code.coding:icd10``.  The former may populate an ordinary entry
         when slicing is open; the latter explicitly selects a named slice.
+        Inferred ancestor contexts are excluded when direct-target provenance is
+        available.
         """
         path = field.get("path")
         if not path:
             return []
+        explicit = getattr(self, "explicit_mapping_targets", None)
         return [
             key
             for key in (automapped_mappings or {})
-            if key == path or key.startswith(path + ".")
+            if (key == path or key.startswith(path + "."))
+            and (explicit is None or key in explicit)
         ]
 
     @staticmethod
@@ -545,6 +647,31 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 )
                 continue
 
+            path = field.get("path") or field.get("id") or ""
+            minimum = int(
+                ((field.get("cardinality") or {}).get("min", 0)) or 0
+            )
+            has_extension_provider = any(
+                key == path
+                or key.startswith(path + ".")
+                or key.startswith(path + ":")
+                for key in (automapped_mappings or {})
+            )
+            if (
+                path
+                and is_extension_type(field.get("type"))
+                and minimum > 0
+                and not has_extension_provider
+            ):
+                self.record_diagnostic(
+                    "required-extension-container-provider-missing",
+                    f"Required extension container {path} has no authored "
+                    "source provider for any extension value.",
+                    path=path,
+                    minimum=minimum,
+                    severity="error",
+                )
+
             is_choice_field = (
                 bool(field.get("is_type_choice"))
                 or field.get("type") == "choice"
@@ -554,6 +681,16 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 isinstance(s, dict) and not is_extension_type(s.get("type"))
                 for s in (field.get("slices") or [])
             )
+
+            required_profile_refs = self._required_profile_reference_slices_rule(
+                field,
+                res_type,
+                parent_source_context,
+                automapped_mappings,
+            )
+            if required_profile_refs is not None:
+                rules.append(required_profile_refs)
+                continue
 
             unsliced_provider_keys = (
                 self._unsliced_provider_keys(field, automapped_mappings)
@@ -1073,6 +1210,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             and not choice_variant_mapped
         ):
             ref_src_key = None
+            disp_src_key = None
             if automapped_mappings:
                 prof = getattr(self, "_current_profile_id", None)
                 qref_key = (
@@ -1084,21 +1222,71 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                     ref_src_key = qref_key
                 elif f"{path}.reference" in automapped_mappings:
                     ref_src_key = f"{path}.reference"
-            if ref_src_key and automapped_mappings:
-                disp_key = ref_src_key[: -len(".reference")] + ".display"
-                disp_src = (
-                    self._as_local_element(automapped_mappings[disp_key])
-                    if disp_key in automapped_mappings
+                qdisp_key = (
+                    f"{prof}.{path[len(res_type) + 1:]}.display"
+                    if prof and path.startswith(f"{res_type}.")
                     else None
                 )
+                if qdisp_key and qdisp_key in automapped_mappings:
+                    disp_src_key = qdisp_key
+                elif f"{path}.display" in automapped_mappings:
+                    disp_src_key = f"{path}.display"
+
+            reference_forbidden = self.is_prohibited_target(f"{path}.reference")
+            tree = self.profile_tree()
+            display_node = tree.node(f"{path}.display") if tree else None
+            display_required = bool(display_node and display_node.required)
+            if reference_forbidden:
+                if disp_src_key and automapped_mappings:
+                    return self._reference_source_rule(
+                        rule,
+                        display_name,
+                        var_suffix,
+                        parent_source_context,
+                        parent_target_context,
+                        None,
+                        self._as_local_element(
+                            automapped_mappings[disp_src_key]
+                        ),
+                        cardinality=cardinality,
+                        rule_name=rule_name,
+                    )
+                self.record_diagnostic(
+                    "reference-representation-requires-source",
+                    f"{path}.reference is prohibited by the profile"
+                    + (
+                        f" while {path}.display is required"
+                        if display_required
+                        else ""
+                    )
+                    + "; bundle reference wiring was suppressed. Map an allowed "
+                    "Reference child explicitly.",
+                    path=path,
+                    prohibited_child=f"{path}.reference",
+                    required_children=(
+                        [f"{path}.display"] if display_required else []
+                    ),
+                    severity="error",
+                )
+                return None
+
+            if (ref_src_key or disp_src_key) and automapped_mappings:
                 return self._reference_source_rule(
                     rule,
                     display_name,
                     var_suffix,
                     parent_source_context,
                     parent_target_context,
-                    self._as_local_element(automapped_mappings[ref_src_key]),
-                    disp_src,
+                    (
+                        self._as_local_element(automapped_mappings[ref_src_key])
+                        if ref_src_key
+                        else None
+                    ),
+                    (
+                        self._as_local_element(automapped_mappings[disp_src_key])
+                        if disp_src_key
+                        else None
+                    ),
                     cardinality=cardinality,
                     rule_name=rule_name,
                 )
@@ -1281,15 +1469,17 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         )
         rule.target = [target]
 
-        children = [
-            self._scalar_child_copy_rule(
+        children = []
+        if ref_source_element:
+            children.append(
+                self._scalar_child_copy_rule(
                 f"map-{var_suffix}-reference",
                 source.variable,
                 ref_source_element,
                 target.variable,
                 "reference",
             )
-        ]
+            )
         if display_source_element:
             children.append(
                 self._scalar_child_copy_rule(
@@ -1301,9 +1491,14 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 )
             )
         rule.rule = children
+        mapped_parts = []
+        if ref_source_element:
+            mapped_parts.append(f"reference from '{ref_source_element}'")
+        if display_source_element:
+            mapped_parts.append(f"display from '{display_source_element}'")
         rule.documentation = (
-            f"Reference.reference from mapped source '{ref_source_element}' "
-            "(literal reference; not deferred to bundle assembler)"
+            "Reference " + " and ".join(mapped_parts)
+            + " (mapped directly; not deferred to bundle assembler)"
         )
         return rule
 
@@ -1623,6 +1818,15 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                     choice_target.parameter = params
 
             choice_rule.target = [choice_target]
+            if is_typed_create:
+                choice_rule.rule = self._choice_fixed_descendant_rules(
+                    field,
+                    choice_type,
+                    choice_target.variable,
+                    parent_source_context,
+                    clean_field_name(base_name),
+                    [],
+                )
             nested_rules.append(choice_rule)
 
         if nested_rules:

@@ -157,6 +157,106 @@ def test_external_reference_does_not_overwrite_mapped_reference():
     assert obs["subject"] == {"reference": "Patient/from-source"}
 
 
+def test_external_reference_respects_prohibited_and_required_children():
+    profile = "http://example.org/StructureDefinition/display-only-procedure"
+    fields = [
+        {
+            "path": "Procedure.subject",
+            "cardinality": {"min": 1, "max": "1"},
+            "type": [{"code": "Reference"}],
+            "children": [
+                {
+                    "path": "Procedure.subject.reference",
+                    "cardinality": {"min": 0, "max": "0"},
+                    "type": [{"code": "string"}],
+                },
+                {
+                    "path": "Procedure.subject.type",
+                    "cardinality": {"min": 0, "max": "0"},
+                    "type": [{"code": "uri"}],
+                },
+                {
+                    "path": "Procedure.subject.display",
+                    "cardinality": {"min": 1, "max": "1"},
+                    "type": [{"code": "string"}],
+                },
+            ],
+        }
+    ]
+    obj = root_obj(profile, "Procedure", fields)
+    obj.prohibited_paths = {"subject.reference", "subject.type"}
+    registry = make_registry([(profile, obj)])
+    procedure = {
+        "resourceType": "Procedure",
+        "meta": {"profile": [profile]},
+    }
+
+    BundleService.create_bundle(
+        [procedure],
+        registry=registry,
+        external_reference_defaults=[
+            {
+                "path": "Procedure.subject",
+                "value": {
+                    "reference": "Patient/external",
+                    "type": "Patient",
+                },
+            }
+        ],
+    )
+
+    assert "subject" not in procedure
+
+
+def test_external_reference_accepts_required_allowed_display():
+    profile = "http://example.org/StructureDefinition/display-only-procedure"
+    fields = [
+        {
+            "path": "Procedure.subject",
+            "cardinality": {"min": 1, "max": "1"},
+            "type": [{"code": "Reference"}],
+            "children": [
+                {
+                    "path": "Procedure.subject.reference",
+                    "cardinality": {"min": 0, "max": "0"},
+                    "type": [{"code": "string"}],
+                },
+                {
+                    "path": "Procedure.subject.display",
+                    "cardinality": {"min": 1, "max": "1"},
+                    "type": [{"code": "string"}],
+                },
+            ],
+        }
+    ]
+    obj = root_obj(profile, "Procedure", fields)
+    obj.prohibited_paths = {"subject.reference"}
+    registry = make_registry([(profile, obj)])
+    procedure = {
+        "resourceType": "Procedure",
+        "meta": {"profile": [profile]},
+    }
+
+    BundleService.create_bundle(
+        [procedure],
+        registry=registry,
+        external_reference_defaults=[
+            {
+                "path": "Procedure.subject",
+                "value": {
+                    "reference": "Patient/external",
+                    "display": "External patient",
+                },
+            }
+        ],
+    )
+
+    assert procedure["subject"] == {
+        "display": "External patient",
+        "type": "Patient",
+    }
+
+
 def test_bundle_wired_reference_takes_precedence_over_external_default():
     obs = {"resourceType": "Observation"}
     pat = {"resourceType": "Patient"}

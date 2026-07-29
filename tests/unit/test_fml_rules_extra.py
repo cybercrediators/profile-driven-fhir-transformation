@@ -186,6 +186,93 @@ def test_explicit_xhtml_mapping_is_copied_and_diagnosed(factory):
     assert factory.diagnostics[0]["code"] == "xhtml-content-authored"
 
 
+def _display_only_reference_profile():
+    return {
+        "resourceType": "StructureDefinition",
+        "type": "Procedure",
+        "snapshot": {
+            "element": [
+                {"id": "Procedure", "path": "Procedure"},
+                {
+                    "id": "Procedure.subject",
+                    "path": "Procedure.subject",
+                    "min": 1,
+                    "max": "1",
+                    "type": [
+                        {
+                            "code": "Reference",
+                            "targetProfile": [
+                                "http://hl7.org/fhir/StructureDefinition/Patient"
+                            ],
+                        }
+                    ],
+                },
+                {
+                    "id": "Procedure.subject.reference",
+                    "path": "Procedure.subject.reference",
+                    "min": 0,
+                    "max": "0",
+                    "type": [{"code": "string"}],
+                },
+                {
+                    "id": "Procedure.subject.display",
+                    "path": "Procedure.subject.display",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "string"}],
+                },
+            ]
+        },
+    }
+
+
+def test_display_only_reference_suppresses_bundle_reference_placeholder(factory):
+    factory.diagnostics = []
+    factory._current_profile_sd = _display_only_reference_profile()
+    factory._target_tree_cache = (None, None)
+    field = {
+        "path": "Procedure.subject",
+        "type": [{"code": "Reference"}],
+        "reference_target": "Patient",
+        "cardinality": {"min": 1, "max": "1"},
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field, "Procedure", "source", "target"
+    )
+
+    assert rule is None
+    assert factory.diagnostics[-1]["code"] == (
+        "reference-representation-requires-source"
+    )
+
+
+def test_display_only_reference_can_be_populated_from_authored_display(factory):
+    factory.diagnostics = []
+    factory._current_profile_sd = _display_only_reference_profile()
+    factory._target_tree_cache = (None, None)
+    field = {
+        "path": "Procedure.subject",
+        "type": [{"code": "Reference"}],
+        "reference_target": "Patient",
+        "cardinality": {"min": 1, "max": "1"},
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "Procedure",
+        "source",
+        "target",
+        automapped_mappings={"Procedure.subject.display": "Source.patientLabel"},
+    )
+
+    assert rule.target[0].element == "subject"
+    assert len(rule.rule) == 1
+    assert rule.rule[0].source[0].element == "patientLabel"
+    assert rule.rule[0].target[0].element == "display"
+    assert "reference" not in rule.documentation
+
+
 def test_unindexed_snapshot_slices_are_reported_once_per_profile(factory):
     factory.diagnostics = []
     factory._current_profile_id = "test-profile"

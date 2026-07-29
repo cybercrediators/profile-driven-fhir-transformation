@@ -1,7 +1,6 @@
 import re
 
 import logging
-logger = logging.getLogger(__name__)
 from fhir.resources.R4B.structuremap import (
     StructureMapGroupRule,
     StructureMapGroupRuleTarget,
@@ -19,10 +18,42 @@ from mapping.fml_creator.fml_helper import (
 from parser.resource_parser.value_expander import expand_valueset
 from data_handling.url_resolver.fhir_url_resolver import resolve_url
 
+logger = logging.getLogger(__name__)
+
 _DOC_TYPE_MAXLEN = 4096
 
 
 class _ExtensionRulesMixin:
+    def _extension_is_modifier(self, extension_url):
+        """Whether the referenced Extension definition declares ``isModifier``."""
+
+        if not extension_url or extension_url == "TODO_EXTENSION_URL":
+            return False
+        cache = getattr(self, "_extension_modifier_cache", None)
+        if cache is None:
+            cache = {}
+            self._extension_modifier_cache = cache
+        if extension_url in cache:
+            return cache[extension_url]
+        try:
+            sd = resolve_url(extension_url, self.app_state)
+        except Exception as exc:
+            logger.debug(
+                "Could not resolve extension SD %s for modifier classification: %s",
+                extension_url,
+                exc,
+            )
+            cache[extension_url] = False
+            return False
+        snapshot = _attr(sd, "snapshot") if sd else None
+        is_modifier = False
+        for element in (_attr(snapshot, "element", []) if snapshot else []) or []:
+            if _attr(element, "id") == "Extension":
+                is_modifier = bool(_attr(element, "isModifier", False))
+                break
+        cache[extension_url] = is_modifier
+        return is_modifier
+
     def _subextension_specs(self, extension_url):
         """resolve sub-extension slices of complex extension StructureDefinition"""
         specs = {}
@@ -197,6 +228,19 @@ class _ExtensionRulesMixin:
                 if _k in automapped_mappings:
                     mapping_key = _k
                     break
+        minimum = int((field.get("cardinality") or {}).get("min", 0) or 0)
+        if is_slice and minimum > 0 and mapping_key is None:
+            recorder = getattr(self, "record_diagnostic", None)
+            if callable(recorder):
+                recorder(
+                    "required-extension-provider-missing",
+                    f"Required extension slice {lookup_path} has no authored "
+                    "source provider. Its URL is known, but its semantic value "
+                    "cannot be inferred from the target profile.",
+                    path=lookup_path,
+                    extension_url=extension_url,
+                    severity="error",
+                )
 
         if is_slice:
             slice_name = slice_info["slice_name"]
@@ -236,9 +280,23 @@ class _ExtensionRulesMixin:
         source.variable = f"src-{var_suffix}"
         rule.source = [source]
 
+        declared_modifier = self._extension_is_modifier(extension_url)
         target_element = (
-            "modifierExtension" if path.endswith(".modifierExtension") else "extension"
+            "modifierExtension"
+            if path.endswith(".modifierExtension") or declared_modifier
+            else "extension"
         )
+        if declared_modifier and not path.endswith(".modifierExtension"):
+            recorder = getattr(self, "record_diagnostic", None)
+            if callable(recorder):
+                recorder(
+                    "modifier-extension-rerouted",
+                    f"{path} references modifier extension {extension_url}; "
+                    "the target was rerouted to modifierExtension.",
+                    path=path,
+                    extension_url=extension_url,
+                    severity="information",
+                )
         target = StructureMapGroupRuleTarget.model_construct()
         target.context = parent_target_context
         target.element = target_element

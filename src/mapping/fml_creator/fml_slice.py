@@ -308,6 +308,12 @@ class _SliceRulesMixin:
         bn = clean_field_name(base_name)
         ct = clean_field_name(choice_type)
         rule = StructureMapGroupRule.model_construct(name=f"map-{bn}-{ct}")
+        fixed_descendants = self._choice_fixed_descendants(field, choice_type)
+        fixed_paths = {
+            relative
+            for relative, node in fixed_descendants
+            if not node.is_pattern
+        }
 
         whole_value_maps = [
             (sub, source) for sub, source in sub_field_maps if sub == ""
@@ -315,6 +321,39 @@ class _SliceRulesMixin:
         descendant_maps = [
             (sub, source) for sub, source in sub_field_maps if sub != ""
         ]
+        # Mapping-table expansion supplies intermediate ancestors so their target
+        # contexts can be materialised.  Once a more specific descendant exists,
+        # however, the ancestor is not an independent value provider.  Treating it
+        # as one creates a second, empty complex value (for example a bare Coding
+        # beside the Coding populated by ``coding.code``/``coding.system``).
+        descendant_paths = {sub for sub, _ in descendant_maps}
+        shadowed_ancestors = {
+            sub
+            for sub in descendant_paths
+            if any(
+                other != sub and other.startswith(sub + ".")
+                for other in descendant_paths
+            )
+        }
+        if shadowed_ancestors:
+            descendant_maps = [
+                (sub, source)
+                for sub, source in descendant_maps
+                if sub not in shadowed_ancestors
+            ]
+            sub_field_maps = [
+                (sub, source)
+                for sub, source in sub_field_maps
+                if sub not in shadowed_ancestors
+            ]
+            self.record_diagnostic(
+                "choice-ancestor-provider-shadowed",
+                f"Intermediate mapping provider(s) for {base_name} were ignored "
+                "because mapped descendants populate the same complex value.",
+                target=base_name,
+                shadowed_paths=sorted(shadowed_ancestors),
+                severity="information",
+            )
         if whole_value_maps and descendant_maps:
             # A generated required-field placeholder can coexist with authored
             # descendant mappings for the same complex choice. Copying the whole
@@ -366,6 +405,7 @@ class _SliceRulesMixin:
             tgt = StructureMapGroupRuleTarget.model_construct(
                 context=parent_target_context,
                 element=f"{base_name}{self._choice_suffix(choice_type)}",
+                variable=f"tgt-{bn}-{ct}",
                 transform="copy",
                 parameter=[
                     StructureMapGroupRuleTargetParameter.model_construct(
@@ -375,6 +415,15 @@ class _SliceRulesMixin:
             )
             rule.source = [src]
             rule.target = [tgt]
+            rule.rule = self._choice_fixed_descendant_rules(
+                field,
+                choice_type,
+                tgt.variable,
+                parent_source_context,
+                bn,
+                sub_field_maps,
+                descendants=fixed_descendants,
+            )
             return rule
 
         # Complex choice type: create then populate direct sub-fields.
@@ -396,6 +445,21 @@ class _SliceRulesMixin:
         nested = []
 
         for sub, src_local in sub_field_maps:
+            if sub in fixed_paths:
+                self.record_diagnostic(
+                    "fixed-choice-descendant-overrides-source",
+                    f"Source mapping for fixed target descendant "
+                    f"{field.get('path') if field else base_name}.{sub} was ignored; "
+                    "the profile-fixed value is authoritative.",
+                    path=(
+                        f"{field.get('path')}.{sub}"
+                        if field and field.get("path")
+                        else f"{base_name}.{sub}"
+                    ),
+                    source=src_local,
+                    severity="information",
+                )
+                continue
             if "." in sub:
                 deep = self._emit_subpath_population(
                     var, sub, src_local, choice_type, bn, parent_source_context
@@ -419,8 +483,180 @@ class _SliceRulesMixin:
             ]
             sr.target = [st]
             nested.append(sr)
+        for fixed_rule in self._choice_fixed_descendant_rules(
+            field,
+            choice_type,
+            var,
+            parent_source_context,
+            bn,
+            sub_field_maps,
+            descendants=fixed_descendants,
+        ):
+            _append_or_merge(nested, fixed_rule)
         rule.rule = nested
         return rule
+
+    def _snapshot_nested_extension_specs(
+        self, owner_id, automapped_mappings=None
+    ):
+        """Recover immediate extension slices omitted from the parser field tree.
+
+        Snapshot ``ElementDefinition.id`` retains both the owning slice and the
+        nested extension slice, so it is the authoritative fallback for paths such
+        as ``contact:forschungskontakt.extension:rolle``.
+        """
+
+        if not owner_id:
+            return []
+        sd = getattr(self, "_current_profile_sd", None)
+        snapshot = _attr(sd, "snapshot") if sd else None
+        elements = (_attr(snapshot, "element", []) if snapshot else []) or []
+        prefix = f"{owner_id}."
+        specs = []
+        for element in elements:
+            identity = _attr(element, "id") or ""
+            if not identity.startswith(prefix):
+                continue
+            relative_to_owner = identity[len(prefix) :]
+            match = re.fullmatch(
+                r"(extension|modifierExtension):([^.]+)", relative_to_owner
+            )
+            if not match or str(_attr(element, "max", "1")) == "0":
+                continue
+            source = (automapped_mappings or {}).get(identity)
+            minimum = int(_attr(element, "min", 0) or 0)
+            if minimum < 1 and not source:
+                continue
+            specs.append(
+                {
+                    "owner_id": owner_id,
+                    "sub": relative_to_owner,
+                    "relative": relative_to_owner,
+                    "source": source,
+                    "identity": identity,
+                }
+            )
+        return specs
+
+    def _choice_fixed_descendants(self, field, choice_type=None):
+        """Profile-fixed/pattern leaves below one choice element, relative to it."""
+
+        if not field:
+            return []
+        tree_fn = getattr(self, "profile_tree", None)
+        tree = tree_fn() if callable(tree_fn) else None
+        key = field.get("id") or field.get("path")
+        node = tree.node(key) if tree and key else None
+        if node is None:
+            return []
+
+        descendants = []
+        for descendant in tree.fixed_descendants(key):
+            if descendant.slice_name and (
+                descendant.parent is not node
+                or (
+                    choice_type
+                    and choice_type not in descendant.types
+                )
+            ):
+                continue
+            slice_ancestors = []
+            ancestor = descendant.parent
+            while ancestor is not None and ancestor is not node:
+                if ancestor.slice_name:
+                    slice_ancestors.append(ancestor)
+                ancestor = ancestor.parent
+            if ancestor is not node:
+                continue
+            if slice_ancestors:
+                # A direct type slice of the choice may describe the selected
+                # concrete branch. Any deeper slice (for example
+                # medicationCodeableConcept.coding:UNII) needs an explicit
+                # slice provider and must not leak its pattern into the generic
+                # CodeableConcept instance.
+                direct_type_slice = (
+                    len(slice_ancestors) == 1
+                    and slice_ancestors[0].parent is node
+                    and (
+                        not choice_type
+                        or choice_type in slice_ancestors[0].types
+                    )
+                )
+                if not direct_type_slice:
+                    continue
+            if descendant.eid.startswith(node.eid + "."):
+                relative = descendant.eid[len(node.eid) + 1 :]
+            elif descendant.path.startswith(node.path + "."):
+                relative = descendant.path[len(node.path) + 1 :]
+            else:
+                continue
+            # Sliced descendants require their own instance-selection machinery.
+            # Treating a slice marker as a normal target property would create an
+            # invalid StructureMap element name.
+            if not relative or any(":" in part for part in relative.split(".")):
+                continue
+            descendants.append((relative, descendant))
+        return descendants
+
+    def _choice_fixed_descendant_rules(
+        self,
+        field,
+        choice_type,
+        target_var,
+        source_context,
+        name_prefix,
+        mapped_subfields,
+        *,
+        descendants=None,
+    ):
+        """Emit fixed/pattern leaves inside a concrete complex choice branch."""
+
+        descendants = (
+            self._choice_fixed_descendants(field, choice_type)
+            if descendants is None
+            else descendants
+        )
+        if not descendants:
+            return []
+
+        mapped_paths = {sub for sub, _ in mapped_subfields}
+        fixed = {}
+        compatible_children = self._fixed_structure_children(field, choice_type)
+        for relative, node in descendants:
+            if self._fixed_child_schema(
+                compatible_children, relative.split(".", 1)[0]
+            )[0] is None:
+                continue
+            # A pattern constrains an authored value but need not replace it.
+            # Fixed values are authoritative and are emitted even when a broader
+            # complex provider exists.
+            if node.is_pattern and any(
+                not mapped
+                or relative == mapped
+                or relative.startswith(mapped + ".")
+                for mapped in mapped_paths
+            ):
+                continue
+            current = fixed
+            parts = relative.split(".")
+            for part in parts[:-1]:
+                existing = current.get(part)
+                if not isinstance(existing, dict):
+                    existing = {}
+                    current[part] = existing
+                current = existing
+            current[parts[-1]] = node.fixed_value
+
+        if not fixed:
+            return []
+        return self._fixed_pattern_rules(
+            target_var,
+            fixed,
+            source_context,
+            name_prefix,
+            parent_type=choice_type,
+            structure=field,
+        )
 
     def _resolve_leaf_type(self, complex_type, sub, children=None):
         """Resolve a direct sub-field's type on a complex datatype: a profile-declared child
@@ -553,8 +789,29 @@ class _SliceRulesMixin:
                             "sub": f"{element}:{slice_name}",
                             "relative": relative,
                             "source": mapping_source,
+                            "identity": identity,
                         }
                     )
+            indexed = {
+                spec.get("identity")
+                or (
+                    f"{owner_id}.{spec['sub']}"
+                    if owner_id
+                    else spec["sub"]
+                )
+                for spec in specs
+            }
+            for recovered in self._snapshot_nested_extension_specs(
+                owner_id, automapped_mappings
+            ):
+                if recovered["identity"] in indexed:
+                    continue
+                relative = (
+                    recovered["identity"][len(slice_path) + 1 :]
+                    if recovered["identity"].startswith(slice_path + ".")
+                    else recovered["relative"]
+                )
+                specs.append({**recovered, "relative": relative})
             return specs
 
         direct_extension_specs = _nested_extension_specs(slice_field)
@@ -582,7 +839,16 @@ class _SliceRulesMixin:
         ]
 
         min_c = (slice_field.get("cardinality") or {}).get("min", 0) or 0
-        explicit_provider = bool(root_provider or subs)
+        extension_providers = [
+            spec.get("source")
+            for spec in direct_extension_specs
+            if spec.get("source")
+        ]
+        for specs in child_extension_specs.values():
+            extension_providers.extend(
+                spec.get("source") for spec in specs if spec.get("source")
+            )
+        explicit_provider = bool(root_provider or subs or extension_providers)
         if not explicit_provider and min_c == 0:
             return None
         if not self._slice_selection_is_safe(
@@ -591,7 +857,11 @@ class _SliceRulesMixin:
             explicit_provider,
             source_providers=[
                 provider
-                for provider in [root_provider, *(value for _, value in subs)]
+                for provider in [
+                    root_provider,
+                    *(value for _, value in subs),
+                    *extension_providers,
+                ]
                 if provider
             ],
         ):
@@ -961,12 +1231,19 @@ class _SliceRulesMixin:
         base_path = slice_path.split(":")[0]  # e.g. Organization.contact
         exact_id = f"{slice_path}.{sub}"
         canonical = None
-        for el in elements:
-            eid = _attr(el, "id") or ""
-            if eid != exact_id and not (
-                eid.startswith(base_path) and eid.endswith(f".{sub}")
-            ):
-                continue
+        exact = [
+            element
+            for element in elements
+            if (_attr(element, "id") or "") == exact_id
+        ]
+        fallbacks = [
+            element
+            for element in elements
+            if not exact
+            and (_attr(element, "id") or "").startswith(base_path)
+            and (_attr(element, "id") or "").endswith(f".{sub}")
+        ]
+        for el in [*exact, *fallbacks]:
             for t in _attr(el, "type", []) or []:
                 profiles = _attr(t, "profile", []) or []
                 if profiles:
@@ -1064,6 +1341,23 @@ class _SliceRulesMixin:
             if child.fixed_value is not None and not child.prohibited
         ]
 
+    def _tree_fixed_choice_types(self, choice_eid):
+        """Concrete type slices carrying a fixed/pattern value below ``choice_eid``."""
+
+        tree_fn = getattr(self, "profile_tree", None)
+        tree = tree_fn() if callable(tree_fn) else None
+        node = tree.node(choice_eid) if tree and choice_eid else None
+        if node is None:
+            return []
+        return [
+            child
+            for child in node.children.values()
+            if child.slice_name
+            and child.fixed_value is not None
+            and len(child.types) == 1
+            and not child.prohibited
+        ]
+
     def _slice_child_fixed_rules(
         self, slice_children, slice_var, src_ctx, nm, mapped_roots=None, slice_eid=None
     ):
@@ -1084,6 +1378,48 @@ class _SliceRulesMixin:
                     )
                     fv = None
             elem = child.get("path", "").split(".")[-1]
+            if (
+                "[x]" in elem
+                and elem.replace("[x]", "") in mapped_roots
+                and slice_eid
+            ):
+                concrete_patterns = self._tree_fixed_choice_types(
+                    f"{slice_eid}.{elem}"
+                )
+                if len(concrete_patterns) == 1:
+                    pattern = concrete_patterns[0]
+                    base = elem.replace("[x]", "")
+                    ctype = pattern.types[0]
+                    cvar = f"{slice_var}-{clean_field_name(base)}"
+                    r = StructureMapGroupRule.model_construct(
+                        name=f"set-{nm}-{clean_field_name(base)}"
+                    )
+                    r.source = [
+                        StructureMapGroupRuleSource.model_construct(context=src_ctx)
+                    ]
+                    r.target = [
+                        StructureMapGroupRuleTarget.model_construct(
+                            context=slice_var,
+                            element=base,
+                            variable=cvar,
+                            transform="create",
+                            parameter=[
+                                StructureMapGroupRuleTargetParameter.model_construct(
+                                    valueString=ctype
+                                )
+                            ],
+                        )
+                    ]
+                    r.rule = self._fixed_pattern_rules(
+                        cvar,
+                        pattern.fixed_value,
+                        src_ctx,
+                        f"{nm}-{clean_field_name(base)}",
+                        parent_type=ctype,
+                        structure=child,
+                    )
+                    out.append(r)
+                    continue
             if fv is None or (isinstance(fv, (list, dict, str)) and len(fv) == 0):
                 # N1: no fixed value on the child itself, but the profile may fix its
                 # children (`category:obstetrics.coding.system|code|display`). Create the
@@ -1169,14 +1505,28 @@ class _SliceRulesMixin:
         """emit a nested rule that populates a sub-path of a complex type (e.g. value[x]:valueQuantity.value/.unit)"""
 
         def _resolve(seg, cur_type, children):
+            concrete_type = None
+            lookup_seg = seg
+            if ":" in seg:
+                lookup_seg, selector = seg.split(":", 1)
+                logical = lookup_seg.replace("[x]", "")
+                if selector.lower().startswith(logical.lower()):
+                    concrete_type = selector[len(logical) :]
             for c in children or []:
                 last = (c.get("path", "") or "").split(".")[-1]
-                if last == seg or last == f"{seg}[x]":
+                if last == lookup_seg or last == f"{lookup_seg}[x]":
                     tc = type_codes(c.get("type"))
-                    ty = tc[0] if tc else None
-                    name = seg
-                    if last.endswith("[x]") and ty:
-                        name = f"{seg}{ty[:1].upper()}{ty[1:]}"  # value + Integer -> valueInteger
+                    ty = concrete_type or (tc[0] if tc else None)
+                    name = lookup_seg
+                    if concrete_type and last.endswith("[x]"):
+                        # Complex choices are created on the unsuffixed FML target
+                        # element (``value = create('Quantity')``).
+                        name = lookup_seg.replace("[x]", "")
+                    elif last.endswith("[x]") and ty:
+                        base = lookup_seg.replace("[x]", "")
+                        name = (
+                            f"{base}{ty[:1].upper()}{ty[1:]}"
+                        )  # value + Integer -> valueInteger
                     return name, ty, (c.get("children") or [])
             for f in get_complex_type_fields(cur_type) if cur_type else []:
                 if (f.get("path", "") or "").split(".")[-1] == seg:
@@ -1194,7 +1544,7 @@ class _SliceRulesMixin:
             seg = segs[0]
             rest = segs[1:]
             elem, stype, child_nodes = _resolve(seg, cur_type, children)
-            sid = clean_field_name(seg)
+            sid = clean_field_name(seg.split(":", 1)[0].replace("[x]", ""))
             if not rest:
                 var = f"src-{prefix}-{sid}"
                 r = StructureMapGroupRule.model_construct(name=f"set-{prefix}-{sid}")

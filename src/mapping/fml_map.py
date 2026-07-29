@@ -1041,6 +1041,10 @@ class StructureMapGenerator:
     ) -> Tuple[Set[str], Dict[str, str]]:
         automapped_paths = set()
         automapped_mappings = {}
+        # The mapping dictionary also receives inferred ancestor contexts. Keep
+        # the directly authored targets separately so emitters do not mistake an
+        # inferred unsliced ancestor for a second requested entry (B7).
+        self.factory.explicit_mapping_targets = set()
         if custom_mapping_table:
             automapped_paths, automapped_mappings = self._apply_custom_mapping_table(
                 custom_mapping_table,
@@ -1061,9 +1065,11 @@ class StructureMapGenerator:
                     )
                     automapped_paths.add(target_path)
                     automapped_mappings[target_path] = source_field["id"]
+                    self.factory.explicit_mapping_targets.add(target_path)
                     if match_path and match_path != target_path:
                         automapped_paths.add(match_path)
                         automapped_mappings[match_path] = source_field["id"]
+                        self.factory.explicit_mapping_targets.add(match_path)
         return automapped_paths, automapped_mappings
 
     def _apply_custom_mapping_table(
@@ -1081,6 +1087,8 @@ class StructureMapGenerator:
             logger.warning("Custom mapping table is not a dict. Skipping.")
             return automapped_paths, automapped_mappings
 
+        if not hasattr(self.factory, "explicit_mapping_targets"):
+            self.factory.explicit_mapping_targets = set()
         if not hasattr(self, "mapping_diagnostics"):
             self.mapping_diagnostics = []
         # Collection declarations are scoped to the target profile currently
@@ -1385,6 +1393,7 @@ class StructureMapGenerator:
                     source_id,
                 )
             automapped_mappings[target_path] = source_id
+            self.factory.explicit_mapping_targets.add(target_path)
             ancestor = target_path
             skip_add = False
             while True:

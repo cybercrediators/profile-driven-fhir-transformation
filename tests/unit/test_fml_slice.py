@@ -10,6 +10,8 @@ All type information comes from the real (offline, no-network) `fhir.resources` 
 `get_complex_type_fields` — no spec facts are hand-invented here.
 """
 
+import json
+
 import pytest
 
 from mapping.fml_creator.fml_factory import FMLRuleFactory
@@ -71,6 +73,207 @@ def test_choice_populate_complex_type_direct_subfields(factory):
     assert rule.rule[1].target[0].transform == "copy"
 
 
+@pytest.mark.parametrize("fixed_key", ["fixedUri", "patternUri"])
+def test_choice_populate_complex_type_emits_profile_fixed_descendant(
+    factory, fixed_key
+):
+    """N1 also applies below a concrete complex value[x] branch."""
+
+    system = "http://unitsofmeasure.org"
+    factory._current_profile_sd = {
+        "resourceType": "StructureDefinition",
+        "type": "Observation",
+        "snapshot": {
+            "element": [
+                {
+                    "id": "Observation",
+                    "path": "Observation",
+                    "min": 0,
+                    "max": "*",
+                },
+                {
+                    "id": "Observation.value[x]",
+                    "path": "Observation.value[x]",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "Quantity"}],
+                },
+                {
+                    "id": "Observation.value[x].system",
+                    "path": "Observation.value[x].system",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "uri"}],
+                    fixed_key: system,
+                },
+            ]
+        },
+    }
+    field = {
+        "id": "Observation.value[x]",
+        "path": "Observation.value[x]",
+        "type": [{"code": "Quantity"}],
+        "children": [
+            {
+                "id": "Observation.value[x].system",
+                "path": "Observation.value[x].system",
+                "type": [{"code": "uri"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "fixed_value": system,
+                "is_pattern": fixed_key.startswith("pattern"),
+            }
+        ],
+    }
+
+    rule = factory._create_choice_populate_rule(
+        "value",
+        "Quantity",
+        [("value", "bgValue"), ("code", "bgUnitCode")],
+        "src",
+        "tgt",
+        {"min": 1, "max": "1"},
+        field=field,
+    )
+
+    system_rule = next(child for child in rule.rule if child.name == "set-value-system")
+    target = system_rule.target[0]
+    assert target.context == "tgt-value-Quantity"
+    assert target.element == "system"
+    assert target.transform == "copy"
+    assert target.parameter[0].valueString == system
+
+
+def test_choice_populate_does_not_leak_pattern_from_nested_coding_slice(factory):
+    """A nested Coding slice is not a generic CodeableConcept provider (B6)."""
+
+    factory._current_profile_sd = {
+        "resourceType": "StructureDefinition",
+        "type": "MedicationAdministration",
+        "snapshot": {
+            "element": [
+                {
+                    "id": "MedicationAdministration",
+                    "path": "MedicationAdministration",
+                },
+                {
+                    "id": "MedicationAdministration.medication[x]",
+                    "path": "MedicationAdministration.medication[x]",
+                    "type": [
+                        {"code": "CodeableConcept"},
+                        {"code": "Reference"},
+                    ],
+                },
+                {
+                    "id": (
+                        "MedicationAdministration.medication[x]"
+                        ":medicationCodeableConcept"
+                    ),
+                    "path": "MedicationAdministration.medication[x]",
+                    "sliceName": "medicationCodeableConcept",
+                    "type": [{"code": "CodeableConcept"}],
+                },
+                {
+                    "id": (
+                        "MedicationAdministration.medication[x]"
+                        ":medicationCodeableConcept.coding"
+                    ),
+                    "path": "MedicationAdministration.medication[x].coding",
+                    "type": [{"code": "Coding"}],
+                },
+                {
+                    "id": (
+                        "MedicationAdministration.medication[x]"
+                        ":medicationCodeableConcept.coding:UNII"
+                    ),
+                    "path": "MedicationAdministration.medication[x].coding",
+                    "sliceName": "UNII",
+                    "type": [{"code": "Coding"}],
+                    "patternCoding": {
+                        "system": "http://fdasis.nlm.nih.gov"
+                    },
+                },
+                {
+                    "id": (
+                        "MedicationAdministration.medication[x]"
+                        ":medicationCodeableConcept.coding:UNII.system"
+                    ),
+                    "path": (
+                        "MedicationAdministration.medication[x].coding.system"
+                    ),
+                    "type": [{"code": "uri"}],
+                    "patternUri": "http://fdasis.nlm.nih.gov",
+                },
+            ]
+        },
+    }
+    field = {
+        "id": "MedicationAdministration.medication[x]",
+        "path": "MedicationAdministration.medication[x]",
+        "type": [{"code": "CodeableConcept"}, {"code": "Reference"}],
+    }
+
+    rule = factory._create_choice_populate_rule(
+        "medication",
+        "CodeableConcept",
+        [("text", "medicationText")],
+        "source",
+        "target",
+        {"min": 1, "max": "1"},
+        field=field,
+    )
+
+    assert [child.target[0].element for child in rule.rule] == ["text"]
+
+
+def test_choice_populate_uses_fixed_values_only_from_selected_type_slice(factory):
+    factory._current_profile_sd = {
+        "resourceType": "StructureDefinition",
+        "type": "Observation",
+        "snapshot": {
+            "element": [
+                {"id": "Observation", "path": "Observation"},
+                {
+                    "id": "Observation.value[x]",
+                    "path": "Observation.value[x]",
+                    "type": [
+                        {"code": "Quantity"},
+                        {"code": "CodeableConcept"},
+                    ],
+                },
+                {
+                    "id": "Observation.value[x]:valueCodeableConcept",
+                    "path": "Observation.value[x]",
+                    "sliceName": "valueCodeableConcept",
+                    "type": [{"code": "CodeableConcept"}],
+                },
+                {
+                    "id": "Observation.value[x]:valueCodeableConcept.text",
+                    "path": "Observation.value[x].text",
+                    "type": [{"code": "string"}],
+                    "fixedString": "not a quantity child",
+                },
+            ]
+        },
+    }
+    field = {
+        "id": "Observation.value[x]",
+        "path": "Observation.value[x]",
+        "type": [{"code": "Quantity"}, {"code": "CodeableConcept"}],
+    }
+
+    rule = factory._create_choice_populate_rule(
+        "value",
+        "Quantity",
+        [("value", "measurement")],
+        "source",
+        "target",
+        {"min": 0, "max": "1"},
+        field=field,
+    )
+
+    assert [child.target[0].element for child in rule.rule] == ["value"]
+
+
 def test_choice_populate_complex_type_dotted_subfield_delegates_to_subpath_builder(factory):
     rule = factory._create_choice_populate_rule(
         "value", "CodeableConcept", [("coding.code", "srcCode")], "src", "tgt", {}
@@ -83,6 +286,176 @@ def test_choice_populate_complex_type_dotted_subfield_delegates_to_subpath_build
     assert code_rule.name == "set-value-coding-code"
     assert code_rule.target[0].transform == "copy"
     assert code_rule.source[0].element == "srcCode"
+
+
+def test_choice_populate_drops_intermediate_provider_when_descendants_exist(factory):
+    """Path expansion must not turn ``coding`` into a second empty Coding."""
+
+    rule = factory._create_choice_populate_rule(
+        "item",
+        "CodeableConcept",
+        [
+            ("coding", "ingredientCode"),
+            ("coding.code", "ingredientCode"),
+            ("coding.system", "ingredientSystem"),
+        ],
+        "src",
+        "tgt",
+        {},
+    )
+
+    coding_rules = [
+        child
+        for child in rule.rule
+        if child.target and child.target[0].element == "coding"
+    ]
+    assert len(coding_rules) == 1
+    assert {child.target[0].element for child in coding_rules[0].rule} == {
+        "code",
+        "system",
+    }
+    assert any(
+        diagnostic["code"] == "choice-ancestor-provider-shadowed"
+        for diagnostic in factory.diagnostics
+    )
+
+
+def test_required_profile_sliced_references_emit_one_bundle_contract(factory):
+    measurement = "http://example.org/StructureDefinition/measurement"
+    reference_value = "http://example.org/StructureDefinition/reference-value"
+    field = {
+        "path": "Observation.derivedFrom",
+        "type": [{"code": "Reference"}],
+        "cardinality": {"min": 2, "max": "2"},
+        "slicing": {
+            "discriminators": [{"type": "profile", "path": "resolve()"}],
+            "rules": "closed",
+        },
+        "slices": [
+            {
+                "path": "Observation.derivedFrom",
+                "id": "Observation.derivedFrom:measurement",
+                "sliceName": "measurement",
+                "type": [
+                    {"code": "Reference", "targetProfile": [measurement]}
+                ],
+                "cardinality": {"min": 1, "max": "1"},
+            },
+            {
+                "path": "Observation.derivedFrom",
+                "id": "Observation.derivedFrom:referenceValue",
+                "sliceName": "referenceValue",
+                "type": [
+                    {"code": "Reference", "targetProfile": [reference_value]}
+                ],
+                "cardinality": {"min": 1, "max": "1"},
+            },
+        ],
+    }
+
+    rules = factory.create_field_rules(
+        "Observation", [field], "source", "target"
+    )
+
+    assert len(rules) == 1
+    assert rules[0].target is None
+    marker = "FHIRBRIDGE_REFERENCE:"
+    assert rules[0].documentation.startswith(marker)
+    contract = json.loads(rules[0].documentation[len(marker) :])
+    assert contract["path"] == "derivedFrom"
+    assert contract["match"] == "all"
+    assert contract["targetProfiles"] == [measurement, reference_value]
+
+
+def test_slice_complex_choice_merges_pattern_with_mapped_descendants(factory):
+    quantity_pattern = {
+        "system": "http://unitsofmeasure.org",
+        "code": "mm[Hg]",
+    }
+    factory._current_profile_sd = {
+        "resourceType": "StructureDefinition",
+        "type": "Observation",
+        "snapshot": {
+            "element": [
+                {"id": "Observation", "path": "Observation"},
+                {
+                    "id": "Observation.component",
+                    "path": "Observation.component",
+                    "type": [{"code": "BackboneElement"}],
+                },
+                {
+                    "id": "Observation.component:SystolicBP",
+                    "path": "Observation.component",
+                    "sliceName": "SystolicBP",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "BackboneElement"}],
+                },
+                {
+                    "id": "Observation.component:SystolicBP.value[x]",
+                    "path": "Observation.component.value[x]",
+                    "type": [{"code": "Quantity"}],
+                },
+                {
+                    "id": (
+                        "Observation.component:SystolicBP.value[x]:valueQuantity"
+                    ),
+                    "path": "Observation.component.value[x]",
+                    "sliceName": "valueQuantity",
+                    "type": [{"code": "Quantity"}],
+                    "patternQuantity": quantity_pattern,
+                },
+            ]
+        },
+    }
+    parent = {
+        "path": "Observation.component",
+        "type": [{"code": "BackboneElement"}],
+    }
+    choice = {
+        "path": "Observation.component.value[x]",
+        "id": "Observation.component:SystolicBP.value[x]",
+        "type": [{"code": "Quantity"}],
+        "cardinality": {"min": 0, "max": "1"},
+    }
+    slice_field = {
+        "path": "Observation.component",
+        "id": "Observation.component:SystolicBP",
+        "sliceName": "SystolicBP",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [choice],
+    }
+    automapped = {
+        (
+            "Observation.component:SystolicBP"
+            ".value[x]:valueQuantity.value"
+        ): "Source.systolic",
+        (
+            "Observation.component:SystolicBP"
+            ".value[x]:valueQuantity.unit"
+        ): "Source.unit",
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Observation", "source", "target", automapped
+    )
+
+    values = [
+        child
+        for child in rule.rule
+        if child.target and child.target[0].element == "value"
+    ]
+    assert len(values) == 1
+    assert values[0].target[0].parameter[0].valueString == "Quantity"
+    by_element = {
+        child.target[0].element: child for child in values[0].rule
+    }
+    assert set(by_element) == {"system", "code", "value", "unit"}
+    assert by_element["system"].target[0].parameter[0].valueString == (
+        "http://unitsofmeasure.org"
+    )
+    assert by_element["value"].source[0].element == "systolic"
 
 
 def test_choice_populate_ignores_whole_placeholder_when_descendants_are_mapped(factory):
@@ -226,6 +599,30 @@ def test_open_slicing_emits_one_generic_entry_for_unsliced_provider(factory):
     assert {
         diagnostic["code"] for diagnostic in factory.diagnostics
     } == {"deferred-descendant-slice"}
+
+
+def test_open_slicing_ignores_inferred_unsliced_ancestor_of_slice_provider(factory):
+    """A slice-qualified leaf must not also create a generic entry (B7)."""
+
+    field = _sliced_coding_field()
+    mappings = {
+        "Condition.code.coding": "Source.problemCode",
+        "Condition.code.coding:icd10.code": "Source.problemCode",
+    }
+    factory.explicit_mapping_targets = {
+        "Condition.code.coding:icd10.code",
+    }
+
+    rules = factory.create_field_rules(
+        "Condition",
+        [field],
+        "src-code",
+        "tgt-code",
+        automapped_mappings=mappings,
+        parent_path="Condition.code",
+    )
+
+    assert [rule.name for rule in rules] == ["map-coding-icd10"]
 
 
 def test_open_unsliced_entry_keeps_base_fixed_leaf_but_not_slice_fixed_leaf(factory):
@@ -916,6 +1313,66 @@ def test_required_nested_extension_slice_is_emitted_under_backbone_slice(factory
         if child is not extension
         for target in (child.target or [])
     )
+
+
+def test_required_nested_extension_is_recovered_from_snapshot_when_parser_omits_it(
+    factory,
+):
+    from types import SimpleNamespace
+
+    canonical = "http://example.org/StructureDefinition/contact-role"
+    exact_id = "Organization.contact:forschungskontakt.extension:rolle"
+    factory._current_profile_sd = SimpleNamespace(
+        snapshot=SimpleNamespace(
+            element=[
+                SimpleNamespace(
+                    id=exact_id,
+                    min=1,
+                    max="1",
+                    type=[SimpleNamespace(profile=[canonical])],
+                )
+            ]
+        )
+    )
+    factory.app_state = SimpleNamespace(
+        registry=SimpleNamespace(registry_objects={}),
+        cache=SimpleNamespace(
+            get_resource_from_cache=lambda url: None,
+            add_resource_to_cache=lambda resource: None,
+        ),
+        conf={"resource_cache_path": "/nonexistent-dir-xyz"},
+        dataIO=None,
+    )
+    factory.map_url = "http://example.org/fml"
+    factory.overwrite = False
+    factory.plugins = []
+
+    parent = {
+        "path": "Organization.contact",
+        "type": [{"code": "BackboneElement"}],
+    }
+    slice_field = {
+        "path": "Organization.contact",
+        "id": "Organization.contact:forschungskontakt",
+        "sliceName": "forschungskontakt",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+        # Deliberately no parsed extension child/slice.
+        "children": [],
+    }
+    automapped = {exact_id: "Source.contactRole"}
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Organization", "src", "tgt", automapped
+    )
+
+    extension = next(
+        child for child in rule.rule if child.name.startswith("map-extension-rolle")
+    )
+    assert extension.source[0].element == "contactRole"
+    assert extension.target[0].context == "tgt-contact-forschungskontakt"
+    assert extension.target[0].element == "extension"
+    assert extension.rule[0].target[0].parameter[0].valueString == canonical
 
 
 def test_required_extension_below_primitive_choice_uses_primitive_context(factory):

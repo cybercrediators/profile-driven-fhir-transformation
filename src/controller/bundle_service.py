@@ -51,19 +51,22 @@ class BundleService:
             specs = BundleService._specs_from_structure_maps(structure_maps or [])
             profile_type_map = BundleService._build_profile_type_map(registry)
             prohibited_map = BundleService._build_profile_prohibited_map(registry)
+            required_map = BundleService._build_profile_required_map(registry)
             if specs:
                 BundleService._wire_references(
                     resources, specs, urn_map, array_paths, profile_type_map,
-                    prohibited_map,
+                    prohibited_map, required_map,
                 )
             if registry:
                 BundleService._resolve_unresolved_required(
-                    resources, registry, specs, urn_map, array_paths, prohibited_map
+                    resources, registry, specs, urn_map, array_paths,
+                    prohibited_map, required_map,
                 )
 
             if external_reference_defaults:
                 BundleService._apply_external_reference_defaults(
-                    resources, external_reference_defaults, array_paths, prohibited_map
+                    resources, external_reference_defaults, array_paths,
+                    prohibited_map, required_map,
                 )
 
             if registry:
@@ -226,20 +229,36 @@ class BundleService:
                     resolved_types.append(
                         (profile_to_type or {}).get(raw, raw)
                     )
-                specs.append(
-                    (
-                        source_type,
-                        field_path,
-                        "|".join(dict.fromkeys(resolved_types)),
-                        source_profile,
-                        "bundled",
-                        contract.get("match", "byOrder"),
-                        contract.get("sourceKey"),
-                        contract.get("targetKey"),
-                        contract.get("referenceMode", "urn"),
-                        contract.get("targetProfile"),
-                    )
+                spec = (
+                    source_type,
+                    field_path,
+                    "|".join(dict.fromkeys(resolved_types)),
+                    source_profile,
+                    "bundled",
+                    contract.get("match", "byOrder"),
+                    contract.get("sourceKey"),
+                    contract.get("targetKey"),
+                    contract.get("referenceMode", "urn"),
+                    contract.get("targetProfile"),
                 )
+                target_profiles = contract.get("targetProfiles")
+                if target_profiles is not None:
+                    if not (
+                        isinstance(target_profiles, list)
+                        and target_profiles
+                        and all(
+                            isinstance(profile, str) and profile
+                            for profile in target_profiles
+                        )
+                    ):
+                        raise ValueError("targetProfiles must be a non-empty string list")
+                    spec += (
+                        tuple(
+                            profile.split("|", 1)[0]
+                            for profile in target_profiles
+                        ),
+                    )
+                specs.append(spec)
             except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
                 logger.warning("Ignoring malformed bundled-reference contract: %s", exc)
         elif rule.get("name", "").lower().startswith("todo-resolve-reference-"):
@@ -325,6 +344,56 @@ class BundleService:
         return prohibited
 
     @staticmethod
+    def _build_profile_required_map(registry) -> dict:
+        """Active required target paths per profile, relative to the resource."""
+
+        required: dict = {}
+        if not registry:
+            return required
+        prohibited = BundleService._build_profile_prohibited_map(registry)
+
+        def _children(field):
+            nested = []
+            for key in ("children", "slices", "type_structure"):
+                nested.extend(field.get(key) or [])
+            raw_types = field.get("type")
+            if isinstance(raw_types, list):
+                for raw_type in raw_types:
+                    if isinstance(raw_type, dict):
+                        nested.extend(raw_type.get("type_structure") or [])
+            return nested
+
+        def _walk(fields, out, forbidden, ancestors_required=True):
+            for field in fields or []:
+                if not isinstance(field, dict):
+                    continue
+                path = field.get("path") or field.get("id") or ""
+                parts = path.split(".")
+                relative = ".".join(parts[1:]) if len(parts) > 1 else path
+                if not relative or BundleService._path_is_prohibited(
+                    relative, forbidden
+                ):
+                    continue
+                minimum = int(
+                    ((field.get("cardinality") or {}).get("min", 0)) or 0
+                )
+                active = ancestors_required and minimum > 0
+                if active:
+                    out.add(relative)
+                _walk(_children(field), out, forbidden, active)
+
+        for obj in registry.registry_objects.values():
+            url = getattr(getattr(obj, "data", None), "url", "") or ""
+            fields = getattr(obj, "mappable_fields", None)
+            if not url or not fields:
+                continue
+            paths = set()
+            _walk(fields, paths, prohibited.get(url, set()))
+            if paths:
+                required[url] = paths
+        return required
+
+    @staticmethod
     def _resource_profiles(resource: dict) -> list:
         """Version-stripped canonical URLs from a resource meta.profile"""
         actual = (resource.get("meta") or {}).get("profile") or []
@@ -341,6 +410,8 @@ class BundleService:
         if field_path in prohibited:
             return True
         for s in prohibited:
+            if field_path.startswith(s + "."):
+                return True
             if s.endswith("[x]"):
                 base = s[:-3]
                 if field_path.startswith(base) and field_path[len(base):][:1].isupper():
@@ -369,6 +440,61 @@ class BundleService:
         return False
 
     @staticmethod
+    def _constrained_reference_value(
+        resource: dict,
+        field_path: str,
+        value: dict,
+        prohibited_map: dict = None,
+        required_map: dict = None,
+    ):
+        """Return a profile-safe Reference value, or ``None`` when incomplete."""
+
+        constrained = deepcopy(value)
+
+        def _prune(current, prefix):
+            if not isinstance(current, dict):
+                return
+            for key in list(current):
+                child_path = f"{prefix}.{key}"
+                if BundleService._wiring_forbidden(
+                    resource, child_path, prohibited_map
+                ):
+                    current.pop(key, None)
+                    continue
+                _prune(current[key], child_path)
+
+        _prune(constrained, field_path)
+        required_children = set()
+        for profile in BundleService._resource_profiles(resource):
+            for required_path in (required_map or {}).get(profile, set()):
+                if required_path.startswith(field_path + "."):
+                    required_children.add(
+                        required_path[len(field_path) + 1 :]
+                    )
+        missing = [
+            child
+            for child in sorted(required_children)
+            if BundleService._get_nested(constrained, child.split(".")) is None
+        ]
+        if missing:
+            logger.warning(
+                "Refusing incomplete Reference %s.%s: required child paths "
+                "are missing after profile constraints: %s",
+                resource.get("resourceType"),
+                field_path,
+                ", ".join(missing),
+            )
+            return None
+        if not any(constrained.get(key) for key in ("reference", "identifier", "display")):
+            logger.warning(
+                "Refusing empty Reference %s.%s after applying profile constraints",
+                resource.get("resourceType"),
+                field_path,
+            )
+            return None
+        return constrained
+
+    @staticmethod
     def _resource_matches_obj(resource: dict, obj_url: str, source_type: str) -> bool:
         """Whether a fallback/co-occurrence rule derived from the profile"""
         profiles = BundleService._resource_profiles(resource)
@@ -380,6 +506,7 @@ class BundleService:
     def _wire_references(
         resources: list, specs: list, urn_map: dict, array_paths: dict = None,
         profile_type_map: dict = None, prohibited_map: dict = None,
+        required_map: dict = None,
     ) -> None:
         """Wire references for the given (source_type, field_path, target_type) specs using the
         urn_map for reference values"""
@@ -409,6 +536,7 @@ class BundleService:
             target_key = spec[7] if len(spec) > 7 else None
             reference_mode = spec[8] if len(spec) > 8 else "urn"
             target_profile = spec[9] if len(spec) > 9 else None
+            target_profiles = spec[10] if len(spec) > 10 else None
             # Resolve each candidate (base type or profile id) to a present type.
             candidates = [
                 profile_type_map.get(t, t) for t in target_type.split("|") if t
@@ -444,9 +572,20 @@ class BundleService:
                         for target in avail
                         if canonical in BundleService._resource_profiles(target)
                     ]
+                if target_profiles:
+                    accepted = set(target_profiles)
+                    avail = [
+                        target
+                        for target in avail
+                        if accepted.intersection(
+                            BundleService._resource_profiles(target)
+                        )
+                    ]
                 if not avail:
                     continue
-                if BundleService._wiring_forbidden(source, field_path, prohibited_map):
+                if BundleService._wiring_forbidden(
+                    source, f"{field_path}.reference", prohibited_map
+                ):
                     continue
                 selected = []
                 if strategy != "bundled" or match == "byOrder":
@@ -492,25 +631,38 @@ class BundleService:
                     )
                     continue
 
-                refs = [
-                    BundleService._reference_value(
-                        target, urn_map, reference_mode
+                refs = list(
+                    dict.fromkeys(
+                        BundleService._reference_value(
+                            target, urn_map, reference_mode
+                        )
+                        for target in selected
                     )
-                    for target in selected
+                )
+                reference_values = [
+                    BundleService._constrained_reference_value(
+                        source,
+                        field_path,
+                        {"reference": ref},
+                        prohibited_map,
+                        required_map,
+                    )
+                    for ref in refs
                 ]
-                refs = list(dict.fromkeys(refs))
+                if any(value is None for value in reference_values):
+                    continue
                 if match == "all":
                     BundleService._set_nested_all(
                         source,
                         parts,
-                        [{"reference": ref} for ref in refs],
+                        reference_values,
                         array_paths.get(source_type, set()),
                     )
                 else:
                     BundleService._set_nested(
                         source,
                         parts,
-                        {"reference": refs[0]},
+                        reference_values[0],
                         array_paths.get(source_type, set()),
                     )
                 logger.info(
@@ -560,7 +712,7 @@ class BundleService:
     @staticmethod
     def _apply_external_reference_defaults(
         resources: list, declarations: list, array_paths: dict = None,
-        prohibited_map: dict = None,
+        prohibited_map: dict = None, required_map: dict = None,
     ) -> None:
         """Fill still-empty references from explicit external declarations.
         """
@@ -668,12 +820,15 @@ class BundleService:
                     resource, parts[:-1]
                 ) is None:
                     continue
-                if BundleService._wiring_forbidden(resource, path, prohibited_map):
+                constrained = BundleService._constrained_reference_value(
+                    resource, path, value, prohibited_map, required_map
+                )
+                if constrained is None:
                     continue
                 BundleService._set_nested(
                     resource,
                     parts,
-                    deepcopy(value),
+                    constrained,
                     array_paths.get(source_type, set()),
                 )
                 logger.info(
@@ -717,6 +872,7 @@ class BundleService:
         urn_map: dict,
         array_paths: dict = None,
         prohibited_map: dict = None,
+        required_map: dict = None,
     ) -> None:
         """For **required** reference fields that are still empty after SM-declared wiring:
         - If there is exactly one candidate of the target type in the bundle, auto-wire it.
@@ -777,17 +933,26 @@ class BundleService:
                         if targets[0] is res:
                             continue
                         if BundleService._wiring_forbidden(
-                            res, field_path, prohibited_map
+                            res, f"{field_path}.reference", prohibited_map
                         ):
                             continue
                         ref = urn_map.get(
                             id(targets[0]),
                             f"{target_type}/{targets[0].get('id', 'unknown')}",
                         )
+                        value = BundleService._constrained_reference_value(
+                            res,
+                            field_path,
+                            {"reference": ref},
+                            prohibited_map,
+                            required_map,
+                        )
+                        if value is None:
+                            continue
                         BundleService._set_nested(
                             res,
                             field_path.split("."),
-                            {"reference": ref},
+                            value,
                             array_paths.get(source_type, set()),
                         )
                         logger.info(f"Auto-wired {source_type}.{field_path} → {ref}")
