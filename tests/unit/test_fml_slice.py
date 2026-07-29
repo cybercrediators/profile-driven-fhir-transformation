@@ -85,6 +85,30 @@ def test_choice_populate_complex_type_dotted_subfield_delegates_to_subpath_build
     assert code_rule.source[0].element == "srcCode"
 
 
+def test_choice_populate_ignores_whole_placeholder_when_descendants_are_mapped(factory):
+    rule = factory._create_choice_populate_rule(
+        "item",
+        "CodeableConcept",
+        [
+            ("coding.code", "ingredientCode"),
+            ("", "TODO_MAP_INGREDIENT_ITEM_SOURCE"),
+            ("coding.system", "ingredientSystem"),
+        ],
+        "src",
+        "tgt",
+        {},
+    )
+
+    assert rule.target[0].element == "item"
+    assert rule.target[0].transform == "create"
+    assert all(
+        target.element
+        for child in rule.rule
+        for target in (child.target or [])
+    )
+    assert factory.diagnostics[-1]["code"] == "whole-complex-provider-shadowed"
+
+
 # ── _create_slice_instance_rule ─────────────────────────────────────────────────
 def test_coding_slice_of_codeableconcept_is_deferred(factory):
     parent_field = {"path": "Observation.category", "type": [{"code": "CodeableConcept"}]}
@@ -199,7 +223,9 @@ def test_open_slicing_emits_one_generic_entry_for_unsliced_provider(factory):
     assert [child.name for child in rules[0].rule] == ["map-code"]
     assert rules[0].rule[0].source[0].element == "problemCode"
     assert rules[0].rule[0].target[0].element == "code"
-    assert not factory.diagnostics
+    assert {
+        diagnostic["code"] for diagnostic in factory.diagnostics
+    } == {"deferred-descendant-slice"}
 
 
 def test_open_unsliced_entry_keeps_base_fixed_leaf_but_not_slice_fixed_leaf(factory):
@@ -278,20 +304,81 @@ def test_closed_slicing_rejects_unsliced_provider_with_diagnostic(factory):
     )
 
     assert rules == []
-    assert factory.diagnostics == [
-        {
-            "code": "unsliced-provider-for-closed-slicing",
-            "message": (
-                "Unsliced mapping target Condition.code.coding cannot create an "
-                "entry in closed slicing. Use a slice-qualified mapping target."
-            ),
-            "profile": "unknown",
-            "path": "Condition.code.coding",
-            "provider_keys": ["Condition.code.coding.code"],
-            "slicing_rules": "closed",
-            "severity": "error",
-        }
+    assert factory.diagnostics[0] == {
+        "code": "unsliced-provider-for-closed-slicing",
+        "message": (
+            "Unsliced mapping target Condition.code.coding cannot create an "
+            "entry in closed slicing. Use a slice-qualified mapping target."
+        ),
+        "profile": "unknown",
+        "path": "Condition.code.coding",
+        "provider_keys": ["Condition.code.coding.code"],
+        "slicing_rules": "closed",
+        "severity": "error",
+    }
+    assert {
+        diagnostic["code"] for diagnostic in factory.diagnostics[1:]
+    } == {"deferred-descendant-slice"}
+
+
+def test_slice_qualified_path_is_not_mistaken_for_descendant_path(factory):
+    slicing = {
+        "discriminators": [{"type": "pattern", "path": "$this.code"}],
+        "rules": "open",
+    }
+    parent = {
+        "path": "Observation.component",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 2, "max": "*"},
+        "slicing": slicing,
+        "slices": [
+            {
+                "path": "Observation.component:type",
+                "id": "Observation.component:type",
+                "sliceName": "type",
+                "type": [{"code": "BackboneElement"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "children": [
+                    {
+                        "path": "Observation.component.code",
+                        "id": "Observation.component:type.code",
+                        "type": [{"code": "CodeableConcept"}],
+                        "cardinality": {"min": 1, "max": "1"},
+                        "fixed_value": {"text": "type"},
+                    }
+                ],
+            },
+            {
+                "path": "Observation.component:result",
+                "id": "Observation.component:result",
+                "sliceName": "result",
+                "type": [{"code": "BackboneElement"}],
+                "cardinality": {"min": 1, "max": "1"},
+                "children": [
+                    {
+                        "path": "Observation.component.code",
+                        "id": "Observation.component:result.code",
+                        "type": [{"code": "CodeableConcept"}],
+                        "cardinality": {"min": 1, "max": "1"},
+                        "fixed_value": {"text": "result"},
+                    }
+                ],
+            },
+        ],
+    }
+
+    rules = factory.create_field_rules(
+        "Observation", [parent], "src", "tgt", automapped_mappings={}
+    )
+
+    assert [rule.name for rule in rules] == [
+        "map-component-type",
+        "map-component-result",
     ]
+    assert not any(
+        diagnostic["code"] == "deferred-descendant-slice"
+        for diagnostic in factory.diagnostics
+    )
 
 
 def test_primitive_slice_optional_without_subs_is_dropped(factory):
@@ -424,6 +511,45 @@ def test_complex_slice_instance_full_shape(factory):
     assert start_rule.target[0].transform == "cast"
     assert start_rule.target[0].parameter[-1].valueString == "dateTime"
     assert start_rule.source[0].element == "mrnStart"
+
+
+def test_required_narrowed_choice_child_uses_concrete_element_name(factory):
+    parent = {
+        "path": "Communication.payload",
+        "type": [{"code": "BackboneElement"}],
+    }
+    slice_field = {
+        "path": "Communication.payload",
+        "id": "Communication.payload:responseProposalContraIndication",
+        "sliceName": "responseProposalContraIndication",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [
+            {
+                "path": "Communication.payload.content[x]",
+                "id": (
+                    "Communication.payload:responseProposalContraIndication"
+                    ".content[x]"
+                ),
+                "type": [{"code": "string"}],
+                "is_type_choice": True,
+                "cardinality": {"min": 1, "max": "1"},
+                "is_required": True,
+                "fixed_value": [],
+            }
+        ],
+    }
+
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Communication", "src", "tgt", {}
+    )
+
+    content = next(
+        child for child in rule.rule if child.name.endswith("-content")
+    )
+    assert content.source[0].element.startswith("TODO-MAP-")
+    assert content.target[0].element == "contentString"
+    assert content.target[0].transform == "copy"
 
 
 def test_active_slice_emits_todos_for_unprovided_required_siblings(factory):
@@ -819,6 +945,54 @@ def test_required_slice_with_unresolved_discriminator_is_omitted(factory):
     )
     assert factory.diagnostics[-1]["code"] == "ambiguous-slice-selection"
     assert factory.diagnostics[-1]["slicing_rules"] == "closed"
+
+
+def test_exists_discriminator_accepts_required_canonical_extension(factory):
+    canonical = (
+        "http://nictiz.nl/fhir/5.0/StructureDefinition/"
+        "extension-Communication.payload.contentCodeableConcept"
+    )
+    factory._current_profile_sd = {
+        "snapshot": {
+            "element": [
+                {
+                    "id": (
+                        "Communication.payload:responseProposalContraIndication"
+                        ".content[x].extension:contentCodeableConcept"
+                    ),
+                    "path": "Communication.payload.content[x].extension",
+                    "min": 1,
+                    "max": "1",
+                    "type": [{"code": "Extension", "profile": [canonical]}],
+                }
+            ]
+        }
+    }
+    parent = {
+        "path": "Communication.payload",
+        "type": [{"code": "BackboneElement"}],
+        "slicing": {
+            "discriminators": [
+                {
+                    "type": "exists",
+                    "path": f"content.extension(url='{canonical}')",
+                }
+            ],
+            "rules": "open",
+        },
+    }
+    slice_field = {
+        "path": "Communication.payload",
+        "id": "Communication.payload:responseProposalContraIndication",
+        "sliceName": "responseProposalContraIndication",
+        "type": [{"code": "BackboneElement"}],
+        "cardinality": {"min": 1, "max": "1"},
+    }
+
+    assert factory._slice_selection_is_safe(
+        parent, slice_field, explicit_provider=False
+    )
+    assert not factory.diagnostics
 
 
 def test_multiple_discriminators_are_checked_together(factory):

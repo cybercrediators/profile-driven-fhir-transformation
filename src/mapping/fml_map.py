@@ -21,21 +21,25 @@ from helpers.utils import (
 )
 
 from typing import List, Any, Dict, Optional, Set, Tuple
+import hashlib
 import logging
 import re
-logger = logging.getLogger(__name__)
-import hashlib
 
 from fhir.resources.R4B.structuredefinition import StructureDefinition
 from mapping.fml_creator.fml_questionnaire import QuestionnaireMapCreator
 from mapping.rule_ir import (
     CollectionRuleSpec,
+    MAPPING_TRANSFORMS,
     SOURCE_LIST_MODES,
     TARGET_LIST_MODES,
+    compile_rule_document,
+    is_rule_document_key,
     mapping_target_path,
     parse_collection_rule,
 )
 from data_handling.app_state import AppState
+
+logger = logging.getLogger(__name__)
 
 
 class StructureMapGenerator:
@@ -171,6 +175,27 @@ class StructureMapGenerator:
                 ),
             ]
 
+            typed_document = compile_rule_document(
+                self.custom_mapping_table,
+                profile_id=profile_identity,
+                profile_url=getattr(obj.data, "url", "") or "",
+                resource_type=res_type,
+            )
+            for diagnostic in typed_document.diagnostics:
+                self._append_diagnostic(**diagnostic)
+            if typed_document.imports:
+                sm.import_fhir = typed_document.imports
+            if typed_document.structures:
+                known_structures = {
+                    (structure.url, structure.mode, structure.alias)
+                    for structure in sm.structure
+                }
+                for structure in typed_document.structures:
+                    identity = (structure.url, structure.mode, structure.alias)
+                    if identity not in known_structures:
+                        sm.structure.append(structure)
+                        known_structures.add(identity)
+
             res_group = self.create_res_group(
                 res_type,
                 obj,
@@ -178,8 +203,16 @@ class StructureMapGenerator:
                 source_obj=self.helper_map,
                 automapped_mappings=automapped_mappings,
             )
+            if typed_document.reference_paths:
+                res_group.rule = self._remove_deferred_reference_rules(
+                    res_group.rule, res_type, typed_document.reference_paths
+                )
+            if typed_document.primary_rules:
+                res_group.rule = list(res_group.rule or []) + list(
+                    typed_document.primary_rules
+                )
 
-            groups = [res_group]
+            groups = [res_group, *typed_document.groups]
             sm.group = groups
             self._sanitize_todo_rules(sm)
             self._normalize_and_validate_structure_map(sm)
@@ -202,6 +235,32 @@ class StructureMapGenerator:
         self._cleanup_stale_structure_maps(structure_maps)
 
         return structure_maps
+
+    @staticmethod
+    def _remove_deferred_reference_rules(rules, res_type, reference_paths):
+        """Remove default TODO wiring superseded by an explicit reference policy."""
+        kept = []
+        for rule in rules or []:
+            nested = StructureMapGenerator._remove_deferred_reference_rules(
+                getattr(rule, "rule", None), res_type, reference_paths
+            )
+            if getattr(rule, "rule", None) is not None:
+                rule.rule = nested or None
+            name = getattr(rule, "name", "") or ""
+            documentation = getattr(rule, "documentation", "") or ""
+            if name.startswith("TODO-resolve-reference"):
+                match = re.match(
+                    rf"Reference<{re.escape(res_type)}\.([^>]+)>",
+                    documentation,
+                )
+                if match:
+                    path = match.group(1)
+                    if path.endswith("[x]"):
+                        path = path[: -len("[x]")] + "Reference"
+                    if path in reference_paths:
+                        continue
+            kept.append(rule)
+        return kept
 
     def _cleanup_stale_structure_maps(self, structure_maps):
         """delete generated-named SM files in structure_maps/ that this run did not produce"""
@@ -246,6 +305,12 @@ class StructureMapGenerator:
                         )
                     if context and not getattr(target, "contextType", None):
                         target.contextType = "variable"
+                    transform = getattr(target, "transform", None)
+                    if transform and transform not in MAPPING_TRANSFORMS:
+                        raise ValueError(
+                            f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
+                            f"has unsupported transform {transform!r}"
+                        )
                     target_modes = list(getattr(target, "listMode", None) or [])
                     invalid_modes = sorted(set(target_modes) - TARGET_LIST_MODES)
                     if invalid_modes:
@@ -261,7 +326,15 @@ class StructureMapGenerator:
                         )
                 _walk(getattr(rule, "rule", None))
 
-        for group in getattr(structure_map, "group", None) or []:
+        groups = getattr(structure_map, "group", None) or []
+        group_names = [
+            getattr(group, "name", None)
+            for group in groups
+            if getattr(group, "name", None)
+        ]
+        if len(group_names) != len(set(group_names)):
+            raise ValueError("StructureMap group names must be unique")
+        for group in groups:
             _walk(getattr(group, "rule", None))
         return structure_map
 
@@ -509,8 +582,23 @@ class StructureMapGenerator:
     def _process_resource_mapping(
         self, obj, res_type, source_fields, active_types: Set[str] = None
     ):
+        special_targets = set()
+        if isinstance(self.custom_mapping_table, dict):
+            profile_id = resource_identity(obj.data)
+            for source_key, value in self.custom_mapping_table.items():
+                if is_rule_document_key(source_key):
+                    continue
+                target = mapping_target_path(value)
+                if not target or "." not in target:
+                    continue
+                prefix, relative = target.split(".", 1)
+                if prefix in (res_type, profile_id):
+                    special_targets.add(f"{res_type}.{relative}")
         flat_fields = flatten_profile_fields(
-            self.app_state, res_type, obj.mappable_fields
+            self.app_state,
+            res_type,
+            obj.mappable_fields,
+            include_special_paths=special_targets,
         )
 
         automap_source_list = self._flatten_fields_recursively(flat_fields)
@@ -1137,6 +1225,8 @@ class StructureMapGenerator:
         )
 
         for source_key, target_value in ordered_entries:
+            if is_rule_document_key(source_key):
+                continue
             target_text = mapping_target_path(target_value)
             if not target_text:
                 if isinstance(target_value, dict):
@@ -1389,6 +1479,9 @@ class StructureMapGenerator:
         else:
             self.factory._current_profile_id = getattr(res_obj.data, "id", None)
             self.factory._current_profile_sd = res_obj.data
+            self.factory.record_unindexed_snapshot_slices(
+                res_obj.data, res_obj.mappable_fields
+            )
             field_rules = self.factory.create_field_rules(
                 res_type,
                 res_obj.mappable_fields,
@@ -1397,7 +1490,11 @@ class StructureMapGenerator:
                 create_references=create_references,
                 automapped_mappings=automapped_mappings,
             )
-            if self._target_declares_meta(res_obj, res_type):
+            explicit_meta_profile = any(
+                path == f"{res_type}.meta.profile"
+                for path in (automapped_mappings or {})
+            )
+            if self._target_declares_meta(res_obj, res_type) and not explicit_meta_profile:
                 meta_rule = self.factory.create_meta_profile_rule(
                     res_obj.data.url, source_context="source", target_context="target"
                 )

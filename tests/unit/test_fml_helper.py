@@ -82,11 +82,10 @@ def test_get_transform_cast_carries_type_param():
     assert info["parameters"][-1].valueString == "dateTime"
 
 
-def test_copy_cast_partition_covers_primitives_except_xhtml():
-    """copy ∪ cast covers every FHIR primitive except xhtml (which falls through to
-    create). Tier 1 keeps this partition explicit and guards the invariant."""
+def test_copy_cast_partition_covers_all_primitives():
+    """Every R4B primitive has an explicit value-producing transform."""
     assert (H.COPYABLE_PRIMITIVES | H.CASTABLE_PRIMITIVES) == (
-        H.PRIMITIVE_TYPES - {"xhtml"}
+        H.PRIMITIVE_TYPES
     )
     assert not (H.COPYABLE_PRIMITIVES & H.CASTABLE_PRIMITIVES)
 
@@ -612,6 +611,30 @@ def test_flatten_profile_fields_skips_base_meta_paths():
     paths = [r["path"] for r in results]
     assert "Patient.id" not in paths
     assert "Patient.name" in paths
+
+
+def test_flatten_profile_fields_includes_explicit_base_or_narrative_paths():
+    fields = [
+        {"path": "Patient.id", "type": "id"},
+        {
+            "path": "Patient.text",
+            "type": [{"code": "Narrative"}],
+        },
+        {"path": "Patient.contained", "type": [{"code": "Resource"}]},
+    ]
+    results = H.flatten_profile_fields(
+        make_app_state(),
+        "Patient",
+        fields,
+        include_special_paths={"Patient.id", "Patient.text.div"},
+    )
+    assert [item["path"] for item in results] == ["Patient.id", "Patient.text"]
+
+
+def test_xhtml_uses_copy_transform():
+    info = H.get_transform_for_type("xhtml", "src-div")
+    assert info["transform"] == "copy"
+    assert info["parameters"][0].valueId == "src-div"
 
 
 def test_flatten_profile_fields_keeps_meaningful_modifier_extension():

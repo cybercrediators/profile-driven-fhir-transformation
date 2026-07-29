@@ -125,10 +125,20 @@ def _expanded_profile_fields(profile_structure):
     return None
 
 
-def flatten_profile_fields(app_state, res_type, fields):
+def flatten_profile_fields(
+    app_state, res_type, fields, include_special_paths=None
+):
     """get a flattened view of the mappable fields for the automapper, hoisting slices to top level
     and enriching them with derived keys (choice_types, reference_target, profile-defined children, extension_url, …)"""
     logger.info("Preprocessing mappable fields for further tasks")
+    include_special_paths = set(include_special_paths or ())
+
+    def _explicitly_requested(path):
+        return any(
+            candidate == path or candidate.startswith(path + ".")
+            for candidate in include_special_paths
+        )
+
     results = []
     for field in fields:
         conv = conv_mappable(app_state, field)
@@ -137,7 +147,7 @@ def flatten_profile_fields(app_state, res_type, fields):
         # skip meta paths (but keep profile-defined modifierExtension slices)
         if path.endswith(BASE_META_SUFFIXES) and not is_meaningful_modifier_extension(
             conv
-        ):
+        ) and not _explicitly_requested(path):
             continue
 
         profile_structure = conv.get("profile_structure")
@@ -454,6 +464,7 @@ COPYABLE_PRIMITIVES = {
     "uuid",
     "markdown",
     "base64binary",
+    "xhtml",
 }
 
 CASTABLE_PRIMITIVES = {
@@ -474,9 +485,9 @@ assert COPYABLE_PRIMITIVES.isdisjoint(
 assert (
     COPYABLE_PRIMITIVES | CASTABLE_PRIMITIVES
 ) <= PRIMITIVE_TYPES, "copy/cast sets contain a non-primitive type"
-assert PRIMITIVE_TYPES - (COPYABLE_PRIMITIVES | CASTABLE_PRIMITIVES) == {
-    "xhtml"
-}, "unexpected primitive missing from copy/cast partition"
+assert not (
+    PRIMITIVE_TYPES - (COPYABLE_PRIMITIVES | CASTABLE_PRIMITIVES)
+), "unexpected primitive missing from copy/cast partition"
 
 
 def get_transform_for_type(field_type, source_variable=None):

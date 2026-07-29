@@ -1,5 +1,6 @@
 from copy import deepcopy
 from typing import List, Dict, Any, Optional
+import json
 import uuid
 import re
 import logging
@@ -199,10 +200,52 @@ class BundleService:
     ) -> None:
         """Recursively collect (source_type, field_path, target_type) tuples from rules with
         TODO_resolve_reference_*, parsing the target_type from the rule documentation."""
-        if rule.get("name", "").lower().startswith("todo-resolve-reference-"):
+        documentation = rule.get("documentation", "")
+        marker = "FHIRBRIDGE_REFERENCE:"
+        if documentation.startswith(marker):
+            try:
+                contract = json.loads(documentation[len(marker) :])
+                source_type = contract["sourceType"]
+                field_path = contract["path"]
+                target_types = contract["targetTypes"]
+                if not (
+                    isinstance(source_type, str)
+                    and source_type
+                    and isinstance(field_path, str)
+                    and field_path
+                    and isinstance(target_types, list)
+                    and target_types
+                    and all(isinstance(item, str) and item for item in target_types)
+                ):
+                    raise ValueError("missing sourceType, path, or targetTypes")
+                if field_path.endswith("[x]"):
+                    field_path = field_path[: -len("[x]")] + "Reference"
+                resolved_types = []
+                for target in target_types:
+                    raw = target.split("/")[-1] if "/" in target else target
+                    resolved_types.append(
+                        (profile_to_type or {}).get(raw, raw)
+                    )
+                specs.append(
+                    (
+                        source_type,
+                        field_path,
+                        "|".join(dict.fromkeys(resolved_types)),
+                        source_profile,
+                        "bundled",
+                        contract.get("match", "byOrder"),
+                        contract.get("sourceKey"),
+                        contract.get("targetKey"),
+                        contract.get("referenceMode", "urn"),
+                        contract.get("targetProfile"),
+                    )
+                )
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+                logger.warning("Ignoring malformed bundled-reference contract: %s", exc)
+        elif rule.get("name", "").lower().startswith("todo-resolve-reference-"):
             m = re.match(
                 r"Reference<(\w+)\.([^>]+)>\s*(?:→|->)\s*(\S+)",
-                rule.get("documentation", ""),
+                documentation,
             )
             if m:
                 raw = m.group(3).rstrip(" —-").rstrip("—").strip()
@@ -360,12 +403,25 @@ class BundleService:
                     or source_profile in BundleService._resource_profiles(s)
                 ]
                 sources = scoped
-            # resolve each candidate (base type or profile id) to a present type
+            strategy = spec[4] if len(spec) > 4 else "legacy"
+            match = spec[5] if len(spec) > 5 else "byOrder"
+            source_key = spec[6] if len(spec) > 6 else None
+            target_key = spec[7] if len(spec) > 7 else None
+            reference_mode = spec[8] if len(spec) > 8 else "urn"
+            target_profile = spec[9] if len(spec) > 9 else None
+            # Resolve each candidate (base type or profile id) to a present type.
             candidates = [
                 profile_type_map.get(t, t) for t in target_type.split("|") if t
             ]
             chosen = next((c for c in candidates if by_type.get(c)), None)
-            targets = by_type.get(chosen, []) if chosen else []
+            if match == "all":
+                targets = [
+                    target
+                    for candidate in candidates
+                    for target in by_type.get(candidate, [])
+                ]
+            else:
+                targets = by_type.get(chosen, []) if chosen else []
             if not sources or not targets:
                 logger.warning(
                     f"Reference {source_type}.{field_path} → {target_type}: "
@@ -381,19 +437,125 @@ class BundleService:
                     )
                     continue
                 avail = [t for t in targets if t is not source]
+                if target_profile:
+                    canonical = target_profile.split("|", 1)[0]
+                    avail = [
+                        target
+                        for target in avail
+                        if canonical in BundleService._resource_profiles(target)
+                    ]
                 if not avail:
                     continue
                 if BundleService._wiring_forbidden(source, field_path, prohibited_map):
                     continue
-                target = avail[i % len(avail)]
-                ref = urn_map.get(id(target), f"{chosen}/{target.get('id', 'unknown')}")
-                BundleService._set_nested(
-                    source,
-                    parts,
-                    {"reference": ref},
-                    array_paths.get(source_type, set()),
+                selected = []
+                if strategy != "bundled" or match == "byOrder":
+                    selected = [avail[i % len(avail)]]
+                elif match == "singleton":
+                    if len(avail) != 1:
+                        logger.warning(
+                            "Reference %s.%s requires one target, found %d — skipping",
+                            source_type,
+                            field_path,
+                            len(avail),
+                        )
+                        continue
+                    selected = avail
+                elif match == "identifier":
+                    source_value = BundleService._reference_match_value(
+                        source, source_key, source_type
+                    )
+                    selected = [
+                        target
+                        for target in avail
+                        if BundleService._reference_match_value(
+                            target, target_key, target.get("resourceType")
+                        )
+                        == source_value
+                    ]
+                    if source_value is None or len(selected) != 1:
+                        logger.warning(
+                            "Reference %s.%s identifier correlation found %d matches — skipping",
+                            source_type,
+                            field_path,
+                            len(selected) if source_value is not None else 0,
+                        )
+                        continue
+                elif match == "all":
+                    selected = avail
+                else:
+                    logger.warning(
+                        "Reference %s.%s has unsupported match policy %r — skipping",
+                        source_type,
+                        field_path,
+                        match,
+                    )
+                    continue
+
+                refs = [
+                    BundleService._reference_value(
+                        target, urn_map, reference_mode
+                    )
+                    for target in selected
+                ]
+                refs = list(dict.fromkeys(refs))
+                if match == "all":
+                    BundleService._set_nested_all(
+                        source,
+                        parts,
+                        [{"reference": ref} for ref in refs],
+                        array_paths.get(source_type, set()),
+                    )
+                else:
+                    BundleService._set_nested(
+                        source,
+                        parts,
+                        {"reference": refs[0]},
+                        array_paths.get(source_type, set()),
+                    )
+                logger.info(
+                    "Wired %s.%s → %s",
+                    source_type,
+                    field_path,
+                    ", ".join(refs),
                 )
-                logger.info(f"Wired {source_type}.{field_path} → {ref}")
+
+    @staticmethod
+    def _reference_match_value(resource: dict, path: str, resource_type: str):
+        if not isinstance(path, str) or not path:
+            return None
+        parts = path.split(".")
+        if parts and parts[0] == resource_type:
+            parts = parts[1:]
+        value = BundleService._get_nested(resource, parts)
+        if isinstance(value, (dict, list)):
+            return json.dumps(value, sort_keys=True, separators=(",", ":"))
+        return value
+
+    @staticmethod
+    def _reference_value(target: dict, urn_map: dict, mode: str) -> str:
+        if mode == "relative" and target.get("id"):
+            return f"{target.get('resourceType')}/{target['id']}"
+        return urn_map.get(
+            id(target),
+            f"{target.get('resourceType')}/{target.get('id', 'unknown')}",
+        )
+
+    @staticmethod
+    def _set_nested_all(
+        obj: dict, path: list, values: list, array_paths: set = None
+    ) -> None:
+        """Assign all values to a repeating leaf without collapsing to the first."""
+        if len(path) == 1:
+            obj[path[0]] = values
+            return
+        parent = BundleService._get_nested(obj, path[:-1])
+        if isinstance(parent, list):
+            parent = parent[0] if parent else None
+        if isinstance(parent, dict):
+            parent[path[-1]] = values
+            return
+        BundleService._set_nested(obj, path, values, array_paths)
 
     @staticmethod
     def _apply_external_reference_defaults(

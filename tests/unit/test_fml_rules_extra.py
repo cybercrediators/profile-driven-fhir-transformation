@@ -49,6 +49,114 @@ def test_meta_profile_rule_respects_contexts(factory):
     assert rule.target[0].context == "tg"
 
 
+@pytest.mark.parametrize(
+    "path,field_type",
+    [("Patient.id", "id"), ("Patient.language", "code")],
+)
+def test_explicit_base_primitive_mapping_is_emitted(factory, path, field_type):
+    rule = factory.create_mappable_field_rule(
+        {"path": path, "type": field_type},
+        "Patient",
+        "source",
+        "target",
+        automapped_mappings={path: f"Source.{path.rsplit('.', 1)[-1]}"},
+    )
+    assert rule is not None
+    assert rule.target[0].element == path.rsplit(".", 1)[-1]
+    assert rule.target[0].transform == "copy"
+
+
+@pytest.mark.parametrize(
+    "path,expected",
+    [
+        ("Patient.contained", "contained-requires-typed-reference"),
+        ("Patient.modifierExtension", "modifier-extension-requires-slice"),
+    ],
+)
+def test_unsafe_unsliced_special_mapping_is_diagnosed(factory, path, expected):
+    factory.diagnostics = []
+    rule = factory.create_mappable_field_rule(
+        {"path": path, "type": "Resource"},
+        "Patient",
+        "source",
+        "target",
+        automapped_mappings={path: "Source.value"},
+    )
+    assert rule is None
+    assert factory.diagnostics[0]["code"] == expected
+
+
+def test_explicit_xhtml_mapping_is_copied_and_diagnosed(factory):
+    factory.diagnostics = []
+    rule = factory.create_mappable_field_rule(
+        {"path": "Patient.text.div", "type": "xhtml"},
+        "Patient",
+        "source",
+        "narrative",
+        automapped_mappings={"Patient.text.div": "Source.div"},
+        parent_path="Patient.text",
+    )
+    assert rule.target[0].transform == "copy"
+    assert factory.diagnostics[0]["code"] == "xhtml-content-authored"
+
+
+def test_unindexed_snapshot_slices_are_reported_once_per_profile(factory):
+    factory.diagnostics = []
+    factory._current_profile_id = "test-profile"
+    sd = SimpleNamespace(
+        snapshot=SimpleNamespace(
+            element=[
+                SimpleNamespace(
+                    id="Patient.identifier:mrn",
+                    path="Patient.identifier",
+                    sliceName="mrn",
+                    min=1,
+                    max="1",
+                ),
+                SimpleNamespace(
+                    id="Patient.identifier:known",
+                    path="Patient.identifier",
+                    sliceName="known",
+                    min=0,
+                    max="1",
+                ),
+                SimpleNamespace(
+                    id="Patient.identifier:forbidden",
+                    path="Patient.identifier",
+                    sliceName="forbidden",
+                    min=0,
+                    max="0",
+                ),
+            ]
+        )
+    )
+
+    factory.record_unindexed_snapshot_slices(
+        sd,
+        [
+            {
+                "id": "Patient.identifier",
+                "slices": [{"id": "Patient.identifier:known"}],
+            }
+        ],
+    )
+
+    assert factory.diagnostics == [
+        {
+            "code": "snapshot-slices-not-indexed",
+            "message": (
+                "1 snapshot slice definition(s) were not retained as "
+                "first-class parsed fields; owning constraints or explicit "
+                "mappings may still recover them."
+            ),
+            "profile": "test-profile",
+            "slice_ids": ["Patient.identifier:mrn"],
+            "required_slice_ids": ["Patient.identifier:mrn"],
+            "severity": "information",
+        }
+    ]
+
+
 # ── Correctness-F: coded-leaf source resolution (binding-branch bug fix) ───────
 # A coded field with an inherited/bound ValueSet routes through the translate /
 # direct-copy branch. Users key the mapping at the *leaf* (code.coding.code), not
@@ -391,6 +499,62 @@ def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factor
 
     assert rule.rule[0].target[0].element == "allowedBoolean"
     assert rule.rule[0].target[0].transform == "copy"
+
+
+def test_concrete_choice_parent_does_not_gate_on_a_todo_placeholder(factory):
+    """The parent's source element is resolved from the bare ``[x]`` path, so a table
+    addressing the concrete choice leaves it on the generated ``TODO_MAP_*`` fallback.
+    A nested rule only runs when its parent matches, so leaving it there means
+    ``$transform`` succeeds while the required choice element is silently absent
+    (medikation 5/5 -> 3/5, biobank 11/11 -> 6/11 against live Matchbox)."""
+    factory.source_field_types = {"statementEffective": "dateTime"}
+    field = {
+        "path": "MedicationStatement.effective[x]",
+        "type": [{"code": "dateTime"}, {"code": "Period"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "MedicationStatement",
+        "source",
+        "target",
+        automapped_mappings={
+            "MedicationStatement.effective[x]:effectiveDateTime": (
+                "Source.statementEffective"
+            )
+        },
+    )
+
+    parent_source = rule.source[0]
+    assert getattr(parent_source, "element", None) is None, (
+        "a TODO placeholder on the parent gates the populated child"
+    )
+    nested_source = rule.rule[0].source[0]
+    assert nested_source.element == "statementEffective"
+    assert rule.rule[0].target[0].element == "effectiveDateTime"
+
+
+def test_scaffold_choice_without_a_provider_keeps_its_todo_source(factory):
+    """The ungating must not strip scaffolding: with no provider there is no populated
+    child to protect, and the TODO source is the author's fill-in point."""
+    field = {
+        "path": "MedicationStatement.effective[x]",
+        "type": [{"code": "dateTime"}],
+        "cardinality": {"min": 1, "max": "1"},
+        "children": [],
+    }
+
+    rule = factory.create_mappable_field_rule(
+        field, "MedicationStatement", "source", "target", automapped_mappings={}
+    )
+
+    if rule is not None:
+        elements = [getattr(s, "element", None) for s in rule.source or []]
+        assert any(
+            isinstance(e, str) and e.startswith("TODO") for e in elements
+        ), "an unmapped choice must remain a fillable scaffold"
 
 
 def test_explicit_concrete_complex_choice_can_be_copied_as_a_whole(factory):

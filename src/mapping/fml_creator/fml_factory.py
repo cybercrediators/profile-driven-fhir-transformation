@@ -98,6 +98,61 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         logger.warning("%s: %s", code, message)
         return diagnostic
 
+    def record_unindexed_snapshot_slices(self, structure_definition, fields):
+        """Expose snapshot slices that the parser did not retain as first-class fields.
+
+        This is informational: fixed constraints or an explicit mapping may still let
+        another generator path recover a slice. Recording the gap nevertheless makes
+        deliberate parser pruning distinguishable from an unexplained rule loss.
+        """
+
+        indexed_ids = set()
+
+        def _collect(items):
+            for field in items or []:
+                if not isinstance(field, dict):
+                    continue
+                identity = field.get("id") or field.get("slice_identity")
+                if identity:
+                    indexed_ids.add(identity)
+                _collect(field.get("children"))
+                _collect(field.get("slices"))
+
+        _collect(fields)
+        snapshot = _attr(structure_definition, "snapshot")
+        elements = (_attr(snapshot, "element", []) if snapshot else []) or []
+        missing = []
+        for element in elements:
+            slice_name = _attr(element, "sliceName")
+            identity = _attr(element, "id")
+            if (
+                not slice_name
+                or not identity
+                or identity in indexed_ids
+                or _attr(element, "max") == "0"
+            ):
+                continue
+            missing.append(
+                {
+                    "id": identity,
+                    "path": _attr(element, "path"),
+                    "min": _attr(element, "min", 0) or 0,
+                    "max": _attr(element, "max"),
+                }
+            )
+        if not missing:
+            return None
+        required = [entry["id"] for entry in missing if entry["min"] > 0]
+        return self.record_diagnostic(
+            "snapshot-slices-not-indexed",
+            f"{len(missing)} snapshot slice definition(s) were not retained as "
+            "first-class parsed fields; owning constraints or explicit mappings "
+            "may still recover them.",
+            slice_ids=[entry["id"] for entry in missing],
+            required_slice_ids=required,
+            severity="information",
+        )
+
     def profile_tree(self):
         """Profile-constrained target tree for the profile currently being emitted.
 
@@ -512,7 +567,10 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 if (
                     slice_field.get("path")
                     and field.get("path")
-                    and slice_field.get("path") != field.get("path")
+                    and self._element_path_without_slices(
+                        slice_field.get("path")
+                    )
+                    != self._element_path_without_slices(field.get("path"))
                 ):
                     # Some parser trees retain descendant slices in an ancestor's
                     # flattened slice collection as well as below their real
@@ -527,6 +585,19 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                         field.get("path"),
                         slice_field.get("path"),
                     )
+                    self.record_diagnostic(
+                        "deferred-descendant-slice",
+                        f"Descendant slice "
+                        f"{slice_field.get('id') or slice_field.get('sliceName')} "
+                        f"was not emitted under {field.get('path')} because it "
+                        f"belongs to {slice_field.get('path')}.",
+                        path=slice_field.get("id")
+                        or slice_field.get("slice_identity")
+                        or slice_field.get("path"),
+                        owner_path=slice_field.get("path"),
+                        encountered_under=field.get("path"),
+                        severity="information",
+                    )
                     continue
                 if (
                     slice_field.get("slices")
@@ -535,6 +606,17 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 ):
                     # A required/emitted reslice is already an instance of its parent
                     # slice. Do not create a second unconditional parent instance.
+                    self.record_diagnostic(
+                        "redundant-parent-slice-suppressed",
+                        f"Parent slice "
+                        f"{slice_field.get('id') or slice_field.get('sliceName')} "
+                        "was not emitted separately because an emitted reslice "
+                        "already creates that instance.",
+                        path=slice_field.get("id")
+                        or slice_field.get("slice_identity")
+                        or slice_field.get("path"),
+                        severity="information",
+                    )
                     continue
                 sl_tc = _tc(slice_field)
                 if (
@@ -549,6 +631,21 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                         sl_tc,
                         field.get("path"),
                         field_type_code,
+                    )
+                    self.record_diagnostic(
+                        "misplaced-descendant-slice",
+                        f"Slice "
+                        f"{slice_field.get('id') or slice_field.get('sliceName')} "
+                        f"was not emitted under {field.get('path')}: its type "
+                        f"{sl_tc} does not match the owning element type "
+                        f"{field_type_code}.",
+                        path=slice_field.get("id")
+                        or slice_field.get("slice_identity")
+                        or slice_field.get("path"),
+                        encountered_under=field.get("path"),
+                        slice_type=sl_tc,
+                        owner_type=field_type_code,
+                        severity="information",
                     )
                     continue
                 # Extension slices keep their dedicated handler (url-discriminated, works well).
@@ -616,7 +713,49 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         if path.endswith(BASE_META_SUFFIXES) and not is_meaningful_modifier_extension(
             field
         ):
-            return None
+            has_provider = bool(
+                automapped_mappings
+                and any(
+                    key == path or key.startswith(path + ".")
+                    for key in automapped_mappings
+                )
+            )
+            if not has_provider:
+                return None
+            if path.endswith(".contained"):
+                self.record_diagnostic(
+                    "contained-requires-typed-reference",
+                    (
+                        f"{path} cannot be populated safely from a legacy field "
+                        "mapping; use a contained $references declaration or $rules."
+                    ),
+                    target=path,
+                )
+                return None
+            if path.endswith(".modifierExtension"):
+                self.record_diagnostic(
+                    "modifier-extension-requires-slice",
+                    (
+                        f"{path} requires a profile-defined slice or an explicit "
+                        "typed rule; an unsliced modifier extension is not inferred."
+                    ),
+                    target=path,
+                )
+                return None
+        if (
+            type_codes(field_type) == ["xhtml"]
+            and automapped_mappings
+            and path in automapped_mappings
+        ):
+            self.record_diagnostic(
+                "xhtml-content-authored",
+                (
+                    f"{path} is copied from the declared source. The generator "
+                    "does not synthesize or sanitize Narrative XHTML."
+                ),
+                target=path,
+                severity="info",
+            )
 
         if is_extension_type(field_type):
             return self.create_extension_rule(
@@ -1155,6 +1294,23 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 target.parameter = params
         return False
 
+    @staticmethod
+    def _ungate_placeholder_parent(rule):
+        """Drop a generated ``TODO_*`` source element from a rule with real children.
+
+        A nested rule only runs when its parent's source matches. The parent's element
+        is resolved from the bare ``value[x]`` path, so an author who addressed the
+        concrete choice (``value[x]:valueDateTime``) leaves it on the generated
+        ``TODO_MAP_*`` fallback. That gates the populated child on a source field which
+        does not exist: ``$transform`` succeeds, reports nothing, and the choice element
+        is silently absent. The parent carries no target of its own, so binding only the
+        context is sufficient — selection stays with the child that owns the provider.
+        """
+        for source in rule.source or []:
+            element = getattr(source, "element", None)
+            if isinstance(element, str) and element.startswith("TODO"):
+                source.element = None
+
     def _choice_field_rule(
         self,
         field,
@@ -1310,6 +1466,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 cardinality,
             )
             if narrowed_rule:
+                self._ungate_placeholder_parent(rule)
                 rule.rule = [narrowed_rule]
                 return rule
 

@@ -12,9 +12,11 @@ from mapping.fml_creator.fml_helper import (
     has_fixed_value,
     type_codes,
     fhir_type_suffix,
+    attr as _attr,
 )
 from parser.resource_parser.fhir_type_introspection import get_complex_type_fields
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +50,13 @@ def _append_or_merge(rules, candidate):
 
 
 class _SliceRulesMixin:
+    @staticmethod
+    def _element_path_without_slices(path):
+        """Return the underlying ElementDefinition path without slice selectors."""
+        return ".".join(
+            segment.split(":", 1)[0] for segment in str(path or "").split(".")
+        )
+
     @staticmethod
     def _slice_identity(parent_field, slice_field):
         identity = slice_field.get("slice_identity") or slice_field.get("id")
@@ -145,6 +154,35 @@ class _SliceRulesMixin:
 
         if disc_type == "exists":
             if target_field is None:
+                # R4/R4B permits discriminator FHIRPaths such as
+                # content.extension(url='...'). The parser tree cannot represent
+                # that function call as an ordinary child lookup, but a required
+                # extension slice with the same canonical URL makes the existence
+                # condition generatively true.
+                match = re.search(
+                    r"extension\(\s*(?:url\s*=\s*)?(['\"])(.*?)\1\s*\)",
+                    str(disc_path),
+                )
+                if not match:
+                    return False
+                canonical = match.group(2)
+                sd = getattr(self, "_current_profile_sd", None)
+                snapshot = _attr(sd, "snapshot") if sd else None
+                elements = (_attr(snapshot, "element", []) if snapshot else []) or []
+                slice_identity = (
+                    slice_field.get("id")
+                    or slice_field.get("slice_identity")
+                    or self._slice_identity(parent_field, slice_field)
+                )
+                for element in elements:
+                    element_id = _attr(element, "id") or ""
+                    if not element_id.startswith(f"{slice_identity}."):
+                        continue
+                    if (_attr(element, "min", 0) or 0) < 1:
+                        continue
+                    for type_ref in _attr(element, "type", []) or []:
+                        if canonical in (_attr(type_ref, "profile", []) or []):
+                            return True
                 return False
             cardinality = target_field.get("cardinality") or {}
             if cardinality.get("max") == "0":
@@ -270,6 +308,29 @@ class _SliceRulesMixin:
         ct = clean_field_name(choice_type)
         rule = StructureMapGroupRule.model_construct(name=f"map-{bn}-{ct}")
 
+        whole_value_maps = [
+            (sub, source) for sub, source in sub_field_maps if sub == ""
+        ]
+        descendant_maps = [
+            (sub, source) for sub, source in sub_field_maps if sub != ""
+        ]
+        if whole_value_maps and descendant_maps:
+            # A generated required-field placeholder can coexist with authored
+            # descendant mappings for the same complex choice. Copying the whole
+            # placeholder as well would compete with the populated create branch;
+            # treating "" as a child also serializes an invalid empty target element.
+            # Prefer the more specific descendant assignments and expose the decision.
+            self.record_diagnostic(
+                "whole-complex-provider-shadowed",
+                f"Whole-value provider for {base_name}{self._choice_suffix(choice_type)} "
+                "was ignored because more specific descendant mappings populate the "
+                "same complex choice.",
+                target=f"{base_name}{self._choice_suffix(choice_type)}",
+                source_providers=[source for _, source in whole_value_maps],
+                severity="information",
+            )
+            sub_field_maps = descendant_maps
+
         if is_primitive_type(choice_type):
             suffix = self._choice_suffix(choice_type)
             src = StructureMapGroupRuleSource.model_construct(
@@ -291,10 +352,10 @@ class _SliceRulesMixin:
 
         # A concrete complex choice can also be copied as a whole.  This is distinct
         # from descendant mappings, where the datatype must be created and populated.
-        if sub_field_maps and sub_field_maps[0][0] == "":
+        if whole_value_maps and not descendant_maps:
             src = StructureMapGroupRuleSource.model_construct(
                 context=parent_source_context,
-                element=sub_field_maps[0][1],
+                element=whole_value_maps[0][1],
                 variable="src-choiceval",
             )
             tgt = StructureMapGroupRuleTarget.model_construct(
@@ -359,8 +420,10 @@ class _SliceRulesMixin:
     def _resolve_leaf_type(self, complex_type, sub, children=None):
         """Resolve a direct sub-field's type on a complex datatype: a profile-declared child
         element wins (its type may be constrained), then generic type introspection."""
+        logical_sub = sub.split(":", 1)[0].replace("[x]", "")
         for c in children or []:
-            if (c.get("path", "") or "").split(".")[-1] == sub:
+            child_name = (c.get("path", "") or "").split(".")[-1]
+            if child_name.replace("[x]", "") == logical_sub:
                 codes = type_codes(c.get("type"))
                 if codes:
                     return codes[0]
@@ -404,6 +467,13 @@ class _SliceRulesMixin:
             logger.info(
                 "Coding-slice '%s' of a CodeableConcept deferred (nested coding-slice).",
                 slice_path,
+            )
+            self.record_diagnostic(
+                "nested-coding-slice-deferred",
+                f"Coding slice {slice_path} was not emitted as a sibling of its "
+                "CodeableConcept; it is handled by the owning coding branch.",
+                path=slice_path,
+                severity="information",
             )
             return None
 
@@ -688,12 +758,51 @@ class _SliceRulesMixin:
             sr.source = [s]
             # Type-aware transform, like _create_choice_populate_rule: a numeric/date leaf
             # needs a cast, a bare copy crashes the engine on non-string sources.
+            target_element = sub
             leaf_type = self._resolve_leaf_type(
                 slice_type, sub, children=direct_children
             )
+            logical_sub = sub.split(":", 1)[0].replace("[x]", "")
+            choice_child = next(
+                (
+                    child
+                    for child in direct_children
+                    if (child.get("path", "") or "")
+                    .split(".")[-1]
+                    .replace("[x]", "")
+                    == logical_sub
+                    and (child.get("path", "") or "").split(".")[-1].endswith(
+                        "[x]"
+                    )
+                ),
+                None,
+            )
+            if choice_child:
+                target_element = self._resolve_choice_element(
+                    choice_child,
+                    logical_sub,
+                    choice_child.get("path", ""),
+                    {choice_child.get("path", ""): src_local},
+                )
+                choice_types = type_codes(choice_child.get("type"))
+                if target_element is None:
+                    self.record_diagnostic(
+                        "ambiguous-choice-type",
+                        f"Slice child "
+                        f"{choice_child.get('id') or choice_child.get('path')} "
+                        "does not identify one concrete target choice type.",
+                        path=choice_child.get("id") or choice_child.get("path"),
+                        allowed_types=choice_types,
+                        severity="error",
+                    )
+                    continue
+                if len(choice_types) == 1:
+                    leaf_type = choice_types[0]
             info = get_transform_for_type(leaf_type or "string", sub_var)
             stt = StructureMapGroupRuleTarget.model_construct(
-                context=var, element=sub, transform=info.get("transform", "copy")
+                context=var,
+                element=target_element,
+                transform=info.get("transform", "copy"),
             )
             stt.parameter = info.get("parameters") or [
                 StructureMapGroupRuleTargetParameter.model_construct(valueId=sub_var)

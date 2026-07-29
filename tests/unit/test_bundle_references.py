@@ -144,3 +144,156 @@ def test_collect_todo_refs_expands_choice_element_to_typed_reference():
     # Specs carry the declaring map's target profile (None when not supplied) so
     # _wire_references can scope a reference to the profile that declared it.
     assert specs == [("MedicationStatement", "medicationReference", "Medication", None)]
+
+
+def _bundled_rule(**overrides):
+    contract = {
+        "sourceType": "Observation",
+        "path": "performer",
+        "targetTypes": ["Practitioner"],
+        "targetProfile": None,
+        "match": "byOrder",
+        "sourceKey": None,
+        "targetKey": None,
+        "referenceMode": "urn",
+        **overrides,
+    }
+    import json
+
+    return {
+        "name": "TODO-resolve-reference-performer",
+        "documentation": "FHIRBRIDGE_REFERENCE:"
+        + json.dumps(contract, sort_keys=True, separators=(",", ":")),
+    }
+
+
+def test_collect_bundled_reference_contract():
+    specs = []
+    BundleService._collect_todo_refs(_bundled_rule(match="singleton"), specs)
+    assert specs == [
+        (
+            "Observation",
+            "performer",
+            "Practitioner",
+            None,
+            "bundled",
+            "singleton",
+            None,
+            None,
+            "urn",
+            None,
+        )
+    ]
+
+
+def test_identifier_correlation_wires_matching_target():
+    first = {
+        "resourceType": "Observation",
+        "identifier": [{"value": "a"}],
+    }
+    second = {
+        "resourceType": "Observation",
+        "identifier": [{"value": "b"}],
+    }
+    practitioner_a = {
+        "resourceType": "Practitioner",
+        "identifier": [{"value": "a"}],
+    }
+    practitioner_b = {
+        "resourceType": "Practitioner",
+        "identifier": [{"value": "b"}],
+    }
+    resources = [first, second, practitioner_b, practitioner_a]
+    urns = {
+        id(practitioner_a): "urn:uuid:a",
+        id(practitioner_b): "urn:uuid:b",
+    }
+    specs = []
+    BundleService._collect_todo_refs(
+        _bundled_rule(
+            match="identifier",
+            sourceKey="identifier.value",
+            targetKey="identifier.value",
+        ),
+        specs,
+    )
+    BundleService._wire_references(resources, specs, urns)
+    assert first["performer"] == {"reference": "urn:uuid:a"}
+    assert second["performer"] == {"reference": "urn:uuid:b"}
+
+
+def test_all_correlation_wires_repeated_multi_target_references():
+    obs = {"resourceType": "Observation"}
+    practitioner = {"resourceType": "Practitioner", "id": "p1"}
+    organization = {"resourceType": "Organization", "id": "o1"}
+    specs = [
+        (
+            "Observation",
+            "performer",
+            "Practitioner|Organization",
+            None,
+            "bundled",
+            "all",
+            None,
+            None,
+            "relative",
+        )
+    ]
+    BundleService._wire_references(
+        [obs, practitioner, organization], specs, {}, {"Observation": {"performer"}}
+    )
+    assert obs["performer"] == [
+        {"reference": "Practitioner/p1"},
+        {"reference": "Organization/o1"},
+    ]
+
+
+def test_singleton_policy_does_not_guess_between_multiple_targets():
+    obs = {"resourceType": "Observation"}
+    one = {"resourceType": "Practitioner"}
+    two = {"resourceType": "Practitioner"}
+    specs = [
+        (
+            "Observation",
+            "performer",
+            "Practitioner",
+            None,
+            "bundled",
+            "singleton",
+            None,
+            None,
+            "urn",
+        )
+    ]
+    BundleService._wire_references(
+        [obs, one, two],
+        specs,
+        {id(one): "urn:uuid:one", id(two): "urn:uuid:two"},
+    )
+    assert "performer" not in obs
+
+
+def test_target_profile_scopes_same_base_type_candidates():
+    obs = {"resourceType": "Observation"}
+    wanted = {
+        "resourceType": "Practitioner",
+        "meta": {"profile": ["http://example.org/StructureDefinition/Wanted"]},
+    }
+    other = {
+        "resourceType": "Practitioner",
+        "meta": {"profile": ["http://example.org/StructureDefinition/Other"]},
+    }
+    specs = []
+    BundleService._collect_todo_refs(
+        _bundled_rule(
+            targetProfile="http://example.org/StructureDefinition/Wanted",
+            match="singleton",
+        ),
+        specs,
+    )
+    BundleService._wire_references(
+        [obs, other, wanted],
+        specs,
+        {id(other): "urn:uuid:other", id(wanted): "urn:uuid:wanted"},
+    )
+    assert obs["performer"] == {"reference": "urn:uuid:wanted"}

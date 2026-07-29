@@ -115,6 +115,28 @@ def test_invalid_typed_mode_is_diagnosed_and_omitted_by_generator():
     assert generator.mapping_diagnostics[0]["code"] == "invalid-collection-rule"
 
 
+def test_document_envelope_keys_do_not_enter_legacy_mapping_parser():
+    factory = _factory()
+    generator = _generator(factory)
+    paths, mappings = generator._apply_custom_mapping_table(
+        {
+            "$imports": ["http://example.org/StructureMap/common"],
+            "$rules": [{"name": "explicit"}],
+            "Source.name": "Patient.name.text",
+        },
+        [{"id": "Source.name", "path": "Source.name"}],
+        [_field("Patient.name.text", "string")],
+        "Patient",
+        "patient-profile",
+    )
+    assert "Patient.name.text" in paths
+    assert mappings["Patient.name.text"] == "Source.name"
+    assert not any(
+        diagnostic["code"] == "invalid-collection-rule"
+        for diagnostic in generator.mapping_diagnostics
+    )
+
+
 def test_collection_parent_correlates_all_children_in_one_target_repetition():
     factory = _factory()
     generator = _generator(factory)
