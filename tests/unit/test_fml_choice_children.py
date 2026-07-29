@@ -124,6 +124,130 @@ def test_concrete_primitive_choice_root_preserves_selected_type():
     assert mappings.get("Observation.value[x]:valueBoolean") == "flag"
 
 
+def test_documented_x_colon_concrete_choice_root_is_addressable():
+    gen = _generator()
+    field = {
+        "path": "Observation.effective[x]",
+        "type": [{"code": "dateTime"}, {"code": "Period"}],
+        "cardinality": {"min": 1, "max": "1"},
+    }
+
+    _, mappings = gen._apply_custom_mapping_table(
+        {"src.when": "Observation.effective[x]:effectiveDateTime"},
+        [{"id": "when", "path": "src.when"}],
+        [field],
+        "Observation",
+        "observation-profile",
+    )
+
+    assert mappings["Observation.effective[x]:effectiveDateTime"] == "when"
+    assert gen.mapping_diagnostics == []
+
+
+def test_unknown_x_colon_concrete_choice_type_is_rejected():
+    gen = _generator()
+    field = {
+        "path": "Observation.effective[x]",
+        "type": [{"code": "dateTime"}, {"code": "Period"}],
+    }
+
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"src.when": "Observation.effective[x]:effectiveTiming"},
+        [{"id": "when", "path": "src.when"}],
+        [field],
+        "Observation",
+        "observation-profile",
+    )
+
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-target-path-not-found"
+
+
+def test_slice_qualified_descendant_uses_exact_snapshot_identity():
+    gen = _generator()
+    coding = {
+        "path": "Medication.code.coding",
+        "type": [{"code": "Coding"}],
+        "slices": [
+            {
+                "path": "Medication.code.coding",
+                "id": "Medication.code.coding:Pharmazentralnummer",
+                "slice_identity": "Medication.code.coding:Pharmazentralnummer",
+                "sliceName": "Pharmazentralnummer",
+                "type": [{"code": "Coding"}],
+                "children": [
+                    {
+                        "path": "Medication.code.coding.code",
+                        "id": (
+                            "Medication.code.coding:Pharmazentralnummer.code"
+                        ),
+                        "type": [{"code": "code"}],
+                    }
+                ],
+            }
+        ],
+    }
+    target = {
+        "path": "Medication.code",
+        "type": [{"code": "CodeableConcept"}],
+        "children": [coding],
+    }
+
+    _, mappings = gen._apply_custom_mapping_table(
+        {
+            "src.pzn": (
+                "Medication.code.coding:Pharmazentralnummer.code"
+            )
+        },
+        [{"id": "pzn", "path": "src.pzn"}],
+        [target],
+        "Medication",
+        "medication-profile",
+    )
+
+    assert mappings[
+        "Medication.code.coding:Pharmazentralnummer.code"
+    ] == "pzn"
+    assert gen.mapping_diagnostics == []
+
+
+def test_unknown_slice_qualified_descendant_is_rejected():
+    gen = _generator()
+    target = {
+        "path": "Medication.code.coding",
+        "type": [{"code": "Coding"}],
+        "slices": [
+            {
+                "path": "Medication.code.coding",
+                "id": "Medication.code.coding:known",
+                "slice_identity": "Medication.code.coding:known",
+                "sliceName": "known",
+                "type": [{"code": "Coding"}],
+                "children": [
+                    {
+                        "path": "Medication.code.coding.code",
+                        "id": "Medication.code.coding:known.code",
+                        "type": [{"code": "code"}],
+                    }
+                ],
+            }
+        ],
+    }
+
+    paths, mappings = gen._apply_custom_mapping_table(
+        {"src.code": "Medication.code.coding:missing.code"},
+        [{"id": "code", "path": "src.code"}],
+        [target],
+        "Medication",
+        "medication-profile",
+    )
+
+    assert paths == set()
+    assert mappings == {}
+    assert gen.mapping_diagnostics[0]["code"] == "mapping-target-path-not-found"
+
+
 def test_nested_raw_choice_indexes_every_candidate_not_only_first():
     gen = _generator()
     nested = {

@@ -1145,13 +1145,16 @@ class StructureMapGenerator:
                     for ct in cts:
                         suffix = self.factory._choice_suffix(ct)
                         concrete_path = f"{base}{suffix}"
+                        concrete_head = concrete_path.rsplit(".", 1)[-1]
+                        qualified_path = f"{field_path}:{concrete_head}"
                         # Keep the author's concrete choice selection.  Mapping it back to
                         # the raw ``value[x]`` path discards the only type information a
                         # primitive ``copy`` transform has (N3).
-                        concrete_head = concrete_path.rsplit(".", 1)[-1]
-                        target_index[concrete_path] = (
-                            f"{field_path}:{concrete_head}"
-                        )
+                        target_index[concrete_path] = qualified_path
+                        # The documented explicit form keeps the snapshot's `[x]`
+                        # marker and appends the concrete choice after `:`:
+                        # `effective[x]:effectiveDateTime`.
+                        target_index[qualified_path] = qualified_path
                     # children of each candidate type, so a mapping table can address
                     # inside an unsliced multi-type choice (`value[x].coding.code`).
                     # Registered under both the `[x]` form (the parser's own child
@@ -1175,9 +1178,11 @@ class StructureMapGenerator:
                             if child_path.startswith(f"{field_path}."):
                                 tail = child_path[len(field_path) :]
                                 concrete_head = f"{base}{suffix}".rsplit(".", 1)[-1]
-                                target_index[f"{base}{suffix}{tail}"] = (
+                                qualified_child = (
                                     f"{field_path}:{concrete_head}{tail}"
                                 )
+                                target_index[f"{base}{suffix}{tail}"] = qualified_child
+                                target_index[qualified_child] = qualified_child
                 if f.get("children"):
                     flat.extend(_flatten_targets(f.get("children"), virtual_path))
                 if f.get("type_structure"):
@@ -1211,7 +1216,11 @@ class StructureMapGenerator:
                         slice_path = f"{field_path}:{slice_name}"
                     sl_copy = dict(sl)
                     sl_copy["path"] = slice_path
-                    flat.extend(_flatten_targets([sl_copy], virtual_path))
+                    # `slice_path` already contains the sliced element. Reusing
+                    # `virtual_path` here prepends that element a second time
+                    # (`Medication.code.coding.coding:slice.code`) and makes the
+                    # exact snapshot identity unreachable.
+                    flat.extend(_flatten_targets([sl_copy], parent_virtual_path))
             return flat
 
         for entry in _flatten_targets(target_fields or []):
