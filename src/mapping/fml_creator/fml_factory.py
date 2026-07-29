@@ -1203,51 +1203,79 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 for key in automapped_mappings
             )
         )
-        if (
-            is_reference
-            and create_references
-            and reference_target
-            and not choice_variant_mapped
-        ):
-            ref_src_key = None
-            disp_src_key = None
-            if automapped_mappings:
-                prof = getattr(self, "_current_profile_id", None)
-                qref_key = (
-                    f"{prof}.{path[len(res_type) + 1:]}.reference"
-                    if prof and path.startswith(f"{res_type}.")
-                    else None
-                )
-                if qref_key and qref_key in automapped_mappings:
-                    ref_src_key = qref_key
-                elif f"{path}.reference" in automapped_mappings:
-                    ref_src_key = f"{path}.reference"
-                qdisp_key = (
-                    f"{prof}.{path[len(res_type) + 1:]}.display"
-                    if prof and path.startswith(f"{res_type}.")
-                    else None
-                )
-                if qdisp_key and qdisp_key in automapped_mappings:
-                    disp_src_key = qdisp_key
-                elif f"{path}.display" in automapped_mappings:
-                    disp_src_key = f"{path}.display"
-
+        if is_reference and not choice_variant_mapped:
             reference_forbidden = self.is_prohibited_target(f"{path}.reference")
             tree = self.profile_tree()
             display_node = tree.node(f"{path}.display") if tree else None
             display_required = bool(display_node and display_node.required)
-            if reference_forbidden:
-                if disp_src_key and automapped_mappings:
+
+            explicit = getattr(self, "explicit_mapping_targets", None)
+            authored_children = [
+                key
+                for key in (automapped_mappings or {})
+                if key.startswith(f"{path}.")
+                and (explicit is None or key in explicit)
+                and not self.is_prohibited_target(key)
+            ]
+            if authored_children:
+                simple_children = {
+                    key[len(path) + 1 :]
+                    for key in authored_children
+                }
+                if simple_children <= {"reference", "display"}:
                     return self._reference_source_rule(
                         rule,
                         display_name,
                         var_suffix,
                         parent_source_context,
                         parent_target_context,
-                        None,
-                        self._as_local_element(
-                            automapped_mappings[disp_src_key]
+                        (
+                            self._as_local_element(
+                                automapped_mappings[f"{path}.reference"]
+                            )
+                            if "reference" in simple_children
+                            else None
                         ),
+                        (
+                            self._as_local_element(
+                                automapped_mappings[f"{path}.display"]
+                            )
+                            if "display" in simple_children
+                            else None
+                        ),
+                        cardinality=cardinality,
+                        rule_name=rule_name,
+                    )
+                return self._reference_descendant_rule(
+                    rule,
+                    normalized_field,
+                    display_name,
+                    var_suffix,
+                    parent_source_context,
+                    parent_target_context,
+                    automapped_mappings,
+                    cardinality=cardinality,
+                    rule_name=rule_name,
+                )
+
+            if reference_forbidden:
+                # No literal reference is allowed, so the assembler has nothing to
+                # wire — but the profile may still pin the permitted children. evo13
+                # prohibits subject.reference/type/identifier and fixes
+                # subject.display to "Versicherter", which alone satisfies the
+                # required subject. Emit that rather than dropping the element.
+                fixed_only = self._provided_type_structure(
+                    normalized_field.get("children") or [], None, include_fixed=True
+                )
+                if fixed_only:
+                    return self._reference_descendant_rule(
+                        rule,
+                        normalized_field,
+                        display_name,
+                        var_suffix,
+                        parent_source_context,
+                        parent_target_context,
+                        automapped_mappings,
                         cardinality=cardinality,
                         rule_name=rule_name,
                     )
@@ -1270,35 +1298,37 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 )
                 return None
 
-            if (ref_src_key or disp_src_key) and automapped_mappings:
-                return self._reference_source_rule(
+            if create_references and reference_target:
+                return self._reference_placeholder_rule(
                     rule,
+                    path,
+                    clean_path,
+                    res_type,
+                    base_field_name,
                     display_name,
-                    var_suffix,
-                    parent_source_context,
-                    parent_target_context,
-                    (
-                        self._as_local_element(automapped_mappings[ref_src_key])
-                        if ref_src_key
-                        else None
-                    ),
-                    (
-                        self._as_local_element(automapped_mappings[disp_src_key])
-                        if disp_src_key
-                        else None
-                    ),
-                    cardinality=cardinality,
-                    rule_name=rule_name,
+                    reference_target,
                 )
-            return self._reference_placeholder_rule(
-                rule,
-                path,
-                clean_path,
-                res_type,
-                base_field_name,
-                display_name,
-                reference_target,
+            # A Reference without an authored representation or assembler
+            # target must not fall through to the generic complex builder.
+            return None
+
+        # A dotted path at this point has reached the root rule list without its
+        # parent having created a target context. Emitting its last segment here
+        # flattens e.g. subject.identifier.system into Resource.system and may
+        # abort the complete transform.
+        if (
+            "." in clean_path
+            and not is_slice
+            and parent_path is None
+            and parent_target_context in {"target", "tgt"}
+        ):
+            self.record_diagnostic(
+                "unmaterialized-nested-target",
+                f"{path} was omitted because its parent target context was not created.",
+                path=path,
+                severity="error",
             )
+            return None
 
         type_structure = field.get("type_structure", [])
         is_choice = (
@@ -1499,6 +1529,74 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         rule.documentation = (
             "Reference " + " and ".join(mapped_parts)
             + " (mapped directly; not deferred to bundle assembler)"
+        )
+        return rule
+
+    def _reference_descendant_rule(
+        self,
+        rule,
+        field,
+        display_name,
+        var_suffix,
+        parent_source_context,
+        parent_target_context,
+        automapped_mappings,
+        cardinality=None,
+        rule_name=None,
+    ):
+        """Create a Reference and populate explicitly mapped child paths.
+
+        Reference.identifier is a complex child. Treating its leaves as
+        resource-level scalar rules flattened ``subject.identifier.system`` to
+        ``Resource.system``. Reusing the ordinary recursive builder here keeps
+        the full Reference -> Identifier -> leaf context chain.
+        """
+
+        source = StructureMapGroupRuleSource.model_construct(
+            context=parent_source_context,
+            variable=f"src-{var_suffix}",
+        )
+        rule.source = [source]
+        target = StructureMapGroupRuleTarget.model_construct(
+            context=parent_target_context,
+            element=display_name,
+            variable=f"tgt-{var_suffix}",
+            transform="create",
+            parameter=[{"valueString": "Reference"}],
+        )
+        self._apply_repeating_list_modes(
+            cardinality or {}, source, target, rule_name or f"map-{var_suffix}"
+        )
+        rule.target = [target]
+
+        # ``children`` is the profile-derived subtree: it carries the profile's
+        # fixed values and has already had prohibited children (max=0) removed by
+        # the element parser. ``type_structure`` is the *base* Reference expanded
+        # from fhir.resources, which knows nothing about this profile — using it
+        # silently drops e.g. a ``fixedUri`` on ``practitioner.identifier.system``
+        # or a ``fixedString`` on ``subject.display``. Prefer the profile.
+        structure = field.get("children") or field.get("type_structure") or []
+        if not structure:
+            for raw_type in field.get("type") or []:
+                if isinstance(raw_type, dict) and raw_type.get("code") == "Reference":
+                    structure = raw_type.get("type_structure") or []
+                    if structure:
+                        break
+        provided = self._provided_type_structure(
+            structure, automapped_mappings, include_fixed=True
+        )
+        rule.rule = self.create_field_rules(
+            "Reference",
+            provided,
+            parent_source_context=source.variable,
+            parent_target_context=target.variable,
+            create_references=False,
+            automapped_mappings=automapped_mappings,
+            parent_path=field.get("path"),
+        )
+        rule.documentation = (
+            f"Reference {field.get('path')} populated from explicitly authored "
+            "child mappings."
         )
         return rule
 

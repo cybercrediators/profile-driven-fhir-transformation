@@ -77,9 +77,7 @@ def test_mapped_string_emits_max_length_source_check(factory):
         "Patient",
         "identifier",
         "target-identifier",
-        automapped_mappings={
-            "Patient.identifier.value": "Source.identifierValue"
-        },
+        automapped_mappings={"Patient.identifier.value": "Source.identifierValue"},
         parent_path="Patient.identifier",
     )
     assert rule.source[0].check == "($this.toString().length() <= 12)"
@@ -96,9 +94,7 @@ def test_mapped_numeric_emits_min_and_max_source_checks(factory):
         "Observation",
         "source",
         "target",
-        automapped_mappings={
-            "Observation.valueDecimal": "Source.measurement"
-        },
+        automapped_mappings={"Observation.valueDecimal": "Source.measurement"},
     )
     assert rule.source[0].check == (
         "($this.toDecimal() >= -2.5) and ($this.toDecimal() <= 10)"
@@ -143,9 +139,7 @@ def test_narrowed_choice_keeps_bound_check_on_real_provider(factory):
         "Observation",
         "source",
         "target",
-        automapped_mappings={
-            "Observation.value[x]:valueDecimal": "Source.measurement"
-        },
+        automapped_mappings={"Observation.value[x]:valueDecimal": "Source.measurement"},
     )
     narrowed = rule.rule[0]
     assert narrowed.source[0].element == "measurement"
@@ -237,9 +231,7 @@ def test_display_only_reference_suppresses_bundle_reference_placeholder(factory)
         "cardinality": {"min": 1, "max": "1"},
     }
 
-    rule = factory.create_mappable_field_rule(
-        field, "Procedure", "source", "target"
-    )
+    rule = factory.create_mappable_field_rule(field, "Procedure", "source", "target")
 
     assert rule is None
     assert factory.diagnostics[-1]["code"] == (
@@ -412,6 +404,151 @@ def test_raw_filter_bound_codeable_concept_uses_one_coded_builder(factory):
     assert coding.target[0].element == "coding"
     assert {child.target[0].element for child in coding.rule} == {"system", "code"}
     assert rule.source[0].element == "obsCode"
+
+
+def test_unsliced_codeableconcept_populates_all_explicit_coding_leaves(factory):
+    field = _raw_codeable_concept(
+        "Procedure.code",
+        [{"code": "FROM_CS", "system": "http://example.org/codes"}],
+    )
+    mappings = {
+        "Procedure.code.coding.system": "Source.codeSystem",
+        "Procedure.code.coding.code": "Source.code",
+        "Procedure.code.coding.display": "Source.codeDisplay",
+    }
+    factory.explicit_mapping_targets = set(mappings)
+
+    rule = factory.create_mappable_field_rule(
+        field, "Procedure", "source", "target", automapped_mappings=mappings
+    )
+
+    assert rule.name == "map-code-authored-coded-leaves"
+    coding = rule.rule[0]
+    assert coding.target[0].element == "coding"
+    assert {
+        child.target[0].element: child.source[0].element for child in coding.rule
+    } == {
+        "system": "codeSystem",
+        "code": "code",
+        "display": "codeDisplay",
+    }
+
+
+def test_unsliced_codeableconcept_text_mapping_does_not_create_coding(factory):
+    field = _raw_codeable_concept(
+        "Goal.description",
+        [{"code": "FROM_CS", "system": "http://example.org/codes"}],
+    )
+    mappings = {"Goal.description.text": "Source.goalText"}
+    factory.explicit_mapping_targets = set(mappings)
+
+    rule = factory.create_mappable_field_rule(
+        field, "Goal", "source", "target", automapped_mappings=mappings
+    )
+
+    assert rule.name == "map-description-authored-coded-leaves"
+    assert [child.target[0].element for child in rule.rule] == ["text"]
+    assert rule.rule[0].source[0].element == "goalText"
+
+
+def test_fixed_coding_leaves_take_precedence_over_example_binding(factory):
+    field = _raw_codeable_concept(
+        "ServiceRequest.serviceType",
+        [{"system": "http://example.org", "code": "unrelated"}],
+    )
+    field["children"] = [
+        {
+            "path": "ServiceRequest.serviceType.coding",
+            "children": [
+                {
+                    "path": "ServiceRequest.serviceType.coding.system",
+                    "fixed_value": "http://snomed.info/sct",
+                },
+                {
+                    "path": "ServiceRequest.serviceType.coding.code",
+                    "fixed_value": "308335008",
+                },
+            ],
+        }
+    ]
+    mappings = {"ServiceRequest.serviceType.coding.code": "Source.serviceType"}
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "ServiceRequest",
+        "source",
+        "target",
+        automapped_mappings=mappings,
+    )
+
+    assert rule.name == "map-serviceType-fixed-codings"
+    coding_rules = rule.rule[0].rule
+    literal_values = {
+        child.target[0]
+        .element: child.target[0]
+        .parameter[0]
+        .model_dump(exclude_none=True)
+        for child in coding_rules
+    }
+    assert literal_values["system"] == {"valueString": "http://snomed.info/sct"}
+    assert literal_values["code"] == {"valueString": "308335008"}
+    assert all(child.target[0].transform == "copy" for child in coding_rules)
+
+
+def test_reference_identifier_leaf_mappings_keep_reference_and_identifier_contexts(
+    factory,
+):
+    factory.diagnostics = []
+    field = {
+        "path": "Procedure.subject",
+        "type": [
+            {
+                "code": "Reference",
+                "type_structure": [
+                    {
+                        "path": "Procedure.subject.identifier",
+                        "type": "Identifier",
+                        "type_structure": [
+                            {
+                                "path": "Procedure.subject.identifier.system",
+                                "type": "uri",
+                            },
+                            {
+                                "path": "Procedure.subject.identifier.value",
+                                "type": "string",
+                            },
+                        ],
+                    }
+                ],
+            }
+        ],
+        "reference_target": "Patient",
+    }
+    mappings = {
+        "Procedure.subject.identifier.system": "Source.patientSystem",
+        "Procedure.subject.identifier.value": "Source.patientId",
+    }
+    factory.explicit_mapping_targets = set(mappings)
+
+    rule = factory.create_mappable_field_rule(
+        field,
+        "Procedure",
+        "source",
+        "target",
+        automapped_mappings=mappings,
+    )
+
+    assert rule.target[0].element == "subject"
+    identifier = rule.rule[0]
+    assert identifier.target[0].context == rule.target[0].variable
+    assert identifier.target[0].element == "identifier"
+    assert {
+        child.target[0].element: child.target[0].context for child in identifier.rule
+    } == {
+        "system": identifier.target[0].variable,
+        "value": identifier.target[0].variable,
+    }
+    assert not any(child.target[0].context == "target" for child in identifier.rule)
 
 
 def test_raw_bound_codeable_concept_without_provider_keeps_legacy_route(
@@ -701,9 +838,9 @@ def test_concrete_choice_parent_does_not_gate_on_a_todo_placeholder(factory):
     )
 
     parent_source = rule.source[0]
-    assert getattr(parent_source, "element", None) is None, (
-        "a TODO placeholder on the parent gates the populated child"
-    )
+    assert (
+        getattr(parent_source, "element", None) is None
+    ), "a TODO placeholder on the parent gates the populated child"
     nested_source = rule.rule[0].source[0]
     assert nested_source.element == "statementEffective"
     assert rule.rule[0].target[0].element == "effectiveDateTime"
@@ -1333,3 +1470,99 @@ def test_meta_emitted_when_no_snapshot_present():
     gen = _gen()
     obj = SimpleNamespace(data=SimpleNamespace(id="x", url="u", snapshot=None))
     assert gen._target_declares_meta(obj, "Observation") is True
+
+
+# ── Reference subtree: the profile's children, not the base type expansion ────
+#
+# ``type_structure`` is the base FHIR Reference expanded from fhir.resources, so it
+# carries no profile constraints. The profile's own fixed values (and its max=0
+# prunings) live in ``children``. Reading the wrong one silently drops e.g. a
+# ``fixedUri`` on ``practitioner.identifier.system`` or a ``fixedString`` on
+# ``subject.display``, which then fail validation as missing required elements.
+def _reference_factory():
+    factory = object.__new__(FMLRuleFactory)
+    factory.source_field_types = {}
+    factory.source_field_max = {}
+    factory.collection_rules = {}
+    factory.diagnostics = []
+    factory._current_profile_id = None
+    factory._current_profile_sd = None
+    factory._target_tree_cache = (None, None)
+    captured = {}
+
+    def _capture(_type, provided, **kwargs):
+        captured["provided"] = provided
+        return []
+
+    factory.create_field_rules = _capture
+    factory._apply_repeating_list_modes = lambda *a, **k: None
+    return factory, captured
+
+
+def _rule():
+    from fhir.resources.R4B.structuremap import StructureMapGroupRule
+
+    return StructureMapGroupRule.model_construct(name="map-subject")
+
+
+def _paths(provided):
+    return {c["path"] for c in provided}
+
+
+def test_reference_subtree_prefers_the_profile_children_over_the_base_expansion():
+    factory, captured = _reference_factory()
+    field = {
+        "path": "Procedure.subject",
+        # base Reference expansion: no fixed values anywhere
+        "type_structure": [{"path": "Procedure.subject.reference", "fixed_value": []}],
+        # profile view: subject.display is pinned, the rest is prohibited (max=0)
+        # and has already been pruned away by the element parser
+        "children": [
+            {"path": "Procedure.subject.display", "fixed_value": "Versicherter"},
+            {"path": "Procedure.subject.extension", "fixed_value": []},
+        ],
+    }
+    factory._reference_descendant_rule(
+        _rule(), field, "subject", "subject", "source", "target", {}
+    )
+    assert _paths(captured["provided"]) == {"Procedure.subject.display"}
+
+
+def test_reference_subtree_keeps_a_fixed_value_nested_under_identifier():
+    factory, captured = _reference_factory()
+    field = {
+        "path": "PractitionerRole.practitioner",
+        "children": [
+            {
+                "path": "PractitionerRole.practitioner.identifier",
+                "fixed_value": [],
+                "children": [
+                    {
+                        "path": "PractitionerRole.practitioner.identifier.system",
+                        "fixed_value": "http://fhir.de/NamingSystem/kbv/lanr",
+                    },
+                    {
+                        "path": "PractitionerRole.practitioner.identifier.value",
+                        "fixed_value": [],
+                    },
+                ],
+            }
+        ],
+    }
+    factory._reference_descendant_rule(
+        _rule(),
+        field,
+        "practitioner",
+        "practitioner",
+        "source",
+        "target",
+        {"PractitionerRole.practitioner.identifier.value": "Src.practIdValue"},
+    )
+    identifier = captured["provided"][0]
+    assert identifier["path"] == "PractitionerRole.practitioner.identifier"
+    kept = {c["path"] for c in identifier["children"]}
+    # the authored .value AND the profile-fixed .system both survive
+    assert kept == {
+        "PractitionerRole.practitioner.identifier.system",
+        "PractitionerRole.practitioner.identifier.value",
+    }

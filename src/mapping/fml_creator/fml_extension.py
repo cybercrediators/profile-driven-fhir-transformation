@@ -9,6 +9,7 @@ from fhir.resources.R4B.structuremap import (
     StructureMapGroupRuleDependent,
 )
 from mapping.fml_creator.fml_helper import (
+    fixed_scalar_parameter,
     infer_extension_value_type,
     is_primitive_type,
     parse_slice_info,
@@ -281,21 +282,22 @@ class _ExtensionRulesMixin:
         rule.source = [source]
 
         declared_modifier = self._extension_is_modifier(extension_url)
+        profile_element = path.rsplit(".", 1)[-1].split(":", 1)[0]
         target_element = (
             "modifierExtension"
-            if path.endswith(".modifierExtension") or declared_modifier
+            if profile_element == "modifierExtension"
             else "extension"
         )
-        if declared_modifier and not path.endswith(".modifierExtension"):
+        if declared_modifier and target_element != "modifierExtension":
             recorder = getattr(self, "record_diagnostic", None)
             if callable(recorder):
                 recorder(
-                    "modifier-extension-rerouted",
+                    "modifier-extension-path-mismatch",
                     f"{path} references modifier extension {extension_url}; "
-                    "the target was rerouted to modifierExtension.",
+                    "emission follows the profile-declared extension slice path.",
                     path=path,
                     extension_url=extension_url,
-                    severity="information",
+                    severity="warning",
                 )
         target = StructureMapGroupRuleTarget.model_construct()
         target.context = parent_target_context
@@ -538,9 +540,7 @@ class _ExtensionRulesMixin:
                     bool_target.element = "valueBoolean"
                     bool_target.transform = "copy"
                     bool_target.parameter = [
-                        StructureMapGroupRuleTargetParameter.model_construct(
-                            valueBoolean=literal
-                        )
+                        fixed_scalar_parameter(literal, "boolean")
                     ]
                     bool_rule.target = [bool_target]
                     nested_rules.append(bool_rule)

@@ -161,7 +161,7 @@ def test_modifier_extension_targets_modifier_extension_element(factory):
     assert rule.target[0].element == "modifierExtension"
 
 
-def test_modifier_extension_definition_reroutes_plain_extension_slice(factory):
+def test_modifier_extension_definition_does_not_override_profile_slice_path(factory):
     url = "http://example.org/StructureDefinition/modifier-by-definition"
     factory.app_state = _app_state(
         {
@@ -195,9 +195,9 @@ def test_modifier_extension_definition_reroutes_plain_extension_slice(factory):
         automapped_mappings={"Procedure.extension": "Source.abbreviation"},
     )
 
-    assert rule.target[0].element == "modifierExtension"
+    assert rule.target[0].element == "extension"
     assert any(
-        diagnostic["code"] == "modifier-extension-rerouted"
+        diagnostic["code"] == "modifier-extension-path-mismatch"
         for diagnostic in factory.diagnostics
     )
 
@@ -588,6 +588,12 @@ def test_boolean_mismatch_emits_guarded_literal_rules(factory):
     assert true_rule.target[0].parameter[0].valueBoolean is True
     assert false_rule.source[0].condition == "$this = '0' or $this = 'false'"
     assert false_rule.target[0].parameter[0].valueBoolean is False
+    assert true_rule.target[0].parameter[0].model_dump(exclude_none=True) == {
+        "valueBoolean": True
+    }
+    assert false_rule.target[0].parameter[0].model_dump(exclude_none=True) == {
+        "valueBoolean": False
+    }
 
 
 def test_boolean_matching_source_type_stays_plain_copy(factory):

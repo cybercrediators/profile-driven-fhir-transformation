@@ -39,9 +39,7 @@ class _CodedRulesMixin:
 
     @staticmethod
     def _coded_source_keys(field) -> list:
-        """Candidate ``automapped_mappings`` keys for a coded field's source.
-
-        """
+        """Candidate ``automapped_mappings`` keys for a coded field's source."""
         path = field.get("path")
         if not path:
             return []
@@ -54,15 +52,235 @@ class _CodedRulesMixin:
         return keys
 
     def _resolve_coded_source(self, field, automapped_mappings):
-        """Return the local source element for a coded field, or ``None``.
-
-        """
+        """Return the local source element for a coded field, or ``None``."""
         if not automapped_mappings:
             return None
         for key in self._coded_source_keys(field):
             if key in automapped_mappings:
                 return self._as_local_element(automapped_mappings[key])
         return None
+
+    def _authored_coded_leaf_sources(self, field, automapped_mappings):
+        """Return explicitly authored providers for Coding/CodeableConcept leaves.
+
+        The mapping dictionary also contains inferred ancestor entries.  Those
+        entries must not turn a mapping to ``CodeableConcept.text`` or
+        ``Coding.display`` into the historical code-only shorthand.
+        """
+
+        if not automapped_mappings:
+            return {}
+        path = field.get("path")
+        field_type = self._canonical_coded_type(field)
+        if not path or field_type not in ("Coding", "CodeableConcept"):
+            return {}
+
+        explicit = getattr(self, "explicit_mapping_targets", None)
+        prefixes = {"text": f"{path}.text"} if field_type == "CodeableConcept" else {}
+        coding_prefix = f"{path}.coding" if field_type == "CodeableConcept" else path
+        prefixes.update(
+            {
+                (
+                    f"coding.{leaf}" if field_type == "CodeableConcept" else leaf
+                ): f"{coding_prefix}.{leaf}"
+                for leaf in ("system", "version", "code", "display", "userSelected")
+            }
+        )
+
+        result = {}
+        for relative, target_path in prefixes.items():
+            if target_path not in automapped_mappings:
+                continue
+            if explicit is not None and target_path not in explicit:
+                continue
+            result[relative] = self._as_local_element(automapped_mappings[target_path])
+        return result
+
+    @staticmethod
+    def _fixed_plain_coding_leaves(field):
+        """Return fixed/pattern values on an unsliced Coding child."""
+
+        coding = {}
+        for child in field.get("children") or []:
+            if not isinstance(child, dict):
+                continue
+            child_name = child.get("path", "").split(".")[-1]
+            if child_name == "coding":
+                leaves = child.get("children") or child.get("type_structure") or []
+            elif _CodedRulesMixin._canonical_coded_type(field) == "Coding":
+                leaves = [child]
+            else:
+                continue
+            for leaf in leaves:
+                if not isinstance(leaf, dict):
+                    continue
+                name = leaf.get("path", "").split(".")[-1]
+                value = leaf.get("fixed_value")
+                if has_fixed_value(value) and name in {
+                    "system",
+                    "version",
+                    "code",
+                    "display",
+                    "userSelected",
+                }:
+                    coding[name] = value
+        return coding
+
+    def _create_authored_coded_leaves_rule(
+        self,
+        field,
+        field_name,
+        parent_source_context,
+        parent_target_context,
+        automapped_mappings,
+    ):
+        """Materialise explicitly mapped coded leaves without changing their meaning."""
+
+        field_type = self._canonical_coded_type(field)
+        authored = self._authored_coded_leaf_sources(field, automapped_mappings)
+        fixed = self._fixed_plain_coding_leaves(field)
+        # A lone code provider retains the established terminology dispatch.
+        # Multiple authored leaves, text/display, or a fixed discriminator need
+        # structural population instead.
+        if not authored or (
+            set(authored)
+            == {"coding.code" if field_type == "CodeableConcept" else "code"}
+            and not fixed
+        ):
+            return None
+
+        nm = clean_field_name(field_name)
+        is_value_x = field_name == "value"
+        outer_element = "value" if is_value_x else field_name
+        outer_var = (
+            f"tgt-{nm}-cc" if field_type == "CodeableConcept" else f"tgt-{nm}-coding"
+        )
+        rule = StructureMapGroupRule.model_construct(
+            name=f"map-{nm}-authored-coded-leaves",
+            documentation=(
+                f"Explicit coded leaf mappings for {field.get('path', field_name)}"
+            ),
+        )
+        rule.source = [
+            StructureMapGroupRuleSource.model_construct(context=parent_source_context)
+        ]
+        outer = StructureMapGroupRuleTarget.model_construct(
+            context=parent_target_context,
+            element=outer_element,
+            variable=outer_var,
+            transform="create",
+            parameter=[
+                StructureMapGroupRuleTargetParameter.model_construct(
+                    valueString=field_type
+                )
+            ],
+        )
+        rule.target = [outer]
+
+        def _leaf_rule(relative, source_element=None, literal=None, context=outer_var):
+            leaf = relative.rsplit(".", 1)[-1]
+            suffix = clean_field_name(relative.replace(".", "-"))
+            child = StructureMapGroupRule.model_construct(name=f"set-{nm}-{suffix}")
+            source = StructureMapGroupRuleSource.model_construct(
+                context=parent_source_context
+            )
+            if source_element:
+                source.element = source_element
+                source.variable = f"src-{nm}-{suffix}"
+            child.source = [source]
+            target = StructureMapGroupRuleTarget.model_construct(
+                context=context, element=leaf, transform="copy"
+            )
+            if source_element:
+                target.parameter = [
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueId=source.variable
+                    )
+                ]
+            else:
+                target.parameter = [
+                    fixed_scalar_parameter(
+                        literal, "boolean" if leaf == "userSelected" else None
+                    )
+                ]
+            child.target = [target]
+            return child
+
+        nested = []
+        if field_type == "CodeableConcept" and "text" in authored:
+            nested.append(_leaf_rule("text", authored["text"]))
+
+        coding_authored = (
+            {
+                key.removeprefix("coding."): value
+                for key, value in authored.items()
+                if key.startswith("coding.")
+            }
+            if field_type == "CodeableConcept"
+            else dict(authored)
+        )
+        coding_values = set(coding_authored) | set(fixed)
+        if coding_values:
+            if (
+                field_type == "CodeableConcept"
+                and getattr(self, "is_prohibited_target", None)
+                and self.is_prohibited_target(f"{field.get('path')}.coding")
+            ):
+                recorder = getattr(self, "record_diagnostic", None)
+                if callable(recorder):
+                    recorder(
+                        "coded-leaf-target-prohibited",
+                        f"{field.get('path')}.coding is prohibited; authored coding "
+                        "leaf mappings were suppressed.",
+                        path=f"{field.get('path')}.coding",
+                        severity="error",
+                    )
+            else:
+                coding_var = (
+                    f"tgt-{nm}-coding" if field_type == "CodeableConcept" else outer_var
+                )
+                coding_children = []
+                for leaf in ("system", "version", "code", "display", "userSelected"):
+                    if leaf in fixed:
+                        coding_children.append(
+                            _leaf_rule(leaf, literal=fixed[leaf], context=coding_var)
+                        )
+                    elif leaf in coding_authored:
+                        coding_children.append(
+                            _leaf_rule(
+                                leaf,
+                                coding_authored[leaf],
+                                context=coding_var,
+                            )
+                        )
+                if field_type == "CodeableConcept":
+                    coding_rule = StructureMapGroupRule.model_construct(
+                        name=f"add-{nm}-coding"
+                    )
+                    coding_rule.source = [
+                        StructureMapGroupRuleSource.model_construct(
+                            context=parent_source_context
+                        )
+                    ]
+                    coding_rule.target = [
+                        StructureMapGroupRuleTarget.model_construct(
+                            context=outer_var,
+                            element="coding",
+                            variable=coding_var,
+                            transform="create",
+                            parameter=[
+                                StructureMapGroupRuleTargetParameter.model_construct(
+                                    valueString="Coding"
+                                )
+                            ],
+                        )
+                    ]
+                    coding_rule.rule = coding_children
+                    nested.append(coding_rule)
+                else:
+                    nested.extend(coding_children)
+        rule.rule = nested
+        return rule
 
     def _coding_structure_rules(
         self,
@@ -351,7 +569,7 @@ class _CodedRulesMixin:
             )
         fixed_system = self._fixed_system_from_field(field)
 
-        if not fixed_codings and not has_source:
+        if not fixed_codings:
             leaf_coding = self._fixed_coding_from_leaves(field)
             if leaf_coding:
                 fixed_codings = [leaf_coding]
@@ -389,6 +607,16 @@ class _CodedRulesMixin:
                 source_element=source_el,
                 source_system=system_uri,
             )
+
+        authored_leaf_rule = self._create_authored_coded_leaves_rule(
+            field,
+            field_name,
+            parent_source_context,
+            parent_target_context,
+            automapped_mappings,
+        )
+        if authored_leaf_rule is not None:
+            return authored_leaf_rule
 
         if self._options_are_filter_based(
             options
@@ -466,7 +694,7 @@ class _CodedRulesMixin:
         return _attr(compose, "include") or []
 
     def _bound_valueset_is_intensional(self, field) -> bool:
-        """check if the field's bound value set is intensional (any compose include carries a filter) """
+        """check if the field's bound value set is intensional (any compose include carries a filter)"""
         for inc in self._resolve_valueset_compose_includes(field):
             if _attr(inc, "filter"):
                 return True
@@ -797,15 +1025,9 @@ class _CodedRulesMixin:
             val = self._fixed_value_dict(val)
 
             r = StructureMapGroupRule.model_construct(
-                name=(
-                    f"add-{rule_name}"
-                    if index is not None
-                    else f"set-{rule_name}"
-                )
+                name=(f"add-{rule_name}" if index is not None else f"set-{rule_name}")
             )
-            r.source = [
-                StructureMapGroupRuleSource.model_construct(context=src_ctx)
-            ]
+            r.source = [StructureMapGroupRuleSource.model_construct(context=src_ctx)]
             if isinstance(val, dict):
                 if not child_type:
                     _diagnose(
@@ -943,9 +1165,7 @@ class _CodedRulesMixin:
         return rule
 
     def _existing_concept_map_is_authored(self, cm_id) -> bool:
-        """check if the on-disk ConceptMap ``cm_id`` carries non-identity arrows.
-
-        """
+        """check if the on-disk ConceptMap ``cm_id`` carries non-identity arrows."""
         try:
             existing = self.app_state.dataIO.load_project_file(
                 self.app_state.dataIO.ProjectFolders.CONCEPT_MAPS, f"{cm_id}.json"
