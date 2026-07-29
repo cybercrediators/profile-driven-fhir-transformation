@@ -12,6 +12,7 @@ import json
 import re
 from typing import Any, Optional, Tuple
 
+from fhir_spec.context import ActiveCapabilitySet
 from fhir.resources.R4B.structuremap import (
     StructureMapGroup,
     StructureMapGroupInput,
@@ -24,37 +25,21 @@ from fhir.resources.R4B.structuremap import (
 )
 
 
-SOURCE_LIST_MODES = frozenset(
-    {"first", "not_first", "last", "not_last", "only_one"}
-)
-TARGET_LIST_MODES = frozenset({"first", "share", "last", "collate"})
+# These are dynamic views over the active release context.  The public names
+# remain backward-compatible for existing imports, but membership is no longer
+# a frozen copy of one FHIR release.
+SOURCE_LIST_MODES = ActiveCapabilitySet("source_list_modes")
+TARGET_LIST_MODES = ActiveCapabilitySet("target_list_modes")
 _FHIR_ID = re.compile(r"^[A-Za-z0-9\-.]{1,64}$")
 RULE_DOCUMENT_KEYS = frozenset(
     {"$imports", "$structures", "$groups", "$rules", "$references"}
 )
-STRUCTURE_MODES = frozenset({"source", "queried", "target", "produced"})
-GROUP_TYPE_MODES = frozenset({"none", "types", "type-and-types"})
-MAPPING_TRANSFORMS = frozenset(
-    {
-        "create",
-        "copy",
-        "truncate",
-        "escape",
-        "cast",
-        "append",
-        "translate",
-        "reference",
-        "dateOp",
-        "uuid",
-        "pointer",
-        "evaluate",
-        "cc",
-        "c",
-        "qty",
-        "id",
-        "cp",
-    }
-)
+STRUCTURE_MODES = ActiveCapabilitySet("structure_modes")
+GROUP_TYPE_MODES = ActiveCapabilitySet("group_type_modes")
+MAPPING_TRANSFORMS = ActiveCapabilitySet("transforms")
+PARAMETER_VALUE_TYPES = ActiveCapabilitySet("parameter_value_types")
+INPUT_MODES = ActiveCapabilitySet("input_modes")
+CONTEXT_TYPES = ActiveCapabilitySet("context_types")
 REFERENCE_STRATEGIES = frozenset(
     {"direct", "bundled", "conditional", "contained", "canonical"}
 )
@@ -99,6 +84,54 @@ class CompiledRuleDocument:
 
 class RuleIRValidationError(ValueError):
     """An authored typed-rule declaration cannot be represented safely."""
+
+
+@dataclass(frozen=True)
+class TransformSignature:
+    """Runtime/compiler knowledge not represented by the FHIR transform code system."""
+
+    min_parameters: int
+    max_parameters: Optional[int]
+    literal_parameters: Tuple[Tuple[int, Tuple[str, ...]], ...] = ()
+
+
+# The transform names themselves come from the selected core package.  Arity and
+# parameter roles are execution semantics, so they intentionally live in this
+# separate runtime overlay rather than being inferred from CodeSystem membership.
+TRANSFORM_SIGNATURES = {
+    "create": TransformSignature(0, 1, ((0, ("valueString",)),)),
+    "copy": TransformSignature(1, 1),
+    "truncate": TransformSignature(2, 2, ((1, ("valueInteger",)),)),
+    "escape": TransformSignature(
+        3,
+        3,
+        (
+            (1, ("valueString",)),
+            (2, ("valueString",)),
+        ),
+    ),
+    "cast": TransformSignature(1, 2, ((1, ("valueString",)),)),
+    "append": TransformSignature(1, None),
+    "translate": TransformSignature(
+        3,
+        3,
+        (
+            (1, ("valueString",)),
+            (2, ("valueString",)),
+        ),
+    ),
+    "reference": TransformSignature(1, 1),
+    # R4 leaves dateOp parameters explicitly undocumented.
+    "dateOp": TransformSignature(1, None),
+    "uuid": TransformSignature(0, 0),
+    "pointer": TransformSignature(1, 1),
+    "evaluate": TransformSignature(1, 2, ((1, ("valueString",)),)),
+    "cc": TransformSignature(1, 3),
+    "c": TransformSignature(2, 3),
+    "qty": TransformSignature(1, 4),
+    "id": TransformSignature(2, 3),
+    "cp": TransformSignature(1, 2),
+}
 
 
 def mapping_target_path(value: Any) -> Optional[str]:
@@ -273,13 +306,12 @@ def _check_unknown(raw: dict, allowed: set[str], label: str) -> None:
         )
 
 
-_PARAMETER_FIELDS = {
-    "valueId",
-    "valueString",
-    "valueBoolean",
-    "valueInteger",
-    "valueDecimal",
-}
+def _parameter_field(type_code: str) -> str:
+    return "value" + type_code[:1].upper() + type_code[1:]
+
+
+def _parameter_fields() -> set[str]:
+    return {_parameter_field(type_code) for type_code in PARAMETER_VALUE_TYPES}
 
 
 def _compile_parameter(raw: Any) -> StructureMapGroupRuleTargetParameter:
@@ -289,12 +321,13 @@ def _compile_parameter(raw: Any) -> StructureMapGroupRuleTargetParameter:
         raise RuleIRValidationError(
             "target parameters must be strings or single-value objects"
         )
-    unknown = sorted(set(raw) - _PARAMETER_FIELDS)
-    populated = [key for key in _PARAMETER_FIELDS if key in raw]
+    parameter_fields = _parameter_fields()
+    unknown = sorted(set(raw) - parameter_fields)
+    populated = [key for key in parameter_fields if key in raw]
     if unknown or len(populated) != 1:
         raise RuleIRValidationError(
             "a target parameter must contain exactly one of "
-            + ", ".join(sorted(_PARAMETER_FIELDS))
+            + ", ".join(sorted(parameter_fields))
         )
     key = populated[0]
     value = raw[key]
@@ -385,8 +418,10 @@ def _compile_target(raw: Any) -> StructureMapGroupRuleTarget:
     values["context"] = values.get("context", "target")
     _require_id(values["context"], "target.context")
     values["contextType"] = values.get("contextType", "variable")
-    if values["contextType"] not in ("type", "variable"):
-        raise RuleIRValidationError("target.contextType must be 'type' or 'variable'")
+    if values["contextType"] not in CONTEXT_TYPES:
+        raise RuleIRValidationError(
+            f"target.contextType must be one of {sorted(CONTEXT_TYPES)}"
+        )
     variable = values.get("variable")
     if variable is not None:
         _require_id(variable, "target.variable")
@@ -525,9 +560,9 @@ def _compile_group(raw: Any) -> StructureMapGroup:
         _check_unknown(item, {"name", "mode", "type", "documentation"}, "group input")
         input_name = _require_id(item.get("name"), "group input.name")
         mode = item.get("mode")
-        if mode not in ("source", "target"):
+        if mode not in INPUT_MODES:
             raise RuleIRValidationError(
-                "group input.mode must be 'source' or 'target'"
+                f"group input.mode must be one of {sorted(INPUT_MODES)}"
             )
         inputs.append(
             StructureMapGroupInput.model_construct(
@@ -1087,4 +1122,279 @@ def compile_rule_document(
         except (RuleIRValidationError, TypeError) as exc:
             _diagnose("$references", index, exc)
 
+    _validate_compiled_semantics(result)
     return result
+
+
+def _parameter_key(parameter) -> Optional[str]:
+    for key in _parameter_fields():
+        if getattr(parameter, key, None) is not None:
+            return key
+    return None
+
+
+def _validate_transform(target, variables: dict[str, str]) -> list[str]:
+    errors = []
+    transform = getattr(target, "transform", None)
+    parameters = list(getattr(target, "parameter", None) or [])
+    if transform is None:
+        if parameters:
+            errors.append("target parameters require a transform")
+        return errors
+    signature = TRANSFORM_SIGNATURES.get(transform)
+    if signature is None:
+        errors.append(
+            f"transform {transform!r} has no runtime signature metadata"
+        )
+        return errors
+    count = len(parameters)
+    if count < signature.min_parameters or (
+        signature.max_parameters is not None
+        and count > signature.max_parameters
+    ):
+        expected = (
+            str(signature.min_parameters)
+            if signature.max_parameters == signature.min_parameters
+            else (
+                f"{signature.min_parameters}..*"
+                if signature.max_parameters is None
+                else f"{signature.min_parameters}..{signature.max_parameters}"
+            )
+        )
+        errors.append(
+            f"transform {transform!r} requires {expected} parameters, got {count}"
+        )
+    for index, parameter in enumerate(parameters):
+        key = _parameter_key(parameter)
+        if key == "valueId":
+            variable = parameter.valueId
+            if variable not in variables:
+                errors.append(
+                    f"transform {transform!r} references unknown variable "
+                    f"{variable!r}"
+                )
+    for index, allowed in signature.literal_parameters:
+        if index >= count:
+            continue
+        actual = _parameter_key(parameters[index])
+        if actual not in allowed:
+            errors.append(
+                f"transform {transform!r} parameter {index + 1} must use "
+                f"{' or '.join(allowed)}, got {actual or 'no value'}"
+            )
+    return errors
+
+
+def _validate_rule_semantics(
+    rule,
+    inherited_variables: dict[str, str],
+    groups: dict[str, Any],
+    *,
+    imports_present: bool,
+) -> list[str]:
+    errors: list[str] = []
+    variables = dict(inherited_variables)
+    sources = list(getattr(rule, "source", None) or [])
+    for source in sources:
+        context = getattr(source, "context", None)
+        if context not in variables:
+            errors.append(f"source references unknown context {context!r}")
+        if getattr(source, "listMode", None) and not getattr(
+            source, "element", None
+        ):
+            errors.append("source.listMode requires source.element")
+        variable = getattr(source, "variable", None)
+        if variable:
+            if variable in variables:
+                errors.append(f"duplicate variable {variable!r}")
+            variables[variable] = "source"
+
+    for target in list(getattr(rule, "target", None) or []):
+        context = getattr(target, "context", None)
+        if context and context not in variables:
+            errors.append(f"target references unknown context {context!r}")
+        element = getattr(target, "element", None)
+        variable = getattr(target, "variable", None)
+        if variable and not element and not getattr(target, "transform", None):
+            errors.append(
+                f"target variable {variable!r} requires an element or transform"
+            )
+        errors.extend(_validate_transform(target, variables))
+        if variable:
+            if variable in variables:
+                errors.append(f"duplicate variable {variable!r}")
+            variables[variable] = "target"
+
+    nested_names: set[str] = set()
+    for nested in list(getattr(rule, "rule", None) or []):
+        if nested.name in nested_names:
+            errors.append(f"duplicate nested rule name {nested.name!r}")
+        nested_names.add(nested.name)
+        errors.extend(
+            _validate_rule_semantics(
+                nested,
+                variables,
+                groups,
+                imports_present=imports_present,
+            )
+        )
+
+    for dependent in list(getattr(rule, "dependent", None) or []):
+        supplied = list(getattr(dependent, "variable", None) or [])
+        for variable in supplied:
+            if variable not in variables:
+                errors.append(
+                    f"dependent group {dependent.name!r} receives unknown "
+                    f"variable {variable!r}"
+                )
+        called = groups.get(dependent.name)
+        if called is None:
+            if not imports_present:
+                errors.append(
+                    f"dependent group {dependent.name!r} is not declared locally "
+                    "and no imports are present"
+                )
+            continue
+        expected = list(getattr(called, "input", None) or [])
+        if len(supplied) != len(expected):
+            errors.append(
+                f"dependent group {dependent.name!r} requires {len(expected)} "
+                f"arguments, got {len(supplied)}"
+            )
+            continue
+        for variable, group_input in zip(supplied, expected):
+            if (
+                getattr(group_input, "mode", None) == "target"
+                and variables.get(variable) != "target"
+            ):
+                errors.append(
+                    f"dependent group {dependent.name!r} target argument "
+                    f"{group_input.name!r} requires a target variable, got "
+                    f"{variable!r}"
+                )
+    return errors
+
+
+def _group_signature(group) -> dict[str, tuple[str, Optional[str]]]:
+    return {
+        item.name: (item.mode, getattr(item, "type", None))
+        for item in (getattr(group, "input", None) or [])
+    }
+
+
+def _validate_group_semantics(
+    group,
+    groups: dict[str, Any],
+    *,
+    imports_present: bool,
+) -> list[str]:
+    errors: list[str] = []
+    inputs = list(getattr(group, "input", None) or [])
+    names = [item.name for item in inputs]
+    if len(names) != len(set(names)):
+        errors.append("group input names must be unique")
+    if group.typeMode in ("types", "type-and-types"):
+        if (
+            len(inputs) != 2
+            or [item.mode for item in inputs] != ["source", "target"]
+            or any(not getattr(item, "type", None) for item in inputs)
+        ):
+            errors.append(
+                f"group typeMode {group.typeMode!r} requires exactly one typed "
+                "source input followed by one typed target input"
+            )
+    if group.extends:
+        base = groups.get(group.extends)
+        if base is None:
+            if not imports_present:
+                errors.append(
+                    f"extended group {group.extends!r} is not declared locally "
+                    "and no imports are present"
+                )
+        else:
+            own = _group_signature(group)
+            for name, signature in _group_signature(base).items():
+                if own.get(name) != signature:
+                    errors.append(
+                        f"extended group input {name!r} must preserve mode and type"
+                    )
+    variables = {item.name: item.mode for item in inputs}
+    rule_names: set[str] = set()
+    for rule in list(getattr(group, "rule", None) or []):
+        if rule.name in rule_names:
+            errors.append(f"duplicate group rule name {rule.name!r}")
+        rule_names.add(rule.name)
+        errors.extend(
+            _validate_rule_semantics(
+                rule,
+                variables,
+                groups,
+                imports_present=imports_present,
+            )
+        )
+    return errors
+
+
+def _validate_compiled_semantics(result: CompiledRuleDocument) -> None:
+    """Validate relationships that Pydantic and per-object parsing cannot see."""
+
+    groups: dict[str, Any] = {}
+    duplicate_group_names: set[str] = set()
+    for group in result.groups:
+        if group.name in groups:
+            duplicate_group_names.add(group.name)
+        groups[group.name] = group
+    for name in sorted(duplicate_group_names):
+        result.diagnostics.append(
+            {
+                "code": "invalid-typed-rule",
+                "message": f"duplicate group name {name!r}",
+                "section": "$groups",
+                "severity": "error",
+            }
+        )
+
+    imports_present = bool(result.imports)
+    valid_groups = []
+    for index, group in enumerate(result.groups):
+        errors = _validate_group_semantics(
+            group, groups, imports_present=imports_present
+        )
+        if errors:
+            result.diagnostics.extend(
+                {
+                    "code": "invalid-typed-rule",
+                    "message": message,
+                    "section": "$groups",
+                    "index": index,
+                    "severity": "error",
+                }
+                for message in errors
+            )
+        else:
+            valid_groups.append(group)
+    result.groups = valid_groups
+
+    valid_primary_rules = []
+    primary_variables = {"source": "source", "target": "target"}
+    for index, rule in enumerate(result.primary_rules):
+        errors = _validate_rule_semantics(
+            rule,
+            primary_variables,
+            groups,
+            imports_present=imports_present,
+        )
+        if errors:
+            result.diagnostics.extend(
+                {
+                    "code": "invalid-typed-rule",
+                    "message": message,
+                    "section": "$rules",
+                    "index": index,
+                    "severity": "error",
+                }
+                for message in errors
+            )
+        else:
+            valid_primary_rules.append(rule)
+    result.primary_rules = valid_primary_rules

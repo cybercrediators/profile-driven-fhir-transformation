@@ -302,6 +302,7 @@ class _SliceRulesMixin:
         parent_source_context,
         parent_target_context,
         cardinality,
+        field=None,
     ):
         """emit a single rule that creates and populates a choice-typed element (value[x] or similar)"""
         bn = clean_field_name(base_name)
@@ -342,6 +343,10 @@ class _SliceRulesMixin:
             if sub_field_maps:
                 src.element = sub_field_maps[0][1]
                 src.variable = "src-choiceval"
+                if field is not None:
+                    self._apply_source_bound_check(
+                        field, src, target_type=choice_type
+                    )
                 info = get_transform_for_type(choice_type, "src-choiceval")
                 tgt.transform = info.get("transform")
                 if info.get("parameters"):

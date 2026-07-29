@@ -39,7 +39,7 @@ def test_document_compiles_imports_structures_groups_and_full_rule_shape():
             "$groups": [
                 {
                     "name": "Correlate",
-                    "typeMode": "types",
+                    "typeMode": "none",
                     "extends": "BaseCorrelate",
                     "inputs": [
                         {"name": "left", "mode": "source", "type": "Observation"},
@@ -122,13 +122,43 @@ def test_document_compiles_imports_structures_groups_and_full_rule_shape():
 
 @pytest.mark.parametrize("transform", sorted(MAPPING_TRANSFORMS))
 def test_every_r4b_structuremap_transform_is_accepted(transform):
+    parameters = {
+        "create": [{"valueString": "String"}],
+        "copy": [{"valueId": "value"}],
+        "truncate": [{"valueId": "value"}, {"valueInteger": 8}],
+        "escape": [
+            {"valueId": "value"},
+            {"valueString": "json"},
+            {"valueString": "xml"},
+        ],
+        "cast": [{"valueId": "value"}, {"valueString": "string"}],
+        "append": [{"valueId": "value"}],
+        "translate": [
+            {"valueId": "value"},
+            {"valueString": "http://example.org/ConceptMap/map"},
+            {"valueString": "code"},
+        ],
+        "reference": [{"valueId": "value"}],
+        "dateOp": [{"valueId": "value"}],
+        "uuid": [],
+        "pointer": [{"valueId": "value"}],
+        "evaluate": [
+            {"valueId": "value"},
+            {"valueString": "$this"},
+        ],
+        "cc": [{"valueString": "text"}],
+        "c": [{"valueString": "system"}, {"valueString": "code"}],
+        "qty": [{"valueString": "12 mg"}],
+        "id": [{"valueString": "system"}, {"valueString": "value"}],
+        "cp": [{"valueString": "contact"}],
+    }[transform]
     rule = {
         "name": f"use-{transform.lower()}",
         "source": {"element": "value", "variable": "value"},
         "target": {
             "element": "value",
             "transform": transform,
-            "parameters": [{"valueId": "value"}],
+            "parameters": parameters,
         },
     }
     document = _compile({"$rules": [rule]})
@@ -317,3 +347,207 @@ def test_profile_scoping_omits_nonmatching_declarations():
     )
     assert document.primary_rules == []
     assert document.diagnostics == []
+
+
+@pytest.mark.parametrize(
+    ("target", "message"),
+    [
+        (
+            {
+                "element": "value",
+                "transform": "copy",
+                "parameters": [{"valueId": "missing"}],
+            },
+            "unknown variable",
+        ),
+        (
+            {
+                "element": "value",
+                "transform": "truncate",
+                "parameters": [{"valueId": "value"}],
+            },
+            "requires 2 parameters",
+        ),
+        (
+            {
+                "element": "value",
+                "transform": "truncate",
+                "parameters": [
+                    {"valueId": "value"},
+                    {"valueString": "eight"},
+                ],
+            },
+            "parameter 2 must use valueInteger",
+        ),
+    ],
+)
+def test_semantic_transform_errors_omit_authored_rule(target, message):
+    document = _compile(
+        {
+            "$rules": [
+                {
+                    "name": "invalid-transform",
+                    "source": {"element": "value", "variable": "value"},
+                    "target": target,
+                }
+            ]
+        }
+    )
+    assert document.primary_rules == []
+    assert any(message in item["message"] for item in document.diagnostics)
+
+
+def test_semantic_context_and_list_mode_errors_omit_authored_rule():
+    document = _compile(
+        {
+            "$rules": [
+                {
+                    "name": "bad-context",
+                    "source": {
+                        "context": "missing",
+                        "listMode": "first",
+                    },
+                    "target": {
+                        "context": "also-missing",
+                        "element": "value",
+                        "transform": "copy",
+                        "parameters": [{"valueString": "x"}],
+                    },
+                }
+            ]
+        }
+    )
+    assert document.primary_rules == []
+    messages = {item["message"] for item in document.diagnostics}
+    assert "source references unknown context 'missing'" in messages
+    assert "source.listMode requires source.element" in messages
+    assert "target references unknown context 'also-missing'" in messages
+
+
+def test_local_dependent_group_arguments_are_validated():
+    document = _compile(
+        {
+            "$groups": [
+                {
+                    "name": "Child",
+                    "inputs": [
+                        {"name": "childSource", "mode": "source"},
+                        {"name": "childTarget", "mode": "target"},
+                    ],
+                    "rules": [
+                        {
+                            "name": "noop",
+                            "source": {"context": "childSource"},
+                            "target": {
+                                "context": "childTarget",
+                                "element": "status",
+                                "transform": "copy",
+                                "parameters": [{"valueString": "final"}],
+                            },
+                        }
+                    ],
+                }
+            ],
+            "$rules": [
+                {
+                    "name": "call-child",
+                    "source": {
+                        "element": "value",
+                        "variable": "value",
+                    },
+                    "target": {
+                        "element": "component",
+                        "variable": "component",
+                        "transform": "create",
+                        "parameters": [{"valueString": "BackboneElement"}],
+                    },
+                    "dependent": [
+                        {
+                            "name": "Child",
+                            "variables": ["value", "component"],
+                        }
+                    ],
+                }
+            ],
+        }
+    )
+    assert document.diagnostics == []
+    assert len(document.primary_rules) == 1
+
+    invalid = _compile(
+        {
+            "$groups": [
+                {
+                    "name": "Child",
+                    "inputs": [
+                        {"name": "childSource", "mode": "source"},
+                        {"name": "childTarget", "mode": "target"},
+                    ],
+                    "rules": [
+                        {
+                            "name": "noop",
+                            "source": {"context": "childSource"},
+                            "target": {
+                                "context": "childTarget",
+                                "element": "status",
+                                "transform": "copy",
+                                "parameters": [{"valueString": "final"}],
+                            },
+                        }
+                    ],
+                }
+            ],
+            "$rules": [
+                {
+                    "name": "bad-call",
+                    "source": {"element": "value", "variable": "value"},
+                    "dependent": [
+                        {
+                            "name": "Child",
+                            "variables": ["value", "value"],
+                        }
+                    ],
+                }
+            ],
+        }
+    )
+    assert invalid.primary_rules == []
+    assert any(
+        "requires a target variable" in item["message"]
+        for item in invalid.diagnostics
+    )
+
+
+def test_default_group_requires_one_typed_source_and_target():
+    document = _compile(
+        {
+            "$groups": [
+                {
+                    "name": "BadDefault",
+                    "typeMode": "types",
+                    "inputs": [
+                        {"name": "source", "mode": "source", "type": "Patient"},
+                        {"name": "lookup", "mode": "source", "type": "Patient"},
+                        {"name": "target", "mode": "target", "type": "Patient"},
+                    ],
+                    "rules": [
+                        {
+                            "name": "noop",
+                            "source": {"context": "source"},
+                            "target": {
+                                "context": "target",
+                                "element": "active",
+                                "transform": "copy",
+                                "parameters": [{"valueBoolean": True}],
+                            },
+                        }
+                    ],
+                }
+            ]
+        }
+    )
+    assert document.groups == []
+    assert any(
+        "requires exactly one typed source" in item["message"]
+        for item in document.diagnostics
+    )

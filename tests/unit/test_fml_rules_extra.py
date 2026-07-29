@@ -67,6 +67,91 @@ def test_explicit_base_primitive_mapping_is_emitted(factory, path, field_type):
     assert rule.target[0].transform == "copy"
 
 
+def test_mapped_string_emits_max_length_source_check(factory):
+    rule = factory.create_mappable_field_rule(
+        {
+            "path": "Patient.identifier.value",
+            "type": "string",
+            "max_length": 12,
+        },
+        "Patient",
+        "identifier",
+        "target-identifier",
+        automapped_mappings={
+            "Patient.identifier.value": "Source.identifierValue"
+        },
+        parent_path="Patient.identifier",
+    )
+    assert rule.source[0].check == "($this.toString().length() <= 12)"
+
+
+def test_mapped_numeric_emits_min_and_max_source_checks(factory):
+    rule = factory.create_mappable_field_rule(
+        {
+            "path": "Observation.valueDecimal",
+            "type": "decimal",
+            "min_value": {"type": "Decimal", "value": "-2.5"},
+            "max_value": {"type": "Decimal", "value": 10},
+        },
+        "Observation",
+        "source",
+        "target",
+        automapped_mappings={
+            "Observation.valueDecimal": "Source.measurement"
+        },
+    )
+    assert rule.source[0].check == (
+        "($this.toDecimal() >= -2.5) and ($this.toDecimal() <= 10)"
+    )
+
+
+def test_bounds_are_not_attached_to_todo_or_non_numeric_targets(factory):
+    todo = factory.create_mappable_field_rule(
+        {
+            "path": "Patient.name",
+            "type": "string",
+            "max_length": 20,
+        },
+        "Patient",
+        "source",
+        "target",
+    )
+    assert todo.source[0].check is None
+
+    date = factory.create_mappable_field_rule(
+        {
+            "path": "Patient.birthDate",
+            "type": "date",
+            "min_value": {"type": "Date", "value": "1900-01-01"},
+        },
+        "Patient",
+        "source",
+        "target",
+        automapped_mappings={"Patient.birthDate": "Source.birthDate"},
+    )
+    assert date.source[0].check is None
+
+
+def test_narrowed_choice_keeps_bound_check_on_real_provider(factory):
+    rule = factory.create_mappable_field_rule(
+        {
+            "path": "Observation.value[x]",
+            "type": [{"code": "decimal"}],
+            "is_type_choice": True,
+            "min_value": {"type": "Decimal", "value": 0},
+        },
+        "Observation",
+        "source",
+        "target",
+        automapped_mappings={
+            "Observation.value[x]:valueDecimal": "Source.measurement"
+        },
+    )
+    narrowed = rule.rule[0]
+    assert narrowed.source[0].element == "measurement"
+    assert narrowed.source[0].check == "($this.toDecimal() >= 0)"
+
+
 @pytest.mark.parametrize(
     "path,expected",
     [

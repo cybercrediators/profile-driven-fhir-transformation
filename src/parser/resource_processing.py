@@ -2,6 +2,7 @@ import jsonpickle
 
 from helpers import utils
 from data_handling.app_state import AppState
+from fhir_spec.context import ensure_fhir_spec_context
 from parser.resource_parser import resource_obj_parser
 
 import logging
@@ -31,8 +32,9 @@ def process_files(files, app_state: AppState, overwrite=False):
     # for mod in fhir_modules:
     #    for name, cls in inspect.getmembers(importlib.import_module(f"fhir.resources.R4B.{mod}"), inspect.isclass):
     #        print(name, cls)
+    spec_context = ensure_fhir_spec_context(app_state)
     for file in files:
-        obj, res_type = utils.json_file_to_obj(file)
+        obj, res_type = utils.json_file_to_obj(file, spec_context=spec_context)
         try:
             app_state.registry.add_fhir_object(obj, res_type)
         except ReferenceError as e:

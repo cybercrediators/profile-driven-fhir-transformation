@@ -398,10 +398,19 @@ class StructureMapGenerator:
                     )
                 for facet in ("default_value", "min_value", "max_value", "max_length"):
                     if facet in field:
+                        message = (
+                            f"{facet} constrains {path}; it remains "
+                            "validator-enforced."
+                        )
+                        if facet in ("min_value", "max_value", "max_length"):
+                            message += (
+                                " Direct scalar mappings also receive a "
+                                "source-side check when the constraint is safely "
+                                "comparable."
+                            )
                         self._append_diagnostic(
                             f"target-{facet.replace('_', '-')}",
-                            f"{facet} constrains {path}; it is validator-enforced "
-                            "and is not invented as source data.",
+                            message,
                             path=path,
                             value=field[facet],
                             severity="information",

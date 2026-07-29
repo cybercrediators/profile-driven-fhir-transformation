@@ -32,6 +32,7 @@ from mapping.fml_creator.fml_helper import (
 )
 from parser.resource_parser.fhir_type_introspection import get_complex_type_fields
 from functools import lru_cache
+from decimal import Decimal, InvalidOperation
 
 from mapping.fml_creator.fml_extension import _ExtensionRulesMixin
 from mapping.fml_creator.fml_slice import _SliceRulesMixin
@@ -229,6 +230,74 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         Thin wrapper over fml_helper.local_element_name (shared with the questionnaire creator).
         """
         return local_element_name(source_id)
+
+    @staticmethod
+    def _numeric_literal(value):
+        """FHIRPath numeric literal text, or ``None`` for non-scalar bounds."""
+
+        if isinstance(value, bool) or not isinstance(
+            value, (int, float, str, Decimal)
+        ):
+            return None
+        try:
+            number = Decimal(str(value).strip())
+        except (InvalidOperation, TypeError, ValueError):
+            return None
+        if not number.is_finite():
+            return None
+        return str(value).strip()
+
+    def _source_bound_check(self, field, target_type=None):
+        """Safe source-side FHIRPath check for directly comparable scalar facets."""
+
+        type_code = target_type
+        if not type_code:
+            codes = type_codes(field.get("type"))
+            type_code = codes[0] if len(codes) == 1 else None
+        clauses = []
+        string_types = {
+            "canonical",
+            "code",
+            "id",
+            "markdown",
+            "oid",
+            "string",
+            "uri",
+            "url",
+            "uuid",
+        }
+        numeric_types = {"decimal", "integer", "positiveInt", "unsignedInt"}
+        max_length = field.get("max_length")
+        if type_code in string_types and isinstance(max_length, int):
+            clauses.append(f"$this.toString().length() <= {max_length}")
+
+        if type_code in numeric_types:
+            for facet, operator in (("min_value", ">="), ("max_value", "<=")):
+                bound = field.get(facet)
+                if not isinstance(bound, dict):
+                    continue
+                bound_type = str(bound.get("type") or "")
+                if bound_type and bound_type[:1].lower() + bound_type[1:] not in (
+                    numeric_types
+                ):
+                    continue
+                literal = self._numeric_literal(bound.get("value"))
+                if literal is not None:
+                    clauses.append(f"$this.toDecimal() {operator} {literal}")
+        return " and ".join(f"({clause})" for clause in clauses)
+
+    def _apply_source_bound_check(self, field, source, target_type=None):
+        source_element = getattr(source, "element", None)
+        if not source_element or source_element.startswith("TODO"):
+            return None
+        expression = self._source_bound_check(field, target_type=target_type)
+        if not expression:
+            return None
+        existing = getattr(source, "check", None)
+        source.check = (
+            f"({existing}) and ({expression})" if existing else expression
+        )
+        return expression
 
     def _apply_repeating_list_modes(
         self, cardinality, source, target, rule_name, field_path=None
@@ -1065,6 +1134,8 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             # unidentifiable repetition when a key was declared.
             source.check = f"{collection.source_key}.count() = 1"
 
+        self._apply_source_bound_check(field, source)
+
         # Add documentation (enhanced for slices)
         rule.documentation = self.generate_rule_documentation(
             field, is_slice, slice_info
@@ -1465,6 +1536,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 parent_source_context,
                 parent_target_context,
                 cardinality,
+                field=field,
             )
             if narrowed_rule:
                 self._ungate_placeholder_parent(rule)
@@ -1526,6 +1598,9 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             # Guard against REDCap's empty-string representation of missing values
             if guard_empty_choice:
                 choice_source.condition = "$this != ''"
+            self._apply_source_bound_check(
+                field, choice_source, target_type=choice_type
+            )
             choice_rule.source = [choice_source]
 
             choice_target = StructureMapGroupRuleTarget.model_construct()

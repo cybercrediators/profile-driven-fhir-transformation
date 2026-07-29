@@ -1,6 +1,7 @@
 from data_handling.registry.registry import Registry
 from data_handling.caching.cache_connector import CacheConnector
 from dataclasses import dataclass
+from typing import Any
 
 from data_handling.data_io import DataIO
 
@@ -13,3 +14,4 @@ class AppState:
     registry: Registry
     cache: CacheConnector
     dataIO: DataIO
+    fhir_spec_context: Any = None

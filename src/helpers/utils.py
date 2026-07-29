@@ -52,9 +52,11 @@ def get_model_class(res_type):
     )
 
 
-def json_file_to_obj(file):
+def json_file_to_obj(file, spec_context=None):
     content = get_json(file)
     res_type = content.get("resourceType") if isinstance(content, dict) else None
+    if spec_context is not None and isinstance(content, dict):
+        spec_context.assert_profile_compatible(content)
     return json_to_obj(content, res_type), res_type
 
 
