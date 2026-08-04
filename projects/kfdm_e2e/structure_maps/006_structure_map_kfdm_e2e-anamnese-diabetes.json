@@ -2,7 +2,7 @@
   "resourceType": "StructureMap",
   "id": "sm-anamnese-diabetes-52afbd65",
   "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-anamnese-diabetes",
-  "name": "006_structure_map_kfdm_e2e-anamnese-diabetes",
+  "name": "Map_006_structure_map_kfdm_e2e_anamnese_diabetes",
   "title": "Structure Map for kfdm_e2e - anamnese-diabetes",
   "status": "draft",
   "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-diabetes). Placeholders have to be set (or use auto-mapping)",
@@ -45,6 +45,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "meta",
               "variable": "tgt-meta",
               "transform": "create",
@@ -66,6 +67,7 @@
               "target": [
                 {
                   "context": "tgt-meta",
+                  "contextType": "variable",
                   "element": "profile",
                   "transform": "copy",
                   "parameter": [
@@ -90,6 +92,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "clinicalStatus",
               "variable": "tgt-clinicalStatus",
               "transform": "create",
@@ -100,20 +103,21 @@
               ]
             }
           ],
-          "documentation": "Maps to Condition.clinicalStatus | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Condition.clinicalStatus.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Condition.clinicalStatus.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Condition.clinicalStatus.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+          "documentation": "Maps to Condition.clinicalStatus | Type: CodeableConcept | Cardinality: 1..1"
         },
         {
           "name": "map-extension-existance",
           "source": [
             {
               "context": "source",
-              "element": "TODO-MAP-EXISTANCE_SOURCE",
+              "element": "diabetes",
               "variable": "src-existance"
             }
           ],
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "extension",
               "variable": "ext-existance",
               "transform": "create",
@@ -135,6 +139,7 @@
               "target": [
                 {
                   "context": "ext-existance",
+                  "contextType": "variable",
                   "element": "url",
                   "transform": "copy",
                   "parameter": [
@@ -151,13 +156,14 @@
               "source": [
                 {
                   "context": "source",
-                  "element": "TODO-SOURCE-FOR-VALUECODE",
+                  "element": "diabetes",
                   "variable": "src"
                 }
               ],
               "target": [
                 {
                   "context": "ext-existance",
+                  "contextType": "variable",
                   "element": "valueCode",
                   "transform": "translate",
                   "parameter": [
@@ -173,10 +179,10 @@
                   ]
                 }
               ],
-              "documentation": "Translate mapping for Condition.extension using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-existance-ffa55ad0"
+              "documentation": "Translate mapping for Condition.extension:existance using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-existance-ffa55ad0"
             }
           ],
-          "documentation": "Maps to extension: http://example.org/StructureDefinition/yes-no-unknown-extension | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/yes-no-unknown-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [{'code': 'Y', 'display': 'Yes', 'system': 'http://terminology.hl7.org/CodeSystem/v2-0136'}, {'code': 'N', 'display': 'No', 'system': 'http://terminology.hl7.org/CodeSystem/v2-0136'}, {'code': 'asked-unknown', 'display': \"Don't know\", 'system': 'http://terminology.hl7.org/CodeSystem/data-absent-reason'}], 'binding_strength': 'required', 'valueSetUrl': 'http://hl7.org/fhir/ValueSet/yesnodontknow', 'children': []}]]}] | Path: Condition.extension"
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/yes-no-unknown-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/yes-no-unknown-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/yes-no-unknown-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [{'code': 'Y', 'display': 'Yes', 'system': 'http://terminology.hl7.org/CodeSystem/v2-0136'}, {'code': 'N', 'display': 'No', 'system': 'http://terminology.hl7.org/CodeSystem/v2-0136'}, {'code': 'asked-unknown', 'display': \"Don't know\", 'system': 'http://terminology.hl7.org/CodeSystem/data-absent-reason'}], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'http://hl7.org/fhir/ValueSet/yesnodontknow', 'children': []}]]}] | Path: Condition.extension"
         },
         {
           "name": "TODO-resolve-reference-Condition-subject",
@@ -186,79 +192,7 @@
               "variable": "src-subject"
             }
           ],
-          "target": [
-            {
-              "element": "subject"
-            }
-          ],
           "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
-        },
-        {
-          "name": "set-fixed-verificationStatus",
-          "source": [
-            {
-              "context": "source"
-            }
-          ],
-          "target": [
-            {
-              "context": "target",
-              "element": "verificationStatus",
-              "variable": "tgt-fixed-verificationStatus",
-              "transform": "create",
-              "parameter": [
-                {
-                  "valueString": "CodeableConcept"
-                }
-              ]
-            }
-          ],
-          "rule": [
-            {
-              "name": "add-fixed-verificationStatus-coding",
-              "source": [
-                {
-                  "context": "source"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tgt-fixed-verificationStatus",
-                  "element": "coding",
-                  "variable": "tgt-fixed-verificationStatus-coding",
-                  "transform": "create",
-                  "parameter": [
-                    {
-                      "valueString": "Coding"
-                    }
-                  ]
-                }
-              ],
-              "rule": [
-                {
-                  "name": "set-fixed-verificationStatus-coding-code",
-                  "source": [
-                    {
-                      "context": "source"
-                    }
-                  ],
-                  "target": [
-                    {
-                      "context": "tgt-fixed-verificationStatus-coding",
-                      "element": "code",
-                      "transform": "copy",
-                      "parameter": [
-                        {
-                          "valueString": "provisional"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "documentation": "Sets fixed value for verificationStatus"
         }
       ]
     }

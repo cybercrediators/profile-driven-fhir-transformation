@@ -2,7 +2,7 @@
   "resourceType": "StructureMap",
   "id": "sm-anamnese-bewegung-ac2678b2",
   "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-anamnese-bewegung",
-  "name": "005_structure_map_kfdm_e2e-anamnese-bewegung",
+  "name": "Map_005_structure_map_kfdm_e2e_anamnese_bewegung",
   "title": "Structure Map for kfdm_e2e - anamnese-bewegung",
   "status": "draft",
   "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-bewegung). Placeholders have to be set (or use auto-mapping)",
@@ -45,6 +45,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "meta",
               "variable": "tgt-meta",
               "transform": "create",
@@ -66,6 +67,7 @@
               "target": [
                 {
                   "context": "tgt-meta",
+                  "contextType": "variable",
                   "element": "profile",
                   "transform": "copy",
                   "parameter": [
@@ -90,6 +92,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "clinicalStatus",
               "variable": "tgt-clinicalStatus",
               "transform": "create",
@@ -100,20 +103,21 @@
               ]
             }
           ],
-          "documentation": "Maps to Condition.clinicalStatus | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Condition.clinicalStatus.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Condition.clinicalStatus.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Condition.clinicalStatus.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Condition.clinicalStatus.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+          "documentation": "Maps to Condition.clinicalStatus | Type: CodeableConcept | Cardinality: 1..1"
         },
         {
           "name": "map-extension-activity",
           "source": [
             {
               "context": "source",
-              "element": "TODO-MAP-ACTIVITY_SOURCE",
+              "element": "bewegung",
               "variable": "src-activity"
             }
           ],
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "extension",
               "variable": "ext-activity",
               "transform": "create",
@@ -135,6 +139,7 @@
               "target": [
                 {
                   "context": "ext-activity",
+                  "contextType": "variable",
                   "element": "url",
                   "transform": "copy",
                   "parameter": [
@@ -147,18 +152,20 @@
               "documentation": "Sets the extension URL to http://example.org/StructureDefinition/physical-activity-extension"
             },
             {
-              "name": "set-extension-value-activity",
+              "name": "map-extension-YesNoExtension",
               "source": [
                 {
                   "context": "source",
-                  "element": "TODO-VALUE-SOURCE",
-                  "variable": "srcValue"
+                  "element": "bewegung",
+                  "variable": "src-YesNoExtension"
                 }
               ],
               "target": [
                 {
                   "context": "ext-activity",
-                  "element": "value",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-YesNoExtension",
                   "transform": "create",
                   "parameter": [
                     {
@@ -167,10 +174,158 @@
                   ]
                 }
               ],
-              "documentation": "Sets the extension value (type: valueExtension)"
+              "rule": [
+                {
+                  "name": "set-extension-url-YesNoExtension",
+                  "source": [
+                    {
+                      "context": "src-YesNoExtension"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoExtension",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoExtension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to YesNoExtension"
+                },
+                {
+                  "name": "set-extension-value-YesNoExtension-true",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "bewegung",
+                      "variable": "srcValue",
+                      "condition": "$this = '1' or $this = 'true'"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoExtension",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueBoolean": true
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value to True (boolean coercion from string)"
+                },
+                {
+                  "name": "set-extension-value-YesNoExtension-false",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "bewegung",
+                      "variable": "srcValue",
+                      "condition": "$this = '0' or $this = 'false'"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoExtension",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueBoolean": false
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value to False (boolean coercion from string)"
+                }
+              ],
+              "documentation": "Maps to extension: YesNoExtension | Type: [{'code': 'Extension'}] | Path: Condition.extension:activity.extension"
+            },
+            {
+              "name": "map-extension-HoursPerWeek",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "bewegung_std",
+                  "variable": "src-HoursPerWeek"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-activity",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-HoursPerWeek",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-HoursPerWeek",
+                  "source": [
+                    {
+                      "context": "src-HoursPerWeek"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-HoursPerWeek",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "HoursPerWeek"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to HoursPerWeek"
+                },
+                {
+                  "name": "set-extension-value-HoursPerWeek",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "bewegung_std",
+                      "variable": "srcValue",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-HoursPerWeek",
+                      "contextType": "variable",
+                      "element": "valueDecimal",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueDecimal)"
+                }
+              ],
+              "documentation": "Maps to extension: HoursPerWeek | Type: [{'code': 'Extension'}] | Path: Condition.extension:activity.extension"
             }
           ],
-          "documentation": "Maps to extension: http://example.org/StructureDefinition/physical-activity-extension | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:YesNoExtension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'An extension for yes or no questions.', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'YesNoExtension', 'must_support': True, 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:YesNoExtension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:YesNoExtension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'YesNoExtension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:YesNoExtension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}]}, {'path': 'Extension.extension', 'id': 'Extension.extension:HoursPerWeek', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'An extension that indicates the amount of hours per week the patient is physical active.', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'HoursPerWeek', 'must_support': True, 'children': [{'path': 'Extension.extension.id', 'id': 'Extension.extension:HoursPerWeek.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:HoursPerWeek.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'HoursPerWeek', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:HoursPerWeek.value[x]', 'type': [{'code': 'decimal'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}]}], 'slicing_type': 'value', 'discriminator': {'path': 'url', 'type': 'value'}, 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/physical-activity-extension', 'options': [], 'comment': 'The definition may point directly to a computable or … [truncated; full structure in the registry entry for http://example.org/StructureDefinition/physical-activity-extension] | Path: Condition.extension"
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/physical-activity-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/physical-activity-extension'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:YesNoExtension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'An extension for yes or no questions.', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'YesNoExtension', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:YesNoExtension', 'slice_selector': 'YesNoExtension', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:YesNoExtension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '0'}, 'description': 'Extension', 'is_required': False, 'is_prohibited': True, 'fixed_value': [], 'options': [], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:YesNoExtension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:YesNoExtension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'YesNoExtension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:YesNoExtension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, … [truncated; full structure in the registry entry for http://example.org/StructureDefinition/physical-activity-extension] | Path: Condition.extension"
         },
         {
           "name": "TODO-resolve-reference-Condition-subject",
@@ -180,79 +335,7 @@
               "variable": "src-subject"
             }
           ],
-          "target": [
-            {
-              "element": "subject"
-            }
-          ],
           "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
-        },
-        {
-          "name": "set-fixed-verificationStatus",
-          "source": [
-            {
-              "context": "source"
-            }
-          ],
-          "target": [
-            {
-              "context": "target",
-              "element": "verificationStatus",
-              "variable": "tgt-fixed-verificationStatus",
-              "transform": "create",
-              "parameter": [
-                {
-                  "valueString": "CodeableConcept"
-                }
-              ]
-            }
-          ],
-          "rule": [
-            {
-              "name": "add-fixed-verificationStatus-coding",
-              "source": [
-                {
-                  "context": "source"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tgt-fixed-verificationStatus",
-                  "element": "coding",
-                  "variable": "tgt-fixed-verificationStatus-coding",
-                  "transform": "create",
-                  "parameter": [
-                    {
-                      "valueString": "Coding"
-                    }
-                  ]
-                }
-              ],
-              "rule": [
-                {
-                  "name": "set-fixed-verificationStatus-coding-code",
-                  "source": [
-                    {
-                      "context": "source"
-                    }
-                  ],
-                  "target": [
-                    {
-                      "context": "tgt-fixed-verificationStatus-coding",
-                      "element": "code",
-                      "transform": "copy",
-                      "parameter": [
-                        {
-                          "valueString": "provisional"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ],
-          "documentation": "Sets fixed value for verificationStatus"
         }
       ]
     }

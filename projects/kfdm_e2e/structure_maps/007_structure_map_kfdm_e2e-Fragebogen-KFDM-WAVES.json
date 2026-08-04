@@ -2,7 +2,7 @@
   "resourceType": "StructureMap",
   "id": "sm-Fragebogen-KFDM-WAVES-e2d8dfb6",
   "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-Fragebogen-KFDM-WAVES",
-  "name": "007_structure_map_kfdm_e2e-Fragebogen-KFDM-WAVES",
+  "name": "Map_007_structure_map_kfdm_e2e_Fragebogen_KFDM_WAVES",
   "title": "Structure Map for kfdm_e2e - Fragebogen-KFDM-WAVES",
   "status": "draft",
   "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Fragebogen-KFDM-WAVES). Placeholders have to be set (or use auto-mapping)",
@@ -47,6 +47,7 @@
           "target": [
             {
               "context": "Fragebogen-KFDM-WAVES",
+              "contextType": "variable",
               "element": "status",
               "transform": "translate",
               "parameter": [
@@ -71,11 +72,6 @@
               "variable": "src-subject"
             }
           ],
-          "target": [
-            {
-              "element": "subject"
-            }
-          ],
           "documentation": "Reference<QuestionnaireResponse.subject> → Patient — resolve via bundle assembler"
         },
         {
@@ -88,6 +84,7 @@
           "target": [
             {
               "context": "Fragebogen-KFDM-WAVES",
+              "contextType": "variable",
               "element": "questionnaire",
               "transform": "copy",
               "parameter": [
@@ -99,17 +96,17 @@
           ]
         },
         {
-          "name": "rule-1-1",
+          "name": "rule-1",
           "source": [
             {
               "context": "Source",
-              "element": "erstdiagnose_durch",
               "variable": "srcVal"
             }
           ],
           "target": [
             {
               "context": "Fragebogen-KFDM-WAVES",
+              "contextType": "variable",
               "element": "item",
               "variable": "tItem"
             }
@@ -125,11 +122,12 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "linkId",
                   "transform": "copy",
                   "parameter": [
                     {
-                      "valueString": "1.1"
+                      "valueString": "1"
                     }
                   ]
                 }
@@ -145,241 +143,352 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "text",
                   "transform": "copy",
                   "parameter": [
                     {
-                      "valueString": "Wer hat Sie als Erstes über Ihre Diagnose Brustkrebs aufgklärt?"
+                      "valueString": "Rahmenbedingungen des Gespräches"
                     }
                   ]
                 }
               ]
             },
             {
-              "name": "answer-rule-1-1",
+              "name": "rule-1-1",
               "source": [
                 {
-                  "context": "srcVal"
+                  "context": "Source",
+                  "element": "erstdiagnose_durch",
+                  "variable": "srcVal"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
-                  "element": "answer",
-                  "variable": "tAns"
+                  "contextType": "variable",
+                  "element": "item",
+                  "variable": "tItem"
                 }
               ],
               "rule": [
                 {
-                  "name": "set-val",
+                  "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal",
-                      "variable": "srcV"
+                      "context": "srcVal"
                     }
                   ],
                   "target": [
                     {
-                      "context": "tAns",
-                      "element": "valueString",
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "linkId",
                       "transform": "copy",
                       "parameter": [
                         {
-                          "valueId": "srcV"
+                          "valueString": "1.1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "assign-text",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Wer hat Sie als Erstes über Ihre Diagnose Brustkrebs aufgklärt?"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "answer-rule-1-1",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "answer",
+                      "variable": "tAns"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-val",
+                      "source": [
+                        {
+                          "context": "srcVal",
+                          "variable": "srcV"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tAns",
+                          "contextType": "variable",
+                          "element": "valueString",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "srcV"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-item-1-1-39dd5d9a"
+                            },
+                            {
+                              "valueString": "display"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "name": "rule-1-2",
-          "source": [
-            {
-              "context": "Source",
-              "element": "diagnose_per",
-              "variable": "srcVal"
-            }
-          ],
-          "target": [
-            {
-              "context": "Fragebogen-KFDM-WAVES",
-              "element": "item",
-              "variable": "tItem"
-            }
-          ],
-          "rule": [
-            {
-              "name": "assign-linkId",
-              "source": [
-                {
-                  "context": "srcVal"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tItem",
-                  "element": "linkId",
-                  "transform": "copy",
-                  "parameter": [
-                    {
-                      "valueString": "1.2"
-                    }
-                  ]
-                }
-              ]
             },
             {
-              "name": "assign-text",
+              "name": "rule-1-2",
               "source": [
                 {
-                  "context": "srcVal"
+                  "context": "Source",
+                  "element": "diagnose_per",
+                  "variable": "srcVal"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
-                  "element": "text",
-                  "transform": "copy",
-                  "parameter": [
-                    {
-                      "valueString": "In wlecher Form wurden Sie über die Diagnose informiert?"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "answer-rule-1-2",
-              "source": [
-                {
-                  "context": "srcVal"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tItem",
-                  "element": "answer",
-                  "variable": "tAns"
+                  "contextType": "variable",
+                  "element": "item",
+                  "variable": "tItem"
                 }
               ],
               "rule": [
                 {
-                  "name": "set-val",
+                  "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal",
-                      "variable": "srcV"
+                      "context": "srcVal"
                     }
                   ],
                   "target": [
                     {
-                      "context": "tAns",
-                      "element": "valueString",
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "linkId",
                       "transform": "copy",
                       "parameter": [
                         {
-                          "valueId": "srcV"
+                          "valueString": "1.2"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "assign-text",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "In wlecher Form wurden Sie über die Diagnose informiert?"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "answer-rule-1-2",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "answer",
+                      "variable": "tAns"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-val",
+                      "source": [
+                        {
+                          "context": "srcVal",
+                          "variable": "srcV"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tAns",
+                          "contextType": "variable",
+                          "element": "valueString",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "srcV"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-item-1-2-1f596f9c"
+                            },
+                            {
+                              "valueString": "display"
+                            }
+                          ]
                         }
                       ]
                     }
                   ]
                 }
               ]
-            }
-          ]
-        },
-        {
-          "name": "rule-1-3",
-          "source": [
-            {
-              "context": "Source",
-              "element": "krebserkankung_in_familie",
-              "variable": "srcVal"
-            }
-          ],
-          "target": [
-            {
-              "context": "Fragebogen-KFDM-WAVES",
-              "element": "item",
-              "variable": "tItem"
-            }
-          ],
-          "rule": [
-            {
-              "name": "assign-linkId",
-              "source": [
-                {
-                  "context": "srcVal"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tItem",
-                  "element": "linkId",
-                  "transform": "copy",
-                  "parameter": [
-                    {
-                      "valueString": "1.3"
-                    }
-                  ]
-                }
-              ]
             },
             {
-              "name": "assign-text",
+              "name": "rule-1-3",
               "source": [
                 {
-                  "context": "srcVal"
+                  "context": "Source",
+                  "element": "krebserkankung_in_familie",
+                  "variable": "srcVal"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
-                  "element": "text",
-                  "transform": "copy",
-                  "parameter": [
-                    {
-                      "valueString": "Ist in Ihrer Familie eine Krebserkrankung bekannt?"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "answer-rule-1-3",
-              "source": [
-                {
-                  "context": "srcVal"
-                }
-              ],
-              "target": [
-                {
-                  "context": "tItem",
-                  "element": "answer",
-                  "variable": "tAns"
+                  "contextType": "variable",
+                  "element": "item",
+                  "variable": "tItem"
                 }
               ],
               "rule": [
                 {
-                  "name": "set-val",
+                  "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal",
-                      "variable": "srcV"
+                      "context": "srcVal"
                     }
                   ],
                   "target": [
                     {
-                      "context": "tAns",
-                      "element": "valueBoolean",
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "linkId",
                       "transform": "copy",
                       "parameter": [
                         {
-                          "valueId": "srcV"
+                          "valueString": "1.3"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "assign-text",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Ist in Ihrer Familie eine Krebserkrankung bekannt?"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "answer-rule-1-3",
+                  "source": [
+                    {
+                      "context": "srcVal"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tItem",
+                      "contextType": "variable",
+                      "element": "answer",
+                      "variable": "tAns"
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-val-true",
+                      "source": [
+                        {
+                          "context": "srcVal",
+                          "variable": "srcV",
+                          "condition": "$this = '1' or $this = 'true'"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tAns",
+                          "contextType": "variable",
+                          "element": "valueBoolean",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueBoolean": true
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-val-false",
+                      "source": [
+                        {
+                          "context": "srcVal",
+                          "variable": "srcV",
+                          "condition": "$this = '0' or $this = 'false'"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tAns",
+                          "contextType": "variable",
+                          "element": "valueBoolean",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueBoolean": false
+                            }
+                          ]
                         }
                       ]
                     }
@@ -400,6 +509,7 @@
           "target": [
             {
               "context": "Fragebogen-KFDM-WAVES",
+              "contextType": "variable",
               "element": "item",
               "variable": "tItem"
             }
@@ -415,6 +525,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "linkId",
                   "transform": "copy",
                   "parameter": [
@@ -435,6 +546,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "text",
                   "transform": "copy",
                   "parameter": [
@@ -450,13 +562,13 @@
               "source": [
                 {
                   "context": "Source",
-                  "element": "erste_reaktion_auf_befund___1",
-                  "variable": "srcVal"
+                  "variable": "srcItemRoot"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -466,12 +578,13 @@
                   "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -486,12 +599,13 @@
                   "name": "assign-text",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -515,6 +629,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -530,6 +645,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -555,6 +671,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -570,6 +687,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -595,6 +713,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -610,6 +729,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -635,6 +755,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -650,6 +771,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -675,6 +797,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -690,6 +813,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -715,6 +839,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -730,6 +855,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -755,6 +881,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -770,6 +897,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -795,6 +923,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -810,6 +939,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -835,6 +965,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -850,6 +981,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -875,6 +1007,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -890,6 +1023,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -910,6 +1044,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -932,6 +1067,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -947,6 +1083,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -967,6 +1104,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -987,6 +1125,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1002,6 +1141,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1024,6 +1164,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1050,6 +1191,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1078,6 +1220,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -1093,6 +1236,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -1113,6 +1257,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -1133,6 +1278,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1148,6 +1294,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1170,6 +1317,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1196,6 +1344,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1224,6 +1373,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -1239,6 +1389,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -1259,6 +1410,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -1279,6 +1431,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1294,6 +1447,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1316,6 +1470,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1342,6 +1497,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1370,6 +1526,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -1385,6 +1542,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -1405,6 +1563,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -1425,6 +1584,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1440,6 +1600,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1462,6 +1623,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1488,6 +1650,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1516,6 +1679,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -1531,6 +1695,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -1551,6 +1716,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -1571,6 +1737,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1586,6 +1753,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1608,6 +1776,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1634,6 +1803,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1662,6 +1832,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "item",
                       "variable": "tItem"
                     }
@@ -1677,6 +1848,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "linkId",
                           "transform": "copy",
                           "parameter": [
@@ -1697,6 +1869,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "text",
                           "transform": "copy",
                           "parameter": [
@@ -1717,6 +1890,7 @@
                       "target": [
                         {
                           "context": "tItem",
+                          "contextType": "variable",
                           "element": "answer",
                           "variable": "tAns"
                         }
@@ -1732,6 +1906,7 @@
                           "target": [
                             {
                               "context": "tAns",
+                              "contextType": "variable",
                               "element": "value",
                               "variable": "tCoding",
                               "transform": "create",
@@ -1754,6 +1929,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "code",
                                   "transform": "translate",
                                   "parameter": [
@@ -1780,6 +1956,7 @@
                               "target": [
                                 {
                                   "context": "tCoding",
+                                  "contextType": "variable",
                                   "element": "system",
                                   "transform": "copy",
                                   "parameter": [
@@ -1810,6 +1987,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -1825,6 +2003,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -1845,6 +2024,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -1865,6 +2045,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -1880,6 +2061,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "value",
                           "variable": "tCoding",
                           "transform": "create",
@@ -1902,6 +2084,7 @@
                           "target": [
                             {
                               "context": "tCoding",
+                              "contextType": "variable",
                               "element": "code",
                               "transform": "translate",
                               "parameter": [
@@ -1936,6 +2119,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -1951,6 +2135,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -1971,6 +2156,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -1991,6 +2177,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2006,6 +2193,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "value",
                           "variable": "tCoding",
                           "transform": "create",
@@ -2028,6 +2216,7 @@
                           "target": [
                             {
                               "context": "tCoding",
+                              "contextType": "variable",
                               "element": "code",
                               "transform": "translate",
                               "parameter": [
@@ -2062,6 +2251,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -2077,6 +2267,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -2097,6 +2288,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -2117,6 +2309,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2133,11 +2326,18 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
-                          "transform": "copy",
+                          "transform": "translate",
                           "parameter": [
                             {
                               "valueId": "srcV"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-item-2-5-fcd6b96f"
+                            },
+                            {
+                              "valueString": "display"
                             }
                           ]
                         }
@@ -2152,13 +2352,13 @@
               "source": [
                 {
                   "context": "Source",
-                  "element": "emotionen_aufkl_rung___1",
-                  "variable": "srcVal"
+                  "variable": "srcItemRoot"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -2168,12 +2368,13 @@
                   "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -2188,12 +2389,13 @@
                   "name": "assign-text",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -2217,6 +2419,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2232,6 +2435,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2257,6 +2461,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2272,6 +2477,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2297,6 +2503,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2312,6 +2519,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2337,6 +2545,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2352,6 +2561,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2377,6 +2587,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2392,6 +2603,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2411,13 +2623,13 @@
               "source": [
                 {
                   "context": "Source",
-                  "element": "wunsch_besseres_verstndnis___1",
-                  "variable": "srcVal"
+                  "variable": "srcItemRoot"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -2427,12 +2639,13 @@
                   "name": "assign-linkId",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -2447,12 +2660,13 @@
                   "name": "assign-text",
                   "source": [
                     {
-                      "context": "srcVal"
+                      "context": "srcItemRoot"
                     }
                   ],
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -2476,6 +2690,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2491,6 +2706,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2516,6 +2732,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2531,6 +2748,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2556,6 +2774,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2571,6 +2790,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2596,6 +2816,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2611,6 +2832,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2636,6 +2858,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2651,6 +2874,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2676,6 +2900,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2691,6 +2916,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2717,6 +2943,7 @@
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -2732,6 +2959,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
@@ -2752,6 +2980,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -2772,6 +3001,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2788,6 +3018,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "valueString",
                           "transform": "copy",
                           "parameter": [
@@ -2800,20 +3031,22 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "documentation": "enableWhen (INACTIVE — matchbox cannot evaluate a rule source whose context is the target being built; emitting it aborts the whole map): ($this.repeat(item).where(linkId = '2.7').answer.value.where($this = 'Sonstiges').exists())"
             },
             {
-              "name": "rule-2-8",
+              "name": "rule-2-9",
               "source": [
                 {
                   "context": "Source",
-                  "element": "wunsch_besseres_verstndnis_sonstiges",
+                  "element": "aufnhamef_higkeit_patient",
                   "variable": "srcVal"
                 }
               ],
               "target": [
                 {
                   "context": "tItem",
+                  "contextType": "variable",
                   "element": "item",
                   "variable": "tItem"
                 }
@@ -2829,11 +3062,12 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "linkId",
                       "transform": "copy",
                       "parameter": [
                         {
-                          "valueString": "2.8"
+                          "valueString": "2.9"
                         }
                       ]
                     }
@@ -2849,6 +3083,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "text",
                       "transform": "copy",
                       "parameter": [
@@ -2860,7 +3095,7 @@
                   ]
                 },
                 {
-                  "name": "answer-rule-2-8",
+                  "name": "answer-rule-2-9",
                   "source": [
                     {
                       "context": "srcVal"
@@ -2869,6 +3104,7 @@
                   "target": [
                     {
                       "context": "tItem",
+                      "contextType": "variable",
                       "element": "answer",
                       "variable": "tAns"
                     }
@@ -2884,6 +3120,7 @@
                       "target": [
                         {
                           "context": "tAns",
+                          "contextType": "variable",
                           "element": "value",
                           "variable": "tCoding",
                           "transform": "create",
@@ -2906,6 +3143,7 @@
                           "target": [
                             {
                               "context": "tCoding",
+                              "contextType": "variable",
                               "element": "code",
                               "transform": "translate",
                               "parameter": [
@@ -2913,7 +3151,7 @@
                                   "valueId": "srcV"
                                 },
                                 {
-                                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-item-2-8-4a5a7846"
+                                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-item-2-9-4a5a7846"
                                 },
                                 {
                                   "valueString": "code"

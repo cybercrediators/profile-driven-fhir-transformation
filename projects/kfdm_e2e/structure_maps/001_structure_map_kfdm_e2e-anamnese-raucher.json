@@ -2,7 +2,7 @@
   "resourceType": "StructureMap",
   "id": "sm-anamnese-raucher-2d082be1",
   "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-anamnese-raucher",
-  "name": "001_structure_map_kfdm_e2e-anamnese-raucher",
+  "name": "Map_001_structure_map_kfdm_e2e_anamnese_raucher",
   "title": "Structure Map for kfdm_e2e - anamnese-raucher",
   "status": "draft",
   "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-raucher). Placeholders have to be set (or use auto-mapping)",
@@ -45,6 +45,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "meta",
               "variable": "tgt-meta",
               "transform": "create",
@@ -66,6 +67,7 @@
               "target": [
                 {
                   "context": "tgt-meta",
+                  "contextType": "variable",
                   "element": "profile",
                   "transform": "copy",
                   "parameter": [
@@ -89,6 +91,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "category",
               "variable": "tgt-fixed-category",
               "transform": "create",
@@ -101,7 +104,7 @@
           ],
           "rule": [
             {
-              "name": "add-fixed-category-coding",
+              "name": "add-fixed-category-coding-0",
               "source": [
                 {
                   "context": "source"
@@ -110,8 +113,9 @@
               "target": [
                 {
                   "context": "tgt-fixed-category",
+                  "contextType": "variable",
                   "element": "coding",
-                  "variable": "tgt-fixed-category-coding",
+                  "variable": "tgt-fixed-category-coding-0",
                   "transform": "create",
                   "parameter": [
                     {
@@ -122,7 +126,7 @@
               ],
               "rule": [
                 {
-                  "name": "set-fixed-category-coding-code",
+                  "name": "set-fixed-category-coding-0-code",
                   "source": [
                     {
                       "context": "source"
@@ -130,7 +134,8 @@
                   ],
                   "target": [
                     {
-                      "context": "tgt-fixed-category-coding",
+                      "context": "tgt-fixed-category-coding-0",
+                      "contextType": "variable",
                       "element": "code",
                       "transform": "copy",
                       "parameter": [
@@ -147,18 +152,20 @@
           "documentation": "Sets fixed value for category"
         },
         {
-          "name": "map-code",
+          "name": "map-code-copy",
           "source": [
             {
               "context": "source",
-              "variable": "src-code"
+              "element": "rauchen_klasse",
+              "variable": "src"
             }
           ],
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "code",
-              "variable": "tgt-code",
+              "variable": "tgt-cc",
               "transform": "create",
               "parameter": [
                 {
@@ -167,20 +174,89 @@
               ]
             }
           ],
-          "documentation": "Maps to Observation.code | Type: [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Observation.code.coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Observation.code.coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Observation.code.coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.code.coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Observation.code.coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Observation.code.coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.code.text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}] | Cardinality: 1..1"
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Observation.code (filter-based/open VS, system: http://snomed.info/sct)"
         },
         {
           "name": "map-extension-years",
           "source": [
             {
               "context": "source",
-              "element": "TODO-MAP-YEARS_SOURCE",
+              "element": "rauchen_jahre",
               "variable": "src-years"
             }
           ],
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "extension",
               "variable": "ext-years",
               "transform": "create",
@@ -202,6 +278,7 @@
               "target": [
                 {
                   "context": "ext-years",
+                  "contextType": "variable",
                   "element": "url",
                   "transform": "copy",
                   "parameter": [
@@ -218,18 +295,23 @@
               "source": [
                 {
                   "context": "source",
-                  "element": "TODO-VALUE-SOURCE",
-                  "variable": "srcValue"
+                  "element": "rauchen_jahre",
+                  "variable": "srcValue",
+                  "condition": "$this != ''"
                 }
               ],
               "target": [
                 {
                   "context": "ext-years",
+                  "contextType": "variable",
                   "element": "valueInteger",
-                  "transform": "copy",
+                  "transform": "cast",
                   "parameter": [
                     {
                       "valueId": "srcValue"
+                    },
+                    {
+                      "valueString": "integer"
                     }
                   ]
                 }
@@ -237,7 +319,7 @@
               "documentation": "Sets the extension value (type: valueInteger)"
             }
           ],
-          "documentation": "Maps to extension: http://example.org/StructureDefinition/years-of-smoking | Type: [{'code': 'Extension', 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/years-of-smoking', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'integer'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'children': []}]]}] | Path: Observation.extension"
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/years-of-smoking | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/years-of-smoking'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/years-of-smoking', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'integer'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Observation.extension"
         },
         {
           "name": "set-fixed-status",
@@ -249,6 +331,7 @@
           "target": [
             {
               "context": "target",
+              "contextType": "variable",
               "element": "status",
               "transform": "copy",
               "parameter": [
@@ -259,29 +342,6 @@
             }
           ],
           "documentation": "Sets fixed value for status"
-        },
-        {
-          "name": "map-value",
-          "source": [
-            {
-              "context": "source",
-              "variable": "src-value"
-            }
-          ],
-          "target": [
-            {
-              "context": "target",
-              "element": "value",
-              "variable": "tgt-value",
-              "transform": "create",
-              "parameter": [
-                {
-                  "valueString": "Quantity"
-                }
-              ]
-            }
-          ],
-          "documentation": "Maps to Observation.component.value[x] | Type: [{'code': 'Quantity', 'type_structure': [{'path': 'Observation.component.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'code': 'CodeableConcept', 'type_structure': [{'path': 'Observation.component.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Observation.component.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.component.value[x].text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}, {'code': 'string'}, {'code': 'boolean'}, {'code': 'integer'}, {'code': 'Range', 'type_structure': [{'path': 'Observation.component.value[x].high', 'id': 'Range.high', 'type': 'Quantity', 'description': 'The high limit. The boundary is inclusive.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Observation.component.value[x].high.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].high.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].high.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].high.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].high.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.component.value[x].low', 'id': 'Range.low', 'type': 'Quantity', 'description': 'The low limit. The boundary is inclusive.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Observation.component.value[x].low.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].low.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].low.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].low.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].low.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}]}, {'code': 'Ratio', 'type_structure': [{'path': 'Observation.component.value[x].denominator', 'id': 'Ratio.denominator', 'type': 'Quantity', 'description': 'The value of the denominator.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Observation.component.value[x].denominator.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].denominator.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].denominator.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].denominator.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].denominator.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.component.value[x].numerator', 'id': 'Ratio.numerator', 'type': 'Quantity', 'description': 'The value of the numerator.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Observation.component.value[x].numerator.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].numerator.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].numerator.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].numerator.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].numerator.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}]}, {'code': 'SampledData', 'type_structure': [{'path': 'Observation.component.value[x].data', 'id': 'SampledData.data', 'type': 'string', 'description': 'A series of data points which are decimal values separated by a single space (character u20). The special values \"E\" (error), \"L\" (below detection limit) and \"U\" (above detection limit) can also be used in place of a decimal value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].dimensions', 'id': 'SampledData.dimensions', 'type': 'positiveInt', 'description': 'The number of sample points at each time point. If this value is greater than one, then the dimensions will be interlaced - all the sample points for a point in time will be recorded at once.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].factor', 'id': 'SampledData.factor', 'type': 'decimal', 'description': 'A correction factor that is applied to the sampled data points before they are added to the origin.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].lowerLimit', 'id': 'SampledData.lowerLimit', 'type': 'decimal', 'description': 'The lower limit of detection of the measured points. This is needed if any of the data points have the value \"L\" (lower than detection limit).', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].origin', 'id': 'SampledData.origin', 'type': 'Quantity', 'description': 'The base quantity that a measured value of zero represents. In addition, this provides the units of the entire measurement series.', 'is_required': True, 'is_list': False, 'type_structure': [{'path': 'Observation.component.value[x].origin.code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].origin.comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].origin.system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].origin.unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].origin.value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'path': 'Observation.component.value[x].period', 'id': 'SampledData.period', 'type': 'decimal', 'description': 'The length of time between sampling times, measured in milliseconds.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].upperLimit', 'id': 'SampledData.upperLimit', 'type': 'decimal', 'description': 'The upper limit of detection of the measured points. This is needed if any of the data points have the value \"U\" (higher than detection limit).', 'is_required': False, 'is_list': False}]}, {'code': 'time'}, {'code': 'dateTime'}, {'code': 'Period', 'type_structure': [{'path': 'Observation.component.value[x].end', 'id': 'Period.end', 'type': 'dateTime', 'description': 'The end of the period. If the end of the period is missing, it means no end was known or planned at the time the instance was created. The start may be in the past, and the end date in the future, which means that period is expected/planned to end at that time.', 'is_required': False, 'is_list': False}, {'path': 'Observation.component.value[x].start', 'id': 'Period.start', 'type': 'dateTime', 'description': 'The start of the period. The boundary is inclusive.', 'is_required': False, 'is_list': False}]}] | Cardinality: 0..1"
         }
       ]
     }
