@@ -550,3 +550,41 @@ def test_existing_concept_map_is_authored_true_when_element_target_code_differs(
     }
     factory.app_state = SimpleNamespace(dataIO=FakeDataIO(existing=existing))
     assert factory._existing_concept_map_is_authored("cm-1") is True
+
+
+# ── _report_required_target_without_provider ──────────────────────────────────
+def test_required_coded_target_without_provider_is_reported(factory):
+    factory.diagnostics = []
+    factory._report_required_target_without_provider(
+        {"path": "Condition.clinicalStatus", "cardinality": {"min": 1, "max": "1"}},
+        "clinicalStatus",
+    )
+    assert [d["code"] for d in factory.diagnostics] == [
+        "required-target-without-provider"
+    ]
+    assert factory.diagnostics[0]["path"] == "Condition.clinicalStatus"
+    assert factory.diagnostics[0]["severity"] == "error"
+
+
+def test_optional_coded_target_without_provider_is_not_reported(factory):
+    # The normal sparse-map case: reporting it would bury the required-element signal.
+    factory.diagnostics = []
+    factory._report_required_target_without_provider(
+        {"path": "Condition.severity", "cardinality": {"min": 0, "max": "1"}},
+        "severity",
+    )
+    assert factory.diagnostics == []
+
+
+def test_required_coded_target_with_a_pinned_value_is_not_reported(factory):
+    # The profile already answers what the mapping would have supplied.
+    factory.diagnostics = []
+    factory._report_required_target_without_provider(
+        {
+            "path": "Observation.status",
+            "cardinality": {"min": 1, "max": "1"},
+            "fixed_value": "final",
+        },
+        "status",
+    )
+    assert factory.diagnostics == []

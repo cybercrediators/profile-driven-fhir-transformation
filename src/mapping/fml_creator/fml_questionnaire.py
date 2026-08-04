@@ -13,7 +13,7 @@ from fhir.resources.R4B.structuremap import (
 )
 
 from data_handling.registry.registry_object import RegistryObject
-from mapping.fml_creator.fml_helper import local_element_name
+from mapping.fml_creator.fml_helper import fixed_scalar_parameter, local_element_name
 from mapping.rule_ir import mapping_target_path
 from parser.resource_parser.value_expander import expand_valueset
 
@@ -36,6 +36,15 @@ _FHIRPATH_LANGUAGES = {
     "application/fhirpath",
     "text/x-fhirpath",
 }
+
+# `QuestionnaireResponse.item.answer.value[x]` permits these string-like primitives.
+# Anything a `translate` writes into one of them has to *be* a string, because the
+# engine derives the concrete element name from the produced value's type.
+_STRING_VALUED_ANSWER_ELEMENTS = {"valueString", "valueUri"}
+
+
+def _is_string_valued(value_element: Optional[str]) -> bool:
+    return (value_element or "") in _STRING_VALUED_ANSWER_ELEMENTS
 
 
 class QuestionnaireMapCreator:
@@ -354,6 +363,87 @@ class QuestionnaireMapCreator:
         return any(
             str(source_max.get(_local(field), "1")) not in {"0", "1"}
             for field in source_fields
+        )
+
+    def _coded_source_translation(
+        self, item: QuestionnaireItem, source_fields: List[str], link_id: str
+    ) -> Optional[str]:
+        """A code→label ConceptMap when a label-valued choice is fed by coded data.
+
+        A supplied Questionnaire may declare its options as plain labels
+        (``answerOption.valueString``) while the source system exports the *codes*
+        of the same code list. REDCap is exactly this shape: the codebook holds
+        ``"1, Hausarzt|2, Radiologe"``, the export carries ``1``, and the
+        Questionnaire lists only ``Hausarzt``. The labels therefore describe the
+        *post-translation* domain, so copying the raw source into
+        ``answer.valueString`` stores a bare ``1``, and enumerating the labels in a
+        source ``check`` fails for every record — fatally, since a failed FML check
+        aborts the whole map for that record rather than skipping the item.
+
+        Plugins already expose the code list (``get_field_metadata`` →
+        ``_choices``) and can build the ConceptMap (``generate_concept_map``); this
+        is only ever reached through the ``valueCoding`` branch, so the plain-string
+        case never asked for it. Returns a ConceptMap url, or ``None`` to leave the
+        existing copy behaviour untouched.
+        """
+        if not (self.factory and source_fields and item.answerOption):
+            return None
+        option_values = {
+            str(option.get("value"))
+            for option in self._extract_options(item)
+            if option.get("element") == "valueString" and option.get("value") is not None
+        }
+        if not option_values:
+            return None
+
+        leaf = str(source_fields[0]).split(".")[-1]
+        choices = None
+        for plugin in getattr(self.factory, "plugins", None) or []:
+            try:
+                meta = plugin.get_field_metadata(leaf)
+            except Exception as exc:
+                logger.warning(
+                    "Plugin '%s' field lookup failed for %s: %s",
+                    getattr(plugin, "plugin_id", "?"), leaf, exc,
+                )
+                continue
+            if meta and meta.get("_choices"):
+                choices = meta["_choices"]
+                break
+        if not choices:
+            return None
+
+        codes = {str(choice.get("code")) for choice in choices}
+        labels = {str(choice.get("label")) for choice in choices}
+        # Only translate when the declared options really are the labels and the
+        # source really does carry something else. A Questionnaire whose options
+        # already are the codes needs no translation, and translating anyway would
+        # replace a correct value with a display string.
+        if not (labels & option_values) or (codes & option_values):
+            return None
+
+        self._record(
+            "questionnaire-coded-source-translated",
+            "Questionnaire declares its answer options as labels while the source "
+            "field supplies the code list's codes. Emitting a translate so the "
+            "stored answer is the declared option rather than the raw code.",
+            link_id=str(item.linkId),
+            source_field=leaf,
+        )
+        return self._concept_map_for(
+            f"item-{link_id}",
+            source_fields[0],
+            f"QuestionnaireResponse.item[{item.linkId}]",
+            # Hand over the options the item actually permits. Without them a plugin
+            # has nothing to aim its arrows at and falls back to the source system's
+            # own label, which lands outside the declared set whenever the two spell
+            # the same choice differently (leading spaces, "10 min" vs "10min").
+            options=[
+                {"code": option["value"]}
+                for option in self._extract_options(item)
+                if option.get("element") == "valueString"
+                and option.get("value") is not None
+            ],
         )
 
     def _concept_map_for(
@@ -846,7 +936,14 @@ class QuestionnaireMapCreator:
                 element=primary_source_element,
                 variable="srcVal",
             )
-            outer_source.check = self._value_check(item)
+            # A translated answer is checked after the translate, never here: the
+            # raw source holds codes, so enumerating the declared labels would
+            # abort the whole record.
+            outer_source.check = (
+                None
+                if self._coded_source_translation(item, source_fields, safe_link_id)
+                else self._value_check(item)
+            )
 
         count_check = self._count_check(
             item, source_fields, checkbox_fields=is_multi
@@ -873,12 +970,44 @@ class QuestionnaireMapCreator:
         enable_condition = self._enable_condition(item, linkid_to_sources)
         if enable_condition:
             enable_context, enable_expression = enable_condition
-            outer_rule.source.append(
-                StructureMapGroupRuleSource(
-                    context=enable_context,
+            if enable_context == self._target_root_alias:
+                # Enablement is defined over the QuestionnaireResponse, so the
+                # condition has to read the target built so far. Matchbox cannot
+                # execute a rule source whose context is the target root — it
+                # aborts the *whole map* with "not handled yet", losing every
+                # resource for the record, not just this item. Verified against
+                # matchbox: the same rule fails with a trivial `$this.exists()`
+                # condition, so the obstacle is the target context itself and not
+                # the FHIRPath. An unexecutable guard is strictly worse than none:
+                # the item is still gated by its own source element, and the
+                # validator checks enableWhen on the result independently.
+                #
+                # The condition is carried on the rule as documentation rather than
+                # dropped, so the generated map still states what the Questionnaire
+                # requires and why it is inactive. `documentation` serialises as a
+                # comment in the FML text form, so it reads as commented-out intent.
+                outer_rule.documentation = (
+                    "enableWhen (INACTIVE — matchbox cannot evaluate a rule source "
+                    "whose context is the target being built; emitting it aborts "
+                    f"the whole map): {enable_expression}"
+                )
+                self._record(
+                    "questionnaire-enablewhen-not-emitted",
+                    "Item enablement reads the QuestionnaireResponse being built, "
+                    "which the transform engine cannot evaluate as a rule source. "
+                    "The condition is retained as rule documentation rather than "
+                    "emitted; enablement remains enforced by validation of the "
+                    "generated response.",
+                    link_id=str(item.linkId),
                     condition=enable_expression,
                 )
-            )
+            else:
+                outer_rule.source.append(
+                    StructureMapGroupRuleSource(
+                        context=enable_context,
+                        condition=enable_expression,
+                    )
+                )
 
         metadata_source = "srcItemRoot" if answer_collection else "srcVal"
         outer_rule.rule.append(
@@ -1036,17 +1165,34 @@ class QuestionnaireMapCreator:
                     source_check=self._value_check(item),
                 )
             elif opt_element == "valueString":
-                answer_rule = self._build_copy_answer_rule(
-                    rule_name,
-                    "valueString",
-                    source_context=(
-                        "srcItemRoot" if answer_collection else "srcVal"
-                    ),
-                    source_element=(
-                        _local(source_fields[0]) if answer_collection else None
-                    ),
-                    source_check=self._value_check(item),
+                translation_cm = self._coded_source_translation(
+                    item, source_fields, safe_link_id
                 )
+                if translation_cm:
+                    answer_rule = self._build_translated_answer_rule(
+                        rule_name,
+                        "valueString",
+                        translation_cm,
+                        source_context=(
+                            "srcItemRoot" if answer_collection else "srcVal"
+                        ),
+                        source_element=(
+                            _local(source_fields[0]) if answer_collection else None
+                        ),
+                    )
+                else:
+                    answer_rule = self._build_copy_answer_rule(
+                        rule_name,
+                        "valueString",
+                        source_context=(
+                            "srcItemRoot" if answer_collection else "srcVal"
+                        ),
+                        source_element=(
+                            _local(source_fields[0]) if answer_collection else None
+                        ),
+                        source_check=self._value_check(item),
+                        source_field=source_fields[0] if source_fields else None,
+                    )
             elif opt_element in {
                 "valueInteger",
                 "valueDate",
@@ -1063,6 +1209,7 @@ class QuestionnaireMapCreator:
                         _local(source_fields[0]) if answer_collection else None
                     ),
                     source_check=self._value_check(item),
+                    source_field=source_fields[0] if source_fields else None,
                 )
             else:
                 answer_rule = self._build_copy_answer_rule(
@@ -1075,6 +1222,7 @@ class QuestionnaireMapCreator:
                         _local(source_fields[0]) if answer_collection else None
                     ),
                     source_check=self._value_check(item),
+                    source_field=source_fields[0] if source_fields else None,
                 )
             outer_rule.rule.append(answer_rule)
             self._attach_question_children(
@@ -1082,6 +1230,71 @@ class QuestionnaireMapCreator:
             )
 
         rules.append(outer_rule)
+
+    def _build_translated_answer_rule(
+        self,
+        rule_name: str,
+        value_type: str,
+        concept_map_url: str,
+        *,
+        source_context: str = "srcVal",
+        source_element: Optional[str] = None,
+    ) -> StructureMapGroupRule:
+        """answer.value[x] = translate(source) — coded source, label-valued options.
+
+        No source check: the raw value is a code, so the option enumeration only
+        holds after the translate.
+
+        ``answer.value[x]`` is polymorphic, and the engine names the concrete element
+        from the *type* the transform produces rather than from the element named
+        here. ``translate(…, 'code')`` produces a FHIR ``code``, which serialises as
+        ``valueCode`` — a type ``QuestionnaireResponse.item.answer`` does not permit
+        (it allows Coding, string, boolean, … but no bare code). Asking for the
+        target's ``display`` produces a string, so a ``valueString`` answer really is
+        one. Coding-valued answers are built elsewhere and still ask for ``code``,
+        which is correct there because it fills ``Coding.code``.
+        """
+        translate_output = "display" if _is_string_valued(value_type) else "code"
+        answer_rule = StructureMapGroupRule(
+            name=f"answer-{rule_name}",
+            source=[
+                StructureMapGroupRuleSource(
+                    context=source_context,
+                    element=source_element,
+                    variable="srcVal" if source_element else None,
+                )
+            ],
+            target=[
+                StructureMapGroupRuleTarget(
+                    context="tItem", element="answer", variable="tAns"
+                )
+            ],
+            rule=[
+                StructureMapGroupRule(
+                    name="set-val",
+                    source=[
+                        StructureMapGroupRuleSource(context="srcVal", variable="srcV")
+                    ],
+                    target=[
+                        StructureMapGroupRuleTarget(
+                            context="tAns",
+                            element=value_type,
+                            transform="translate",
+                            parameter=[
+                                StructureMapGroupRuleTargetParameter(valueId="srcV"),
+                                StructureMapGroupRuleTargetParameter(
+                                    valueString=concept_map_url
+                                ),
+                                StructureMapGroupRuleTargetParameter(
+                                    valueString=translate_output
+                                ),
+                            ],
+                        )
+                    ],
+                )
+            ],
+        )
+        return answer_rule
 
     def _build_copy_answer_rule(
         self,
@@ -1091,6 +1304,7 @@ class QuestionnaireMapCreator:
         source_context: str = "srcVal",
         source_element: Optional[str] = None,
         source_check: Optional[str] = None,
+        source_field: Optional[str] = None,
     ) -> StructureMapGroupRule:
         """answer.value[x] = copy(source) — for string options and plain primitive items."""
         answer_source = StructureMapGroupRuleSource(
@@ -1109,26 +1323,78 @@ class QuestionnaireMapCreator:
             ],
             rule=[],
         )
-        if value_type:
-            answer_rule.rule.append(
-                StructureMapGroupRule(
-                    name="set-val",
-                    source=[
-                        StructureMapGroupRuleSource(context="srcVal", variable="srcV")
-                    ],
-                    target=[
-                        StructureMapGroupRuleTarget(
-                            context="tAns",
-                            element=value_type,
-                            transform="copy",
-                            parameter=[
-                                StructureMapGroupRuleTargetParameter(valueId="srcV")
-                            ],
-                        )
-                    ],
-                )
+        if not value_type:
+            return answer_rule
+
+        coercion = self._boolean_coercion_rules(value_type, source_field)
+        if coercion:
+            answer_rule.rule.extend(coercion)
+            return answer_rule
+
+        answer_rule.rule.append(
+            StructureMapGroupRule(
+                name="set-val",
+                source=[
+                    StructureMapGroupRuleSource(context="srcVal", variable="srcV")
+                ],
+                target=[
+                    StructureMapGroupRuleTarget(
+                        context="tAns",
+                        element=value_type,
+                        transform="copy",
+                        parameter=[
+                            StructureMapGroupRuleTargetParameter(valueId="srcV")
+                        ],
+                    )
+                ],
             )
+        )
         return answer_rule
+
+    def _boolean_coercion_rules(
+        self, value_type: str, source_field: Optional[str]
+    ) -> List[StructureMapGroupRule]:
+        """Write a real boolean when a boolean item is fed a non-boolean source.
+
+        A boolean item copied straight from a source that carries ``"0"``/``"1"``
+        stores the string, and the engine then names the polymorphic element from
+        what it was given — ``valueString: "0"`` where ``valueBoolean: false``
+        belongs. Two guarded rules write the literal instead.
+
+        Only applied when the source type is *known* and known not to be boolean. A
+        source that really is boolean must keep the plain copy: these guards compare
+        against strings, so against a genuine boolean they match nothing and the
+        answer would vanish altogether.
+        """
+        if value_type != "valueBoolean" or not source_field:
+            return []
+        declared = (
+            getattr(self.factory, "source_field_types", None) or {}
+        ).get(str(source_field).split(".")[-1])
+        if not declared or declared.lower() == "boolean":
+            return []
+        return [
+            StructureMapGroupRule(
+                name=f"set-val-{suffix}",
+                source=[
+                    StructureMapGroupRuleSource(
+                        context="srcVal", variable="srcV", condition=condition
+                    )
+                ],
+                target=[
+                    StructureMapGroupRuleTarget(
+                        context="tAns",
+                        element="valueBoolean",
+                        transform="copy",
+                        parameter=[fixed_scalar_parameter(literal, "boolean")],
+                    )
+                ],
+            )
+            for suffix, condition, literal in (
+                ("true", "$this = '1' or $this = 'true'", True),
+                ("false", "$this = '0' or $this = 'false'", False),
+            )
+        ]
 
     def _build_coded_answer_rule(
         self,

@@ -175,6 +175,149 @@ def test_todo_sanitizer_keeps_source_scaffolds_and_removes_unsafe_todos():
     }
 
 
+def _extension_rule(name, source_element, value_child=None, sub_rules=None):
+    """An extension rule shaped like the generator emits: create + a url child."""
+    ext_var = f"ext-{name}"
+    url_child = SimpleNamespace(
+        name=f"set-extension-url-{name}",
+        source=[SimpleNamespace(context=f"src-{name}")],
+        target=[
+            SimpleNamespace(
+                context=ext_var,
+                element="url",
+                transform="copy",
+                parameter=[SimpleNamespace(valueString="http://example.org/ext")],
+            )
+        ],
+        dependent=None,
+        rule=[],
+    )
+    children = [url_child] + list(sub_rules or [])
+    if value_child is not None:
+        children.append(value_child)
+    return SimpleNamespace(
+        name=f"map-extension-{name}",
+        source=[
+            SimpleNamespace(
+                context="source", element=source_element, variable=f"src-{name}"
+            )
+        ],
+        target=[
+            SimpleNamespace(
+                context="target",
+                element="extension",
+                variable=ext_var,
+                transform="create",
+                parameter=[SimpleNamespace(valueString="Extension")],
+            )
+        ],
+        dependent=None,
+        rule=children,
+    )
+
+
+def _unresolvable_translate(name):
+    """A value rule the sanitizer drops: its target carries a TODO placeholder."""
+    return SimpleNamespace(
+        name=f"map-{name}-translate",
+        source=[SimpleNamespace(context=f"src-{name}", element="bundesland")],
+        target=[
+            SimpleNamespace(
+                context=f"ext-{name}",
+                element="valueCode",
+                transform="translate",
+                parameter=[SimpleNamespace(valueString="TODO-resolveConceptMap")],
+            )
+        ],
+        dependent=None,
+        rule=[],
+    )
+
+
+def test_extension_left_url_only_by_sanitizing_is_pruned_too():
+    # Dropping the value rule is correct on its own, but leaving its parent behind
+    # ships an extension carrying nothing but a url, which violates ext-1.
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "PatientProfile"
+    generator.mapping_diagnostics = []
+    extension = _extension_rule(
+        "federalState", "bundesland", value_child=_unresolvable_translate("federalState")
+    )
+    group = SimpleNamespace(name="Transform-Patient", rule=[extension])
+
+    generator._sanitize_todo_rules(SimpleNamespace(group=[group]))
+
+    assert group.rule == []
+    assert "url-only-extension-pruned" in {
+        item["code"] for item in generator.mapping_diagnostics
+    }
+
+
+def test_url_only_extension_behind_a_todo_source_is_kept():
+    # This rule never matches at runtime, so it ships nothing invalid. It is the
+    # supported sparse-map scaffold and must survive as a signal of an unmapped field.
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "PatientProfile"
+    generator.mapping_diagnostics = []
+    extension = _extension_rule(
+        "strength", "TODO-MAP-STRENGTH_SOURCE", value_child=None
+    )
+    group = SimpleNamespace(name="Transform-Medication", rule=[extension])
+
+    generator._sanitize_todo_rules(SimpleNamespace(group=[group]))
+
+    assert group.rule == [extension]
+    assert "url-only-extension-pruned" not in {
+        item["code"] for item in generator.mapping_diagnostics
+    }
+
+
+def test_url_only_pruning_cascades_from_sub_extension_to_parent():
+    # A complex extension is only as alive as its sub-extensions: once the last one
+    # is pruned the parent satisfies neither half of ext-1 either.
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "ConditionProfile"
+    generator.mapping_diagnostics = []
+    sub = _extension_rule(
+        "YesNoUnknownExtension",
+        "raucher",
+        value_child=_unresolvable_translate("YesNoUnknownExtension"),
+    )
+    parent = _extension_rule("existance", "raucher", sub_rules=[sub])
+    group = SimpleNamespace(name="Transform-Condition", rule=[parent])
+
+    generator._sanitize_todo_rules(SimpleNamespace(group=[group]))
+
+    assert group.rule == []
+
+
+def test_extension_keeping_a_live_value_rule_survives():
+    generator = object.__new__(StructureMapGenerator)
+    generator.current_profile_name = "PatientProfile"
+    generator.mapping_diagnostics = []
+    value_child = SimpleNamespace(
+        name="set-extension-value-federalState",
+        source=[SimpleNamespace(context="src-federalState", element="bundesland")],
+        target=[
+            SimpleNamespace(
+                context="ext-federalState",
+                element="valueCode",
+                transform="copy",
+                parameter=[SimpleNamespace(valueId="srcValue")],
+            )
+        ],
+        dependent=None,
+        rule=[],
+    )
+    extension = _extension_rule("federalState", "bundesland", value_child=value_child)
+    group = SimpleNamespace(name="Transform-Patient", rule=[extension])
+
+    generator._sanitize_todo_rules(SimpleNamespace(group=[group]))
+
+    assert group.rule == [extension]
+    assert extension.rule == [extension.rule[0], value_child]
+
+
 def test_profile_facets_become_json_safe_diagnostics():
     generator = object.__new__(StructureMapGenerator)
     generator.current_profile_name = "ObservationProfile"

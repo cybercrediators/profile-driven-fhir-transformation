@@ -96,6 +96,61 @@ class _SliceRulesMixin:
                 return None
         return current
 
+    def _ancestor_slice_selector(self, parent_field, slice_field):
+        """How the bundle assembler can find this slice's repeat at runtime.
+
+        A deferred reference below a sliced repeating backbone flattens to a path
+        that no longer names the slice — ontario's six
+        ``Composition.section:<name>.entry`` all become ``section.entry``. The
+        assembler therefore needs the discriminator the profile slices on plus the
+        value pinned there, which together identify exactly one repeat regardless
+        of the order the sections were generated in.
+
+        Returns ``None`` unless the profile pins a value on a plain
+        ``value``/``pattern`` discriminator: ``$this``, ``resolve()``, ``type`` and
+        ``exists`` discriminators cannot be evaluated against generated JSON here,
+        and guessing a repeat is worse than deferring nothing.
+        """
+        slicing = parent_field.get("slicing") or {}
+        discriminators = slicing.get("discriminators") or []
+        if not discriminators:
+            legacy = parent_field.get("discriminator")
+            discriminators = [legacy] if legacy else []
+        element = (parent_field.get("path") or "").rsplit(".", 1)[-1].split(":", 1)[0]
+        if not element:
+            return None
+        for discriminator in discriminators:
+            if not isinstance(discriminator, dict):
+                continue
+            if discriminator.get("type") not in ("value", "pattern"):
+                continue
+            disc_path = str(discriminator.get("path") or "")
+            if not disc_path or "resolve()" in disc_path or "$this" in disc_path:
+                continue
+            target_field = self._slice_discriminator_field(slice_field, disc_path)
+            if target_field is None:
+                continue
+            value = target_field.get("fixed_value")
+            if hasattr(value, "model_dump"):
+                try:
+                    value = value.model_dump(exclude_none=True)
+                except Exception as exc:
+                    logger.warning(
+                        "Unreadable discriminator value on %s (%s: %s)",
+                        self._slice_identity(parent_field, slice_field),
+                        type(exc).__name__,
+                        exc,
+                    )
+                    continue
+            if not has_fixed_value(value):
+                continue
+            return {
+                "path": element,
+                "discriminator": disc_path.replace("[x]", ""),
+                "value": value,
+            }
+        return None
+
     def _profile_defines_discriminator(
         self, parent_field, slice_field, discriminator
     ):
@@ -1093,6 +1148,38 @@ class _SliceRulesMixin:
                     segment.split(":", 1)[0]
                     for segment in _rel_base.split(".")
                 )
+                # A reference that is itself profile-sliced carries far more than
+                # the unsliced child's `reference_target` (which is only
+                # `Resource|4.0.1` for ontario's section entries). Prefer the
+                # correlated contract, scoped to this slice's repeat so it does not
+                # collapse onto the parent list's first element.
+                _selector = self._ancestor_slice_selector(parent_field, slice_field)
+                _sliced_ref = (
+                    self._required_profile_reference_slices_rule(
+                        _ref_child,
+                        res_type,
+                        nested_source_context,
+                        automapped_mappings,
+                        selectors=[_selector] if _selector else None,
+                        name_hint=f"{_rel_base}-{slice_name}-{sub}",
+                    )
+                    if _selector
+                    else None
+                )
+                if _sliced_ref is not None:
+                    nested.append(_sliced_ref)
+                    continue
+                if _ref_child.get("slices"):
+                    self.record_diagnostic(
+                        "sliced-reference-not-deferrable",
+                        f"{slice_path}.{sub} is sliced by target profile but the "
+                        "contract could not be built (no discriminating value on "
+                        "the owning slice, or a required slice without a target "
+                        "profile). Falling back to an unscoped reference, which "
+                        "cannot satisfy the profile slices.",
+                        path=f"{slice_path}.{sub}",
+                        severity="warning",
+                    )
                 ref_rule = StructureMapGroupRule.model_construct(
                     name=(
                         f"TODO-resolve-reference-{clean_field_name(res_type)}"

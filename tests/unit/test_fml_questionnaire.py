@@ -118,6 +118,20 @@ def creator(questionnaire, factory):
     return QuestionnaireMapCreator(SimpleNamespace(data=questionnaire), factory=factory)
 
 
+def _enable_expression(rule):
+    """The compiled enableWhen carried on a rule.
+
+    Enablement is compiled exactly as before, but it is no longer emitted as a
+    rule source: matchbox cannot evaluate a source whose context is the target
+    being built and aborts the whole map. The expression is retained as
+    documentation so the map still records the requirement.
+    """
+    doc = rule.documentation or ""
+    marker = "INACTIVE"
+    assert marker in doc, f"expected an inactive-enableWhen note, got {doc!r}"
+    return doc.split("): ", 1)[1]
+
+
 def _by_name(rules, name):
     return next(r for r in rules if r.name == name)
 
@@ -438,9 +452,8 @@ def test_primitive_enable_when_is_compiled_against_response_answers(factory):
         },
     )
     item_rule = _by_name(group.rule, "rule-dependent")
-    assert len(item_rule.source) == 2
-    assert item_rule.source[1].context == "Target"
-    assert item_rule.source[1].condition == (
+    assert all(s.context != "Target" for s in item_rule.source)
+    assert _enable_expression(item_rule) == (
         "($this.repeat(item).where(linkId = 'trigger').answer.value"
         ".where($this = true).exists())"
     )
@@ -478,7 +491,7 @@ def test_enable_when_any_combines_primitive_conditions(factory):
             "Src.value": "QuestionnaireResponse.item[dependent]",
         },
     )
-    condition = _by_name(group.rule, "rule-dependent").source[1].condition
+    condition = _enable_expression(_by_name(group.rule, "rule-dependent"))
     assert condition == (
         "($this.repeat(item).where(linkId = 'first').answer.value"
         ".where($this > 2).exists()) or "
@@ -573,9 +586,8 @@ def test_complex_enable_when_compiles_target_answer_predicate(
         "Target",
         mapping_table={"Src.value": "QuestionnaireResponse.item[dependent]"},
     )
-    condition_source = _by_name(group.rule, "rule-dependent").source[1]
-    assert condition_source.context == "Target"
-    assert all(fragment in condition_source.condition for fragment in expected_fragments)
+    condition = _enable_expression(_by_name(group.rule, "rule-dependent"))
+    assert all(fragment in condition for fragment in expected_fragments)
 
 
 def test_enable_when_expression_is_evaluated_against_response(factory):
@@ -609,11 +621,8 @@ def test_enable_when_expression_is_evaluated_against_response(factory):
         "Target",
         mapping_table={"Src.value": "QuestionnaireResponse.item[dependent]"},
     )
-    condition_source = _by_name(group.rule, "rule-dependent").source[1]
-    assert condition_source.context == "Target"
-    assert condition_source.condition == (
-        "$this.item.where(linkId='trigger').answer.exists()"
-    )
+    condition = _enable_expression(_by_name(group.rule, "rule-dependent"))
+    assert condition == "$this.item.where(linkId='trigger').answer.exists()"
 
 
 @pytest.mark.parametrize(
@@ -949,7 +958,7 @@ def test_date_enable_when_uses_fhirpath_date_literal(factory):
         "Target",
         mapping_table={"Src.value": "QuestionnaireResponse.item[dependent]"},
     )
-    condition = _by_name(group.rule, "rule-dependent").source[1].condition
+    condition = _enable_expression(_by_name(group.rule, "rule-dependent"))
     assert ".where($this > @2025-01-01).exists()" in condition
 
 
@@ -977,3 +986,169 @@ def test_checkbox_integer_option_keeps_integer_literal_type(creator):
 )
 def test_get_value_type(creator, item_type, expected):
     assert creator._get_value_type(item_type) == expected
+
+
+# ── Label-valued options fed by a coded source (REDCap shape) ─────────────────
+#
+# kfdm's Questionnaire declares `answerOption.valueString: "Hausarzt"` while the
+# REDCap export supplies the codebook's code `"1"`. Copying the raw value stores a
+# bare "1", and enumerating the labels in a source `check` fails for every record —
+# fatally, because a failed FML check aborts the whole map for that record. The
+# plugin already holds the code list; it just was never consulted on this path.
+
+class _CodebookPlugin:
+    """Minimal stand-in for the REDCap plugin's codebook surface."""
+
+    plugin_id = "fake-redcap"
+
+    def __init__(self, field, choices):
+        self._field = field
+        self._choices = choices
+
+    def get_field_metadata(self, field_name):
+        if field_name != self._field:
+            return None
+        return {"_choices": self._choices}
+
+    def generate_concept_map(self, field_name, field_meta, existing_cm):
+        return {
+            "resourceType": "ConceptMap",
+            "status": "draft",
+            "group": [{
+                "element": [
+                    {"code": c["code"],
+                     "target": [{"code": c["label"], "equivalence": "equivalent"}]}
+                    for c in field_meta["_choices"]
+                ]
+            }],
+        }
+
+
+_CHOICES = [{"code": "1", "label": "Hausarzt"}, {"code": "2", "label": "Radiologe"}]
+
+
+def _label_choice_questionnaire():
+    return Questionnaire.model_construct(
+        name="LabelChoice",
+        status="active",
+        item=[
+            QuestionnaireItem.model_construct(
+                linkId="1.1",
+                type="choice",
+                text="Wer hat Sie aufgeklaert?",
+                answerOption=[
+                    QuestionnaireItemAnswerOption.model_construct(valueString="Hausarzt"),
+                    QuestionnaireItemAnswerOption.model_construct(valueString="Radiologe"),
+                ],
+            )
+        ],
+    )
+
+
+def _build(factory, mapping_table):
+    creator = QuestionnaireMapCreator(
+        SimpleNamespace(data=_label_choice_questionnaire()), factory=factory
+    )
+    return creator.generate_group("Source", "TargetQR", mapping_table)
+
+
+def _all_rules(group):
+    out = []
+
+    def walk(rs):
+        for r in rs or []:
+            out.append(r)
+            walk(r.rule)
+
+    walk(group.rule)
+    return out
+
+
+def test_coded_source_gets_a_translate_instead_of_a_label_check(factory):
+    factory.plugins = [_CodebookPlugin("erstdiagnose_durch", _CHOICES)]
+    group = _build(factory, {"Source.erstdiagnose_durch": "QuestionnaireResponse.item[1.1]"})
+    rules = _all_rules(group)
+
+    checks = [s.check for r in rules for s in (r.source or []) if s.check]
+    assert not any("Hausarzt" in (c or "") for c in checks), (
+        "label enumeration must not be checked against the untranslated source"
+    )
+    translates = [
+        t for r in rules for t in (r.target or []) if t.transform == "translate"
+    ]
+    assert translates, "no translate emitted for a coded source"
+    assert translates[0].element == "valueString"
+
+
+def test_label_check_is_kept_when_no_plugin_knows_the_field(factory):
+    """Without a code list there is nothing to translate — behaviour must not change."""
+    factory.plugins = []
+    group = _build(factory, {"Source.erstdiagnose_durch": "QuestionnaireResponse.item[1.1]"})
+    rules = _all_rules(group)
+
+    checks = [s.check for r in rules for s in (r.source or []) if s.check]
+    assert any("Hausarzt" in (c or "") for c in checks)
+    assert not [t for r in rules for t in (r.target or []) if t.transform == "translate"]
+
+
+def test_no_translate_when_the_options_already_are_the_codes(factory):
+    """A Questionnaire listing the codes needs no translation — translating would
+    replace a correct code with a display string."""
+    factory.plugins = [
+        _CodebookPlugin("erstdiagnose_durch",
+                        [{"code": "Hausarzt", "label": "Hausarzt (GP)"},
+                         {"code": "Radiologe", "label": "Radiologe (Rad)"}])
+    ]
+    group = _build(factory, {"Source.erstdiagnose_durch": "QuestionnaireResponse.item[1.1]"})
+    rules = _all_rules(group)
+
+    assert not [t for r in rules for t in (r.target or []) if t.transform == "translate"]
+
+
+def test_unexecutable_enablewhen_is_documented_not_silently_dropped(factory):
+    """matchbox cannot evaluate a target-context rule source (verified: it fails
+    even with a trivial condition), and emitting one aborts the entire map. The
+    condition is kept as rule documentation so the generated map still records
+    what the Questionnaire requires and why it is inactive."""
+    q = Questionnaire.model_construct(
+        name="EnableWhenQ",
+        status="active",
+        item=[
+            QuestionnaireItem.model_construct(
+                linkId="1", type="string", text="Trigger"
+            ),
+            QuestionnaireItem.model_construct(
+                linkId="2",
+                type="string",
+                text="Dependent",
+                enableWhen=[
+                    QuestionnaireItemEnableWhen.model_construct(
+                        question="1", operator="=", answerString="yes"
+                    )
+                ],
+            ),
+        ],
+    )
+    creator = QuestionnaireMapCreator(SimpleNamespace(data=q), factory=factory)
+    group = creator.generate_group(
+        "Source", "TargetQR",
+        {"Source.trigger": "QuestionnaireResponse.item[1]",
+         "Source.dependent": "QuestionnaireResponse.item[2]"},
+    )
+
+    def walk(rs, out):
+        for r in rs or []:
+            out.append(r)
+            walk(r.rule, out)
+        return out
+
+    rules = walk(group.rule, [])
+    dependent = next(r for r in rules if r.name == "rule-2")
+    # No source may point at the target root — that is the construct matchbox rejects.
+    assert all(s.context != "TargetQR" for s in dependent.source)
+    assert dependent.documentation and "INACTIVE" in dependent.documentation
+    assert "repeat(item)" in dependent.documentation
+    assert any(
+        d.get("code") == "questionnaire-enablewhen-not-emitted"
+        for d in factory.diagnostics
+    )

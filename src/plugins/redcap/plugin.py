@@ -37,6 +37,7 @@ Configuration block example (project JSON):
 
 from typing import Optional
 import logging
+import re
 logger = logging.getLogger(__name__)
 from plugins.base import PipelinePlugin
 from plugins.redcap.codebook import REDCapCodebook, load_fhir_code_mapping
@@ -157,6 +158,7 @@ class REDCapPlugin(PipelinePlugin):
 
         enriched_desc = 0
         enriched_type = 0
+        enriched_units = 0
         snapshot = source_definition.get("snapshot", {})
 
         for elem in snapshot.get("element", []):
@@ -193,12 +195,59 @@ class REDCapPlugin(PipelinePlugin):
                         elem["type"] = [{"code": fhir_type}]
                         enriched_type += 1
 
+            if self._enrich_allowed_units(elem, meta):
+                enriched_units += 1
+
         logger.info(
-            "REDCap plugin (post_source_def): %d descriptions, %d types enriched.",
+            "REDCap plugin (post_source_def): %d descriptions, %d types, "
+            "%d units enriched.",
             enriched_desc,
             enriched_type,
+            enriched_units,
         )
         return source_definition
+
+    # REDCap has no unit column: a numeric field states its unit in the free-text
+    # Field Note ("kg", "cm"). Reading that convention is REDCap-specific and so
+    # belongs here, but what it produces is not — it is the standard FHIR
+    # `elementdefinition-allowedUnits` extension, which any consumer of the source
+    # definition can act on without knowing REDCap exists.
+    _ALLOWED_UNITS_URL = (
+        "http://hl7.org/fhir/StructureDefinition/elementdefinition-allowedUnits"
+    )
+    _UCUM_SYSTEM = "http://unitsofmeasure.org"
+    _NUMERIC_FHIR_TYPES = {"integer", "decimal", "positiveInt", "unsignedInt"}
+    # Deliberately strict. A Field Note is free text and usually a sentence; only a
+    # bare token can be a unit, so anything longer is left alone rather than pinned
+    # as a unit that would then be emitted into every derived Quantity.
+    _UNIT_TOKEN = re.compile(r"^[A-Za-z%\[\]/*.0-9^{}-]{1,12}$")
+
+    def _enrich_allowed_units(self, elem: dict, meta: dict) -> bool:
+        note = (meta.get("field_note") or "").strip()
+        if not note or not self._UNIT_TOKEN.match(note):
+            return False
+        codes = {
+            t.get("code")
+            for t in (elem.get("type") or [])
+            if isinstance(t, dict)
+        }
+        if not codes & self._NUMERIC_FHIR_TYPES:
+            return False
+        extensions = elem.setdefault("extension", [])
+        if any(
+            isinstance(ext, dict) and ext.get("url") == self._ALLOWED_UNITS_URL
+            for ext in extensions
+        ):
+            return False
+        extensions.append(
+            {
+                "url": self._ALLOWED_UNITS_URL,
+                "valueCodeableConcept": {
+                    "coding": [{"system": self._UCUM_SYSTEM, "code": note}]
+                },
+            }
+        )
+        return True
 
     def enrich_automapping(self, automapping: dict[str, str]) -> dict[str, str]:
         """

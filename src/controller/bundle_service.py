@@ -258,6 +258,12 @@ class BundleService:
                             for profile in target_profiles
                         ),
                     )
+                selectors = BundleService._parse_selectors(contract.get("selectors"))
+                if selectors:
+                    # Keep index 10 meaning `targetProfiles` for every existing reader.
+                    if len(spec) == 10:
+                        spec += (None,)
+                    spec += (selectors,)
                 specs.append(spec)
             except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
                 logger.warning("Ignoring malformed bundled-reference contract: %s", exc)
@@ -402,6 +408,33 @@ class BundleService:
         return [p.split("|", 1)[0] for p in actual if isinstance(p, str)]
 
     @staticmethod
+    def _profile_constraints(resource: dict, profile_map: dict) -> list:
+        """Constraint sets for a resource, tolerating a scheme-only canonical mismatch.
+
+        A profile may pin ``meta.profile`` to a canonical that differs from the URL its
+        StructureDefinition is published under — evo13 pins the ``http://`` form of an
+        ``https://`` canonical. ``profile_map`` is keyed by the published canonical, so
+        an exact lookup misses and every max=0 path on that profile silently stops being
+        enforced: the assembler then wires elements the profile prohibits. Matching the
+        scheme-insensitive form keeps the constraints in force.
+        """
+        if not profile_map:
+            return []
+        def _bare(url):
+            return url.split("://", 1)[-1] if "://" in url else url
+        by_bare = {}
+        for key in profile_map:
+            by_bare.setdefault(_bare(key), []).append(key)
+        out = []
+        for profile in BundleService._resource_profiles(resource):
+            if profile in profile_map:
+                out.append((profile, profile_map[profile]))
+                continue
+            for key in by_bare.get(_bare(profile), []):
+                out.append((key, profile_map[key]))
+        return out
+
+    @staticmethod
     def _path_is_prohibited(field_path: str, prohibited: set) -> bool:
         """check if field_path is forbidden by prohibited
         """
@@ -428,8 +461,10 @@ class BundleService:
         the resource own declared profiles"""
         if not prohibited_map:
             return False
-        for prof in BundleService._resource_profiles(resource):
-            if BundleService._path_is_prohibited(field_path, prohibited_map.get(prof, set())):
+        for prof, prohibited in BundleService._profile_constraints(
+            resource, prohibited_map
+        ):
+            if BundleService._path_is_prohibited(field_path, prohibited):
                 logger.info(
                     "Refusing to wire %s.%s — prohibited (max=0) by profile %s",
                     resource.get("resourceType"),
@@ -465,8 +500,10 @@ class BundleService:
 
         _prune(constrained, field_path)
         required_children = set()
-        for profile in BundleService._resource_profiles(resource):
-            for required_path in (required_map or {}).get(profile, set()):
+        for _profile, required_paths in BundleService._profile_constraints(
+            resource, required_map or {}
+        ):
+            for required_path in required_paths:
                 if required_path.startswith(field_path + "."):
                     required_children.add(
                         required_path[len(field_path) + 1 :]
@@ -493,6 +530,130 @@ class BundleService:
             )
             return None
         return constrained
+
+    @staticmethod
+    def _parse_selectors(raw):
+        """Ancestor-slice selectors from a contract, as a hashable tuple.
+
+        A contract path is a runtime JSON path, so every slice of a repeating
+        backbone flattens to the same string: ontario's six
+        ``Composition.section:<name>.entry`` slices all become ``section.entry``.
+        Identical specs then dedup to one, and that one writes into ``section[0]``.
+        A selector says *which* repeat a contract means, in terms the instance can
+        be matched against — the discriminator the profile slices on plus the value
+        it pins there.
+
+        Malformed selectors raise, so the whole contract is rejected rather than
+        silently degrading to first-element wiring.
+        """
+        if raw is None:
+            return ()
+        if not isinstance(raw, list):
+            raise ValueError("selectors must be a list")
+        parsed = []
+        for item in raw:
+            if not isinstance(item, dict):
+                raise ValueError("each selector must be an object")
+            path = item.get("path")
+            discriminator = item.get("discriminator")
+            if not (isinstance(path, str) and path):
+                raise ValueError("selector needs a non-empty path")
+            if not (isinstance(discriminator, str) and discriminator):
+                raise ValueError("selector needs a non-empty discriminator")
+            if "value" not in item:
+                raise ValueError("selector needs a value to match")
+            parsed.append(
+                (
+                    path,
+                    discriminator,
+                    json.dumps(item["value"], sort_keys=True, separators=(",", ":")),
+                )
+            )
+        return tuple(parsed)
+
+    @staticmethod
+    def _pattern_matches(instance, pattern) -> bool:
+        """FHIR pattern semantics: `instance` must *contain* `pattern`.
+
+        Objects match when every key the pattern names matches; extra keys on the
+        instance are fine. Arrays match when every pattern entry is matched by some
+        instance entry — so a section whose `code.coding` also carries a local
+        SNOMED code still matches a LOINC-only pattern. Scalars compare by equality.
+        """
+        if isinstance(pattern, dict):
+            if not isinstance(instance, dict):
+                return False
+            return all(
+                BundleService._pattern_matches(instance.get(key), value)
+                for key, value in pattern.items()
+            )
+        if isinstance(pattern, list):
+            if not isinstance(instance, list):
+                return False
+            return all(
+                any(
+                    BundleService._pattern_matches(candidate, wanted)
+                    for candidate in instance
+                )
+                for wanted in pattern
+            )
+        return instance == pattern
+
+    @staticmethod
+    def _selected_container(source: dict, selectors, field_path: str):
+        """Resolve the repeat a slice-scoped contract addresses.
+
+        Returns ``(container, remaining_path)``, or ``None`` when the selector does
+        not identify exactly one repeat. Zero matches means the section the contract
+        belongs to was never generated; several means the discriminator does not
+        actually discriminate. Either way, picking one would be a guess, and a guess
+        here silently attaches references to the wrong section.
+        """
+        container = source
+        remaining = field_path.split(".")
+        for path, discriminator, value_json in selectors:
+            steps = path.split(".")
+            if remaining[: len(steps)] != steps:
+                logger.warning(
+                    "Selector %s is not a prefix of %s — skipping", path, field_path
+                )
+                return None
+            for step in steps[:-1]:
+                container = container.get(step) if isinstance(container, dict) else None
+                if isinstance(container, list):
+                    container = container[0] if container else None
+            if not isinstance(container, dict):
+                return None
+            repeats = container.get(steps[-1])
+            if isinstance(repeats, dict):
+                repeats = [repeats]
+            if not isinstance(repeats, list):
+                return None
+            wanted = json.loads(value_json)
+            disc_steps = discriminator.split(".")
+            matches = [
+                repeat
+                for repeat in repeats
+                if isinstance(repeat, dict)
+                and BundleService._pattern_matches(
+                    BundleService._get_nested(repeat, disc_steps), wanted
+                )
+            ]
+            if len(matches) != 1:
+                logger.warning(
+                    "Slice selector %s[%s=%s] matched %d repeats — not wiring %s",
+                    path,
+                    discriminator,
+                    value_json,
+                    len(matches),
+                    field_path,
+                )
+                return None
+            container = matches[0]
+            remaining = remaining[len(steps):]
+        if not remaining:
+            return None
+        return container, remaining
 
     @staticmethod
     def _resource_matches_obj(resource: dict, obj_url: str, source_type: str) -> bool:
@@ -537,6 +698,7 @@ class BundleService:
             reference_mode = spec[8] if len(spec) > 8 else "urn"
             target_profile = spec[9] if len(spec) > 9 else None
             target_profiles = spec[10] if len(spec) > 10 else None
+            selectors = spec[11] if len(spec) > 11 else ()
             # Resolve each candidate (base type or profile id) to a present type.
             candidates = [
                 profile_type_map.get(t, t) for t in target_type.split("|") if t
@@ -558,7 +720,21 @@ class BundleService:
                 continue
             parts = field_path.split(".")
             for i, source in enumerate(sources):
-                if len(parts) > 1 and BundleService._get_nested(source, parts[:-1]) is None:
+                # A slice-scoped contract writes into one specific repeat of a
+                # repeating backbone, resolved from the discriminator value the
+                # profile pins on that slice rather than from list position.
+                container, local_parts = source, parts
+                if selectors:
+                    resolved = BundleService._selected_container(
+                        source, selectors, field_path
+                    )
+                    if resolved is None:
+                        continue
+                    container, local_parts = resolved
+                if (
+                    len(local_parts) > 1
+                    and BundleService._get_nested(container, local_parts[:-1]) is None
+                ):
                     logger.info(
                         f"Skipping {source_type}.{field_path}: parent backbone absent "
                         f"(optional, unpopulated) — not materialising it for a reference."
@@ -653,15 +829,15 @@ class BundleService:
                     continue
                 if match == "all":
                     BundleService._set_nested_all(
-                        source,
-                        parts,
+                        container,
+                        local_parts,
                         reference_values,
                         array_paths.get(source_type, set()),
                     )
                 else:
                     BundleService._set_nested(
-                        source,
-                        parts,
+                        container,
+                        local_parts,
                         reference_values[0],
                         array_paths.get(source_type, set()),
                     )

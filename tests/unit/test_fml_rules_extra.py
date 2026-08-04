@@ -1566,3 +1566,283 @@ def test_reference_subtree_keeps_a_fixed_value_nested_under_identifier():
         "PractitionerRole.practitioner.identifier.system",
         "PractitionerRole.practitioner.identifier.value",
     }
+
+
+# ── meta.profile precedence: a pinned canonical outranks the SD url ───────────
+def _sd_obj(url, elements):
+    return SimpleNamespace(
+        data=SimpleNamespace(
+            id="x", url=url,
+            snapshot=SimpleNamespace(
+                element=[SimpleNamespace(**e) for e in elements])))
+
+
+def test_meta_profile_prefers_a_canonical_pinned_on_the_snapshot():
+    # evo13 pins the http:// form on an SD whose own canonical is https://.
+    gen = _gen()
+    obj = _sd_obj(
+        "https://fhir.element44.de/E44_EVO13_PR_CorrectionRequest",
+        [{"path": "Communication.meta"},
+         {"path": "Communication.meta.profile",
+          "fixedCanonical": "http://fhir.element44.de/E44_EVO13_PR_CorrectionRequest"}],
+    )
+    assert gen._snapshot_fixed_meta_profile(obj, "Communication") == (
+        "http://fhir.element44.de/E44_EVO13_PR_CorrectionRequest")
+
+
+def test_meta_profile_falls_back_to_the_sd_url_when_nothing_is_pinned():
+    gen = _gen()
+    obj = _sd_obj("http://example.org/StructureDefinition/P",
+                  [{"path": "Patient.meta"}, {"path": "Patient.meta.profile"}])
+    assert gen._snapshot_fixed_meta_profile(obj, "Patient") is None
+
+
+# ── Deferred references below a sliced repeating backbone (ontario) ───────────
+#
+# `Composition.section` is sliced on a `code` pattern; each section slice carries a
+# required `entry` sub-slice discriminated by `profile:resolve()`. The runtime path
+# of every one of them is `section.entry`, so the contract has to say which section
+# it means or six contracts collapse into one write against `section[0]`.
+
+_LOINC = "http://loinc.org"
+
+
+def _entry_child(slice_name, entry_slice, target_profiles):
+    return {
+        "path": "Composition.section.entry",
+        "id": f"Composition.section:{slice_name}.entry",
+        "cardinality": {"min": 1, "max": "*"},
+        "reference_target": "http://hl7.org/fhir/StructureDefinition/Resource|4.0.1",
+        "type": [{"code": "Reference"}],
+        "slicing": {"discriminators": [{"path": "resolve()", "type": "profile"}]},
+        "slices": [
+            {
+                "path": "Composition.section.entry",
+                "id": f"Composition.section:{slice_name}.entry:{entry_slice}",
+                "sliceName": entry_slice,
+                "cardinality": {"min": 1, "max": "*"},
+                "type": [{"code": "Reference", "targetProfile": list(target_profiles)}],
+            }
+        ],
+    }
+
+
+def _section_slice(slice_name, code, entry_slice, target_profiles, pinned_code=True):
+    code_child = {
+        "path": "Composition.section.code",
+        "id": f"Composition.section:{slice_name}.code",
+        "cardinality": {"min": 1, "max": "1"},
+        "type": [{"code": "CodeableConcept"}],
+    }
+    if pinned_code:
+        code_child["fixed_value"] = {"coding": [{"system": _LOINC, "code": code}]}
+        code_child["fixed_kind"] = "pattern"
+    return {
+        "path": "Composition.section",
+        "id": f"Composition.section:{slice_name}",
+        "sliceName": slice_name,
+        "slice_identity": f"Composition.section:{slice_name}",
+        "cardinality": {"min": 1, "max": "1"},
+        "type": [{"code": "BackboneElement"}],
+        "children": [code_child, _entry_child(slice_name, entry_slice, target_profiles)],
+    }
+
+
+def _section_parent():
+    return {
+        "path": "Composition.section",
+        "cardinality": {"min": 0, "max": "*"},
+        "type": [{"code": "BackboneElement"}],
+        "slicing": {
+            "discriminators": [{"path": "code", "type": "pattern"}],
+            "rules": "open",
+        },
+    }
+
+
+def _contracts(rule):
+    import json
+
+    found = []
+
+    def walk(node):
+        doc = node.documentation or ""
+        marker = "FHIRBRIDGE_REFERENCE:"
+        if doc.startswith(marker):
+            found.append(json.loads(doc[len(marker):]))
+        for child in node.rule or []:
+            walk(child)
+
+    walk(rule)
+    return found
+
+
+def test_reference_under_a_sliced_backbone_is_scoped_to_its_own_slice(factory):
+    factory.diagnostics = []
+    parent = _section_parent()
+    slice_field = _section_slice(
+        "sectionMedications", "10160-0", "medicationInformation",
+        ["http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationstatement",
+         "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationrequest"],
+    )
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Composition", "source", "target", {},
+    )
+    contracts = _contracts(rule)
+    assert len(contracts) == 1, "sliced reference did not produce a correlated contract"
+    contract = contracts[0]
+    assert contract["path"] == "section.entry"
+    assert contract["selectors"] == [
+        {
+            "path": "section",
+            "discriminator": "code",
+            "value": {"coding": [{"system": _LOINC, "code": "10160-0"}]},
+        }
+    ]
+    # Both profiles the slice accepts must be offered, not just the first.
+    assert len(contract["targetProfiles"]) == 2
+
+
+def test_sibling_sections_produce_distinguishable_contracts(factory):
+    """Identical contracts are deduped by `_specs_from_structure_maps`."""
+    factory.diagnostics = []
+    parent = _section_parent()
+    rules = [
+        factory._create_slice_instance_rule(
+            parent,
+            _section_slice(name, code, entry, ["http://example.org/p"]),
+            "Composition", "source", "target", {},
+        )
+        for name, code, entry in (
+            ("sectionMedications", "10160-0", "medicationInformation"),
+            ("sectionAllergies", "48765-2", "allergyOrIntolerance"),
+        )
+    ]
+    contracts = [c for rule in rules for c in _contracts(rule)]
+    assert len(contracts) == 2
+    assert contracts[0]["selectors"] != contracts[1]["selectors"]
+    assert contracts[0]["path"] == contracts[1]["path"] == "section.entry"
+
+
+def test_sliced_reference_with_no_target_profile_is_reported(factory):
+    """A required entry slice with no target profile cannot be correlated.
+
+    The fallback is an unscoped reference, which cannot satisfy the profile
+    slices — so the gap is reported rather than left to look like success.
+    (An *unpinned* discriminator never reaches here: the slice itself is
+    rejected earlier as `ambiguous-slice-selection`.)
+    """
+    factory.diagnostics = []
+    parent = _section_parent()
+    slice_field = _section_slice(
+        "sectionMedications", "10160-0", "medicationInformation", [],
+    )
+    rule = factory._create_slice_instance_rule(
+        parent, slice_field, "Composition", "source", "target", {},
+    )
+    assert _contracts(rule) == []
+    assert any(
+        d.get("code") == "sliced-reference-not-deferrable"
+        for d in factory.diagnostics
+    )
+
+
+def test_fixed_complex_value_on_a_choice_element_keeps_the_x_base(factory):
+    """`create` names the type, so the element must not repeat it.
+
+    Emitting element `valueCodeableConcept` together with `create CodeableConcept`
+    makes the engine look for `valueCodeableConceptCodeableConcept` and abort the
+    whole transform (matchbox: "Unable to find type ... with path Extension.value[x]").
+    """
+    rule = factory._create_fixed_value_rule(
+        "CodeableConcept",
+        {"coding": [{"system": "http://snomed.info/sct", "code": "420134006"}]},
+        "value[x]",
+        "ext-type",
+        "source",
+    )
+    target = rule.target[0]
+    assert target.element == "value"
+    assert target.transform == "create"
+    assert target.parameter[0].valueString == "CodeableConcept"
+    # the rule/variable names still carry the concrete type for readability
+    assert rule.name == "set-fixed-valueCodeableConcept"
+
+
+def test_fixed_scalar_on_a_choice_element_still_uses_the_concrete_name(factory):
+    """A `copy` carries no type parameter, so the element must be concrete."""
+    rule = factory._create_fixed_value_rule(
+        "string", "fixed text", "value[x]", "ext-note", "source",
+    )
+    assert rule.target[0].element == "valueString"
+    assert rule.target[0].transform == "copy"
+
+
+# ── optional pattern-only elements ────────────────────────────────────────────
+def _patterned_child(path, parent_required=True):
+    """A pinned, optional element — the shape of `Patient.identifier.system`."""
+    return {
+        "path": path,
+        "id": path,
+        "type": [{"code": "uri"}],
+        "cardinality": {"min": 0, "max": "1"},
+        "is_required": False,
+        "is_pattern": True,
+        "fixed_kind": "pattern",
+        "fixed_value": "http://terminology.hl7.org/CodeSystem/v2-0203",
+        "options": [],
+        "children": [],
+    }
+
+
+def test_pinned_component_of_a_created_element_is_emitted(factory):
+    # `Patient.identifier` is required and separately mapped, so an Identifier is
+    # written regardless; the profile pins `identifier.system` precisely so that every
+    # Identifier it produces carries that system. Dropping it emitted a bare
+    # `{"value": "1"}` where the profile — and the reference output — say otherwise.
+    rule = factory.create_mappable_field_rule(
+        _patterned_child("Patient.identifier.system"),
+        "Patient",
+        "source",
+        "tgt-identifier",
+        automapped_mappings={},
+        parent_path="Patient.identifier",
+        # `identifier.value` is mapped, so an Identifier really is being written.
+        siblings_have_content=True,
+    )
+    assert rule is not None
+    assert rule.target[0].element == "system"
+    assert (
+        rule.target[0].parameter[0].valueString
+        == "http://terminology.hl7.org/CodeSystem/v2-0203"
+    )
+
+
+def test_standalone_optional_pattern_element_is_still_suppressed(factory):
+    # No parent context is being built here, so emitting the element would create it
+    # purely because the profile patterns it — inventing data the record lacks.
+    rule = factory.create_mappable_field_rule(
+        _patterned_child("Patient.maritalStatus"),
+        "Patient",
+        "source",
+        "target",
+        automapped_mappings={},
+        parent_path=None,
+    )
+    assert rule is None
+
+
+def test_pinned_component_of_an_otherwise_empty_structure_is_suppressed(factory):
+    # `Procedure.outcome.coding` has no mapped or fixed sibling. Emitting its pinned
+    # `system` alone writes a Coding carrying a system and no code, which matches no
+    # member of the required value set and fails the whole instance.
+    rule = factory.create_mappable_field_rule(
+        _patterned_child("Procedure.outcome.coding.system"),
+        "Procedure",
+        "source",
+        "tgt-coding",
+        automapped_mappings={},
+        parent_path="Procedure.outcome.coding",
+        siblings_have_content=False,
+    )
+    assert rule is None

@@ -397,3 +397,228 @@ def test_reference_wiring_respects_prohibited_reference_child():
     )
 
     assert "subject" not in procedure
+
+
+def test_profile_constraints_survive_a_scheme_only_canonical_mismatch():
+    """evo13 pins the http:// form of an https:// canonical on meta.profile.
+
+    The prohibited/required maps are keyed by the published canonical, so an exact
+    lookup misses and every max=0 path stops being enforced — the assembler would
+    then wire elements the profile forbids.
+    """
+    from controller.bundle_service import BundleService
+
+    resource = {"resourceType": "Communication",
+                "meta": {"profile": ["http://example.org/StructureDefinition/X"]}}
+    prohibited = {"https://example.org/StructureDefinition/X": {"subject"}}
+    assert BundleService._wiring_forbidden(resource, "subject", prohibited) is True
+    # an unrelated profile is still not matched
+    assert BundleService._wiring_forbidden(
+        resource, "subject",
+        {"https://example.org/StructureDefinition/Y": {"subject"}}) is False
+
+
+# --------------------------------------------------------------------------
+# Slice-scoped contracts: a reference below a sliced repeating backbone.
+#
+# `Composition.section:sectionMedications.entry` and its five sibling sections all
+# flatten to the runtime path `section.entry`. Without a selector the specs are
+# byte-identical, `_specs_from_structure_maps` dedups them to one, and that one
+# writes into `section[0]` — so five sections end up with no entry at all and the
+# sixth gets the wrong references (ontario, 12 of its 22 bundle issues).
+# --------------------------------------------------------------------------
+
+_LOINC = "http://loinc.org"
+
+
+def _section(code, title):
+    return {"title": title, "code": {"coding": [{"system": _LOINC, "code": code}]}}
+
+
+def _composition(*sections):
+    return {"resourceType": "Composition", "status": "final", "section": list(sections)}
+
+
+def _section_contract(code, target_profile, path="section.entry"):
+    return _bundled_rule(
+        sourceType="Composition",
+        path=path,
+        targetTypes=[target_profile],
+        targetProfiles=[target_profile],
+        match="all",
+        selectors=[
+            {
+                "path": "section",
+                "discriminator": "code",
+                "value": {"coding": [{"system": _LOINC, "code": code}]},
+            }
+        ],
+    )
+
+
+def _specs(*rules):
+    specs = []
+    for rule in rules:
+        BundleService._collect_todo_refs(rule, specs, {}, None)
+    return specs
+
+
+def test_slice_scoped_contracts_wire_into_their_own_section():
+    """Each section must receive only the references its own slice requires.
+
+    Sections are deliberately ordered so that neither the first nor the last
+    element is the right answer for any contract — positional wiring cannot pass.
+    """
+    meds_profile = "http://example.org/StructureDefinition/medicationstatement"
+    allergy_profile = "http://example.org/StructureDefinition/allergyintolerance"
+    problem_profile = "http://example.org/StructureDefinition/condition"
+
+    composition = _composition(
+        _section("11450-4", "Problems"),
+        _section("10160-0", "Medications"),
+        _section("48765-2", "Allergies"),
+    )
+    medication = {"resourceType": "MedicationStatement",
+                  "meta": {"profile": [meds_profile]}}
+    allergy = {"resourceType": "AllergyIntolerance",
+               "meta": {"profile": [allergy_profile]}}
+    condition = {"resourceType": "Condition",
+                 "meta": {"profile": [problem_profile]}}
+
+    specs = _specs(
+        _section_contract("10160-0", meds_profile),
+        _section_contract("48765-2", allergy_profile),
+        _section_contract("11450-4", problem_profile),
+    )
+    assert len(specs) == 3, "identical paths must stay distinct once scoped by slice"
+
+    BundleService._wire_references(
+        [composition, medication, allergy, condition],
+        specs,
+        {
+            id(medication): "urn:uuid:med",
+            id(allergy): "urn:uuid:allergy",
+            id(condition): "urn:uuid:condition",
+        },
+        {},
+        {"medicationstatement": "MedicationStatement",
+         "allergyintolerance": "AllergyIntolerance",
+         "condition": "Condition"},
+    )
+
+    by_title = {s["title"]: s for s in composition["section"]}
+    assert by_title["Medications"]["entry"] == [{"reference": "urn:uuid:med"}]
+    assert by_title["Allergies"]["entry"] == [{"reference": "urn:uuid:allergy"}]
+    assert by_title["Problems"]["entry"] == [{"reference": "urn:uuid:condition"}]
+
+
+def test_slice_selector_survives_a_structure_map_round_trip():
+    profile = "http://example.org/StructureDefinition/condition"
+    structure_map = {
+        "structure": [{"mode": "target", "url": "http://example.org/comp"}],
+        "group": [{"rule": [_section_contract("11450-4", profile)]}],
+    }
+
+    specs = BundleService._specs_from_structure_maps([structure_map])
+
+    assert len(specs) == 1
+    assert specs[0][1] == "section.entry"
+    assert specs[0][11] == (
+        ("section", "code", '{"coding":[{"code":"11450-4","system":"http://loinc.org"}]}'),
+    )
+
+
+def test_slice_selector_matching_no_container_wires_nothing():
+    profile = "http://example.org/StructureDefinition/condition"
+    composition = _composition(_section("10160-0", "Medications"))
+    condition = {"resourceType": "Condition", "meta": {"profile": [profile]}}
+
+    BundleService._wire_references(
+        [composition, condition],
+        _specs(_section_contract("11450-4", profile)),
+        {id(condition): "urn:uuid:condition"},
+        {},
+        {"condition": "Condition"},
+    )
+
+    assert "entry" not in composition["section"][0]
+
+
+def test_slice_selector_matching_several_containers_wires_nothing():
+    """Two repeats satisfying one selector is ambiguous — guessing would be wrong."""
+    profile = "http://example.org/StructureDefinition/condition"
+    composition = _composition(
+        _section("11450-4", "Problems"), _section("11450-4", "Problems again")
+    )
+    condition = {"resourceType": "Condition", "meta": {"profile": [profile]}}
+
+    BundleService._wire_references(
+        [composition, condition],
+        _specs(_section_contract("11450-4", profile)),
+        {id(condition): "urn:uuid:condition"},
+        {},
+        {"condition": "Condition"},
+    )
+
+    assert all("entry" not in section for section in composition["section"])
+
+
+def test_slice_selector_matches_a_pattern_not_an_exact_value():
+    """`pattern` discriminators constrain a subset — extra codings must still match."""
+    profile = "http://example.org/StructureDefinition/condition"
+    section = _section("11450-4", "Problems")
+    section["code"]["text"] = "Problem list"
+    section["code"]["coding"].insert(0, {"system": "http://snomed.info/sct", "code": "1"})
+    composition = _composition(section)
+    condition = {"resourceType": "Condition", "meta": {"profile": [profile]}}
+
+    BundleService._wire_references(
+        [composition, condition],
+        _specs(_section_contract("11450-4", profile)),
+        {id(condition): "urn:uuid:condition"},
+        {},
+        {"condition": "Condition"},
+    )
+
+    assert composition["section"][0]["entry"] == [{"reference": "urn:uuid:condition"}]
+
+
+def test_contract_without_selectors_keeps_its_legacy_spec_shape():
+    """Adding selectors must not change the tuple every existing consumer indexes."""
+    specs = _specs(_bundled_rule())
+    assert len(specs[0]) == 10
+
+
+def test_slice_selector_on_a_missing_backbone_wires_nothing():
+    """The sliced backbone may not have been generated at all."""
+    profile = "http://example.org/StructureDefinition/condition"
+    composition = {"resourceType": "Composition", "status": "final"}
+    condition = {"resourceType": "Condition", "meta": {"profile": [profile]}}
+
+    BundleService._wire_references(
+        [composition, condition],
+        _specs(_section_contract("11450-4", profile)),
+        {id(condition): "urn:uuid:condition"},
+        {},
+        {"condition": "Condition"},
+    )
+
+    assert "section" not in composition
+
+
+def test_malformed_selectors_reject_the_whole_contract():
+    """A selector we cannot read must not degrade to first-element wiring."""
+    import json
+
+    rule = {
+        "name": "TODO-resolve-reference-broken",
+        "documentation": "FHIRBRIDGE_REFERENCE:" + json.dumps({
+            "sourceType": "Composition",
+            "path": "section.entry",
+            "targetTypes": ["Condition"],
+            "selectors": [{"path": "section"}],  # no discriminator, no value
+        }),
+    }
+    specs = []
+    BundleService._collect_todo_refs(rule, specs)
+    assert specs == []

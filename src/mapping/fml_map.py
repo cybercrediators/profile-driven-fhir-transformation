@@ -11,8 +11,15 @@ from fhir.resources.R4B.structuremap import (
 )
 
 from mapping.fml_creator.fml_factory import FMLRuleFactory
-from mapping.fml_creator.fml_helper import flatten_profile_fields, has_fixed_value
+from mapping.fml_creator.fml_helper import (
+    created_extension_variable,
+    emits_only_url,
+    flatten_profile_fields,
+    has_fixed_value,
+    rule_can_fire,
+)
 from mapping.fml_creator.fml_automapper import FMLAutomapper
+from mapping import derived_resources
 from helpers.utils import (
     get_value_from_element,
     resource_identity,
@@ -128,6 +135,31 @@ class StructureMapGenerator:
             self.custom_mapping_table = combined_table
             self.automapper = None
 
+        # A Reference-valued extension names its target with `targetProfile`. When no
+        # declared root satisfies that target, the reference has nothing to point at
+        # and the extension is dropped for violating ext-1 — so the target becomes an
+        # additional map target here and is generated like any other profile.
+        derived = derived_resources.discover(
+            self.app_state,
+            resources,
+            self.custom_mapping_table,
+            source_fields,
+            self._append_diagnostic,
+        )
+        derived_by_url = {spec.target_profile: spec for spec in derived}
+        if derived:
+            resources = list(resources) + derived_resources.registry_entries(
+                self.app_state, derived
+            )
+            # `active_types` was computed from the declared roots alone. Minimal mode
+            # keeps a required path only when its owning type is active, so without
+            # this the derived profile's own required elements are pruned out of the
+            # map that exists to carry them.
+            for spec in derived:
+                active_types.update(
+                    {spec.target_type, spec.target_profile, spec.target_identity}
+                )
+
         structure_maps = []
         for res_idx, res in enumerate(resources):
             url = next(iter(res))
@@ -139,8 +171,18 @@ class StructureMapGenerator:
             self.current_profile_name = profile_identity
             res_type = obj.res_type if not hasattr(obj.data, "type") else obj.data.type
 
+            # A derived profile's value provider is inferred, not authored, so it is
+            # scoped to that profile's own map instead of the shared table (whose one
+            # target per source is already spent on the referencing extension).
+            derived_spec = derived_by_url.get(url)
+            mapping_table = (
+                derived_resources.mapping_overlay(self.custom_mapping_table, derived_spec)
+                if derived_spec
+                else self.custom_mapping_table
+            )
+
             automapped_mappings = self._process_resource_mapping(
-                obj, res_type, source_fields, active_types
+                obj, res_type, source_fields, active_types, mapping_table=mapping_table
             )
             self._record_profile_facet_diagnostics(obj)
 
@@ -176,7 +218,7 @@ class StructureMapGenerator:
             ]
 
             typed_document = compile_rule_document(
-                self.custom_mapping_table,
+                mapping_table,
                 profile_id=profile_identity,
                 profile_url=getattr(obj.data, "url", "") or "",
                 resource_type=res_type,
@@ -496,7 +538,30 @@ class StructureMapGenerator:
                         severity="warning",
                     )
                     continue
-                rule.rule = _sanitize(getattr(rule, "rule", None), group_name) or None
+                surviving = _sanitize(getattr(rule, "rule", None), group_name)
+                ext_var = created_extension_variable(rule)
+                if (
+                    ext_var
+                    and emits_only_url(surviving, ext_var)
+                    and all(rule_can_fire(s) for s in getattr(rule, "source", None) or [])
+                ):
+                    # Pruning a child can leave its parent extension holding nothing
+                    # but a url, which violates ext-1
+                    # (`extension.exists() != value.exists()`) and fails the whole
+                    # instance — so the parent has to go too. Bottom-up recursion makes
+                    # this cascade: a dropped sub-extension can empty its own parent,
+                    # which is checked in turn. Rules gated behind a TODO source are
+                    # left alone: they never fire, so they ship nothing invalid.
+                    self._append_diagnostic(
+                        "url-only-extension-pruned",
+                        f"Rule {name} was omitted because sanitizing its children left "
+                        "it writing only the extension url, which violates ext-1.",
+                        group=group_name,
+                        rule=name,
+                        severity="warning",
+                    )
+                    continue
+                rule.rule = surviving or None
                 kept.append(rule)
             return kept
 
@@ -589,12 +654,21 @@ class StructureMapGenerator:
         return result
 
     def _process_resource_mapping(
-        self, obj, res_type, source_fields, active_types: Set[str] = None
+        self,
+        obj,
+        res_type,
+        source_fields,
+        active_types: Set[str] = None,
+        mapping_table=None,
     ):
+        # Defaults to the project's table; a caller passes one only to add bindings
+        # that apply to this profile alone (see derived_resources.mapping_overlay).
+        if mapping_table is None:
+            mapping_table = self.custom_mapping_table
         special_targets = set()
-        if isinstance(self.custom_mapping_table, dict):
+        if isinstance(mapping_table, dict):
             profile_id = resource_identity(obj.data)
-            for source_key, value in self.custom_mapping_table.items():
+            for source_key, value in mapping_table.items():
                 if is_rule_document_key(source_key):
                     continue
                 target = mapping_target_path(value)
@@ -613,7 +687,7 @@ class StructureMapGenerator:
         automap_source_list = self._flatten_fields_recursively(flat_fields)
 
         automapped_paths, automapped_mappings = self._get_automapped_mappings(
-            self.custom_mapping_table,
+            mapping_table,
             self.automapper,
             source_fields,
             automap_source_list,
@@ -1016,6 +1090,11 @@ class StructureMapGenerator:
                         "description": elem.short or elem.definition or "",
                         "type": elem_type,
                         "max": elem.max,
+                        # Element extensions state things about the source a plugin
+                        # derived rather than the shape alone gives — the UCUM unit a
+                        # numeric field is recorded in, say. Dropping them here left
+                        # that knowledge unreachable to everything downstream.
+                        "extension": list(elem.extension or []),
                     }
                 )
         return source_fields
@@ -1071,6 +1150,88 @@ class StructureMapGenerator:
                         automapped_mappings[match_path] = source_field["id"]
                         self.factory.explicit_mapping_targets.add(match_path)
         return automapped_paths, automapped_mappings
+
+    @staticmethod
+    def _type_structure_has(field, type_code, tail):
+        """Whether `tail` names an element of `type_code`'s expanded structure."""
+        if not tail:
+            return True
+        wanted = tail.lstrip(".")
+        for type_ref in field.get("type") or []:
+            if not isinstance(type_ref, dict) or type_ref.get("code") != type_code:
+                continue
+            for child in type_ref.get("type_structure") or []:
+                if not isinstance(child, dict):
+                    continue
+                path = str(child.get("path") or "")
+                # The synthesized descendants keep the *unsliced* parent path, so
+                # compare only the part below the choice element.
+                if path.split("[x]", 1)[-1].lstrip(".") == wanted:
+                    return True
+        return False
+
+    def _resolve_sliced_choice_target(self, target, target_index, field_by_identity):
+        """Resolve `…:<slice>.value<Type>.<rest>` when no exact index entry exists.
+
+        A profile may narrow a slice's `value[x]` to one datatype without profiling
+        that datatype's children. The children are then synthesized from
+        `fhir.resources` and keep the *unsliced* path, so no single record carries
+        both the slice and the concrete choice, and the authored target matches
+        nothing — even though every part of it is real.
+
+        Resolved on demand rather than by adding aliases to the shared index:
+        `target_index` is single-valued and its keys overlap across exact snapshot
+        identities, structural paths and choice aliases, so inserting a concrete
+        alias for every virtual path silently redirects lookups that already work.
+
+        Returns the canonical `…:<slice>.<base>[x]:<concrete>.<rest>` key, or None —
+        including when more than one choice element could account for the segment,
+        which is reported rather than guessed at.
+        """
+        if ":" not in target or "[x]" in target:
+            return None
+        segments = target.split(".")
+        # Longest slice-qualified ancestor that the index already knows.
+        for cut in range(len(segments) - 1, 0, -1):
+            prefix = ".".join(segments[:cut])
+            if ":" not in prefix or prefix not in field_by_identity:
+                continue
+            remainder = segments[cut:]
+            head, tail = remainder[0], "".join(f".{s}" for s in remainder[1:])
+            owner = field_by_identity[prefix]
+            candidates = []
+            for child in owner.get("children") or []:
+                if not isinstance(child, dict):
+                    continue
+                name = str(child.get("path") or "").rsplit(".", 1)[-1]
+                if not name.endswith("[x]"):
+                    continue
+                base = name[: -len("[x]")]
+                if not head.startswith(base) or head == base:
+                    continue
+                concrete = head[len(base):]
+                for type_ref in child.get("type") or []:
+                    code = (
+                        type_ref.get("code") if isinstance(type_ref, dict) else type_ref
+                    )
+                    if not code or self.factory._choice_suffix(code) != concrete:
+                        continue
+                    if not self._type_structure_has(child, code, tail):
+                        continue
+                    candidates.append(f"{prefix}.{base}[x]:{head}{tail}")
+            unique = sorted(set(candidates))
+            if len(unique) == 1:
+                return unique[0]
+            if unique:
+                self._append_diagnostic(
+                    "mapping-target-choice-ambiguous",
+                    "Custom mapping target names a choice that more than one element "
+                    "of the slice could satisfy; qualify it explicitly.",
+                    target=target,
+                    candidates=unique,
+                )
+                return None
+        return None
 
     def _apply_custom_mapping_table(
         self,
@@ -1240,10 +1401,18 @@ class StructureMapGenerator:
                     flat.extend(_flatten_targets([sl_copy], parent_virtual_path))
             return flat
 
+        # Keeps the field record reachable by its slice-carrying identity. The
+        # on-demand fallback below has to inspect the declared types of a slice's
+        # `value[x]`, which the flat index alone cannot answer.
+        field_by_identity = {}
+
         for entry in _flatten_targets(target_fields or []):
             field_path = entry["path"]
             virtual_path = entry["virtual_path"]
             cardinality = (entry.get("field") or {}).get("cardinality") or {}
+            if entry.get("field") is not None:
+                field_by_identity.setdefault(virtual_path, entry["field"])
+                field_by_identity.setdefault(field_path, entry["field"])
 
             target_index[field_path] = field_path
             target_cardinality[field_path] = cardinality
@@ -1328,6 +1497,13 @@ class StructureMapGenerator:
             target_path = target_index.get(normalized_target)
             if not target_path and not normalized_target.startswith(f"{res_type}."):
                 target_path = target_index.get(f"{res_type}.{normalized_target}")
+
+            if not target_path:
+                # Exact lookups first; only a target that matched nothing is worth
+                # re-interpreting, so nothing that already resolves can be redirected.
+                target_path = self._resolve_sliced_choice_target(
+                    normalized_target, target_index, field_by_identity
+                )
 
             if not target_path:
                 self._append_diagnostic(
@@ -1565,8 +1741,24 @@ class StructureMapGenerator:
                 for path in (automapped_mappings or {})
             )
             if self._target_declares_meta(res_obj, res_type) and not explicit_meta_profile:
+                # Precedence: an authored mapping (handled above) > a canonical the
+                # snapshot pins on meta.profile > the StructureDefinition's own url.
+                pinned = self._snapshot_fixed_meta_profile(res_obj, res_type)
+                declared = res_obj.data.url
+                if pinned and pinned != declared:
+                    self._append_diagnostic(
+                        "profile-canonical-conflict",
+                        f"{res_type}.meta.profile is pinned to {pinned} but the "
+                        f"StructureDefinition's canonical is {declared}. Stamping the "
+                        "pinned value so the instance satisfies its own profile; note "
+                        "that the pinned canonical may not resolve on the server.",
+                        path=f"{res_type}.meta.profile",
+                        severity="warning",
+                    )
                 meta_rule = self.factory.create_meta_profile_rule(
-                    res_obj.data.url, source_context="source", target_context="target"
+                    pinned or declared,
+                    source_context="source",
+                    target_context="target",
                 )
                 group.rule = [meta_rule] + field_rules
             else:
@@ -1582,6 +1774,29 @@ class StructureMapGenerator:
                 )
                 group.rule = field_rules
         return group
+
+    def _snapshot_fixed_meta_profile(self, res_obj, res_type) -> Optional[str]:
+        """A ``fixedCanonical``/``patternCanonical`` pinned on ``<res_type>.meta.profile``.
+
+        A profile may pin the canonical its instances must declare, and that value
+        is not always the StructureDefinition's own ``url`` — evo13 pins
+        ``http://…/E44_EVO13_PR_CorrectionRequest`` on an SD whose url is the
+        ``https://`` form. Stamping the url then fails the fixed value. The pinned
+        value wins; the caller reports the disagreement rather than hiding it.
+        """
+        data = getattr(res_obj, "data", None)
+        snapshot = getattr(data, "snapshot", None)
+        elements = getattr(snapshot, "element", None) if snapshot else None
+        target = f"{res_type}.meta.profile"
+        for element in elements or []:
+            if getattr(element, "path", None) != target:
+                continue
+            for attribute in ("fixedCanonical", "patternCanonical",
+                              "fixedUri", "patternUri"):
+                value = getattr(element, attribute, None)
+                if isinstance(value, str) and value:
+                    return value
+        return None
 
     def _target_declares_meta(self, res_obj, res_type) -> bool:
         """check if the target profile's snapshot declares ``<res_type>.meta``"""

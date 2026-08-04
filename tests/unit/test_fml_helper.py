@@ -473,34 +473,6 @@ def test_parse_slice_info_with_discriminator():
     }
 
 
-# ── find_reference_fields ─────────────────────────────────────────────────────
-def test_find_reference_fields_simple():
-    fields = [
-        {"type": "Reference", "reference_target": "Patient"},
-        {"type": "string"},
-    ]
-    assert H.find_reference_fields(fields) == {"Patient"}
-
-
-def test_find_reference_fields_skips_reference_without_target():
-    fields = [{"type": "Reference"}]
-    assert H.find_reference_fields(fields) == set()
-
-
-def test_find_reference_fields_recurses_into_children_and_slices():
-    fields = [
-        {
-            "type": "BackboneElement",
-            "children": [{"type": "Reference", "reference_target": "Organization"}],
-        },
-        {
-            "type": "BackboneElement",
-            "slices": [{"type": "Reference", "reference_target": "Practitioner"}],
-        },
-    ]
-    assert H.find_reference_fields(fields) == {"Organization", "Practitioner"}
-
-
 # ── conv_mappable ──────────────────────────────────────────────────────────
 def make_app_state(registry_hit=True, resolve_result=None):
     registry = SimpleNamespace(get_obj_by_name=lambda u: registry_hit)

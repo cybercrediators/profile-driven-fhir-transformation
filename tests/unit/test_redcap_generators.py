@@ -83,9 +83,13 @@ def test_build_concept_map_explicit_mapping_by_code():
     group = cm["group"][0]
     elements = {e["code"]: e["target"][0]["code"] for e in group["element"]}
     assert elements == {"1": "Y", "2": "N", "3": "U"}
-    # display text is preserved from the REDCap label
+    # The REDCap label glosses the SOURCE code, so it belongs on the element. It used
+    # to be written as the TARGET's display, which both mislabelled the target and —
+    # since a string-valued answer stores whatever `translate` is asked for — stored
+    # the unmapped source text in the answer.
     ja_elem = next(e for e in group["element"] if e["code"] == "1")
-    assert ja_elem["target"][0]["display"] == "Ja"
+    assert ja_elem["display"] == "Ja"
+    assert ja_elem["target"][0]["display"] == "Y"
 
 
 def test_build_concept_map_explicit_mapping_by_label_fallback():

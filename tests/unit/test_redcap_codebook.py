@@ -372,3 +372,58 @@ def test_load_fhir_code_mapping_unsupported_extension_raises(tmp_path):
 
     with pytest.raises(ValueError, match="Unsupported FHIR code mapping format"):
         load_fhir_code_mapping(str(path))
+
+
+# ── Field Note → elementdefinition-allowedUnits ───────────────────────────────
+def _plugin_with(fields):
+    from types import SimpleNamespace
+    from plugins.redcap.plugin import REDCapPlugin
+
+    plugin = object.__new__(REDCapPlugin)
+    plugin._codebook = SimpleNamespace(get_field=lambda name: fields.get(name))
+    return plugin
+
+
+def _numeric_element(name="gewicht", code="decimal"):
+    return {"id": f"Source.{name}", "path": f"Source.{name}", "type": [{"code": code}]}
+
+
+def test_numeric_field_note_becomes_a_ucum_allowed_units_extension():
+    plugin = _plugin_with({})
+    elem = _numeric_element()
+    assert plugin._enrich_allowed_units(elem, {"field_note": "kg"}) is True
+    ext = elem["extension"][0]
+    assert ext["url"].endswith("elementdefinition-allowedUnits")
+    coding = ext["valueCodeableConcept"]["coding"][0]
+    assert coding == {"system": "http://unitsofmeasure.org", "code": "kg"}
+
+
+def test_prose_field_note_is_not_mistaken_for_a_unit():
+    # Field Note is free text and usually a sentence; pinning one as a unit would
+    # put it into every derived Quantity.
+    plugin = _plugin_with({})
+    elem = _numeric_element()
+    assert (
+        plugin._enrich_allowed_units(elem, {"field_note": "Bitte in kg angeben"})
+        is False
+    )
+    assert "extension" not in elem or not elem["extension"]
+
+
+def test_non_numeric_field_gets_no_unit():
+    plugin = _plugin_with({})
+    elem = _numeric_element("familienstand", "string")
+    assert plugin._enrich_allowed_units(elem, {"field_note": "kg"}) is False
+
+
+def test_empty_field_note_is_ignored():
+    plugin = _plugin_with({})
+    assert plugin._enrich_allowed_units(_numeric_element(), {"field_note": ""}) is False
+
+
+def test_existing_allowed_units_is_not_overwritten():
+    plugin = _plugin_with({})
+    elem = _numeric_element()
+    elem["extension"] = [{"url": plugin._ALLOWED_UNITS_URL, "valueCodeableConcept": {}}]
+    assert plugin._enrich_allowed_units(elem, {"field_note": "kg"}) is False
+    assert len(elem["extension"]) == 1

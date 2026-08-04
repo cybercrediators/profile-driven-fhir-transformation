@@ -339,26 +339,6 @@ def process_slice(app_state, field, slice):
     return result
 
 
-def find_reference_fields(fields):
-    """
-    Find all references and target types (recursive)
-    """
-    refs = set()
-    for field in fields:
-        if field.get("type") == "Reference":
-            reference_target = field.get("reference_target")
-            # print(field)
-            if reference_target:
-                refs.add(reference_target)
-
-        if field.get("children"):
-            refs.update(find_reference_fields(field["children"]))
-
-        if field.get("slices"):
-            refs.update(find_reference_fields(field["slices"]))
-    return refs
-
-
 PRIMITIVE_TYPES = {p.lower() for p in PRIMITIVES}
 _CANONICAL_PRIMITIVE = {p.lower(): p for p in PRIMITIVES}
 
@@ -516,8 +496,14 @@ def get_transform_for_type(field_type, source_variable=None):
         src_param = _value_id_param()
         if src_param:
             params.append(src_param)
+        # The second argument names a FHIR type, so it has to be the type code and
+        # not whatever spelling reached us. A caller working from a polymorphic
+        # element passes the choice suffix (`Decimal`), and the engine rejects
+        # `cast(…, 'Decimal')` with "cast to Decimal not yet supported".
         params.append(
-            StructureMapGroupRuleTargetParameter.model_construct(valueString=normalized)
+            StructureMapGroupRuleTargetParameter.model_construct(
+                valueString=canonical_primitive(key) or normalized
+            )
         )
         return {"transform": "cast", "parameters": params}
 
@@ -612,3 +598,52 @@ def is_extension_type(field_type) -> bool:
 def is_reference_type(field_type) -> bool:
     """True if the field type is (or includes) Reference."""
     return "Reference" in type_codes(field_type)
+
+
+def created_extension_variable(rule) -> Optional[str]:
+    """The variable a rule binds when it creates an Extension, else ``None``."""
+    for target in attr(rule, "target", None) or []:
+        if attr(target, "transform") != "create":
+            continue
+        for parameter in attr(target, "parameter", None) or []:
+            if attr(parameter, "valueString") == "Extension":
+                return attr(target, "variable")
+    return None
+
+
+def emits_only_url(nested_rules, ext_var) -> bool:
+    """Whether the rules nested under an extension write nothing but its ``url``.
+
+    ``ext-1`` (``extension.exists() != value.exists()``) makes a url-only Extension
+    invalid however it arose, so this asks the question of the emitted rules rather
+    than of the inputs that produced them. Anything that is not a ``url`` write on
+    this extension counts as content — a dependent group invocation carries the
+    value, and deeper nesting means a sub-extension is being populated.
+    """
+    for sub in nested_rules or []:
+        if attr(sub, "dependent", None) or attr(sub, "rule", None):
+            return False
+        targets = attr(sub, "target", None) or []
+        if not targets:
+            # Writes nothing, but says nothing either; leave the rule alone rather
+            # than refuse on a shape this predicate cannot classify.
+            return False
+        for target in targets:
+            if not (
+                attr(target, "context") == ext_var
+                and attr(target, "element") == "url"
+            ):
+                return False
+    return True
+
+
+def rule_can_fire(source) -> bool:
+    """Whether a rule with this source matches anything at runtime.
+
+    A source naming a ``TODO`` placeholder element never matches, so the rule is
+    inert scaffolding that flags an unmapped field — it ships no invalid output and
+    is deliberately kept. A source with no element is the parent context itself and
+    always matches.
+    """
+    element = attr(source, "element", None)
+    return element is None or not str(element).startswith("TODO")

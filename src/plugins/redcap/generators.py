@@ -3,6 +3,7 @@ ConceptMap generation from REDCap codebook choices.
 """
 
 import json
+import re
 from typing import Optional
 import logging
 logger = logging.getLogger(__name__)
@@ -48,7 +49,14 @@ def _resolve_explicit_mapping(
             )
             fhir_code = redcap_label  # fallback: use label text
 
-        elements.append(_make_element(redcap_code, fhir_code, redcap_label))
+        # `target.display` describes the *target*, and a string-valued answer stores
+        # whichever of code/display the map asks for — so the source's own label must
+        # not go here. Where the target is an opaque code its display is unknown, and
+        # repeating the code says nothing untrue; claiming the source's wording
+        # describes it would.
+        elements.append(
+            _make_element(redcap_code, fhir_code, fhir_code, redcap_label)
+        )
 
     return elements
 
@@ -62,11 +70,26 @@ def _cm_url(base_url: str, field_name: str) -> str:
     return f"{base_url}/ConceptMap/redcap-{field_name}"
 
 
-def _make_element(source_code: str, target_code: str, target_display: str = "") -> dict:
+def _make_element(
+    source_code: str,
+    target_code: str,
+    target_display: str = "",
+    source_display: str = "",
+) -> dict:
+    """One ConceptMap arrow.
+
+    The two display slots describe different things: ``element.display`` glosses the
+    *source* code, ``target.display`` the *target*. The source system's own wording
+    belongs in the first — putting it in the second both mislabels the target and,
+    because a string-valued answer stores whatever the map's `translate` asks for,
+    stores the unmapped text.
+    """
     elem: dict = {
         "code": source_code,
         "target": [{"code": target_code, "equivalence": "equivalent"}],
     }
+    if source_display:
+        elem["display"] = source_display
     if target_display:
         elem["target"][0]["display"] = target_display
     return elem
@@ -131,10 +154,58 @@ def build_concept_map(
         "Provide a FHIR code mapping table for full FHIR alignment.",
         field_name,
     )
-    elements = [_make_element(c["code"], c["label"]) for c in choices]
+    # Every arrow carries a display as well as a code. A StructureMap `translate`
+    # returns whichever the caller asks for, and the type it returns decides the
+    # element name of a polymorphic target: asking for `code` yields a FHIR `code`,
+    # which lands in a QuestionnaireResponse answer as `valueCode` — not a type that
+    # element allows. A string-valued answer therefore asks for the display, so the
+    # display has to denote the same thing the code does.
+    elements = [
+        _make_element(c["code"], target_code, target_code, c["label"])
+        for c in choices
+        for target_code in [_permitted_code(c["label"], existing_cm) or c["label"]]
+    ]
     return _assemble_cm(
         cm_url, field_name, "SourceData", "SourceData", elements, existing_cm
     )
+
+
+def _normalise(text: str) -> str:
+    """Compare choice text ignoring case, spacing and punctuation.
+
+    A codebook label and the same option in a Questionnaire routinely differ only in
+    whitespace — REDCap's ``10 min`` against an ``answerOption`` code of ``10min``.
+    """
+    return re.sub(r"[^0-9a-z]+", "", (text or "").casefold())
+
+
+def _permitted_code(label: str, existing_cm: Optional[dict]) -> Optional[str]:
+    """The already-declared target code this label denotes, if there is one.
+
+    The scaffold the generator hands over lists the codes the target actually
+    permits. Where a codebook label names one of them — matching the code itself or
+    its display — the arrow must point at *that* code. Using the label instead
+    produces a value outside the permitted set (``10 min`` where ``10min`` is
+    required), which is exactly what the profile's binding rejects.
+
+    Returns ``None`` when nothing matches, leaving the label in place: with no
+    declared option set there is nothing better to aim at, and guessing would be
+    worse than the honest passthrough.
+    """
+    if not existing_cm or not label:
+        return None
+    wanted = _normalise(label)
+    if not wanted:
+        return None
+    for group in existing_cm.get("group") or []:
+        for element in group.get("element") or []:
+            for target in element.get("target") or []:
+                code = target.get("code")
+                if not code:
+                    continue
+                if _normalise(code) == wanted or _normalise(target.get("display")) == wanted:
+                    return code
+    return None
 
 
 def _assemble_cm(

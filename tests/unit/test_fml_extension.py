@@ -7,6 +7,7 @@ turned into nested rules — including the min>=1-vs-mapped inclusion gate. All 
 through an in-memory registry so no cache/network/local-package fallback is ever exercised.
 """
 
+import json
 from types import SimpleNamespace
 
 import pytest
@@ -126,7 +127,12 @@ def test_complex_value_type_creates_generic_value_element(factory):
     assert vt.parameter[0].valueString == "Quantity"
 
 
-def test_reference_valued_extension_emits_dependent_rule(factory):
+def test_reference_valued_extension_defers_to_the_bundle_assembler(factory):
+    # Contract change (2026-07-30): this used to assert a `ReferencePractitioner`
+    # dependent group. Nothing ever generated that group — `create_ref_groups` has
+    # no callers — so the emitted map invoked a group it did not define. Which
+    # resource satisfies the reference is a bundle-level question anyway, so the
+    # extension now states a reference contract exactly as `subject` does.
     field = {
         "path": "Patient.extension",
         "type": "Extension",
@@ -138,14 +144,25 @@ def test_reference_valued_extension_emits_dependent_rule(factory):
         field, "extension", "src", "tgt",
         automapped_mappings={"Patient.extension": "Source.ref"},
     )
-    value_rule = rule.rule[1]
-    vt = value_rule.target[0]
-    assert vt.element == "valueReference"
-    assert vt.transform == "create"
-    assert vt.parameter[0].valueString == "Reference"
-    dep = value_rule.dependent[0]
-    assert dep.name == "ReferencePractitioner"
-    assert dep.variable == ["srcVal", "valRef"]
+    contract_rule = rule.rule[1]
+    assert contract_rule.name.startswith("TODO-resolve-reference-")
+    assert not getattr(contract_rule, "dependent", None)
+    marker = "FHIRBRIDGE_REFERENCE:"
+    assert contract_rule.documentation.startswith(marker)
+    contract = json.loads(contract_rule.documentation[len(marker):])
+    assert contract["sourceType"] == "Patient"
+    assert contract["path"] == "extension.valueReference"
+    assert contract["targetTypes"] == ["Practitioner"]
+    assert contract["match"] == "byOrder"
+    # Every repeat of `extension` flattens to the same runtime path, so the
+    # contract has to say which one it means.
+    assert contract["selectors"] == [
+        {
+            "path": "extension",
+            "discriminator": "url",
+            "value": "http://example.org/StructureDefinition/ref-ext",
+        }
+    ]
 
 
 def test_modifier_extension_targets_modifier_extension_element(factory):
@@ -648,9 +665,13 @@ def test_primitive_mismatch_emits_cast(factory):
     assert value_rule.source[0].condition == "$this != ''"
 
 
-def test_pruned_reference_slice_stays_url_only(factory):
-    # body-weight shape: value[x] is Reference (contained-resource boundary) with
-    # no resolvable target — must NOT gain an empty `create('Reference')` value.
+def test_pruned_reference_slice_is_refused_not_left_url_only(factory):
+    # body-weight shape: value[x] is Reference (contained-resource boundary) with no
+    # resolvable target. It must still NOT gain an empty `create('Reference')` value —
+    # but url-only is not an acceptable alternative either: the mapped source
+    # (Source.gewicht) resolves, so the rule fires and writes an extension with no
+    # value, violating ext-1 and failing the whole instance. With both emissions
+    # invalid the extension is omitted and the gap reported instead.
     ext_url = "http://example.org/StructureDefinition/body-weight-extension"
     sd = {
         "snapshot": {
@@ -678,7 +699,11 @@ def test_pruned_reference_slice_stays_url_only(factory):
         field, "extension:bodyweight", "src", "tgt",
         automapped_mappings={"Patient.extension:bodyweight": "Source.gewicht"},
     )
-    assert [r.name for r in rule.rule] == ["set-extension-url-bodyweight"]
+    assert rule is None
+    assert any(
+        d.get("code") == "extension-value-emission-failed"
+        for d in factory.diagnostics
+    )
 
 
 def test_complex_extension_with_url_only_children_gets_no_value_rule(factory):
@@ -890,3 +915,236 @@ def test_coded_extension_value_rekeys_slice_qualified_mapping(factory):
     flat = str([r.model_dump(exclude_none=True) for r in rule.rule])
     assert "procIntention" in flat, "mapped value source never resolved onto the value"
     assert "TODO-MAP-INTENTION_SOURCE" not in flat
+
+
+# ── Profile-determined extension slices (nictiz cio shape) ─────────────────────
+#
+# `AllergyIntolerance.extension:type` is min=1 with a fixed url and a
+# `patternCodeableConcept` on value[x]. Nothing about it comes from source data,
+# so it has no mapping-table entry — yet the profile fully determines its content
+# and `ext-1` (extension.exists() != value.exists()) makes the value mandatory.
+# The shapes below are copied from the parsed nictiz profile: the slice's
+# children keep the *unsliced* `path` and the slice-qualified `id`, and the
+# host profile's pattern lands on the child as `fixed_value` + `is_pattern`.
+
+_NICTIZ_TYPE_URL = (
+    "http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type"
+)
+
+
+def _codeable_value_child(pattern=True, fixed_value=None):
+    return {
+        "path": "AllergyIntolerance.extension.value[x]",
+        "id": "AllergyIntolerance.extension:type.value[x]",
+        "cardinality": {"min": 0, "max": "1"},
+        "is_pattern": pattern,
+        "fixed_kind": "pattern" if pattern else "fixed",
+        "fixed_value": (
+            {"coding": [{"system": "http://snomed.info/sct", "code": "420134006"}]}
+            if fixed_value is None
+            else fixed_value
+        ),
+        "options": [],
+        "type": [
+            {
+                "code": "CodeableConcept",
+                "type_structure": [
+                    {
+                        "path": "AllergyIntolerance.extension.value[x].coding",
+                        "id": "CodeableConcept.coding",
+                        "type": "Coding",
+                        "is_list": True,
+                        "type_structure": [
+                            {
+                                "path": "AllergyIntolerance.extension.value[x].coding.code",
+                                "id": "Coding.code",
+                                "type": "code",
+                            },
+                            {
+                                "path": "AllergyIntolerance.extension.value[x].coding.system",
+                                "id": "Coding.system",
+                                "type": "uri",
+                            },
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+
+
+def _nictiz_type_slice(value_child=None):
+    return {
+        "path": "AllergyIntolerance.extension",
+        "id": "AllergyIntolerance.extension:type",
+        "sliceName": "type",
+        "slice_identity": "AllergyIntolerance.extension:type",
+        "cardinality": {"min": 1, "max": "1"},
+        "extension_url": _NICTIZ_TYPE_URL,
+        "type": [{"code": "Extension", "profile_canonical": [_NICTIZ_TYPE_URL]}],
+        "children": [
+            {
+                "path": "AllergyIntolerance.extension.url",
+                "id": "AllergyIntolerance.extension:type.url",
+                "cardinality": {"min": 1, "max": "1"},
+                "fixed_value": _NICTIZ_TYPE_URL,
+                "fixed_kind": "fixed",
+                "type": [{"code": "http://hl7.org/fhirpath/System.String"}],
+            },
+            value_child if value_child is not None else _codeable_value_child(),
+        ],
+    }
+
+
+def _flat(rule):
+    return str([r.model_dump(exclude_none=True) for r in (rule.rule or [])])
+
+
+def test_required_extension_slice_emits_its_patterned_value(factory):
+    """The profile pins both url and value — the extension needs no source at all.
+
+    Emitting only the url produces an `ext-1` violation; emitting nothing leaves the
+    required slice unsatisfied (nictiz: `AllergyIntolerance.extension: minimum
+    required = 4, but only found 3`).
+    """
+    rule = factory.create_extension_rule(
+        _nictiz_type_slice(), "extension", "source", "target",
+        automapped_mappings=None,
+    )
+    assert rule is not None
+    assert len(rule.rule) > 1, "profile-determined extension emitted url-only"
+    flat = _flat(rule)
+    assert "420134006" in flat, "the pinned code never reached the value"
+    assert "http://snomed.info/sct" in flat
+
+
+def test_profile_determined_extension_fires_without_a_source_element(factory):
+    """A TODO source element never matches at runtime, so the slice would vanish."""
+    rule = factory.create_extension_rule(
+        _nictiz_type_slice(), "extension", "source", "target",
+        automapped_mappings=None,
+    )
+    assert rule is not None
+    assert rule.source[0].element is None, (
+        "an extension the profile fully determines must not be gated behind a "
+        "TODO source element"
+    )
+
+
+def test_pinned_extension_value_wins_over_an_authored_leaf_mapping(factory):
+    """A pinned coding is not a default — a source value would break conformance.
+
+    `patternCodeableConcept` requires the instance to carry that exact
+    system+code, so copying a source field onto `coding.code` yields an invalid
+    instance for every record whose value differs. The profile wins; the mapping
+    is silently inapplicable rather than silently corrupting.
+    """
+    rule = factory.create_extension_rule(
+        _nictiz_type_slice(), "extension", "source", "target",
+        automapped_mappings={
+            "AllergyIntolerance.extension:type.value[x].coding.code": "Source.typeCode",
+        },
+    )
+    assert rule is not None
+    flat = _flat(rule)
+    assert "420134006" in flat
+    assert "typeCode" not in flat
+
+
+def test_optional_extension_slice_without_pattern_or_source_stays_url_only(factory):
+    """No pattern and no provider means nothing can be inferred — don't invent a value."""
+    slice_field = _nictiz_type_slice(
+        value_child={
+            "path": "AllergyIntolerance.extension.value[x]",
+            "id": "AllergyIntolerance.extension:type.value[x]",
+            "cardinality": {"min": 0, "max": "1"},
+            "type": [{"code": "string"}],
+        }
+    )
+    slice_field["cardinality"] = {"min": 0, "max": "1"}
+    rule = factory.create_extension_rule(
+        slice_field, "extension", "source", "target", automapped_mappings=None,
+    )
+    assert rule is not None
+    assert len(rule.rule) == 1  # url only, gated behind a TODO source
+    assert rule.source[0].element.startswith("TODO")
+
+
+def test_extension_with_a_provider_that_yields_no_value_is_refused(factory):
+    """A resolvable source plus an unemittable value would ship an ext-1 violation.
+
+    Better to drop the extension and say so than to emit `{url}` with no value.
+    """
+    slice_field = _nictiz_type_slice(
+        value_child={
+            "path": "AllergyIntolerance.extension.value[x]",
+            "id": "AllergyIntolerance.extension:type.value[x]",
+            "cardinality": {"min": 0, "max": "1"},
+            # N/A datatype: nothing can be created for it.
+            "type": [{"code": "N/A"}],
+        }
+    )
+    factory.diagnostics = []
+    rule = factory.create_extension_rule(
+        slice_field, "extension", "source", "target",
+        automapped_mappings={"AllergyIntolerance.extension:type": "Source.anything"},
+    )
+    assert rule is None
+    assert any(
+        d.get("code") == "extension-value-emission-failed"
+        for d in factory.diagnostics
+    )
+
+
+def test_reference_valued_extension_without_a_target_is_refused(factory):
+    """kfdm's `body-weight-extension` declares `value[x] : Reference(bodyweight)`.
+
+    With no resolvable target there is nothing to point at, so only the url would be
+    written — and because the source (`gewicht`) resolves, the rule fires and ships
+    an extension violating ext-1. Refuse and report instead.
+    """
+    factory.diagnostics = []
+    field = {
+        "path": "Patient.extension",
+        "id": "Patient.extension:bodyweight",
+        "sliceName": "bodyweight",
+        "cardinality": {"min": 1, "max": "1"},
+        "extension_url": "http://example.org/StructureDefinition/body-weight-extension",
+        "value_type": "Reference",
+        "type": [{"code": "Extension"}],
+        "children": [],
+    }
+    rule = factory.create_extension_rule(
+        field, "extension", "source", "target",
+        automapped_mappings={"Patient.extension:bodyweight": "Source.gewicht"},
+    )
+    assert rule is None
+    assert any(
+        d.get("code") == "extension-value-emission-failed"
+        for d in factory.diagnostics
+    )
+
+
+def test_reference_valued_extension_without_a_provider_stays_scaffolding(factory):
+    """No provider means the rule never fires, so it cannot violate ext-1 at
+    runtime — keep the existing url-only scaffold rather than dropping the slice."""
+    factory.diagnostics = []
+    field = {
+        "path": "Patient.extension",
+        "id": "Patient.extension:bodyweight",
+        "sliceName": "bodyweight",
+        "cardinality": {"min": 1, "max": "1"},
+        "extension_url": "http://example.org/StructureDefinition/body-weight-extension",
+        "value_type": "Reference",
+        "type": [{"code": "Extension"}],
+        "children": [],
+    }
+    rule = factory.create_extension_rule(
+        field, "extension", "source", "target", automapped_mappings=None,
+    )
+    assert rule is not None
+    assert rule.source[0].element.startswith("TODO")
+    assert not any(
+        d.get("code") == "extension-value-emission-failed"
+        for d in factory.diagnostics
+    )

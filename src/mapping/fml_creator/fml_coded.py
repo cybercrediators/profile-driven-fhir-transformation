@@ -383,6 +383,37 @@ class _CodedRulesMixin:
         coding_rule.rule = _leaf_rules()
         return [coding_rule]
 
+    def _report_required_target_without_provider(self, field, field_name):
+        """Report a required coded element that no source field feeds.
+
+        The generated rule keeps its ``TODO-SOURCE-FOR-*`` placeholder, so it never
+        fires and the element is simply absent — the instance then fails on
+        ``minimum required = 1, but only found 0``, with nothing in the run to say
+        why. The placeholder alone is only visible by reading the map; a diagnostic
+        puts the gap in the report next to the rest.
+
+        Scoped to required elements: an optional element with no provider is the
+        normal sparse-map case and reporting it would bury the signal. It is also
+        scoped to elements with no pinned value, since the profile answering the
+        question makes the missing mapping irrelevant.
+        """
+        if int((field.get("cardinality") or {}).get("min", 0) or 0) < 1:
+            return
+        if has_fixed_value(field.get("fixed_value")):
+            return
+        recorder = getattr(self, "record_diagnostic", None)
+        if not callable(recorder):
+            return
+        recorder(
+            "required-target-without-provider",
+            f"Required element {field.get('path')} has no authored source "
+            f"provider, so its rule stays gated behind a TODO placeholder and the "
+            f"element will be absent from the output.",
+            path=field.get("path"),
+            element=field_name,
+            severity="error",
+        )
+
     def _create_translate_rule(
         self,
         field,
@@ -406,6 +437,8 @@ class _CodedRulesMixin:
 
         resolved = self._resolve_coded_source(field, automapped_mappings)
         source_element = resolved or f"TODO-SOURCE-FOR-{field_name.upper()}"
+        if not resolved:
+            self._report_required_target_without_provider(field, field_name)
 
         guard_empty = field.get("cardinality", {}).get("min", 0) == 0
 
@@ -1127,6 +1160,8 @@ class _CodedRulesMixin:
 
         resolved = self._resolve_coded_source(field, automapped_mappings)
         source_element = resolved or f"TODO-SOURCE-FOR-{field_name.upper()}"
+        if not resolved:
+            self._report_required_target_without_provider(field, field_name)
 
         source = StructureMapGroupRuleSource.model_construct()
         source.context = parent_source_context
@@ -1163,6 +1198,34 @@ class _CodedRulesMixin:
             rule.target = [target]
 
         return rule
+
+    def has_authored_concept_map(self, field_name) -> bool:
+        """Whether the project ships an authored ConceptMap for this element.
+
+        A bound `code` element is copied straight through by default, because the
+        usual case is a source that already speaks the target's code list
+        (`Observation.status` carrying `final`). Where it does not — a source
+        recording sex as `M`/`F` against a `male`/`female` binding — something has to
+        say so, and a ConceptMap the author wrote is that statement.
+
+        Matched by field-name prefix rather than by the generated id, because the id
+        embeds a hash of the bound options: the author cannot know it in advance, and
+        it changes whenever the value set does.
+        """
+        prefix = f"cm-{clean_field_name(field_name)}-"
+        try:
+            files = self.app_state.dataIO.load_project_files(
+                self.app_state.dataIO.ProjectFolders.CONCEPT_MAPS
+            )
+        except Exception as exc:
+            logger.debug("Could not list ConceptMaps for %s: %s", field_name, exc)
+            return False
+        for filename, _ in files or []:
+            if filename.startswith(prefix) and self._existing_concept_map_is_authored(
+                filename[: -len(".json")]
+            ):
+                return True
+        return False
 
     def _existing_concept_map_is_authored(self, cm_id) -> bool:
         """check if the on-disk ConceptMap ``cm_id`` carries non-identity arrows."""
@@ -1250,14 +1313,18 @@ class _CodedRulesMixin:
 
             code = opt.get("code")
             if code and not code.startswith("FILTER:"):
+                # The option's own display travels with the scaffold. It is what a
+                # plugin has to match a source system's human-readable choice label
+                # against in order to arrive at the permitted code rather than
+                # inventing one from the label.
+                target = ConceptMapGroupElementTarget.model_construct(
+                    code=code, equivalence="equivalent"
+                )
+                if opt.get("display"):
+                    target.display = opt["display"]
                 groups[sys].element.append(
                     ConceptMapGroupElement.model_construct(
-                        code=code,
-                        target=[
-                            ConceptMapGroupElementTarget.model_construct(
-                                code=code, equivalence="equivalent"
-                            )
-                        ],
+                        code=code, target=[target]
                     )
                 )
 
@@ -1330,7 +1397,9 @@ class _CodedRulesMixin:
         if len(codes) == 1:
             field_type = codes[0]
 
+        polymorphic_base = None
         if "[x]" in field_name and isinstance(field_type, str):
+            polymorphic_base = field_name.replace("[x]", "")
             field_name = field_name.replace("[x]", fhir_type_suffix(field_type))
 
         if hasattr(fixed_value, "model_dump"):
@@ -1366,6 +1435,12 @@ class _CodedRulesMixin:
         if isinstance(fixed_value, dict) and isinstance(field_type, str):
             nm = clean_field_name(field_name)
             var = f"tgt-fixed-{nm}"
+            # The engine derives a polymorphic element's concrete name from the
+            # `create` parameter. Handing it the already-expanded name as well
+            # produces `valueCodeableConceptCodeableConcept` and aborts the
+            # transform, so the create form keeps the `[x]` base.
+            if polymorphic_base:
+                target.element = polymorphic_base
             target.variable = var
             target.transform = "create"
             target.parameter = [

@@ -1,7 +1,6 @@
 from fhir.resources.R4B.structuremap import (
     StructureMap,
     StructureMapGroup,
-    StructureMapGroupInput,
     StructureMapGroupRule,
     StructureMapGroupRuleTarget,
     StructureMapGroupRuleTargetParameter,
@@ -13,7 +12,6 @@ from data_handling.url_resolver.fhir_url_resolver import resolve_url
 import logging
 
 from mapping.fml_creator.fml_helper import (
-    find_reference_fields,
     is_primitive_type,
     parse_slice_info,
     get_transform_for_type,
@@ -156,7 +154,8 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         )
 
     def _required_profile_reference_slices_rule(
-        self, field, res_type, parent_source_context, automapped_mappings=None
+        self, field, res_type, parent_source_context, automapped_mappings=None,
+        selectors=None, name_hint=None,
     ):
         """Defer a complete set of required profile-sliced references to bundling.
 
@@ -219,9 +218,16 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 for profile in profiles
                 if isinstance(profile, str) and profile
             ]
-            if len(profiles) != 1:
+            # One slice may accept several profiles — ontario's
+            # `entry:medicationInformation` takes a MedicationStatement or a
+            # MedicationRequest. Any of them satisfies the slice, so all are offered
+            # to the assembler; a slice with no target profile at all still cannot be
+            # resolved and aborts the contract.
+            if not profiles:
                 return None
-            target_profiles.append(profiles[0])
+            target_profiles.extend(
+                profile for profile in profiles if profile not in target_profiles
+            )
 
         field_path = field.get("path", "")
         relative_path = (
@@ -239,10 +245,13 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             "targetKey": None,
             "referenceMode": "urn",
         }
+        if selectors:
+            contract["selectors"] = list(selectors)
         return StructureMapGroupRule.model_construct(
             name=(
                 "TODO-resolve-reference-"
-                f"{clean_field_name(res_type)}-{clean_field_name(relative_path)}-slices"
+                f"{clean_field_name(res_type)}-"
+                f"{clean_field_name(name_hint or relative_path)}-slices"
             ),
             source=[
                 StructureMapGroupRuleSource.model_construct(
@@ -617,6 +626,33 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
     ):
         rules = []
 
+        def _has_real_content(sibling):
+            """Whether this element will carry something of its own.
+
+            A mapped provider, or a value the profile states outright (`fixed`, not
+            `pattern`). A pattern does not count: it constrains the element if present
+            and is not by itself a reason to write one, so a structure whose every
+            member is pattern-only is still empty.
+            """
+            for key in ("id", "path"):
+                identity = sibling.get(key)
+                if identity and any(
+                    mapped == identity or mapped.startswith(identity + ".")
+                    for mapped in (automapped_mappings or {})
+                ):
+                    return True
+            return has_fixed_value(sibling.get("fixed_value")) and not sibling.get(
+                "is_pattern"
+            )
+
+        # Computed over the sibling set so a pinned component can tell whether the
+        # structure it belongs to is genuinely being populated.
+        siblings_have_content = any(
+            _has_real_content(sibling)
+            for sibling in fields or []
+            if isinstance(sibling, dict)
+        )
+
         def _iter_slices(slice_fields):
             for candidate in slice_fields or []:
                 if not isinstance(candidate, dict):
@@ -715,6 +751,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                     create_references=create_references,
                     automapped_mappings=automapped_mappings,
                     parent_path=parent_path,
+                    siblings_have_content=siblings_have_content,
                 )
                 if rule:
                     rules.append(rule)
@@ -864,6 +901,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                         create_references=create_references,
                         automapped_mappings=automapped_mappings,
                         parent_path=parent_path,
+                        siblings_have_content=siblings_have_content,
                     )
                 else:
                     slice_rule = self._create_slice_instance_rule(
@@ -895,6 +933,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         create_references=True,
         automapped_mappings=None,
         parent_path=None,
+        siblings_have_content=False,
     ):
         """create a StructureMapGroupRule for a field that can be mapped (non-slice, non-choice)"""
         path = field["path"]
@@ -1045,7 +1084,25 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 "Coding",
                 "CodeableConcept",
             )
-            if is_pattern and not is_req and not has_provider:
+            if (
+                is_pattern
+                and not is_req
+                and not has_provider
+                and not (parent_path is not None and siblings_have_content)
+            ):
+                # A pattern on a standalone optional element constrains it *if
+                # present*; creating the element just because the profile patterns it
+                # would invent data the record does not have.
+                #
+                # It is emitted only as a component of a structure that is genuinely
+                # being populated — `parent_path` marks a parent context being built,
+                # and a sibling with real content proves it is not empty.
+                # `Patient.identifier.value` is mapped, so the Identifier exists and
+                # the profile's pinned `identifier.system` belongs on it.
+                # `Procedure.outcome.coding` has no mapped or fixed sibling, so
+                # emitting its pinned `system` alone produced a Coding carrying a
+                # system and no code — which matches no member of the required value
+                # set and fails the whole instance.
                 logger.info(
                     "Optional pattern-only element %s has no source — emitting nothing.",
                     path,
@@ -1071,8 +1128,20 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             if single_type in ("code", "Coding", "CodeableConcept")
             else None
         )
+        # A scalar `code` type means an expanded complex-type leaf (`Coding.code`),
+        # which is translatable; a list-typed one is a profile snapshot element such
+        # as `Observation.status`, whose source already carries the target code and
+        # which must keep the plain copy route.
+        #
+        # An authored ConceptMap overrides that default: it is the author stating that
+        # this source does *not* speak the target's code list. Opt-in, so an element
+        # with no authored map behaves exactly as before.
         coded_builder_type = coded_type in ("Coding", "CodeableConcept") or (
-            coded_type == "code" and isinstance(field_type, str)
+            coded_type == "code"
+            and (
+                isinstance(field_type, str)
+                or self.has_authored_concept_map(base_field_name)
+            )
         )
         is_raw_complex_coded = isinstance(field_type, list) and coded_type in (
             "Coding",
@@ -1968,56 +2037,6 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         profile_rule.target = [profile_tgt]
         rule.rule = [profile_rule]
         return rule
-
-    def create_ref_groups(self, fields):
-        """create helper StructureMapGroup objects for Reference fields, to be used by the bundle assembler"""
-        groups = []
-        referenced_types = set()
-        # print(fields)
-        for resource_info in fields:
-            refs = find_reference_fields([resource_info])
-            # print(refs)
-            referenced_types.update(refs)
-
-        for ref_type in referenced_types:
-            group = StructureMapGroup.model_construct(
-                name=f"Reference{ref_type}", typeMode="none"
-            )
-            # print(ref_type)
-            group.name = f"Reference{ref_type}"
-            group.typeMode = "none"
-            group.documentation = f"Helper group to create Reference to {ref_type}"
-            group.input = [
-                StructureMapGroupInput.model_construct(
-                    name="source", mode="source", type="Any"
-                ),
-                StructureMapGroupInput.model_construct(
-                    name="target", mode="target", type="Any"
-                ),
-            ]
-
-            rule = StructureMapGroupRule.model_construct()
-            rule.name = "set-reference"
-            source = StructureMapGroupRuleSource.model_construct()
-            source.context = "source"
-            rule.source = [source]
-
-            target = StructureMapGroupRuleTarget.model_construct()
-            target.context = "target"
-            target.element = "reference"
-
-            # Use conditional reference pattern: Type?identifier=[source]
-            # Use FHIRPath concatenation: 'Type?identifier=' + %source
-            target.transform = "evaluate"
-            target.parameter = [
-                StructureMapGroupRuleTargetParameter.model_construct(
-                    valueString=f"'{ref_type}?identifier=' + %source"
-                )
-            ]
-            rule.target = [target]
-            group.rule = [rule]
-            groups.append(group)
-        return groups
 
     def create_base_structure_map(
         self, map_url: str, map_name: str, map_title: str, status: str = "draft"
