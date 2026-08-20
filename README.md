@@ -4,17 +4,19 @@ Enables the (automated) usage of standardized, profile-driven StructureMaps base
 
 # Features
 - Profile-driven FHIR `StructureMaps` for the transformation of data through [Matchbox](https://github.com/ahdis/matchbox)
-- Auto-generated base StructureMaps based on input profiles through multiple layers (+ LLM-based map fix add-on [here](agent-on-fhir)):
+- Auto-generated base StructureMaps based on input profiles through multiple layers:
     - Auto-generated base `ConceptMaps` for code system mapping (if required + terminology information is available)
-- Basic auto-mapping function for input -> resource field mapping (TF-IDF or GloVe-based) (+ optional LLM-based map fix add-on [here](agent-on-fhir))
+- Basic auto-mapping function for input -> resource field mapping (TF-IDF or GloVe-based)
 - FHIR Shorthand integration (through [sushi](https://github.com/FHIR/sushi))
 - Local extensible cache through [Valkey](https://github.com/valkey-io/valkey) (or local disk cache)
 - ETL connector for integration into existing ETL solutions ([Apache NiFi](https://github.com/apache/nifi) reference implementation)
 - Small extensible plugin system to add custom information through various hooks (source definition, automapping, concept map generation, bundle creation)
 - Multi-stage validations through [Matchbox](https://github.com/ahdis/matchbox) `$validate` of StructureMaps and output resources
 - Instance-based validation (based on provided profile example instances) of created StructureMaps
+- Optional LLM features: LLM re-ranking of automapper candidates, and `agent fix` for repairing a generated map (see [Optional LLM features](#optional-llm-features))
 - (optional) transformation service for handling transformations (single/batch) or validation through matchbox
 - (PoC/WIP) Reverse mapping from FHIR resources back to source data (based on mapping table and source definitions)
+- **IMPORTANT**: currently only the R4/R4B release is supported!
 
 # Workflow
 
@@ -23,7 +25,7 @@ Enables the (automated) usage of standardized, profile-driven StructureMaps base
 ![fhir_mapper_overview](./docs/pics/fhir_mapper_overview.png)
 
 - Workflow:
-    - (FSH) Profile
+    - Create or select a FHIR/(FSH) project with profiled resources
     - Parser layer (parse and extract StructureDefinitions)
     - Mapping layer (Generate StructureMaps + required ConceptMaps for the transformation)
     - Controller layer (PipelineController handles pipeline run, integration into ETL pipelines)
@@ -36,16 +38,18 @@ Installable package (recommended — puts all layers on the import path):
 ```bash
 pip install -e .            # runtime dependencies
 pip install -e ".[dev]"     # + tests/linting
-pip install -e ".[ml]"      # + GloVe automapper backend (torch/torchtext; TF-IDF works without it)
+pip install -e ".[ml]"      # + GloVe automapper backend (torch/torchtext, TF-IDF works oob)
+pip install -e ".[llm]"     # + optional LLM automapping (see below)
+pip install -e ".[agent]"   # + agent mode: the same, plus the LangGraph runtime
 ```
 
 Equivalent requirements files: `requirements-bridge.txt` (canonical runtime set),
 `requirements.txt` (runtime + ML + eval extras), `requirements-dev.txt` (tests/linting).
 
 ### FHIR package cache
-Install FHIR IG packages (npm) into `data/resource_cache/` so StructureDefinitions can be resolved locally without network access.
+Install FHIR IG packages (npm) into `data/resource_cache/` so StructureDefinitions can be resolved locally without network access. 
 
-Either use the provided installation script in `scripts/add_simplifier_package.py`:
+You can use the provided installation script in `scripts/add_simplifier_package.py`:
 
 ```
 python scripts/add_simplifier_package.py --package-name de.basisprofil.r4 --package-version 1.5.3
@@ -58,10 +62,10 @@ npm install --prefix data/resource_cache hl7.fhir.r4.core
 npm install --prefix data/resource_cache de.basisprofil.r4
 ```
 
-### Services (Valkey + Matchbox)
+### (Req.) Services (Valkey + Matchbox)
 By default the app uses Valkey as an in-memory resource cache and delegates transformation/validation to a Matchbox FHIR server. Both are defined in `docker-compose.yml`:
 ```bash
-docker compose up -d valkey matchbox      # matchbox on http://localhost:8080/matchboxv3/
+docker compose up -d valkey matchbox      # starts both valkey (on port 6379) and matchbox on http://localhost:8080/matchboxv3/
 docker compose --profile nifi up -d       # optionally: bridge + NiFi (see ETL integration)
 ```
 A system-level Valkey on `localhost:6379` works as well. Alternatively configure `"external_cache_service": "DISK"` for a file-based cache (no service needed).
@@ -81,8 +85,10 @@ All settings live in `conf/default.json` (or a custom config passed with `-c`):
 | `matchbox_connection.url` | Matchbox server base URL                                                                                                             |
 | `socket_connection`       | UNIX socket `path` (default `/tmp/fsh_nifi_bridge.sock`), worker settings (`max_workers`, `worker_processes`, `validation_interval`) |
 | `terminology_server_uri`  | Terminology server for CodeSystem/ValueSet queries                                                                                   |
+| `fhir_version`            | Optional release (`4.0.x`/R4 or `4.3.x`/R4B); otherwise use the input package declaration, defaulting to R4 `4.0.1`                 |
+| `fhir_core_package_path`  | Optional matching unpacked core-package path; otherwise search the standard `~/.fhir/packages` cache                                |
 | `plugins`                 | Optional build-time plugin configuration (e.g. `{"type": "redcap", ...}`)                                                            |
-| `external_reference_defaults` | Optional explicit cross-project/external `Reference` fallbacks applied during bundle assembly; never inferred and never overwrite mapped or bundle-wired references |
+| `external_reference_defaults` | Optional explicit cross-project/external `Reference` fallbacks applied during bundle assembly, otherwise they are never inferred and never overwrite mapped or bundle-wired references |
 
 An external reference can be limited to a resource type and profile. It is
 applied only when the field is still empty after normal bundle wiring:
@@ -105,29 +111,27 @@ applied only when the field is still empty after normal bundle wiring:
 
 ## Usage
 
-The CLI entry point is `src/main.py` (`src/controller/service_controller.py`) commands are subcommand-based.
-
 ### Project setup
 
 ```bash
 # From pre-compiled JSON profiles (folder or npm .tgz)
-python src/main.py -c conf/myproject.json init path/to/profiles/
+python src/main.py -c conf/myproject.json init <path/to/profiles/>
 
-# From FSH sources: compile with SUSHI (docker) and initialize the project
+# From FSH sources: compile through SUSHI (docker) and initialize the project
 python src/main.py process-fsh path/to/fsh-project -n myproject
 ```
 
 ### Pipeline
 ```bash
-# All steps: parse → source-def → StructureMap generation in minimal mode (-msm) (+ optional upload)
+# Executes all steps of the pipeline iteratively: parse -> source-def -> StructureMap generation in minimal mode (-msm) (+ optional upload/matchbox preparation)
 python src/main.py -c conf/myproject.json pipeline run -msm -crm \
     -mt projects/myproject/source_data/mapping_table.json --prepare-matchbox
 
 # Or step by step
-python src/main.py -c conf/myproject.json pipeline process           # 1: parse profiles, add to the internal registry
-python src/main.py -c conf/myproject.json pipeline source-def        # 2: source helper StructureDefinition
+python src/main.py -c conf/myproject.json pipeline process                              # 1: parse profiles, add to the internal registry
+python src/main.py -c conf/myproject.json pipeline source-def                           # 2: source helper StructureDefinition
 python src/main.py -c conf/myproject.json pipeline static-gen-sm -msm -mt <table.json>  # 3: generate initial structure maps statically
-python src/main.py -c conf/myproject.json pipeline prepare-matchbox  # 4: upload SDs/CMs/maps (-f to force overwrite)
+python src/main.py -c conf/myproject.json pipeline prepare-matchbox                     # 4: upload SDs/CMs/maps (-f to force overwrite)
 
 # Utilities
 python src/main.py -c conf/myproject.json pipeline export-fields -o fields.json      # mappable target paths per profile
@@ -135,6 +139,42 @@ python src/main.py -c conf/myproject.json pipeline validate -i out.json -p <prof
 python src/main.py -c conf/myproject.json pipeline validate-instances                # extract IG example instances, then $validate + round-trip
 ```
 Useful flags: `-f` force overwrite, `-msm` minimal maps (only mapped fields), `-crm` reference wiring rules, `-am` auto-mapping.
+
+#### Mapping tables
+
+Either use plain `"source.path": "Target.path"` mapping to map a field from input file to output resource or declare collection rules if a source backbone is repeating and several children must populate the same repeatedly (see [mapping table docs](docs/mapping_tables.md) for more information).
+
+Check out [typed StructureMap rules](docs/typed_mapping_rules.md) for multi-source rules, groups/imports/transforms, explicit reference policies, and special elements.
+
+The executable capability inventory and optional Matchbox runtime corpus are documented in [StructureMap construct conformance](docs/structuremap_conformance.md).
+
+### Optional LLM features
+There are **optional** and different automapping and LLM-assisted [langgraph](https://www.langchain.com/langgraph) based features built-in:
+
+| | What chooses what | When it runs | Needs |
+|---|---|---|---|
+| **Simple Automapping** (default) | TF-IDF or GloVe scoring picks a target path per source field | `pipeline run -am` | nothing beyond the core install |
+| **LLM automapping** | the same deterministic candidates, re-ranked by an LLM creating a (validated) mapping table | `pipeline run -am --auto-mapping-mode llm` | `pip install -e ".[llm]"` + provider config |
+| **Agent Fix mode** | A model proposes JSON patches that try to repair an existing/generated map | `agent fix <map>` | `pip install -e ".[agent]"` + provider config + a live Matchbox |
+
+- LLM output is validated afterwards through e.g. a langgraph node calling Matchbox in-the-loop, modified StructureMaps are executed/validated through the same pipeline as well -> better output is chosen automatically
+- configure LLM endpoints etc. in `.env` (check `.env.example` for available options)
+
+```bash
+# LLM automapping, resulting mapping table will then be used to generate the Structuremaps
+python src/main.py -c conf/myproject.json pipeline run -msm -am --auto-mapping-mode llm
+
+# LLM fixing of created StructureMaps
+python src/main.py -c conf/myproject.json agent fix <map>             # run for one map
+python src/main.py -c conf/myproject.json agent fix <map> --apply     # and replace(!) it
+python src/main.py -c conf/myproject.json agent fix <map> --offline   # deterministic layers only
+
+# OR run for the complete project and repair every map, validate the assembled set, requeue
+python src/main.py -c conf/myproject.json agent fix --all
+python src/main.py -c conf/myproject.json agent fix --all --resume <run-id>
+```
+
+- Related output can be found in the project folder and auto-created `agent_output/<run-id>` folder containing the baseline, report(s)
 
 ### Service
 ```bash
@@ -194,7 +234,7 @@ pytest --cov=src --cov-report=html           # with coverage
 ```
 
 ## Evaluation
--> will be found in the `eval` directory
+-> Results and steps to reproduce can be found in the `eval` directory
 
 ## Project structure
 
