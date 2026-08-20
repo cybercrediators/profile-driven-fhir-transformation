@@ -1,0 +1,188 @@
+{
+  "operations": [
+    {
+      "path": "/group/0/rule/2/rule/-",
+      "op": "add",
+      "value": {
+        "name": "set-extension-value-bodyweight-display",
+        "source": [
+          {
+            "context": "src-bodyweight"
+          }
+        ],
+        "target": [
+          {
+            "context": "ext-bodyweight",
+            "contextType": "variable",
+            "element": "value[x]",
+            "transform": "create",
+            "parameter": [
+              {
+                "valueString": "Reference"
+              }
+            ],
+            "rule": [
+              {
+                "name": "set-reference-display-bodyweight",
+                "source": [
+                  {
+                    "context": "src-bodyweight"
+                  }
+                ],
+                "target": [
+                  {
+                    "element": "display",
+                    "transform": "castString"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "path": "/group/0/rule/3/rule/-",
+      "op": "add",
+      "value": {
+        "name": "set-extension-value-bodyheight-display",
+        "source": [
+          {
+            "context": "src-bodyheight"
+          }
+        ],
+        "target": [
+          {
+            "context": "ext-bodyheight",
+            "contextType": "variable",
+            "element": "value[x]",
+            "transform": "create",
+            "parameter": [
+              {
+                "valueString": "Reference"
+              }
+            ],
+            "rule": [
+              {
+                "name": "set-reference-display-bodyheight",
+                "source": [
+                  {
+                    "context": "src-bodyheight"
+                  }
+                ],
+                "target": [
+                  {
+                    "element": "display",
+                    "transform": "castString"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "rationale": "Added value[x] child rules with display properties for bodyweight and bodyheight extensions to satisfy ext-1 invariant (must have either extension or value[x]) and simple extension requirements that mandate a value. The unmaterialized-nested-target finding (Observation.component.value[x]) cannot be resolved by this Patient map as it concerns Observation transformation which is outside the scope of this repair attempt.",
+  "worklist": [
+    "diag-0b41d991a4bb7ff2",
+    "vf-9a9c93c092049af5",
+    "vf-1b1bce2bb0fddc0c",
+    "vf-9796c2d417fe7c39",
+    "vf-03b9e55c170e47c9"
+  ],
+  "application": {
+    "applied": false,
+    "candidate_sha256": null,
+    "normalized_patch": [
+      {
+        "path": "/group/0/rule/2/rule/-",
+        "op": "add",
+        "value": {
+          "name": "set-extension-value-bodyweight-display",
+          "source": [
+            {
+              "context": "src-bodyweight"
+            }
+          ],
+          "target": [
+            {
+              "context": "ext-bodyweight",
+              "contextType": "variable",
+              "element": "value[x]",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reference-display-bodyweight",
+                  "source": [
+                    {
+                      "context": "src-bodyweight"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "element": "display",
+                      "transform": "castString"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "path": "/group/0/rule/3/rule/-",
+        "op": "add",
+        "value": {
+          "name": "set-extension-value-bodyheight-display",
+          "source": [
+            {
+              "context": "src-bodyheight"
+            }
+          ],
+          "target": [
+            {
+              "context": "ext-bodyheight",
+              "contextType": "variable",
+              "element": "value[x]",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reference-display-bodyheight",
+                  "source": [
+                    {
+                      "context": "src-bodyheight"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "element": "display",
+                      "transform": "castString"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "rejections": [
+      {
+        "code": "invalid-candidate",
+        "message": "The patch applied but the result is not a valid StructureMap: group.0.rule.2.rule.2.target.0.rule |   Extra inputs are not permitted [type=extra_forbidden, input_value=[{'name': 'set-reference-...sform': 'castString'}]}], input_type=list] |     For further information visit https://errors.pydantic.dev/2.12/v/extra_forbidden"
+      }
+    ]
+  }
+}

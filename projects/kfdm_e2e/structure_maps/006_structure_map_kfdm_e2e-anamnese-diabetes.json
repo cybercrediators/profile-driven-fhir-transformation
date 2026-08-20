@@ -193,6 +193,60 @@
             }
           ],
           "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-clinicalstatus-diabetes",
+          "source": [
+            {
+              "context": "source",
+              "element": "diabetes",
+              "variable": "src-cs"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-cs",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-clinicalstatus-coding",
+              "source": [
+                {
+                  "context": "src-cs"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cs",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src-cs"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                    },
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it."
         }
       ]
     }

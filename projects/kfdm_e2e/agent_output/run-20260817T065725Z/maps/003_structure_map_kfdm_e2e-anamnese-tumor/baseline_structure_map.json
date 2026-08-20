@@ -1,0 +1,441 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-anamnese-tumor-5fbbe39e",
+  "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-anamnese-tumor",
+  "name": "Map_003_structure_map_kfdm_e2e_anamnese_tumor",
+  "title": "Structure Map for kfdm_e2e - anamnese-tumor",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: anamnese-tumor). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-kfdm-e2e",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://example.org/StructureDefinition/anamnese-tumor",
+      "mode": "target",
+      "alias": "anamnese-tumor"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-anamnese-tumor",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_kfdm_e2e",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/anamnese-tumor"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://example.org/StructureDefinition/anamnese-tumor"
+        },
+        {
+          "name": "map-clinicalStatus",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-clinicalStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-clinicalStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.clinicalStatus | Type: CodeableConcept | Cardinality: 1..1"
+        },
+        {
+          "name": "map-code-copy",
+          "source": [
+            {
+              "context": "source",
+              "element": "weitere_tumor_art",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Direct copy for Condition.code (filter-based/open VS, system: http://snomed.info/sct)"
+        },
+        {
+          "name": "map-extension-existance",
+          "source": [
+            {
+              "context": "source",
+              "element": "weitere_tumor",
+              "variable": "src-existance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-existance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-existance",
+              "source": [
+                {
+                  "context": "src-existance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/tumor-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/tumor-extension"
+            },
+            {
+              "name": "map-extension-YesNoUnknownExtension",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "weitere_tumor",
+                  "variable": "src-YesNoUnknownExtension"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-YesNoUnknownExtension",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-YesNoUnknownExtension",
+                  "source": [
+                    {
+                      "context": "src-YesNoUnknownExtension"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoUnknownExtension",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "YesNoUnknownExtension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to YesNoUnknownExtension"
+                },
+                {
+                  "name": "map-valueCode-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "weitere_tumor",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-YesNoUnknownExtension",
+                      "contextType": "variable",
+                      "element": "valueCode",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-YesNoUnknownExtension-ffa55ad0"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Condition.extension:existance.extension:YesNoUnknownExtension using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-YesNoUnknownExtension-ffa55ad0"
+                }
+              ],
+              "documentation": "Maps to extension: YesNoUnknownExtension | Type: [{'code': 'Extension'}] | Path: Condition.extension:existance.extension"
+            },
+            {
+              "name": "map-extension-Treatment",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "therapie_tumorerkrankung",
+                  "variable": "src-Treatment"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-existance",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-Treatment",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-Treatment",
+                  "source": [
+                    {
+                      "context": "src-Treatment"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Treatment",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Treatment"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to Treatment"
+                },
+                {
+                  "name": "set-extension-value-Treatment-true",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "therapie_tumorerkrankung",
+                      "variable": "srcValue",
+                      "condition": "$this = '1' or $this = 'true'"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Treatment",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueBoolean": true
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value to True (boolean coercion from string)"
+                },
+                {
+                  "name": "set-extension-value-Treatment-false",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "therapie_tumorerkrankung",
+                      "variable": "srcValue",
+                      "condition": "$this = '0' or $this = 'false'"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Treatment",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueBoolean": false
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value to False (boolean coercion from string)"
+                }
+              ],
+              "documentation": "Maps to extension: Treatment | Type: [{'code': 'Extension'}] | Path: Condition.extension:existance.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/tumor-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/tumor-extension'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:YesNoUnknownExtension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'An extension for yes or no questions.', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'YesNoUnknownExtension', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:YesNoUnknownExtension', 'slice_selector': 'YesNoUnknownExtension', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:YesNoUnknownExtension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:YesNoUnknownExtension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id … [truncated; full structure in the registry entry for http://example.org/StructureDefinition/tumor-extension] | Path: Condition.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

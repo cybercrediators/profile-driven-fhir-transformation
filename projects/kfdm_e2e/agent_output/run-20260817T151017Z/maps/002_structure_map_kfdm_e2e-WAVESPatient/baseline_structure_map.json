@@ -1,0 +1,610 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-WAVESPatient-e62396dc",
+  "url": "http://example.org/StructureMap/source-definition-kfdm-e2e-WAVESPatient",
+  "name": "Map_002_structure_map_kfdm_e2e_WAVESPatient",
+  "title": "Structure Map for kfdm_e2e - WAVESPatient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: WAVESPatient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-kfdm-e2e",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://example.org/StructureDefinition/WAVESPatient",
+      "mode": "target",
+      "alias": "WAVESPatient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-WAVESPatient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_kfdm_e2e",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/WAVESPatient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://example.org/StructureDefinition/WAVESPatient"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "geburtsdatum",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 1..1"
+        },
+        {
+          "name": "map-extension-bodyweight",
+          "source": [
+            {
+              "context": "source",
+              "element": "gewicht",
+              "variable": "src-bodyweight"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-bodyweight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bodyweight",
+              "source": [
+                {
+                  "context": "src-bodyweight"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyweight",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-weight-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/body-weight-extension"
+            },
+            {
+              "name": "TODO-resolve-reference-Patient-extension-bodyweight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://example.org/StructureDefinition/body-weight-extension\"}],\"sourceKey\":null,\"sourceType\":\"Patient\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/bodyweight\"],\"targetTypes\":[\"Observation\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/body-weight-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/body-weight-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/body-weight-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://hl7.org/fhir/StructureDefinition/bodyweight'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that… [truncated; full structure in the registry entry for http://example.org/StructureDefinition/body-weight-extension] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-bodyheight",
+          "source": [
+            {
+              "context": "source",
+              "element": "groesse",
+              "variable": "src-bodyheight"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-bodyheight",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bodyheight",
+              "source": [
+                {
+                  "context": "src-bodyheight"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyheight",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/body-height-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/body-height-extension"
+            },
+            {
+              "name": "TODO-resolve-reference-Patient-extension-bodyheight",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://example.org/StructureDefinition/body-height-extension\"}],\"sourceKey\":null,\"sourceType\":\"Patient\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/bodyheight\"],\"targetTypes\":[\"Observation\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/body-height-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/body-height-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/body-height-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://hl7.org/fhir/StructureDefinition/bodyheight'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that… [truncated; full structure in the registry entry for http://example.org/StructureDefinition/body-height-extension] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-federalState",
+          "source": [
+            {
+              "context": "source",
+              "element": "bundesland",
+              "variable": "src-federalState"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-federalState",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-federalState",
+              "source": [
+                {
+                  "context": "src-federalState"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-federalState",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/country-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/country-extension"
+            },
+            {
+              "name": "map-valueCode-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "bundesland",
+                  "variable": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-federalState",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-federalState-b6bab22e"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Patient.extension:federalState using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-federalState-b6bab22e"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/country-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/country-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/country-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'http://example.org/ValueSet/federal-state-vs', 'children': []}]]}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-current",
+          "source": [
+            {
+              "context": "source",
+              "element": "aktbefinden",
+              "variable": "src-current"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-current",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-current",
+              "source": [
+                {
+                  "context": "src-current"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-current",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://example.org/StructureDefinition/current-condition-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://example.org/StructureDefinition/current-condition-extension"
+            },
+            {
+              "name": "map-valueCode-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "aktbefinden",
+                  "variable": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-current",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-current-5225d426"
+                    },
+                    {
+                      "valueString": "code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Patient.extension:current using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-current-5225d426"
+            }
+          ],
+          "documentation": "Maps to extension: http://example.org/StructureDefinition/current-condition-extension | Type: [{'code': 'Extension', 'profile_canonical': ['http://example.org/StructureDefinition/current-condition-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://example.org/StructureDefinition/current-condition-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [{'code': 'SG', 'display': 'sehr gut', 'system': 'http://example.org/CodeSystem/current-condition-waves'}, {'code': 'G', 'display': 'gut', 'system': 'http://example.org/CodeSystem/current-condition-waves'}, {'code': 'B', 'display': 'befriedigend', 'system': 'http://example.org/CodeSystem/current-condition-waves'}, {'code': 'A', 'display': 'ausreichend', 'system': 'http://example.org/CodeSystem/current-condition-waves'}, {'code': 'M', 'display': 'Mangelhaft', 'system': 'http://example.org/CodeSystem/current-condition-waves'}], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'http://example.org/ValueSet/current-condition-vs', 'children': []}]]}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "geschlecht",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-type",
+              "source": [
+                {
+                  "context": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-fixed-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-fixed-type-coding-0",
+                  "source": [
+                    {
+                      "context": "src-identifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-fixed-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-fixed-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "src-identifier"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-fixed-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-fixed-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "src-identifier"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-fixed-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "ANON"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for type"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "record_id",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-maritalStatus-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "familienstand",
+              "variable": "src"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "maritalStatus",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-maritalStatus-coding-translate",
+              "source": [
+                {
+                  "context": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "transform": "translate",
+                  "parameter": [
+                    {
+                      "valueId": "src"
+                    },
+                    {
+                      "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-maritalStatus-aca56a7a"
+                    },
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Patient.maritalStatus using http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-maritalStatus-aca56a7a"
+        }
+      ]
+    }
+  ]
+}

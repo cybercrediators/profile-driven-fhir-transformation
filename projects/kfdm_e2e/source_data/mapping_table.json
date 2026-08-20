@@ -53,5 +53,307 @@
   "Sourcedefinition_kfdm_e2e.wunsch_besseres_verstndnis___6": "QuestionnaireResponse.item[2.7]",
   "Sourcedefinition_kfdm_e2e.wunsch_besseres_verstndnis_sonstiges": "QuestionnaireResponse.item[2.8]",
   "Sourcedefinition_kfdm_e2e.aufnhamef_higkeit_patient": "QuestionnaireResponse.item[2.9]",
-  "Sourcedefinition_kfdm_e2e.waves_complete": "QuestionnaireResponse.status"
+  "Sourcedefinition_kfdm_e2e.waves_complete": "QuestionnaireResponse.status",
+  "$rules": [
+    {
+      "name": "map-clinicalstatus-diabetes",
+      "profiles": [
+        "anamnese-diabetes"
+      ],
+      "resourceTypes": [
+        "Condition"
+      ],
+      "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it.",
+      "sources": [
+        {
+          "context": "source",
+          "element": "diabetes",
+          "variable": "src-cs"
+        }
+      ],
+      "targets": [
+        {
+          "context": "target",
+          "contextType": "variable",
+          "element": "clinicalStatus",
+          "variable": "tgt-cs",
+          "transform": "create",
+          "parameters": [
+            {
+              "valueString": "CodeableConcept"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "name": "set-clinicalstatus-coding",
+          "sources": [
+            {
+              "context": "src-cs"
+            }
+          ],
+          "targets": [
+            {
+              "context": "tgt-cs",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "translate",
+              "parameters": [
+                {
+                  "valueId": "src-cs"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                },
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "map-clinicalstatus-herzkreislauferkrankung",
+      "profiles": [
+        "anamnese-herzkreislauf"
+      ],
+      "resourceTypes": [
+        "Condition"
+      ],
+      "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it.",
+      "sources": [
+        {
+          "context": "source",
+          "element": "herzkreislauferkrankung",
+          "variable": "src-cs"
+        }
+      ],
+      "targets": [
+        {
+          "context": "target",
+          "contextType": "variable",
+          "element": "clinicalStatus",
+          "variable": "tgt-cs",
+          "transform": "create",
+          "parameters": [
+            {
+              "valueString": "CodeableConcept"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "name": "set-clinicalstatus-coding",
+          "sources": [
+            {
+              "context": "src-cs"
+            }
+          ],
+          "targets": [
+            {
+              "context": "tgt-cs",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "translate",
+              "parameters": [
+                {
+                  "valueId": "src-cs"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                },
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "map-clinicalstatus-bewegung",
+      "profiles": [
+        "anamnese-bewegung"
+      ],
+      "resourceTypes": [
+        "Condition"
+      ],
+      "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it.",
+      "sources": [
+        {
+          "context": "source",
+          "element": "bewegung",
+          "variable": "src-cs"
+        }
+      ],
+      "targets": [
+        {
+          "context": "target",
+          "contextType": "variable",
+          "element": "clinicalStatus",
+          "variable": "tgt-cs",
+          "transform": "create",
+          "parameters": [
+            {
+              "valueString": "CodeableConcept"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "name": "set-clinicalstatus-coding",
+          "sources": [
+            {
+              "context": "src-cs"
+            }
+          ],
+          "targets": [
+            {
+              "context": "tgt-cs",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "translate",
+              "parameters": [
+                {
+                  "valueId": "src-cs"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                },
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "map-clinicalstatus-weitere-tumor",
+      "profiles": [
+        "anamnese-tumor"
+      ],
+      "resourceTypes": [
+        "Condition"
+      ],
+      "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it.",
+      "sources": [
+        {
+          "context": "source",
+          "element": "weitere_tumor",
+          "variable": "src-cs"
+        }
+      ],
+      "targets": [
+        {
+          "context": "target",
+          "contextType": "variable",
+          "element": "clinicalStatus",
+          "variable": "tgt-cs",
+          "transform": "create",
+          "parameters": [
+            {
+              "valueString": "CodeableConcept"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "name": "set-clinicalstatus-coding",
+          "sources": [
+            {
+              "context": "src-cs"
+            }
+          ],
+          "targets": [
+            {
+              "context": "tgt-cs",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "translate",
+              "parameters": [
+                {
+                  "valueId": "src-cs"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                },
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "map-clinicalstatus-weitere-erkrankungen",
+      "profiles": [
+        "anamnese-other-disease"
+      ],
+      "resourceTypes": [
+        "Condition"
+      ],
+      "documentation": "Condition.clinicalStatus is min=1 under a required condition-clinical binding; the source yes/no answer is translated into it.",
+      "sources": [
+        {
+          "context": "source",
+          "element": "weitere_erkrankungen",
+          "variable": "src-cs"
+        }
+      ],
+      "targets": [
+        {
+          "context": "target",
+          "contextType": "variable",
+          "element": "clinicalStatus",
+          "variable": "tgt-cs",
+          "transform": "create",
+          "parameters": [
+            {
+              "valueString": "CodeableConcept"
+            }
+          ]
+        }
+      ],
+      "rules": [
+        {
+          "name": "set-clinicalstatus-coding",
+          "sources": [
+            {
+              "context": "src-cs"
+            }
+          ],
+          "targets": [
+            {
+              "context": "tgt-cs",
+              "contextType": "variable",
+              "element": "coding",
+              "transform": "translate",
+              "parameters": [
+                {
+                  "valueId": "src-cs"
+                },
+                {
+                  "valueString": "http://example.org/StructureMap/source-definition-kfdm-e2e/ConceptMap/cm-clinicalstatus-anamnese"
+                },
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
