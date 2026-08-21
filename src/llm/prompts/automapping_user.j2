@@ -1,0 +1,30 @@
+Source field:
+  id: {{ source.id }}
+{% if source.path %}
+  path: {{ source.path }}
+{% endif %}
+{% if source.type %}
+  type: {{ source.type }}
+{% endif %}
+{% if source.description %}
+  description: {{ source.description }}
+{% endif %}
+{% if source.cardinality %}
+  cardinality: {{ source.cardinality }}
+{% endif %}
+
+Selection pass: {{ pass_index }}{% if is_retry %} (expanded candidate retry){% else %} (initial bounded candidates){% endif %}
+
+Candidate targets ({{ offers | length }}, ranked by deterministic similarity):
+{% for offer in offers %}
+  {{ offer.offer_id }}: {{ offer.emitted_target }}
+{%- if offer.candidate.types %}  type={{ offer.candidate.types | join('|') }}{% endif %}
+{%- if offer.candidate.min is not none or offer.candidate.max is not none %}  card={{ offer.candidate.min }}..{{ offer.candidate.max }}{% endif %}
+{%- if offer.candidate.slice_name %}  slice={{ offer.candidate.slice_name }}{% endif %}
+{%- if offer.description %}  description={{ offer.description }}{% endif %}
+  similarity={{ '%.3f' | format(offer.candidate.scores.legacy) }}
+{% endfor %}
+
+Answer with one candidate id from the list above, or `{{ unmapped_token }}`.
+Do not invent an id or a path: an id that is not listed is discarded and the
+field is left unmapped.

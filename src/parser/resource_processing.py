@@ -131,13 +131,24 @@ def check_results(app_state: AppState):
 
 
 def load_results(app_state: AppState):
-    """Load existing results"""
+    """Load existing results from registry/previous run if already eixsting"""
+
+    missing = []
     for url, val in app_state.registry.registry_objects.items():
-        # TODO: remove this after testing
-        # res_dir = app_state.dataIO.project_dir / 'processed_resources' / val.data.id
-        # res_json = utils.get_json(res_dir)
-        # app_state.registry.registry_objects[url] = jsonpickle.decode(res_json)
+        filename = _result_filename(url, val)
         res_json = app_state.dataIO.load_project_file(
-            app_state.dataIO.ProjectFolders.PROCESSED_RESOURCES, _result_filename(url, val)
+            app_state.dataIO.ProjectFolders.PROCESSED_RESOURCES, filename
         )
+        if res_json is None:
+            missing.append(filename)
+            continue
         app_state.registry.registry_objects[url] = jsonpickle.decode(res_json)
+
+    if missing:
+        raise FileNotFoundError(
+            f"{len(missing)} processed resource(s) are missing, so this project's "
+            "processed_resources/ is older than its input_profile/: "
+            + ", ".join(sorted(missing)[:5])
+            + (" …" if len(missing) > 5 else "")
+            + ". Re-run `pipeline process -f` to regenerate them."
+        )

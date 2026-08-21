@@ -25,6 +25,7 @@ from controller.pipeline_controller.pipeline_instance_validator import (
     PipelineInstanceValidator,
 )
 
+import os
 import sys
 import json
 
@@ -42,6 +43,7 @@ class PipelineController:
         create_references: bool = False,
         minimal_mode: bool = False,
         automapping: bool = False,
+        auto_mapping_mode: str = "deterministic",
         tarred_profile: str = None,
     ):
         self.conf = conf
@@ -75,12 +77,15 @@ class PipelineController:
 
         # init automapper (background); skipped when a custom mapping table is present
         self.automapper = None
+        self.llm_automapping = None
         if self.state.custom_mapping_table:
             logger.info("Custom mapping table provided. Automapper will be skipped.")
             automapping = False
         elif automapping:
             logger.info("Initializing automapper in background...")
             self.automapper = FMLAutomapper(use_word2vec=True)
+            if auto_mapping_mode == "llm":
+                self.llm_automapping = self._init_llm_automapping(self.automapper)
 
         # input data sample path
         input_source_example = self.conf.get("input_source_example", "")
@@ -150,7 +155,52 @@ class PipelineController:
             build_options,
             plugins=self.plugins,
             automapper=self.automapper,
+            llm_automapping=self.llm_automapping,
         )
+
+    def _init_llm_automapping(self, automapper):
+        """set up optional llm automapping strategy"""
+
+        from llm.backend import build_client
+        from llm.errors import LLMError
+        from llm.models import LLMSettings
+        from mapping.fml_creator.llm_automapping import (
+            DEFAULT_SECOND_PASS_TOP_K,
+            DEFAULT_TOP_K,
+            LLMAutomappingStrategy,
+        )
+
+
+        def _env_int(name: str, default: int) -> int:
+            raw = os.environ.get(name)
+            try:
+                return int(raw) if raw else default
+            except ValueError:
+                logger.warning("%s is not an integer (%r); using %d.", name, raw, default)
+                return default
+
+        try:
+            settings = LLMSettings.from_env(project_path=self.conf.get("project_path"))
+            client = build_client(settings)
+            strategy = LLMAutomappingStrategy(
+                automapper,
+                client,
+                settings.model_settings(),
+                top_k=_env_int("LLM_AUTOMAPPING_TOP_K", DEFAULT_TOP_K),
+                second_pass_top_k=_env_int(
+                    "LLM_AUTOMAPPING_SECOND_PASS_TOP_K", DEFAULT_SECOND_PASS_TOP_K
+                ),
+            )
+        except LLMError as exc:
+            logger.error("LLM automapping is unavailable: %s", exc)
+            sys.exit(1)
+
+        logger.info(
+            "LLM automapping enabled (provider=%s, model=%s).",
+            settings.provider,
+            settings.model,
+        )
+        return strategy
 
     def _load_custom_mapping_table(self):
         """Load an optional custom source->target mapping table from config (object or path)."""
@@ -203,6 +253,12 @@ class PipelineController:
     @input_source_example.setter
     def input_source_example(self, value):
         self.build_service.options.input_source_example = value
+
+    @property
+    def last_generation_result(self):
+        """Most recent typed StructureMap generation result, if generation ran."""
+
+        return self.build_service.last_generation_result
 
     def initial_processing(self):
         """initial processing: parse profiles, create source helper SD, generate static-gen SM, populate registry"""
@@ -419,4 +475,3 @@ class PipelineController:
         else:
             print(text)
         return True
-

@@ -296,7 +296,11 @@ class DataIO:
 
         # create package from profile folder (i.e. just tar the input folder), must be in the `package/` dir inside the tar!
         with tarfile.open(output_path, "w:gz") as tar:
-            tar.addfile(tarfile.TarInfo(name="./package"))  # Add package directory
+            package_dir = tarfile.TarInfo(name="package")
+            package_dir.type = tarfile.DIRTYPE
+            # TODO: rework actual permissions
+            package_dir.mode = 0o755
+            tar.addfile(package_dir)
             for p_file in self.get_json_profile_files(input_files):
                 tar.add(p_file, arcname=f"package/{p_file.name}")
         return tar

@@ -123,6 +123,16 @@ def get_args():
             help="Enable simple field auto-mapping",
         )
         p.add_argument(
+            "--auto-mapping-mode",
+            choices=["deterministic", "llm"],
+            default="deterministic",
+            help=(
+                "Auto-mapping strategy (default: deterministic). 'llm' reranks the "
+                "deterministic candidates with a language model and requires the "
+                "optional 'llm' extra plus provider configuration"
+            ),
+        )
+        p.add_argument(
             "-msm",
             "--minimal-structure-map",
             action="store_true",
@@ -300,6 +310,112 @@ def get_args():
         type=str,
         default="",
         help="Path to source→target mapping table JSON (default: from config)",
+    )
+
+    agent_parser = subparsers.add_parser(
+        "agent",
+        help=(
+            "Agent mode: LLM-assisted StructureMap repair (requires optional 'llm' extra)"
+        ),
+    )
+    agent_sub = agent_parser.add_subparsers(dest="agent_action", help="Agent command")
+
+    agent_fix_p = agent_sub.add_parser(
+        "fix",
+        help=(
+            "Propose and validate repairs for one StructureMap. Writes an "
+            "auditable run directory; leaves the map untouched unless --apply"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "map",
+        type=str,
+        nargs="?",
+        default=None,
+        help=(
+            "StructureMap to repair: file path, canonical URL, or resource id. "
+            "Optional when the project has exactly one map"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--all",
+        dest="all_maps",
+        action="store_true",
+        help=(
+            "Repair every StructureMap in the project, validate the assembled "
+            "set, and requeue the maps its findings name"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--max-attempts",
+        type=int,
+        default=4,
+        help="Maximum repair attempts per map before stopping unresolved (default: 4)",
+    )
+    agent_fix_p.add_argument(
+        "--max-project-rounds",
+        type=int,
+        default=3,
+        help=(
+            "Maximum project rounds: repair every pending map, validate the "
+            "assembled set, requeue what it names (default: 3)"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--resume",
+        metavar="RUN_ID",
+        default=None,
+        help=(
+            "Continue an interrupted run from its checkpoint. Refuses if the "
+            "configuration, provider, or any selected map changed since it started"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--llm-provider",
+        choices=["openai-compatible", "openai"],
+        default=None,
+        help="Override the configured LLM provider for this agent run",
+    )
+    agent_fix_p.add_argument(
+        "--llm-model",
+        default=None,
+        help="Override the configured LLM model for this agent run",
+    )
+    agent_fix_p.add_argument(
+        "--llm-base-url",
+        default=None,
+        help="Override the OpenAI-compatible endpoint for this agent run",
+    )
+    agent_fix_p.add_argument(
+        "-o",
+        "--output-dir",
+        type=str,
+        default="",
+        help="Where to write agent_output/<run-id>/ (default: the project directory)",
+    )
+    agent_fix_p.add_argument(
+        "--offline",
+        action="store_true",
+        help=(
+            "Run deterministic validation only, without Matchbox. Produces "
+            "diagnostic candidates that can never be applied"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--use-examples",
+        action="store_true",
+        help=(
+            "Additionally exercise candidates with fixtures reverse-extracted "
+            "from project examples (experimental; never gate-relevant)"
+        ),
+    )
+    agent_fix_p.add_argument(
+        "--apply",
+        action="store_true",
+        help=(
+            "Replace the source map with an accepted candidate. Refuses "
+            "rejected, offline-only, and stale candidates"
+        ),
     )
 
     # Server management command
@@ -524,4 +640,29 @@ def get_args():
         help="Skip the IG-publisher (genonce) run; StructureDefinitions stay differential-only",
     )
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    # A mode without --auto-mapping would silently do nothing, which reads as
+    # "LLM mapping ran and found nothing" rather than "it never ran".
+    if getattr(args, "auto_mapping_mode", "deterministic") != "deterministic" and not (
+        getattr(args, "auto_mapping", False)
+    ):
+        parser.error("--auto-mapping-mode requires --auto-mapping")
+
+    if args.command == "agent":
+        if not getattr(args, "agent_action", None):
+            agent_parser.error("agent requires a subcommand (currently: fix)")
+        # Caught here rather than at the end of a run: an offline candidate can
+        # never be applied, so asking for both is a mistake worth naming before
+        # any provider call is paid for.
+        if getattr(args, "apply", False) and getattr(args, "offline", False):
+            agent_fix_p.error(
+                "--apply cannot be combined with --offline: an offline run has "
+                "no engine evidence, so its candidates are diagnostic only"
+            )
+        if getattr(args, "all_maps", False) and getattr(args, "map", None):
+            agent_fix_p.error(
+                "--all repairs every map in the project; do not also name one"
+            )
+
+    return args

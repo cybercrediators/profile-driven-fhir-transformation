@@ -1,0 +1,254 @@
+## Map under repair
+
+| | |
+|---|---|
+| **Resource type** | `{{ context.resource_type or "unknown" }}` |
+{% if context.profile_url %}
+| **Target profile** | `{{ context.profile_url }}` |
+{% endif %}
+{% if context.source_type %}
+| **Source type** | `{{ context.source_type }}` |
+{% endif %}
+| **Map id** | `{{ context.map_id or "unknown" }}` |
+| **Map url** | `{{ context.map_url or "unknown" }}` |
+| **base_sha256** | `{{ context.map_sha256 }}` |
+
+Copy `map_url`, `map_id` and `base_sha256` into your answer exactly as shown.
+
+## Findings to fix
+
+{% for finding in context.findings %}
+### `{{ finding.finding_id }}` — {{ finding.code }}
+
+{{ finding.message }}
+
+{% if finding.pointer %}
+- Reported at: `{{ finding.pointer }}`
+{% endif %}
+{% if finding.rule_hint %}
+- The engine named rule `{{ finding.rule_hint }}`
+{% endif %}
+{% if finding.path %}
+- Element path: `{{ finding.path }}`
+{% endif %}
+{% if finding.fixture %}
+- Seen while transforming fixture `{{ finding.fixture }}`
+{% endif %}
+{% endfor %}
+
+{% if context.out_of_scope %}
+### Not yours to fix
+
+These were also reported. They are **out of scope for this patch** — they belong
+to another owner, are not classified safely enough, or are deferred to a later
+bounded repair batch. Do not attempt them and do not invent values to make them
+go away.
+
+{% set out_of_scope_status = context.list_status.get('out_of_scope') %}
+{% if out_of_scope_status %}
+Showing {{ out_of_scope_status.shown }} of {{ out_of_scope_status.total }} out-of-scope findings{% if out_of_scope_status.truncated %}; additional findings remain out of scope{% endif %}.
+{% endif %}
+
+{% for item in context.out_of_scope %}
+- `{{ item.get('code') }}` ({{ item.get('owner') }}, {{ item.get('gate') }}) — {{ item.get('message') }}
+{% endfor %}
+{% endif %}
+
+## Rule pointers you may edit
+
+Every operation you propose must address one of these pointers or something
+beneath it. A pointer from the read-only list below is rejected, however correct
+the edit would be.
+
+{% for rule in context.pointers if rule.focused %}
+- `{{ rule.pointer }}` — {{ rule.label }}
+  - variables in scope: source {% if rule.source_variables %}{% for v in rule.source_variables %}`{{ v }}`{{ ", " if not loop.last else "" }}{% endfor %}{% else %}none{% endif %}; target {% if rule.target_variables %}{% for v in rule.target_variables %}`{{ v }}`{{ ", " if not loop.last else "" }}{% endfor %}{% else %}none{% endif %}{{ "" }}
+{% if rule.members %}
+  - members, with the value each holds right now — copy these pointers, do not
+    derive them:
+{% for member in rule.members %}
+    - `{{ member.pointer }}`{% if member.note %} — {{ member.note }}{% else %}{% if member.json_type %} ({{ member.json_type }}){% endif %} = {{ member.value | tojson }}{% endif %}{{ "" }}
+{% endfor %}
+{% endif %}
+{% else %}
+- none: no existing rule is implicated by this worklist.
+{% endfor %}
+
+{% if context.insertion_points %}
+### Authorized insertion points
+
+The only locations where a *new* rule may be added. Use the exact pointer shown;
+do not calculate an array index.
+
+{% for point in context.insertion_points %}
+- `{{ point.pointer }}` — {{ point.label }} for {% for path in point.target_paths %}`{{ path }}`{{ ", " if not loop.last else "" }}{% endfor %}
+{% endfor %}
+{% endif %}
+
+A rule may only reference a variable listed as in scope at the pointer you are
+editing, or one the same rule binds. Referencing any other name fails at
+`$transform` as an unknown context.
+
+{% if context.pointers | rejectattr('focused') | list %}
+### Read-only rules, for context only
+
+{% set pointer_status = context.list_status.get('pointers') %}
+{% if pointer_status %}
+Showing {{ pointer_status.shown }} of {{ pointer_status.total }} existing rule pointers{% if pointer_status.truncated %}; unrelated pointers were intentionally omitted{% endif %}.
+{% endif %}
+
+{% for rule in context.pointers if not rule.focused %}
+- `{{ rule.pointer }}` — {{ rule.label }}
+{% endfor %}
+{% endif %}
+
+## The map
+
+{% if context.excerpt_pruned %}
+Rules not implicated by a finding are shown as `{"_elided": true, "_pointer": …}`
+markers. They exist and are unchanged. Never address an elided marker or infer
+an array index from its position; use only the explicit pointers above.
+{% endif %}
+
+```json
+{{ map_json }}
+```
+
+{% if context.source_fields %}
+## Source fields
+
+{% set source_status = context.list_status.get('source_fields') %}
+{% if source_status %}
+Showing {{ source_status.shown }} of {{ source_status.total }} project source fields.
+{% endif %}
+A rule source may read only the fields shown in this attempt. The `element` value
+is the bare field name. Additional project fields may have been intentionally
+omitted; an omitted field is not authorized for this patch.
+
+| Field | Type | Cardinality |
+|---|---|---|
+{% for field in context.source_fields %}
+| `{{ field.get('name') }}` | `{{ field.get('type', '?') }}` | {{ field.get('min', 0) }}..{{ field.get('max', '1') }} |
+{% endfor %}
+{% endif %}
+
+{% if context.mapping_rows %}
+## Mapping table
+
+{% set mapping_status = context.list_status.get('mapping_rows') %}
+{% if mapping_status %}
+Showing {{ mapping_status.shown }} of {{ mapping_status.total }} authored rows; rows touching the findings are kept first.
+{% endif %}
+These are the mapping-table rows authorized as evidence for this attempt. Rules
+must follow them; do not infer a route from a row that is not shown.
+
+| Source field | Target path | Details |
+|---|---|---|
+{% for row in context.mapping_rows %}
+| `{{ row.source }}` | `{{ row.target }}` | {% if row.get('fixed_value') is not none %}fixed: `{{ row.get('fixed_value') | tojson }}`{% elif row.get('concept_map_url') %}ConceptMap: `{{ row.get('concept_map_url') }}`{% elif row.get('transform') %}transform: `{{ row.get('transform') }}`{% else %}—{% endif %} |
+{% endfor %}
+{% endif %}
+
+{% if context.concept_map_urls %}
+## ConceptMap references
+
+These canonicals are the only ConceptMaps named by the selected mapping rows.
+They may be used to repair `translate()` wiring. Their code pairs are not in the
+prompt: do not invent, replace, or hardcode coded values.
+
+{% for url in context.concept_map_urls %}
+- `{{ url }}`
+{% endfor %}
+{% endif %}
+
+{% if context.repair_hints %}
+## Choice elements under repair — use exactly this shape
+
+The profile fixes the permitted types, so the base element name and the transform
+follow from it. Matchbox derives the concrete JSON choice name from that
+transform; do not append the type to `element`, and do not use `copy` where
+`cast` is listed.
+
+A target entry also needs the `context` it attaches to. Omitting it writes
+nothing: the entry is accepted, the transform runs, and the element is still
+missing afterwards.
+
+{% for hint in context.repair_hints %}
+- `{{ hint.path }}`{% if hint.source_field %} — source field `{{ hint.source_field }}`{% endif %}
+{% for option in hint.options %}
+  - type `{{ option.type }}`:
+    `{"context": "<target variable in scope>", "contextType": "variable", "element": "{{ option.element }}", {% if option.transform == "cast" %}"variable": "tgt-{{ option.element }}", "transform": "cast", "parameter": [{"valueId": "<source variable>"}, {"valueString": "{{ option.type }}"}]{% elif option.transform == "create" %}"variable": "tgt-{{ option.element }}", "transform": "create", "parameter": [{"valueString": "{{ option.type }}"}]{% else %}"transform": "copy", "parameter": [{"valueId": "<source variable>"}]{% endif %}}`
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+{% if context.required_elements %}
+## Required target elements
+
+{% set required_status = context.list_status.get('required_elements') %}
+{% if required_status %}
+Showing {{ required_status.shown }} of {{ required_status.total }} required elements; paths touching the findings are kept first.
+{% endif %}
+{% for element in context.required_elements %}
+- `{{ element.path }}` ({{ element.cardinality }}{{ ", type `" ~ element.types | join("|") ~ "`" if element.types else "" }}){% if element.fixed_value is not none %} — **fixed value** `{{ element.fixed_value | tojson }}`, write exactly this{% endif %}{{ " — bound to `" ~ element.binding ~ "`" if element.binding else "" }}
+{% endfor %}
+{% endif %}
+
+{% if context.prohibited_paths %}
+## Forbidden elements
+
+The profile sets `max = 0` on these. Writing one is always an error.
+
+{% set prohibited_status = context.list_status.get('prohibited_paths') %}
+{% if prohibited_status %}
+Showing {{ prohibited_status.shown }} of {{ prohibited_status.total }} prohibited paths; paths touching the findings are kept first. Unshown paths remain prohibited.
+{% endif %}
+
+{% for path in context.prohibited_paths %}
+- `{{ path }}`
+{% endfor %}
+{% endif %}
+
+{% if context.attempts %}
+## Earlier attempts on this map
+
+Most recent last. Everything here already failed; repeating it cannot establish
+progress and may terminate the run.
+
+{% for attempt in context.attempts %}
+### Attempt {{ attempt.attempt }}
+
+{% if attempt.operations %}
+You proposed:
+
+```json
+{{ attempt.operations | tojson }}
+```
+{% endif %}
+
+{% if attempt.rejections %}
+**Rejected by the patch policy before it was applied:**
+{% for rejection in attempt.rejections %}
+- `{{ rejection.get('code') }}`{% if rejection.get('operation_index') is not none %} at operation {{ rejection.get('operation_index') }}{% endif %}{% if rejection.get('path') %} (`{{ rejection.get('path') }}`){% endif %} — {{ rejection.get('message') }}
+{% endfor %}
+{% endif %}
+
+{% if attempt.failed_invariants %}
+**Applied, but rejected by validation:**
+{% for invariant in attempt.failed_invariants %}
+- `{{ invariant.get('name') }}` — {{ invariant.get('detail') }}
+{% endfor %}
+{% endif %}
+
+{% if attempt.introduced %}
+**Blocking problems it introduced that the baseline did not have — do not
+reintroduce these:**
+{% for finding in attempt.introduced %}
+- `{{ finding.code }}`{% if finding.path %} at `{{ finding.path }}`{% endif %} — {{ finding.message }}
+{% endfor %}
+{% endif %}
+
+{% endfor %}
+{% endif %}
+
+Answer with one `AgentPatch`.

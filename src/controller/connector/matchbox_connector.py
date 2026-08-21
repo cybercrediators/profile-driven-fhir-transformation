@@ -27,6 +27,17 @@ class MatchboxConnector:
         self, endpoint: str, method: str, params=None, headers=None, **kwargs
     ):
         """Send request to the matchbox server"""
+        _status, body = self.send_request_detailed(
+            endpoint, method, params=params, headers=headers, **kwargs
+        )
+        return body if _status is not None and _status < 400 else None
+
+    def send_request_detailed(
+        self, endpoint: str, method: str, params=None, headers=None, **kwargs
+    ):
+        """Send request and keep the response (if possible) (otherwise 4xx/5xx won't
+        answer anything/dropping the response)"""
+
         response = None
         url = f"{self.matchbox_uri}{endpoint}"
 
@@ -39,16 +50,21 @@ class MatchboxConnector:
             response = requests.request(
                 method, url, headers=request_headers, params=params, **kwargs
             )
-            response.raise_for_status()
-            # Check for empty response body
-            if response.content:
-                return response.json()
-            return None
         except requests.exceptions.RequestException as e:
             logger.error("[MATCHBOX Request] Error fetching %s: %s", url, e)
-            if response is not None:
-                logger.error(f"Response content: {response.text}")
-            return None
+            return None, None
+
+        if response.status_code >= 400:
+            logger.error(
+                "[MATCHBOX Request] %s %s returned %s", method, url, response.status_code
+            )
+            # Kept at error level: this is the only place the server's reason
+            # appears for the callers that discard the body.
+            logger.error("Response content: %s", response.text)
+        if not response.content:
+            return response.status_code, None
+        try:
+            return response.status_code, response.json()
         except json.JSONDecodeError as e:
             logger.warning(
                 "Error decoding JSON from %s: %s. Response text: %s",
@@ -56,4 +72,4 @@ class MatchboxConnector:
                 e,
                 response.text,
             )
-            return response.text  # Return text if not json
+            return response.status_code, response.text

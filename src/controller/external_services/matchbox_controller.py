@@ -154,11 +154,47 @@ class MatchboxController:
             json.dumps(sd), resource_type="StructureDefinition"
         )
 
+    def upsert_resource(self, resource: dict):
+        """update/insert (PUT) resource by a given id + replace any copy found on the server
+
+        :return: ``(status_code, body)``; the body is the server's
+            ``OperationOutcome`` when it refused.
+        """
+
+        resource_type = resource.get("resourceType")
+        resource_id = resource.get("id")
+        if not resource_type or not resource_id:
+            logger.warning(
+                "Cannot upsert a resource without both resourceType and id (%s/%s).",
+                resource_type,
+                resource_id,
+            )
+            return None, None
+        return self.mc.send_request_detailed(
+            f"{resource_type}/{resource_id}",
+            "PUT",
+            data=json.dumps(resource),
+            headers={"Content-Type": "application/fhir+json"},
+        )
+
+    def transform_data_detailed(self, source_obj, structure_map_url):
+        """execute $transform and keeping the corresponding failure body for inspection"""
+
+        return self.mc.send_request_detailed(
+            "StructureMap/$transform",
+            "POST",
+            params={"source": structure_map_url},
+            headers={
+                "Content-Type": "application/fhir+json",
+                "Accept": "application/fhir+json",
+            },
+            data=json.dumps(source_obj),
+        )
+
     def transform_data(self, source_obj, structure_map_url):
         """
         Transform data using matchbox ($transform)
         """
-        # structure map and profile must be installed previously!
         response = self.mc.send_request(
             "StructureMap/$transform",
             "POST",

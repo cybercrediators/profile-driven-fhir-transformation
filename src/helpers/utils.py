@@ -138,12 +138,22 @@ def fhir_id_token(value: str, max_len: int = 50) -> str:
     return re.sub(r"[^A-Za-z0-9.-]", "-", value or "")[:max_len]
 
 
-def fhir_name_token(value: str, max_len: int = 255) -> str:
-    """Return an invariant-safe FHIR ``name`` value.
+# check FHIR id compatible pattern
+FHIR_ID_PATTERN = re.compile(r"^[A-Za-z0-9\-.]+$")
 
-    ``name`` is stricter than ``id``: it starts with an uppercase letter and then
-    contains only letters, digits, and underscores.
-    """
+# max FHIR id length
+FHIR_ID_MAX_LENGTH = 64
+
+
+def fhir_map_token(value: str) -> str:
+    """make a string usable as a structuremap group, rule, or variable name"""
+
+    return re.sub(r"[^A-Za-z0-9.-]", "-", value or "") or "unnamed"
+
+
+def fhir_name_token(value: str, max_len: int = 255) -> str:
+    """create invariant-safe FHIR name values"""
+    
     token = re.sub(r"[^A-Za-z0-9_]", "_", value or "")
     if not token or not token[0].isalpha():
         token = f"Map_{token}"

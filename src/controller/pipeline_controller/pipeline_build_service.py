@@ -7,6 +7,7 @@ from helpers import utils
 from parser import resource_processing
 from mapping import fml_structure
 from mapping.fml_map import StructureMapGenerator
+from mapping.generation_result import StructureMapGenerationResult
 from fhir.resources.R4B.structuredefinition import StructureDefinition
 
 from data_handling.app_state import AppState
@@ -40,12 +41,16 @@ class PipelineBuildService:
         *,
         plugins=None,
         automapper=None,
+        llm_automapping=None,
     ):
         self.app_state = app_state
         self.state = state
         self.options = options
         self.plugins = plugins or []
         self.automapper = automapper
+        #: Optional LLM automapping strategy; ``None`` keeps automapping deterministic.
+        self.llm_automapping = llm_automapping
+        self.last_generation_result = None
 
     def initial_processing(self):
         """Run all pipeline steps in sequence (parse → source-def → static-gen-sm)."""
@@ -268,7 +273,36 @@ class PipelineBuildService:
         modular=False,
         overwrite=False,
     ):
-        """structuremap generation call"""
+        """Compatibility API returning only the generated StructureMaps."""
+
+        return self.generate_structure_maps_result(
+            map_url,
+            map_name,
+            map_title,
+            helper_map,
+            minimal=minimal,
+            status=status,
+            create_references=create_references,
+            automapping=automapping,
+            modular=modular,
+            overwrite=overwrite,
+        ).maps()
+
+    def generate_structure_maps_result(
+        self,
+        map_url,
+        map_name,
+        map_title,
+        helper_map,
+        minimal=False,
+        status="draft",
+        create_references=False,
+        automapping=False,
+        modular=False,
+        overwrite=False,
+    ) -> StructureMapGenerationResult:
+        """Generate StructureMaps and return their typed diagnostics/artifacts."""
+
         smg = StructureMapGenerator(
             app_state=self.app_state,
             map_url=map_url,
@@ -283,9 +317,11 @@ class PipelineBuildService:
             custom_mapping_table=self.state.custom_mapping_table,
             overwrite=overwrite,
             plugins=self.plugins,
+            llm_automapping=self.llm_automapping,
         )
         smg.generate()
-        sms = smg.get_structure_maps()
-        for sm in sms:
+        result = smg.get_generation_result()
+        for sm in result.structure_maps:
             self.app_state.cache.add_resource_to_cache(sm.model_dump())
-        return sms
+        self.last_generation_result = result
+        return result
