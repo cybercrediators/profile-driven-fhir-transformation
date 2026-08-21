@@ -1,4 +1,5 @@
 from decimal import Decimal
+import hashlib
 import logging
 import re
 from typing import Optional
@@ -522,6 +523,18 @@ def clean_field_name(field_name):
     return re.sub(r"\W+", "-", field_name).strip("-")
 
 
+def fit_rule_name(name: str) -> str:
+    """fit a rule name to keep the FHIR id within its 64 character limit (if needed)"""
+
+    from helpers.utils import FHIR_ID_MAX_LENGTH  # noqa: PLC0415
+
+    if len(name) <= FHIR_ID_MAX_LENGTH:
+        return name
+    digest = hashlib.sha256(name.encode("utf-8")).hexdigest()[:8]
+    keep = FHIR_ID_MAX_LENGTH - len(digest) - 1
+    return f"{name[:keep].rstrip('-')}-{digest}"
+
+
 def fixed_scalar_literal(value) -> str:
     """FHIR lexical form of a fixed scalar constant. Python booleans stringify as
     'True'/'False', which is not valid FHIR boolean lexical form — lowercase them."""
@@ -647,3 +660,18 @@ def rule_can_fire(source) -> bool:
     """
     element = attr(source, "element", None)
     return element is None or not str(element).startswith("TODO")
+
+
+def rebase_to_resource_identity(
+    target_path: Optional[str], res_type: str, res_id: Optional[str]
+) -> Optional[str]:
+    """reroot target path from resource type onto profile identity"""
+
+    if (
+        target_path
+        and res_id
+        and res_id != res_type
+        and target_path.startswith(f"{res_type}.")
+    ):
+        return f"{res_id}.{target_path[len(res_type) + 1:]}"
+    return target_path

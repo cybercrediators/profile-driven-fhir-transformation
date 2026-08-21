@@ -16,20 +16,32 @@ from mapping.fml_creator.fml_helper import (
     emits_only_url,
     flatten_profile_fields,
     has_fixed_value,
+    rebase_to_resource_identity,
     rule_can_fire,
 )
 from mapping.fml_creator.fml_automapper import FMLAutomapper
 from mapping import derived_resources
+from mapping.generation_result import (
+    COVERAGE_REPORT_VERSION,
+    CoverageReport,
+    GenerationArtifactPaths,
+    MappingDiagnostic,
+    StructureMapGenerationResult,
+)
 from helpers.utils import (
+    FHIR_ID_MAX_LENGTH,
+    FHIR_ID_PATTERN,
     get_value_from_element,
     resource_identity,
     fhir_id_token,
+    fhir_map_token,
     fhir_name_token,
 )
 
 from typing import List, Any, Dict, Optional, Set, Tuple
 import hashlib
 import logging
+from pathlib import Path
 import re
 
 from fhir.resources.R4B.structuredefinition import StructureDefinition
@@ -45,6 +57,8 @@ from mapping.rule_ir import (
     parse_collection_rule,
 )
 from data_handling.app_state import AppState
+
+_re_slice = re.compile(r":[^.]+")
 
 logger = logging.getLogger(__name__)
 
@@ -65,6 +79,7 @@ class StructureMapGenerator:
         custom_mapping_table: Optional[Dict[str, Any]] = None,
         overwrite: bool = False,
         plugins: Optional[List[Any]] = None,
+        llm_automapping: Optional[Any] = None,
     ) -> None:
 
         self.app_state = app_state
@@ -80,9 +95,17 @@ class StructureMapGenerator:
         self.custom_mapping_table = custom_mapping_table
         self.overwrite = overwrite
         self.plugins = plugins or []
+        # Present only when `--auto-mapping-mode llm` was selected; injected rather
+        # than constructed so this module never imports the optional LLM package.
+        self.llm_automapping = llm_automapping
+        self._llm_proposed_mapping_table = None
+        self._llm_compiled_mapping_table = {}
+        self._llm_diagnostics_start = 0
         self.current_profile_name = "unknown"
         self.mapping_diagnostics = []
         self._generated_structure_map_files = set()
+        self.coverage_report: Optional[CoverageReport] = None
+        self.coverage_report_path = None
         # {profile_id: {required_total, required_unmapped, unmapped_required_paths}}
         # per-profile required-element coverage report written alongside the maps.
         self._coverage = {}
@@ -108,12 +131,13 @@ class StructureMapGenerator:
                 sms = self.app_state.dataIO.load_project_files(
                     self.app_state.dataIO.ProjectFolders.STRUCTURE_MAPS
                 )
-                for _, sm in sms:
+                for filename, sm in sms:
                     if (
                         isinstance(sm, dict)
                         and sm.get("resourceType") == "StructureMap"
                     ):
                         self.structure_maps.append(StructureMap(**sm))
+                        self._generated_structure_map_files.add(filename)
             else:
                 logger.info("Overwriting existing structure maps...")
 
@@ -122,23 +146,56 @@ class StructureMapGenerator:
     def get_structure_maps(self) -> List[StructureMap]:
         return self.structure_maps
 
+    @staticmethod
+    def _folder_value(folder) -> str:
+        return getattr(folder, "value", folder)
+
+    def _artifact_path(self, folder, filename: str):
+        project_dir = getattr(self.app_state.dataIO, "project_dir", None)
+        if project_dir is None:
+            return None
+        return Path(project_dir) / self._folder_value(folder) / filename
+
+    def get_generation_result(self) -> StructureMapGenerationResult:
+        """Return generated maps and their structured diagnostic artifacts."""
+
+        sm_folder = self.app_state.dataIO.ProjectFolders.STRUCTURE_MAPS
+        structure_map_paths = tuple(
+            path
+            for filename in sorted(self._generated_structure_map_files)
+            if (path := self._artifact_path(sm_folder, filename)) is not None
+        )
+        return StructureMapGenerationResult(
+            structure_maps=tuple(self.structure_maps),
+            coverage_report=self.coverage_report,
+            artifacts=GenerationArtifactPaths(
+                structure_maps=structure_map_paths,
+                coverage_report=self.coverage_report_path,
+            ),
+        )
+
     def generate(self) -> List[StructureMap]:
         if self.check_exist and not self.overwrite and self.structure_maps:
+            self._load_coverage_report()
             return self.structure_maps
 
         # proceed with generation
         resources, source_fields, active_types = self._prepare_resources_and_fields()
 
         if self.automapper:
-            combined_table = self._build_combined_automapping(resources, source_fields)
-            self._save_automapping_table(combined_table)
+            # Both strategies produce the same mapping-table contract, which is then
+            # compiled and validated by the ordinary custom-table path below. The
+            # model never sees or writes a StructureMap.
+            if self.llm_automapping is not None:
+                combined_table = self._build_llm_automapping(resources, source_fields)
+            else:
+                combined_table = self._build_combined_automapping(
+                    resources, source_fields
+                )
+                self._save_automapping_table(combined_table)
             self.custom_mapping_table = combined_table
             self.automapper = None
 
-        # A Reference-valued extension names its target with `targetProfile`. When no
-        # declared root satisfies that target, the reference has nothing to point at
-        # and the extension is dropped for violating ext-1 — so the target becomes an
-        # additional map target here and is generated like any other profile.
         derived = derived_resources.discover(
             self.app_state,
             resources,
@@ -151,10 +208,6 @@ class StructureMapGenerator:
             resources = list(resources) + derived_resources.registry_entries(
                 self.app_state, derived
             )
-            # `active_types` was computed from the declared roots alone. Minimal mode
-            # keeps a required path only when its owning type is active, so without
-            # this the derived profile's own required elements are pruned out of the
-            # map that exists to carry them.
             for spec in derived:
                 active_types.update(
                     {spec.target_type, spec.target_profile, spec.target_identity}
@@ -171,9 +224,6 @@ class StructureMapGenerator:
             self.current_profile_name = profile_identity
             res_type = obj.res_type if not hasattr(obj.data, "type") else obj.data.type
 
-            # A derived profile's value provider is inferred, not authored, so it is
-            # scoped to that profile's own map instead of the shared table (whose one
-            # target per source is already spent on the referencing extension).
             derived_spec = derived_by_url.get(url)
             mapping_table = (
                 derived_resources.mapping_overlay(self.custom_mapping_table, derived_spec)
@@ -184,7 +234,12 @@ class StructureMapGenerator:
             automapped_mappings = self._process_resource_mapping(
                 obj, res_type, source_fields, active_types, mapping_table=mapping_table
             )
-            self._record_profile_facet_diagnostics(obj)
+            self._record_llm_compiled_mappings(
+                res_type, profile_identity, automapped_mappings
+            )
+            self._record_profile_facet_diagnostics(
+                obj, mapped_paths=set(automapped_mappings or {})
+            )
 
             sm_url = f"{self.map_url}-{profile_identity}"
             sm_name = f"{res_idx + 1:03d}_{self.map_name}-{profile_identity}"
@@ -201,8 +256,6 @@ class StructureMapGenerator:
                 f"(Resource: {profile_identity}). Placeholders have to be set (or use auto-mapping)"
             )
 
-            # For Questionnaire resources the transform target is QuestionnaireResponse,
-            # so point to the QR base SD rather than the Questionnaire canonical URL.
             target_sd_url = (
                 "http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse"
                 if res_type == "Questionnaire"
@@ -257,6 +310,9 @@ class StructureMapGenerator:
             groups = [res_group, *typed_document.groups]
             sm.group = groups
             self._sanitize_todo_rules(sm)
+            self._disambiguate_shadowed_variables(sm)
+            self._resolve_duplicate_rule_names(sm)
+            self._report_overlong_map_tokens(sm)
             self._normalize_and_validate_structure_map(sm)
 
             self.app_state.dataIO.store_project_file(
@@ -270,6 +326,8 @@ class StructureMapGenerator:
             structure_maps.append(sm)
 
         self.structure_maps = structure_maps
+
+        self._finalize_llm_automapping_report()
 
         self._save_coverage_report()
 
@@ -321,6 +379,167 @@ class StructureMapGenerator:
             logger.info(f"Removing stale StructureMap: {f.name}")
             self.app_state.dataIO.delete_file(folder.value + "/" + f.name)
 
+    def _disambiguate_shadowed_variables(self, structure_map) -> None:
+        """Rename variables that shadow one already in scope"""
+
+        used: Set[str] = set()
+
+        def collect(rules) -> None:
+            for rule in rules or []:
+                for source in getattr(rule, "source", None) or []:
+                    if getattr(source, "variable", None):
+                        used.add(source.variable)
+                for target in getattr(rule, "target", None) or []:
+                    if getattr(target, "variable", None):
+                        used.add(target.variable)
+                collect(getattr(rule, "rule", None))
+
+        def fresh(name: str) -> str:
+            suffix = 2
+            while f"{name}-{suffix}" in used:
+                suffix += 1
+            allocated = f"{name}-{suffix}"
+            used.add(allocated)
+            return allocated
+
+        def declare(holder, scope: Dict[str, str], group_name: str) -> None:
+            name = getattr(holder, "variable", None)
+            if not name:
+                return
+            if name in scope:
+                renamed = fresh(name)
+                logger.debug(
+                    "Renaming shadowed variable %r to %r in group %s.",
+                    name,
+                    renamed,
+                    group_name,
+                )
+                holder.variable = renamed
+                scope[name] = renamed
+            else:
+                scope[name] = name
+
+        def walk(rules, scope: Dict[str, str], group_name: str) -> None:
+            for rule in rules or []:
+                local = dict(scope)
+                for source in getattr(rule, "source", None) or []:
+                    context = getattr(source, "context", None)
+                    if context:
+                        source.context = local.get(context, context)
+                    declare(source, local, group_name)
+                for target in getattr(rule, "target", None) or []:
+                    context = getattr(target, "context", None)
+                    if context:
+                        target.context = local.get(context, context)
+                    for parameter in getattr(target, "parameter", None) or []:
+                        value_id = getattr(parameter, "valueId", None)
+                        if value_id and value_id in local:
+                            parameter.valueId = local[value_id]
+                    declare(target, local, group_name)
+                for dependent in getattr(rule, "dependent", None) or []:
+                    supplied = getattr(dependent, "variable", None)
+                    if supplied:
+                        dependent.variable = [
+                            local.get(item, item) for item in supplied
+                        ]
+                walk(getattr(rule, "rule", None), local, group_name)
+
+        for group in getattr(structure_map, "group", None) or []:
+            used.clear()
+            collect(getattr(group, "rule", None))
+            scope = {
+                item.name: item.name
+                for item in (getattr(group, "input", None) or [])
+                if getattr(item, "name", None)
+            }
+            used.update(scope)
+            walk(
+                getattr(group, "rule", None),
+                scope,
+                getattr(group, "name", "") or "",
+            )
+
+    def _resolve_duplicate_rule_names(self, structure_map) -> None:
+        """Make sibling rule names unique, distinguishing redundancy from conflict"""
+
+        def rule_form(rule) -> str:
+            try:
+                return rule.model_dump_json(exclude_none=True)
+            except Exception:
+                return repr(rule)
+
+        def walk(rules, group_name: str) -> List[Any]:
+            if not rules:
+                return rules
+            kept: List[Any] = []
+            seen_forms: Dict[str, str] = {}
+            used_names: Set[str] = set()
+            for rule in rules:
+                name = getattr(rule, "name", None)
+                form = rule_form(rule)
+                if name and seen_forms.get(name) == form:
+                    logger.debug(
+                        "Dropping a duplicate emission of rule %r in %s.",
+                        name,
+                        group_name,
+                    )
+                    continue
+                if name and name in used_names:
+                    suffix = 2
+                    while f"{name}-{suffix}" in used_names:
+                        suffix += 1
+                    self._append_diagnostic(
+                        "duplicate-rule-name-conflict",
+                        f"Rules {name!r} and {name}-{suffix} in group "
+                        f"{group_name!r} write the same target element with "
+                        "different values — typically a profile-fixed value and "
+                        "a mapped source field. Both are emitted; remove the "
+                        "mapping-table entry if the profile's value is the one "
+                        "you want.",
+                        group=group_name,
+                        rule=name,
+                    )
+                    rule.name = f"{name}-{suffix}"
+                    name = rule.name
+                if name:
+                    used_names.add(name)
+                    seen_forms[name] = form
+                rule.rule = walk(getattr(rule, "rule", None), group_name)
+                kept.append(rule)
+            return kept
+
+        for group in getattr(structure_map, "group", None) or []:
+            group.rule = walk(
+                getattr(group, "rule", None), getattr(group, "name", "") or ""
+            )
+
+    def _report_overlong_map_tokens(self, structure_map) -> None:
+        """Report names past FHIR's 64-character ``id`` limit"""
+
+        overlong: List[str] = []
+
+        def check(where: str, value) -> None:
+            if value and len(str(value)) > FHIR_ID_MAX_LENGTH:
+                overlong.append(f"{where} ({len(str(value))} chars): {value}")
+
+        def walk_rules(rules) -> None:
+            for rule in rules or []:
+                check("rule.name", getattr(rule, "name", None))
+                walk_rules(getattr(rule, "rule", None))
+
+        for group in getattr(structure_map, "group", None) or []:
+            check("group.name", getattr(group, "name", None))
+            walk_rules(getattr(group, "rule", None))
+
+        for entry in overlong:
+            self._append_diagnostic(
+                "map-token-too-long",
+                f"{entry} exceeds FHIR's {FHIR_ID_MAX_LENGTH}-character limit for "
+                "an id. Shorten the profile or element identifier it is derived "
+                "from; truncating it here could break a rule that references it "
+                "by name.",
+            )
+
     @staticmethod
     def _normalize_and_validate_structure_map(structure_map):
         """Populate required target context types and reject malformed targets."""
@@ -337,6 +556,14 @@ class StructureMapGenerator:
                             f"StructureMap rule {getattr(rule, 'name', '<unnamed>')!r} "
                             f"has unsupported source list mode {source_mode!r}"
                         )
+                    if source_mode and not getattr(source, "element", None):
+                        logger.debug(
+                            "Dropping source list mode %r on rule %r: the source "
+                            "reads its context, not a repeating element.",
+                            source_mode,
+                            getattr(rule, "name", "<unnamed>"),
+                        )
+                        source.listMode = None
                 for target in getattr(rule, "target", None) or []:
                     context = getattr(target, "context", None)
                     element = getattr(target, "element", None)
@@ -378,7 +605,46 @@ class StructureMapGenerator:
             raise ValueError("StructureMap group names must be unique")
         for group in groups:
             _walk(getattr(group, "rule", None))
+        StructureMapGenerator._reject_invalid_map_tokens(structure_map)
         return structure_map
+
+    @staticmethod
+    def _reject_invalid_map_tokens(structure_map) -> None:
+        """Fail on a name FHIR types as ``id`` that is not a valid id"""
+
+        offenders: List[str] = []
+
+        def check(where: str, value) -> None:
+            if value and not FHIR_ID_PATTERN.match(str(value)):
+                offenders.append(f"{where}={value!r}")
+
+        def walk_rules(rules, trail: str) -> None:
+            for index, rule in enumerate(rules or []):
+                where = f"{trail}/rule[{index}]"
+                check(f"{where}.name", getattr(rule, "name", None))
+                for source in getattr(rule, "source", None) or []:
+                    check(f"{where}.source.context", getattr(source, "context", None))
+                    check(f"{where}.source.variable", getattr(source, "variable", None))
+                for target in getattr(rule, "target", None) or []:
+                    check(f"{where}.target.context", getattr(target, "context", None))
+                    check(f"{where}.target.variable", getattr(target, "variable", None))
+                for dependent in getattr(rule, "dependent", None) or []:
+                    check(f"{where}.dependent.name", getattr(dependent, "name", None))
+                walk_rules(getattr(rule, "rule", None), where)
+
+        for index, group in enumerate(getattr(structure_map, "group", None) or []):
+            where = f"group[{index}]"
+            check(f"{where}.name", getattr(group, "name", None))
+            check(f"{where}.extends", getattr(group, "extends", None))
+            for group_input in getattr(group, "input", None) or []:
+                check(f"{where}.input.name", getattr(group_input, "name", None))
+            walk_rules(getattr(group, "rule", None), where)
+
+        if offenders:
+            raise ValueError(
+                "StructureMap contains names FHIR requires to match "
+                f"{FHIR_ID_PATTERN.pattern}: " + ", ".join(offenders[:10])
+            )
 
     def _append_diagnostic(self, code, message, **details):
         def _plain(value):
@@ -404,8 +670,18 @@ class StructureMapGenerator:
             self.mapping_diagnostics.append(diagnostic)
         return diagnostic
 
-    def _record_profile_facet_diagnostics(self, obj):
+    def _record_profile_facet_diagnostics(self, obj, mapped_paths=None):
         """Surface profile facets that constrain output but do not invent source values."""
+
+        mapped_paths = {str(path) for path in (mapped_paths or set()) if path}
+
+        def _has_explicit_provider(path):
+            return any(
+                candidate == path
+                or candidate.startswith(path + ".")
+                or candidate.startswith(path + ":")
+                for candidate in mapped_paths
+            )
 
         def _walk(fields):
             for field in fields or []:
@@ -457,7 +733,7 @@ class StructureMapGenerator:
                             value=field[facet],
                             severity="information",
                         )
-                if field.get("is_modifier"):
+                if field.get("is_modifier") and not _has_explicit_provider(path):
                     self._append_diagnostic(
                         "target-modifier-element",
                         f"{path} is a modifier element and requires explicit mapping intent.",
@@ -923,13 +1199,14 @@ class StructureMapGenerator:
         }
         self._coverage[resource_identity(obj.data)] = profile_coverage
 
-    def _save_coverage_report(self):
-        """persist the aggregated required-element coverage report to the project's source_data folder"""
+    def _coverage_report_filename(self) -> str:
+        return f"{self.map_name}_coverage.json"
+
+    def _build_coverage_report(self) -> Optional[CoverageReport]:
+        """Build the public coverage contract from current generator state."""
 
         if not self._coverage and not self.mapping_diagnostics:
-            return
-        import json
-
+            return None
         total_req = sum(p["required_total"] for p in self._coverage.values())
         total_unmapped = sum(p["required_unmapped"] for p in self._coverage.values())
         static_req = sum(
@@ -941,7 +1218,7 @@ class StructureMapGenerator:
         )
         covered = total_req - total_unmapped
         report = {
-            "report_version": 2,
+            "report_version": COVERAGE_REPORT_VERSION,
             "map": self.map_name,
             "note": (
                 "Requirements are enumerated independently from the StructureDefinition "
@@ -962,32 +1239,74 @@ class StructureMapGenerator:
                 ),
             },
             "profiles": self._coverage,
-            "mapping_diagnostics": list(self.mapping_diagnostics),
+            "mapping_diagnostics": [
+                MappingDiagnostic.from_raw(diagnostic)
+                for diagnostic in self.mapping_diagnostics
+            ],
         }
+        return CoverageReport.model_validate(report)
+
+    def _load_coverage_report(self) -> Optional[CoverageReport]:
+        """Load an existing v2+ report and enrich its diagnostics in memory."""
+
+        loader = getattr(self.app_state.dataIO, "load_project_file", None)
+        if loader is None:
+            return None
+        filename = self._coverage_report_filename()
+        try:
+            raw = loader(
+                self.app_state.dataIO.ProjectFolders.SOURCE_DATA,
+                filename,
+            )
+            if not isinstance(raw, dict):
+                return None
+            self.coverage_report = CoverageReport.from_raw(raw)
+            self.coverage_report_path = self._artifact_path(
+                self.app_state.dataIO.ProjectFolders.SOURCE_DATA,
+                filename,
+            )
+            return self.coverage_report
+        except Exception as exc:
+            logger.warning("Could not load coverage report: %s", exc)
+            return None
+
+    def _save_coverage_report(self) -> Optional[CoverageReport]:
+        """Persist and return the aggregated required-element coverage report."""
+
+        report = self._build_coverage_report()
+        self.coverage_report = report
+        if report is None:
+            self.coverage_report_path = None
+            return None
+
+        filename = self._coverage_report_filename()
         try:
             self.app_state.dataIO.store_project_file(
                 self.app_state.dataIO.ProjectFolders.SOURCE_DATA,
-                f"{self.map_name}_coverage.json",
-                json.dumps(report, indent=2),
+                filename,
+                report.model_dump_json(indent=2, exclude_none=True),
                 mode="STR",
                 overwrite=True,
             )
+            self.coverage_report_path = self._artifact_path(
+                self.app_state.dataIO.ProjectFolders.SOURCE_DATA,
+                filename,
+            )
+            summary = report.summary
             logger.info(
                 "Required-element coverage: %d/%d mapped across %d profiles (%s unmapped).",
-                covered,
-                total_req,
-                len(self._coverage),
-                total_unmapped,
+                summary.required_mapped,
+                summary.required_total,
+                summary.profiles,
+                summary.required_unmapped,
             )
-        except Exception as e:
-            logger.warning("Could not write coverage report: %s", e)
+        except Exception as exc:
+            self.coverage_report_path = None
+            logger.warning("Could not write coverage report: %s", exc)
+        return report
 
-    def _build_combined_automapping(
-        self, resources: list, source_fields: list
-    ) -> Dict[str, str]:
-        """automapping for every source field against every resource's target fields"""
-        # {source_field_id: {"target": path, "score": float, "resource": res_type}}
-        best: Dict[str, dict] = {}
+    def _iter_mappable_resources(self, resources: list):
+        """Yield ``(obj, res_type, target_fields)`` for every resolvable resource"""
 
         for res_dict in resources:
             url = next(iter(res_dict))
@@ -998,8 +1317,96 @@ class StructureMapGenerator:
             flat_fields = flatten_profile_fields(
                 self.app_state, res_type, obj.mappable_fields
             )
-            target_fields = self._flatten_fields_recursively(flat_fields)
+            yield obj, res_type, self._flatten_fields_recursively(flat_fields)
 
+    def _build_llm_automapping(
+        self, resources: list, source_fields: list
+    ) -> Dict[str, str]:
+        """Delegate target selection to the configured LLM strategy"""
+
+        from mapping.fml_creator.llm_automapping import ResourceTargets
+
+        resource_targets = [
+            ResourceTargets(
+                res_type=res_type,
+                res_id=resource_identity(obj.data),
+                target_fields=target_fields,
+                profile=obj.data,
+            )
+            for obj, res_type, target_fields in self._iter_mappable_resources(resources)
+        ]
+
+        mapping_table = self.llm_automapping.build_mapping_table(
+            resource_targets, source_fields
+        )
+        self._llm_proposed_mapping_table = dict(mapping_table)
+        self._llm_compiled_mapping_table = {}
+        self._llm_diagnostics_start = len(self.mapping_diagnostics)
+        logger.info(
+            f"LLM automapping complete: {len(mapping_table)} source fields mapped."
+        )
+        return mapping_table
+
+    def _record_llm_compiled_mappings(
+        self,
+        res_type: str,
+        res_id: str,
+        automapped_mappings: Dict[str, str],
+    ) -> None:
+        """Record model selections the ordinary compiler actually accepted."""
+
+        if self._llm_proposed_mapping_table is None:
+            return
+
+        for source_id, target_value in self._llm_proposed_mapping_table.items():
+            target_text = mapping_target_path(target_value)
+            if not target_text:
+                continue
+            prefix, separator, remainder = target_text.partition(".")
+            if prefix not in {res_type, res_id}:
+                continue
+            normalized_target = f"{res_type}.{remainder}" if separator else res_type
+            if automapped_mappings.get(normalized_target) == source_id:
+                self._llm_compiled_mapping_table[source_id] = target_text
+
+    def _finalize_llm_automapping_report(self) -> None:
+        """Persist the audit report only after normal compilation succeeds."""
+
+        if self._llm_proposed_mapping_table is None:
+            return
+
+        diagnostics = self.mapping_diagnostics[self._llm_diagnostics_start :]
+        report = self.llm_automapping.report(
+            self._llm_proposed_mapping_table,
+            compiled_mapping_table=self._llm_compiled_mapping_table,
+            compiler_diagnostics=diagnostics,
+        )
+        self._save_automapping_table(self._llm_compiled_mapping_table)
+        self._save_llm_automapping_report(report)
+
+    def _save_llm_automapping_report(self, report: Dict[str, Any]) -> None:
+        """Persist the LLM automapping audit trail beside the mapping table."""
+
+        import json
+
+        filename = f"{self.map_name}_llm_automapping_report.json"
+        self.app_state.dataIO.store_project_file(
+            self.app_state.dataIO.ProjectFolders.SOURCE_DATA,
+            filename,
+            json.dumps(report, indent=2, default=str),
+            mode="STR",
+            overwrite=True,
+        )
+        logger.info(f"Saved LLM automapping report to source_data/{filename}")
+
+    def _build_combined_automapping(
+        self, resources: list, source_fields: list
+    ) -> Dict[str, str]:
+        """automapping for every source field against every resource's target fields"""
+        # {source_field_id: {"target": path, "score": float, "resource": res_type}}
+        best: Dict[str, dict] = {}
+
+        for obj, res_type, target_fields in self._iter_mappable_resources(resources):
             logger.info(
                 f"Automapping pass for resource {obj.data.id} ({len(source_fields)} source fields)..."
             )
@@ -1011,13 +1418,9 @@ class StructureMapGenerator:
                 if src_id not in best or score > best[src_id]["score"]:
                     target_path = match.get("path") or match.get("_virtual_path")
                     res_id = resource_identity(obj.data)
-                    if (
-                        target_path
-                        and res_id
-                        and res_id != res_type
-                        and target_path.startswith(f"{res_type}.")
-                    ):
-                        target_path = f"{res_id}.{target_path[len(res_type)+1:]}"
+                    target_path = rebase_to_resource_identity(
+                        target_path, res_type, res_id
+                    )
                     best[src_id] = {
                         "target": target_path,
                         "score": score,
@@ -1090,10 +1493,6 @@ class StructureMapGenerator:
                         "description": elem.short or elem.definition or "",
                         "type": elem_type,
                         "max": elem.max,
-                        # Element extensions state things about the source a plugin
-                        # derived rather than the shape alone gives — the UCUM unit a
-                        # numeric field is recorded in, say. Dropping them here left
-                        # that knowledge unreachable to everything downstream.
                         "extension": list(elem.extension or []),
                     }
                 )
@@ -1120,10 +1519,8 @@ class StructureMapGenerator:
     ) -> Tuple[Set[str], Dict[str, str]]:
         automapped_paths = set()
         automapped_mappings = {}
-        # The mapping dictionary also receives inferred ancestor contexts. Keep
-        # the directly authored targets separately so emitters do not mistake an
-        # inferred unsliced ancestor for a second requested entry (B7).
         self.factory.explicit_mapping_targets = set()
+        self.factory.coded_code_leaf_sources = {}
         if custom_mapping_table:
             automapped_paths, automapped_mappings = self._apply_custom_mapping_table(
                 custom_mapping_table,
@@ -1164,30 +1561,12 @@ class StructureMapGenerator:
                 if not isinstance(child, dict):
                     continue
                 path = str(child.get("path") or "")
-                # The synthesized descendants keep the *unsliced* parent path, so
-                # compare only the part below the choice element.
                 if path.split("[x]", 1)[-1].lstrip(".") == wanted:
                     return True
         return False
 
     def _resolve_sliced_choice_target(self, target, target_index, field_by_identity):
-        """Resolve `…:<slice>.value<Type>.<rest>` when no exact index entry exists.
-
-        A profile may narrow a slice's `value[x]` to one datatype without profiling
-        that datatype's children. The children are then synthesized from
-        `fhir.resources` and keep the *unsliced* path, so no single record carries
-        both the slice and the concrete choice, and the authored target matches
-        nothing — even though every part of it is real.
-
-        Resolved on demand rather than by adding aliases to the shared index:
-        `target_index` is single-valued and its keys overlap across exact snapshot
-        identities, structural paths and choice aliases, so inserting a concrete
-        alias for every virtual path silently redirects lookups that already work.
-
-        Returns the canonical `…:<slice>.<base>[x]:<concrete>.<rest>` key, or None —
-        including when more than one choice element could account for the segment,
-        which is reported rather than guessed at.
-        """
+        """Resolve `*<slice>.value<Type>.<rest>` when no exact index entry exists"""
         if ":" not in target or "[x]" in target:
             return None
         segments = target.split(".")
@@ -1250,6 +1629,8 @@ class StructureMapGenerator:
 
         if not hasattr(self.factory, "explicit_mapping_targets"):
             self.factory.explicit_mapping_targets = set()
+        if not hasattr(self.factory, "coded_code_leaf_sources"):
+            self.factory.coded_code_leaf_sources = {}
         if not hasattr(self, "mapping_diagnostics"):
             self.mapping_diagnostics = []
         # Collection declarations are scoped to the target profile currently
@@ -1586,6 +1967,15 @@ class StructureMapGenerator:
                 else:
                     break
                 skip_add = False
+                if target_path.rsplit(".", 1)[-1] == "code":
+                    store = self.factory.coded_code_leaf_sources
+                    store[ancestor] = source_id
+                    plain = _re_slice.sub("", ancestor)
+                    if plain != ancestor:
+                        if plain not in store:
+                            store[plain] = source_id
+                        elif store[plain] != source_id:
+                            store[plain] = None
                 if not skip_add and ancestor not in automapped_mappings:
                     automapped_mappings[ancestor] = source_id
                     automapped_paths.add(ancestor)
@@ -1706,7 +2096,8 @@ class StructureMapGenerator:
         logger.info("Creating group for resource %s", res_obj.data.id)
         source_type = source_obj.type if source_obj else "SourceData"
         group = StructureMapGroup.model_construct(
-            name=f"Transform-{resource_identity(res_obj.data)}", typeMode="none"
+            name=fhir_map_token(f"Transform-{resource_identity(res_obj.data)}"),
+            typeMode="none",
         )
         group.input = [
             StructureMapGroupInput.model_construct(

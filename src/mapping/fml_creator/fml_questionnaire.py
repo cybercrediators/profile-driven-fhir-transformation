@@ -13,6 +13,7 @@ from fhir.resources.R4B.structuremap import (
 )
 
 from data_handling.registry.registry_object import RegistryObject
+from helpers.utils import fhir_map_token
 from mapping.fml_creator.fml_helper import fixed_scalar_parameter, local_element_name
 from mapping.rule_ir import mapping_target_path
 from parser.resource_parser.value_expander import expand_valueset
@@ -83,10 +84,11 @@ class QuestionnaireMapCreator:
         self, source_alias: str, target_alias: str, mapping_table: dict = None
     ) -> StructureMapGroup:
         """Generate a StructureMapGroup for this Questionnaire."""
+        source_alias = fhir_map_token(source_alias)
+        target_alias = fhir_map_token(target_alias)
         self._source_root_alias = source_alias
         self._target_root_alias = target_alias
-        group_name = self.questionnaire.name or "QuestionnaireMap"
-        group_name = group_name.replace(" ", "_").replace("-", "_")
+        group_name = fhir_map_token(self.questionnaire.name or "QuestionnaireMap")
 
         group = StructureMapGroup.model_construct(
             name=group_name,

@@ -814,8 +814,10 @@ def _compile_reference(
         documentation = "FHIRBRIDGE_REFERENCE:" + json.dumps(
             contract, sort_keys=True, separators=(",", ":")
         )
+        from mapping.fml_creator.fml_helper import fit_rule_name  # noqa: PLC0415
+
         rule = StructureMapGroupRule.model_construct(
-            name=f"TODO-resolve-reference-{name}",
+            name=fit_rule_name(f"TODO-resolve-reference-{name}"),
             source=[
                 StructureMapGroupRuleSource.model_construct(context="source")
             ],
@@ -1398,3 +1400,37 @@ def _validate_compiled_semantics(result: CompiledRuleDocument) -> None:
         else:
             valid_primary_rules.append(rule)
     result.primary_rules = valid_primary_rules
+
+
+def validate_structure_map_semantics(structure_map) -> list[dict]:
+    """validate by running semantic checks against the completed structuremap"""
+
+    groups = list(getattr(structure_map, "group", None) or [])
+    by_name: dict[str, Any] = {}
+    duplicates: list[dict] = []
+    for index, group in enumerate(groups):
+        name = getattr(group, "name", None)
+        if name in by_name:
+            duplicates.append(
+                {
+                    "pointer": f"/group/{index}",
+                    "group": name,
+                    "message": f"duplicate group name {name!r}",
+                }
+            )
+        by_name[name] = group
+
+    imports_present = bool(getattr(structure_map, "import_fhir", None))
+    findings = list(duplicates)
+    for index, group in enumerate(groups):
+        for message in _validate_group_semantics(
+            group, by_name, imports_present=imports_present
+        ):
+            findings.append(
+                {
+                    "pointer": f"/group/{index}",
+                    "group": getattr(group, "name", None),
+                    "message": message,
+                }
+            )
+    return findings

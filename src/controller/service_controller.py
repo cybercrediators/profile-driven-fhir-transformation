@@ -1,22 +1,20 @@
 from argparse import Namespace
-from controller.socket_controller.socket_controller import SocketServer
-from controller.connector.fsh_connector import SushiController
-from helpers import config
-from controller.pipeline_controller.pipeline_controller import PipelineController
-from view.socket_client import SocketClient
-from view.cache_cli import CacheCLI
-from view.matchbox_cli import MatchboxCLI
-
+import logging
+from pathlib import Path
 from pprint import pprint
 import shutil
-from pathlib import Path
-from data_handling.data_io import DataIO
-
-import logging
-logger = logging.getLogger(__name__)
-
-
 import sys
+
+from controller.connector.fsh_connector import SushiController
+from controller.pipeline_controller.pipeline_controller import PipelineController
+from controller.socket_controller.socket_controller import SocketServer
+from data_handling.data_io import DataIO
+from helpers import config
+from view.cache_cli import CacheCLI
+from view.matchbox_cli import MatchboxCLI
+from view.socket_client import SocketClient
+
+logger = logging.getLogger(__name__)
 
 
 class ServiceController:
@@ -134,6 +132,9 @@ class ServiceController:
         elif args.command == "pipeline":
             self.handle_pipeline(args)
 
+        elif args.command == "agent":
+            sys.exit(self.handle_agent(args))
+
         elif getattr(args, "development", False):
             pc = self._make_pipeline_controller(args)
             pc.initial_processing()
@@ -163,7 +164,23 @@ class ServiceController:
             create_references=getattr(args, "create_references_in_structure_map", True),
             minimal_mode=getattr(args, "minimal_structure_map", False),
             automapping=getattr(args, "auto_mapping", False),
+            auto_mapping_mode=getattr(args, "auto_mapping_mode", "deterministic"),
         )
+
+    def handle_agent(self, args) -> int:
+        """handle the agent command"""
+
+        action = getattr(args, "agent_action", None)
+        if action != "fix":
+            logger.error("Unknown agent command: %s", action)
+            return 2
+
+        from agent.cli import run_agent_fix
+
+        mapping_table_path = getattr(args, "mapping_table_path", "")
+        if mapping_table_path:
+            self.conf["mapping_table_path"] = mapping_table_path
+        return run_agent_fix(args, self.conf)
 
     def handle_pipeline(self, args):
         """Route pipeline subcommands to PipelineController step methods."""

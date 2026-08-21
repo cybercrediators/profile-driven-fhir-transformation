@@ -1,6 +1,5 @@
 from fhir.resources.R4B.structuremap import (
     StructureMap,
-    StructureMapGroup,
     StructureMapGroupRule,
     StructureMapGroupRuleTarget,
     StructureMapGroupRuleTargetParameter,
@@ -12,6 +11,7 @@ from data_handling.url_resolver.fhir_url_resolver import resolve_url
 import logging
 
 from mapping.fml_creator.fml_helper import (
+    fit_rule_name,
     is_primitive_type,
     parse_slice_info,
     get_transform_for_type,
@@ -248,7 +248,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         if selectors:
             contract["selectors"] = list(selectors)
         return StructureMapGroupRule.model_construct(
-            name=(
+            name=fit_rule_name(
                 "TODO-resolve-reference-"
                 f"{clean_field_name(res_type)}-"
                 f"{clean_field_name(name_hint or relative_path)}-slices"

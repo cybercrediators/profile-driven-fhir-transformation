@@ -5,6 +5,7 @@ from fhir.resources.R4B.structuremap import (
     StructureMapGroupRuleSource,
 )
 from mapping.fml_creator.fml_helper import (
+    fit_rule_name,
     is_primitive_type,
     get_transform_for_type,
     clean_field_name,
@@ -435,6 +436,7 @@ class _SliceRulesMixin:
             tgt.context = parent_target_context
             tgt.element = f"{base_name}{suffix}" if suffix else base_name
             if sub_field_maps:
+                tgt.element = base_name
                 src.element = sub_field_maps[0][1]
                 src.variable = "src-choiceval"
                 if field is not None:
@@ -1181,7 +1183,7 @@ class _SliceRulesMixin:
                         severity="warning",
                     )
                 ref_rule = StructureMapGroupRule.model_construct(
-                    name=(
+                    name=fit_rule_name(
                         f"TODO-resolve-reference-{clean_field_name(res_type)}"
                         f"-{clean_field_name(sub)}"
                     )

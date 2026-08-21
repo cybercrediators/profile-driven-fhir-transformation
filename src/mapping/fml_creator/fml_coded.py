@@ -52,21 +52,23 @@ class _CodedRulesMixin:
         return keys
 
     def _resolve_coded_source(self, field, automapped_mappings):
-        """Return the local source element for a coded field, or ``None``."""
+        """return local source element for a coded fiels (or None)"""
+
         if not automapped_mappings:
             return None
+        path = field.get("path")
+        ftype = self._canonical_coded_type(field)
+        if path and ftype in ("Coding", "CodeableConcept"):
+            by_code = getattr(self, "coded_code_leaf_sources", None) or {}
+            if by_code.get(path) is not None and path in by_code:
+                return self._as_local_element(by_code[path])
         for key in self._coded_source_keys(field):
             if key in automapped_mappings:
                 return self._as_local_element(automapped_mappings[key])
         return None
 
     def _authored_coded_leaf_sources(self, field, automapped_mappings):
-        """Return explicitly authored providers for Coding/CodeableConcept leaves.
-
-        The mapping dictionary also contains inferred ancestor entries.  Those
-        entries must not turn a mapping to ``CodeableConcept.text`` or
-        ``Coding.display`` into the historical code-only shorthand.
-        """
+        """return explicitly authored providers for Coding/CodeableConcept leave values"""
 
         if not automapped_mappings:
             return {}

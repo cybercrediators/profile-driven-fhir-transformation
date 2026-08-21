@@ -7,9 +7,9 @@ from fhir.resources.R4B.structuremap import (
     StructureMapGroupRuleTarget,
     StructureMapGroupRuleTargetParameter,
     StructureMapGroupRuleSource,
-    StructureMapGroupRuleDependent,
 )
 from mapping.fml_creator.fml_helper import (
+    fit_rule_name,
     emits_only_url,
     fixed_scalar_parameter,
     has_fixed_value,
@@ -123,7 +123,7 @@ class _ExtensionRulesMixin:
             ],
         }
         return StructureMapGroupRule.model_construct(
-            name=(
+            name=fit_rule_name(
                 "TODO-resolve-reference-"
                 f"{clean_field_name(res_type)}-extension-"
                 f"{clean_field_name(var_suffix)}"

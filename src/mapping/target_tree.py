@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import logging
 from dataclasses import dataclass, field as dc_field
-from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
@@ -39,6 +38,14 @@ PROVIDER_REQUIRED_PARENT = "required-parent"
 _FIXED_PREFIXES = ("fixed", "pattern")
 # keys on an ElementDefinition that are not fixed[x]/pattern[x] despite the prefix
 _NOT_FIXED = {"fixedValueSet", "patternValueSet"}
+
+# how a lookup key resolved against the tree (see TargetTree.resolve)
+RESOLUTION_EXACT_ID = "exact-id"
+RESOLUTION_UNIQUE_PATH = "unique-path"
+RESOLUTION_AMBIGUOUS_PATH = "ambiguous-path"
+RESOLUTION_NOT_FOUND = "not-found"
+#: Statuses that identify exactly one element, so a caller may address it.
+RESOLVED_STATUSES = frozenset({RESOLUTION_EXACT_ID, RESOLUTION_UNIQUE_PATH})
 
 
 @dataclass
@@ -228,14 +235,34 @@ class TargetTree:
                 added += 1
         return added
 
-    # ------------------------------------------------------------------ query
-    def node(self, key: str) -> Optional[TargetNode]:
-        """Look up by ElementDefinition.id, falling back to a unique path match."""
+    def resolve(self, key: str) -> tuple[Optional[TargetNode], str]:
+        """look up key, report how it should be resolved
+
+        :return: ``(node, status)`` with status one of :data:`RESOLUTION_EXACT_ID`,
+            :data:`RESOLUTION_UNIQUE_PATH`, :data:`RESOLUTION_AMBIGUOUS_PATH`, or
+            :data:`RESOLUTION_NOT_FOUND`.
+        """
         hit = self._by_eid.get(key)
         if hit is not None:
-            return hit
+            return hit, RESOLUTION_EXACT_ID
         matches = [n for n in self._by_eid.values() if n.path == key]
-        return matches[0] if len(matches) == 1 else None
+        if len(matches) == 1:
+            return matches[0], RESOLUTION_UNIQUE_PATH
+        if matches:
+            return None, RESOLUTION_AMBIGUOUS_PATH
+        return None, RESOLUTION_NOT_FOUND
+
+    def node(self, key: str) -> Optional[TargetNode]:
+        """Look up by ElementDefinition.id, falling back to a unique path match."""
+        return self.resolve(key)[0]
+
+    def matches(self, key: str) -> List[TargetNode]:
+        """retrieve every node the given key can denote (incl. slices)"""
+
+        hit = self._by_eid.get(key)
+        if hit is not None:
+            return [hit]
+        return [n for n in self._by_eid.values() if n.path == key]
 
     def is_prohibited(self, key: str) -> bool:
         """True when the profile forbids this element or one of its ancestors (N4)."""
