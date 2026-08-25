@@ -212,6 +212,8 @@ MAPPING_TABLE = {
 }
 
 BROKEN_POINTER = "/group/0/rule/0/rule/0/target/0/element"
+#: A member the broken target does not carry, so nothing can be asserted about it.
+UNSET_POINTER = "/group/0/rule/0/rule/0/target/0/variable"
 
 
 @pytest.fixture
@@ -302,9 +304,15 @@ def correct_repair(context):
 
 
 def unguarded_repair(context):
-    """Missing the mandatory `test` guard — WP5 rejects it before application."""
+    """A destructive op the tool cannot guard — WP5 rejects it before application.
 
-    return _patch(context, [operation("replace", BROKEN_POINTER, "family")])
+    Omitting the `test` is no longer a rejection on its own: `inject_guards`
+    reads the current value out of the base and supplies it. It refuses to
+    invent an assertion for a pointer that holds no value, so a `replace` on an
+    unset member is the case where `unguarded-mutation` still fires.
+    """
+
+    return _patch(context, [operation("replace", UNSET_POINTER, "family")])
 
 
 def service_with(conf, proposer, **kwargs):

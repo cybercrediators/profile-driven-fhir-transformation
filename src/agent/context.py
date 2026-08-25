@@ -390,7 +390,7 @@ def _choice_matches(path: str, by_path: Mapping[str, List[str]]) -> List[str]:
 
 
 
-INSERTION_FINDING_CODES = frozenset(
+_INSERTION_FINDING_CODES = frozenset(
     {
         "unmaterialized-nested-target",
         "mapping-obligation-dropped",
