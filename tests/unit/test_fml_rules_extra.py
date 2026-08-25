@@ -741,7 +741,7 @@ def test_raw_primitive_code_retains_scalar_route(factory, monkeypatch):
     assert rule.target[0].transform == "copy"
 
 
-def test_exact_only_raw_choice_mapping_emits_concrete_primitive_target(factory):
+def test_exact_only_raw_choice_mapping_emits_primitive_choice_base(factory):
     field = {
         "path": "MedicationStatement.effective[x]",
         "type": [{"code": "dateTime"}],
@@ -759,7 +759,7 @@ def test_exact_only_raw_choice_mapping_emits_concrete_primitive_target(factory):
 
     assert rule.name == "map-effective"
     assert rule.target == []
-    assert rule.rule[0].target[0].element == "effectiveDateTime"
+    assert rule.rule[0].target[0].element == "effective"
     assert rule.rule[0].target[0].transform == "cast"
 
 
@@ -783,7 +783,7 @@ def test_direct_raw_choice_mapping_narrows_from_source_primitive(factory):
         parent_path="MedicationRequest.substitution",
     )
 
-    assert rule.rule[0].target[0].element == "allowedBoolean"
+    assert rule.rule[0].target[0].element == "allowed"
     assert rule.rule[0].target[0].transform == "copy"
 
 
@@ -807,7 +807,7 @@ def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factor
         parent_path="MedicationRequest.substitution",
     )
 
-    assert rule.rule[0].target[0].element == "allowedBoolean"
+    assert rule.rule[0].target[0].element == "allowed"
     assert rule.rule[0].target[0].transform == "copy"
 
 
@@ -843,7 +843,7 @@ def test_concrete_choice_parent_does_not_gate_on_a_todo_placeholder(factory):
     ), "a TODO placeholder on the parent gates the populated child"
     nested_source = rule.rule[0].source[0]
     assert nested_source.element == "statementEffective"
-    assert rule.rule[0].target[0].element == "effectiveDateTime"
+    assert rule.rule[0].target[0].element == "effective"
 
 
 def test_scaffold_choice_without_a_provider_keeps_its_todo_source(factory):

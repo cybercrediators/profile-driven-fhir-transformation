@@ -1,5 +1,4 @@
 import json
-import socket as socket_module
 from types import SimpleNamespace
 
 import pytest

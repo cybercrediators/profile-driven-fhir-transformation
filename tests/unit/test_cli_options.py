@@ -193,6 +193,53 @@ def test_pipeline_run_long_flags():
     assert args.mapping_table_path == "t.json"
 
 
+# ---------------------------------------------------------------------------
+# auto-mapping mode (WP4)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("action", ["run", "static-gen-sm"])
+def test_auto_mapping_defaults_to_deterministic(action):
+    """`--auto-mapping` on its own must keep meaning the deterministic matcher."""
+
+    args = parse_args(["pipeline", action, "--auto-mapping"])
+
+    assert args.auto_mapping is True
+    assert args.auto_mapping_mode == "deterministic"
+
+
+@pytest.mark.parametrize("action", ["run", "static-gen-sm"])
+def test_llm_mode_is_selected_explicitly(action):
+    args = parse_args(
+        ["pipeline", action, "--auto-mapping", "--auto-mapping-mode", "llm"]
+    )
+
+    assert args.auto_mapping is True
+    assert args.auto_mapping_mode == "llm"
+
+
+def test_mode_without_auto_mapping_is_refused():
+    """Otherwise the flag would look accepted while doing nothing at all."""
+
+    with pytest.raises(SystemExit):
+        parse_args(["pipeline", "run", "--auto-mapping-mode", "llm"])
+
+
+def test_deterministic_mode_without_auto_mapping_is_allowed():
+    """The default value must not turn into an error just by being spelled out."""
+
+    args = parse_args(["pipeline", "run", "--auto-mapping-mode", "deterministic"])
+
+    assert args.auto_mapping is False
+
+
+def test_unknown_mode_is_refused():
+    with pytest.raises(SystemExit):
+        parse_args(
+            ["pipeline", "run", "--auto-mapping", "--auto-mapping-mode", "telepathy"]
+        )
+
+
 def test_pipeline_process_action():
     args = parse_args(["pipeline", "process"])
 
@@ -537,3 +584,89 @@ def test_process_fsh_name_defaults_none():
 def test_process_fsh_requires_directory():
     with pytest.raises(SystemExit):
         parse_args(["process-fsh"])
+
+
+# ---------------------------------------------------------------------------
+# Agent mode (WP8) — strictly opt-in, and it has to stay that way
+# ---------------------------------------------------------------------------
+
+
+def test_agent_fix_parses():
+    args = parse_args(["agent", "fix", "sm-cli"])
+
+    assert args.command == "agent"
+    assert args.agent_action == "fix"
+    assert args.map == "sm-cli"
+    # The default run is diagnostic: it never writes.
+    assert args.apply is False
+    assert args.offline is False
+    assert args.use_examples is False
+    assert args.max_attempts == 4
+
+
+def test_agent_fix_map_selector_is_optional():
+    args = parse_args(["agent", "fix"])
+    assert args.map is None
+
+
+def test_agent_fix_accepts_its_bounds_and_output_directory():
+    args = parse_args(
+        ["agent", "fix", "sm-cli", "--max-attempts", "2", "-o", "/tmp/out", "--offline"]
+    )
+    assert args.max_attempts == 2
+    assert args.output_dir == "/tmp/out"
+    assert args.offline is True
+
+
+def test_agent_fix_accepts_explicit_provider_overrides():
+    args = parse_args(
+        [
+            "agent",
+            "fix",
+            "sm-cli",
+            "--llm-provider",
+            "openai-compatible",
+            "--llm-model",
+            "repair-model",
+            "--llm-base-url",
+            "http://localhost:8000/v1",
+        ]
+    )
+    assert args.llm_provider == "openai-compatible"
+    assert args.llm_model == "repair-model"
+    assert args.llm_base_url == "http://localhost:8000/v1"
+
+
+def test_agent_requires_a_subcommand():
+    with pytest.raises(SystemExit):
+        parse_args(["agent"])
+
+
+def test_agent_apply_and_offline_are_mutually_exclusive():
+    # Rejected at parse time, before any provider call is paid for: an offline
+    # run has no engine evidence, so its candidates can never be applied.
+    with pytest.raises(SystemExit):
+        parse_args(["agent", "fix", "sm-cli", "--apply", "--offline"])
+
+
+def test_agent_help_names_the_feature_agent_mode(capsys):
+    with pytest.raises(SystemExit):
+        parse_args(["--help"])
+    assert "Agent mode" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize(
+    "argv",
+    [
+        ["pipeline", "run"],
+        ["pipeline", "static-gen-sm"],
+        ["pipeline", "process"],
+    ],
+)
+def test_no_pipeline_command_carries_an_agent_route(argv):
+    # An LLM must never be reachable by a route a user took for a deterministic
+    # reason, so there is deliberately no agent flag on any pipeline command.
+    args = parse_args(argv)
+    assert args.command == "pipeline"
+    assert not hasattr(args, "agent_action")
+    assert not getattr(args, "apply", False)

@@ -15,9 +15,20 @@ pytestmark = pytest.mark.unit
 
 
 class FakeResponse:
-    def __init__(self, json_data=None, status_ok=True, content=b"{}", json_error=False, text="body"):
+    def __init__(
+        self,
+        json_data=None,
+        status_ok=True,
+        content=b"{}",
+        json_error=False,
+        text="body",
+        status_code=None,
+    ):
         self._json_data = json_data
         self.status_ok = status_ok
+        # A real ``requests.Response`` always carries a status code, and the
+        # connector reads it directly so a refused request keeps its body.
+        self.status_code = status_code if status_code is not None else (200 if status_ok else 500)
         self.content = content
         self.json_error = json_error
         self.text = text
@@ -168,3 +179,53 @@ def test_send_request_forwards_extra_kwargs(monkeypatch):
     connector = MatchboxConnector({"url": "http://mb"})
     connector.send_request("x", "POST", json={"a": 1})
     assert observed["kwargs"] == {"json": {"a": 1}}
+
+
+# --------------------------------------------------------------------------- #
+# send_request_detailed
+# --------------------------------------------------------------------------- #
+
+
+def test_send_request_detailed_keeps_a_refused_body(monkeypatch):
+    """The whole reason this method exists.
+
+    ``send_request`` discards the body of a 4xx/5xx, but a refused
+    ``$transform`` answers with the ``OperationOutcome`` that says why. Agent
+    validation gates on that outcome, so losing it loses the evidence.
+    """
+
+    outcome = {"resourceType": "OperationOutcome", "issue": [{"code": "processing"}]}
+
+    def fake_request(method, url, headers=None, params=None, **kwargs):
+        return FakeResponse(json_data=outcome, status_ok=False, status_code=500)
+
+    monkeypatch.setattr(matchbox_connector_module.requests, "request", fake_request)
+
+    connector = MatchboxConnector({"url": "http://mb"})
+    assert connector.send_request_detailed("x", "POST") == (500, outcome)
+    # The convenience wrapper still hides it, so existing callers see no change.
+    assert connector.send_request("x", "POST") is None
+
+
+def test_send_request_detailed_reports_an_unreachable_server(monkeypatch):
+    def fake_request(method, url, headers=None, params=None, **kwargs):
+        raise requests.exceptions.ConnectionError("no route")
+
+    monkeypatch.setattr(matchbox_connector_module.requests, "request", fake_request)
+
+    connector = MatchboxConnector({"url": "http://mb"})
+    # No status at all, which is a different fact from "the server said no".
+    assert connector.send_request_detailed("x", "GET") == (None, None)
+
+
+def test_send_request_detailed_returns_the_status_on_success(monkeypatch):
+    def fake_request(method, url, headers=None, params=None, **kwargs):
+        return FakeResponse(json_data={"resourceType": "Patient"}, status_code=201)
+
+    monkeypatch.setattr(matchbox_connector_module.requests, "request", fake_request)
+
+    connector = MatchboxConnector({"url": "http://mb"})
+    assert connector.send_request_detailed("Patient/1", "PUT") == (
+        201,
+        {"resourceType": "Patient"},
+    )

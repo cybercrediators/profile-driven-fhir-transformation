@@ -7,6 +7,10 @@ from controller.pipeline_controller.pipeline_build_service import (
     BuildOptions,
     PipelineBuildService,
 )
+from mapping.generation_result import (
+    GenerationArtifactPaths,
+    StructureMapGenerationResult,
+)
 
 
 pytestmark = pytest.mark.unit
@@ -184,6 +188,42 @@ def test_static_gen_sm_fails_when_helper_missing(make_app_state, state, monkeypa
     svc = make_service(make_app_state, state, options=BuildOptions(project_name="p"))
     monkeypatch.setattr(svc, "_load_helper_map", lambda sd_url: None)
     assert svc.run_static_gen_sm() is False
+
+
+def test_generate_structure_maps_keeps_list_api_and_exposes_typed_result(
+    make_app_state, state, fake_cache, monkeypatch
+):
+    generated_map = SimpleNamespace(
+        url="http://x/StructureMap/generated",
+        model_dump=lambda: {
+            "resourceType": "StructureMap",
+            "url": "http://x/StructureMap/generated",
+        },
+    )
+    typed_result = StructureMapGenerationResult(
+        structure_maps=(generated_map,),
+        coverage_report=None,
+        artifacts=GenerationArtifactPaths(),
+    )
+
+    class FakeGenerator:
+        def __init__(self, **kwargs):
+            pass
+
+        def generate(self):
+            return [generated_map]
+
+        def get_generation_result(self):
+            return typed_result
+
+    monkeypatch.setattr(bs_mod, "StructureMapGenerator", FakeGenerator)
+    svc = make_service(make_app_state, state, cache=fake_cache)
+
+    maps = svc.generate_structure_maps("url", "name", "title", FakeHelperMap())
+
+    assert maps == [generated_map]
+    assert svc.last_generation_result is typed_result
+    assert fake_cache.store[generated_map.url]["resourceType"] == "StructureMap"
 
 
 # --------------------------------------------------------------------------- #

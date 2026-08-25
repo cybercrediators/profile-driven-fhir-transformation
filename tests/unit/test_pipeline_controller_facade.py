@@ -22,7 +22,10 @@ def bare_controller():
     """A PipelineController with stub services, without running __init__."""
     pc = PipelineController.__new__(PipelineController)
     pc.state = PipelineState()
-    pc.build_service = SimpleNamespace(options=BuildOptions(project_name="proj"))
+    pc.build_service = SimpleNamespace(
+        options=BuildOptions(project_name="proj"),
+        last_generation_result=None,
+    )
     pc.matchbox_sync = SimpleNamespace()
     pc.transform_service = SimpleNamespace()
     pc.validation_service = SimpleNamespace()
@@ -113,3 +116,11 @@ def test_input_source_example_proxies_build_options():
     pc.input_source_example = "override.json"
     assert pc.build_service.options.input_source_example == "override.json"
     assert pc.input_source_example == "override.json"
+
+
+def test_last_generation_result_proxies_build_service():
+    result = object()
+    pc = bare_controller()
+    pc.build_service.last_generation_result = result
+
+    assert pc.last_generation_result is result

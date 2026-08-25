@@ -38,7 +38,7 @@ def test_choice_populate_primitive_with_mapping(factory):
     )
     assert rule.name == "map-value-integer"
     tgt = rule.target[0]
-    assert tgt.element == "valueInteger"
+    assert tgt.element == "value"
     assert tgt.transform == "cast"
     assert tgt.parameter[-1].valueString == "integer"
     assert rule.source[0].element == "srcInt"

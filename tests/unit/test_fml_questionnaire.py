@@ -1152,3 +1152,33 @@ def test_unexecutable_enablewhen_is_documented_not_silently_dropped(factory):
         d.get("code") == "questionnaire-enablewhen-not-emitted"
         for d in factory.diagnostics
     )
+
+
+# ── FHIR id-typed names (WP9) ────────────────────────────────────────────────────
+def test_a_questionnaire_group_name_is_a_valid_fhir_id(factory):
+    """`group.name` is a FHIR `id`, so it may not carry spaces — and the
+    hyphens a Questionnaire name usually *does* carry are legal and must
+    survive. The previous normalization replaced hyphens with underscores,
+    which turned a legal name into one no server accepts."""
+    questionnaire = Questionnaire.model_construct(
+        name="Barthel-Index Score", status="active", item=[]
+    )
+    creator = QuestionnaireMapCreator(
+        SimpleNamespace(data=questionnaire), factory=factory
+    )
+
+    group = creator.generate_group("Source", "Barthel_Index_Q")
+
+    assert group.name == "Barthel-Index-Score"
+    assert [item["name"] for item in group.input] == ["Source", "Barthel-Index-Q"]
+
+
+def test_a_questionnaire_without_a_name_still_produces_a_valid_group(factory):
+    questionnaire = Questionnaire.model_construct(status="active", item=[])
+    creator = QuestionnaireMapCreator(
+        SimpleNamespace(data=questionnaire), factory=factory
+    )
+
+    group = creator.generate_group("Source", "TestQ")
+
+    assert group.name == "QuestionnaireMap"

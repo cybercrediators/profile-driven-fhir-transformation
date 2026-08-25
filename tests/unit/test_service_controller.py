@@ -398,13 +398,22 @@ def test_make_pipeline_controller_passes_through_args(monkeypatch):
     captured = {}
 
     class FakePipelineController:
-        def __init__(self, conf, force_overwrite, create_references, minimal_mode, automapping):
+        def __init__(
+            self,
+            conf,
+            force_overwrite,
+            create_references,
+            minimal_mode,
+            automapping,
+            auto_mapping_mode,
+        ):
             captured.update(
                 conf=conf,
                 force_overwrite=force_overwrite,
                 create_references=create_references,
                 minimal_mode=minimal_mode,
                 automapping=automapping,
+                auto_mapping_mode=auto_mapping_mode,
             )
 
     monkeypatch.setattr(
@@ -426,18 +435,28 @@ def test_make_pipeline_controller_passes_through_args(monkeypatch):
     assert captured["create_references"] is False
     assert captured["minimal_mode"] is True
     assert captured["automapping"] is True
+    assert captured["auto_mapping_mode"] == "deterministic"
 
 
 def test_make_pipeline_controller_defaults_when_args_missing(monkeypatch):
     captured = {}
 
     class FakePipelineController:
-        def __init__(self, conf, force_overwrite, create_references, minimal_mode, automapping):
+        def __init__(
+            self,
+            conf,
+            force_overwrite,
+            create_references,
+            minimal_mode,
+            automapping,
+            auto_mapping_mode,
+        ):
             captured.update(
                 force_overwrite=force_overwrite,
                 create_references=create_references,
                 minimal_mode=minimal_mode,
                 automapping=automapping,
+                auto_mapping_mode=auto_mapping_mode,
             )
 
     monkeypatch.setattr(
@@ -452,6 +471,7 @@ def test_make_pipeline_controller_defaults_when_args_missing(monkeypatch):
         "create_references": True,
         "minimal_mode": False,
         "automapping": False,
+        "auto_mapping_mode": "deterministic",
     }
 
 
@@ -694,3 +714,151 @@ def test_getattr_raises_when_not_found_anywhere():
     controller = make_controller()
     with pytest.raises(AttributeError):
         controller.totally_unknown_attribute
+
+
+# --------------------------------------------------------------------------- #
+# Agent mode (WP8)
+# --------------------------------------------------------------------------- #
+
+
+def test_handle_agent_routes_fix_to_the_agent_cli(monkeypatch):
+    """The agent package is imported inside the branch, never at module scope.
+
+    Anything else would put the optional LLM dependencies into the import graph
+    of every deterministic command.
+    """
+    import sys
+    from types import ModuleType
+
+    seen = {}
+
+    def fake_run(args, conf):
+        seen["args"] = args
+        seen["conf"] = conf
+        return 0
+
+    module = ModuleType("agent.cli")
+    module.run_agent_fix = fake_run
+    monkeypatch.setitem(sys.modules, "agent.cli", module)
+
+    controller = make_controller(conf={"project_path": "projects/demo"})
+    args = Namespace(agent_action="fix", mapping_table_path="")
+
+    assert controller.handle_agent(args) == 0
+    assert seen["conf"]["project_path"] == "projects/demo"
+
+
+def test_handle_agent_rejects_an_unknown_subcommand():
+    controller = make_controller()
+    assert controller.handle_agent(Namespace(agent_action="invent")) == 2
+
+
+def test_handle_agent_honours_an_overridden_mapping_table(monkeypatch):
+    import sys
+    from types import ModuleType
+
+    captured = {}
+    module = ModuleType("agent.cli")
+    module.run_agent_fix = lambda args, conf: captured.setdefault("conf", conf) and 0
+    monkeypatch.setitem(sys.modules, "agent.cli", module)
+
+    controller = make_controller(conf={})
+    controller.handle_agent(
+        Namespace(agent_action="fix", mapping_table_path="/tmp/table.json")
+    )
+    assert controller.conf["mapping_table_path"] == "/tmp/table.json"
+
+
+def test_ordinary_commands_load_no_agent_or_provider_package():
+    """Import isolation, proven in a subprocess rather than asserted.
+
+    A stale ``sys.modules`` entry left by an earlier test in this process would
+    make an in-process check pass while the real CLI still imported the world.
+    """
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parents[2]
+    probe = (
+        "import sys; sys.path.insert(0, 'src');\n"
+        "sys.argv = ['prog', 'pipeline', 'run'];\n"
+        "from view.options import get_args; get_args();\n"
+        "from controller.service_controller import ServiceController;\n"
+        "leaked = sorted(m for m in sys.modules if m.split('.')[0] in "
+        "{'agent', 'openai', 'jinja2', 'jsonpatch', 'langchain', 'langgraph',"
+        " 'langgraph_checkpoint_sqlite', 'langgraph_sdk', 'aiosqlite'});\n"
+        "print(','.join(leaked))"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", probe],
+        capture_output=True,
+        text=True,
+        cwd=repo_root,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "", f"leaked modules: {result.stdout.strip()}"
+
+
+def test_the_deterministic_pipeline_imports_on_a_core_only_install():
+    """WP9: no optional dependency may be needed to run a normal pipeline.
+
+    The isolation probe above shows the extras are not *loaded*; this shows they
+    are not needed. A module that imports `jinja2` at the top of a file the
+    pipeline touches would pass the first check on a machine where the extra
+    happens to be installed, and fail on the user's.
+    """
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parents[2]
+    probe = (
+        "import sys;\n"
+        "blocked = {'openai', 'jinja2', 'jsonpatch', 'langgraph',"
+        " 'langgraph_checkpoint_sqlite'};\n"
+        "class Blocker:\n"
+        "    def find_spec(self, name, path=None, target=None):\n"
+        "        if name.split('.')[0] in blocked:\n"
+        "            raise ImportError(name)\n"
+        "        return None\n"
+        "sys.meta_path.insert(0, Blocker());\n"
+        "sys.path.insert(0, 'src');\n"
+        "sys.argv = ['prog', 'pipeline', 'run'];\n"
+        "from view.options import get_args; get_args();\n"
+        "from controller.pipeline_controller.pipeline_controller import "
+        "PipelineController;\n"
+        "from mapping.fml_map import StructureMapGenerator;\n"
+        "print('ok')"
+    )
+    result = subprocess.run(
+        [sys.executable, "-c", probe],
+        capture_output=True,
+        text=True,
+        cwd=repo_root,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.strip() == "ok"
+
+
+def test_no_production_code_depends_on_the_copied_prototype():
+    """WP9: the ``agent-on-fhir/`` copy is reference material, never a runtime.
+
+    Checked as a property of the tree rather than trusted to review, because the
+    whole point of the copy is that it can be deleted. A single import left
+    behind would turn its removal into a broken installation, and nothing else
+    in the suite would notice — the prototype is on nobody's import path today,
+    so an accidental dependency fails only where the copy is absent.
+    """
+    from pathlib import Path
+
+    repo_root = Path(__file__).resolve().parents[2]
+    offenders = []
+    for path in sorted((repo_root / "src").rglob("*.py")):
+        text = path.read_text(encoding="utf-8")
+        for number, line in enumerate(text.splitlines(), start=1):
+            if "agent-on-fhir" in line or "agent_on_fhir" in line:
+                offenders.append(f"{path.relative_to(repo_root)}:{number}: {line.strip()}")
+    assert offenders == [], "production code references the prototype:\n" + "\n".join(
+        offenders
+    )

@@ -6,7 +6,6 @@ underlying connector's send_request with a small recording fake, so no HTTP/
 requests traffic ever leaves the process.
 """
 
-from pathlib import Path
 
 import pytest
 
