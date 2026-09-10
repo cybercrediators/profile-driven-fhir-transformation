@@ -1279,18 +1279,32 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
             display_required = bool(display_node and display_node.required)
 
             explicit = getattr(self, "explicit_mapping_targets", None)
+            _prof = getattr(self, "_current_profile_id", None)
+            _rel = (
+                path[len(res_type) + 1 :]
+                if res_type and path.startswith(f"{res_type}.")
+                else None
+            )
+            _prefixes = [f"{path}."]
+            if _prof and _rel:
+                _prefixes.append(f"{_prof}.{_rel}.")
+
+            def _child_suffix(key: str):
+                for prefix in _prefixes:
+                    if key.startswith(prefix):
+                        return key[len(prefix) :]
+                return None
+
             authored_children = [
                 key
                 for key in (automapped_mappings or {})
-                if key.startswith(f"{path}.")
+                if _child_suffix(key) is not None
                 and (explicit is None or key in explicit)
                 and not self.is_prohibited_target(key)
             ]
             if authored_children:
-                simple_children = {
-                    key[len(path) + 1 :]
-                    for key in authored_children
-                }
+                _by_suffix = {_child_suffix(key): key for key in authored_children}
+                simple_children = set(_by_suffix)
                 if simple_children <= {"reference", "display"}:
                     return self._reference_source_rule(
                         rule,
@@ -1300,14 +1314,14 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                         parent_target_context,
                         (
                             self._as_local_element(
-                                automapped_mappings[f"{path}.reference"]
+                                automapped_mappings[_by_suffix["reference"]]
                             )
                             if "reference" in simple_children
                             else None
                         ),
                         (
                             self._as_local_element(
-                                automapped_mappings[f"{path}.display"]
+                                automapped_mappings[_by_suffix["display"]]
                             )
                             if "display" in simple_children
                             else None
@@ -1792,6 +1806,17 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
                 if src_field_name
                 else ""
             )
+            # An author who addressed a concrete variant (``occurrence[x]:occurrenceDateTime``)
+            # has already stated the type. Source types are inferred from the source
+            # document's JSON, where every one of `code`, `uri`, `id`, `markdown` and
+            # `dateTime` arrives as a string — so narrowing on them would discard the
+            # authored type, and the concrete row is then rejected as an unsupported
+            # choice and the rule is dropped entirely. Infer only what was not stated.
+            concrete_choice_authored = any(
+                key.startswith(field_path + ":") for key in automapped_mappings
+            )
+            if concrete_choice_authored:
+                src_type = ""
             if src_type:
                 preferred = canonical_primitive(src_type) or src_type
                 if preferred:

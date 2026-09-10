@@ -107,9 +107,6 @@ class _ExtensionRulesMixin:
             "path": "extension.valueReference",
             "targetTypes": [reference_target],
             "targetProfiles": list(target_profiles) or [reference_target],
-            # An extension's value is a single Reference, and each source record
-            # produces its own derived resource, so the nth record's extension must
-            # point at the nth target rather than at all of them.
             "match": "byOrder",
             "sourceKey": None,
             "targetKey": None,
@@ -349,16 +346,17 @@ class _ExtensionRulesMixin:
                     spec["value_set"] = vs
         return specs
 
+    def _source_context_for(self, parent_source_context, source_element):
+        """Bind a root-level source field to the source root, not a parent variable"""
+        if parent_source_context != "source" and source_element in getattr(
+            self, "source_field_types", {}
+        ):
+            return "source"
+        return parent_source_context
+
     @staticmethod
     def _extension_value_def(sd):
-        """Return (value_type, value_set, target_profiles) for an Extension SD's value.
-
-        A profile that constrains ``value[x]`` to a single type may state it either
-        way: the polymorphic ``Extension.value[x]`` with one type, or the already
-        resolved ``Extension.valueReference``. Matching only the first shape made the
-        second fall through to the ``string`` default, so a Reference-valued
-        extension was emitted as ``valueExtension`` — an element FHIR does not define.
-        """
+        """Return (value_type, value_set, target_profiles) for an Extension SD's value"""
         snapshot = _attr(sd, "snapshot")
         for el in (_attr(snapshot, "element", []) if snapshot else []) or []:
             element_id = str(_attr(el, "id") or "")
@@ -476,8 +474,6 @@ class _ExtensionRulesMixin:
                     mapping_key = _k
                     break
         minimum = int((field.get("cardinality") or {}).get("min", 0) or 0)
-        # A profile that pins the value has already answered the question this
-        # diagnostic asks, so raising it would be wrong.
         value_is_pinned = self._extension_is_profile_determined(
             children, minimum, bool(self._sub_extension_slices(children))
         )
@@ -527,14 +523,11 @@ class _ExtensionRulesMixin:
             return None
 
         source = StructureMapGroupRuleSource.model_construct()
-        source.context = parent_source_context
+        source.context = self._source_context_for(parent_source_context, source_element)
         source.element = source_element
         source.variable = f"src-{var_suffix}"
         rule.source = [source]
 
-        # An extension the profile fully determines has no source element to key on.
-        # Leaving the TODO placeholder there means the rule never matches and the
-        # required slice silently never appears in the output.
         profile_determined = not mapping_key and self._extension_is_profile_determined(
             children, minimum, bool(self._sub_extension_slices(children))
         )
@@ -590,12 +583,6 @@ class _ExtensionRulesMixin:
         nested_rules.append(url_rule)
         sub_ext_slices = self._sub_extension_slices(children)
         if not sub_ext_slices:
-            # A profile that references a complex extension by canonical carries no
-            # children for it: the named sub-extensions live only in the extension's
-            # own StructureDefinition. Without them the outer url is emitted and
-            # nothing else, which drops the authored mapping
-            # (`…extension:existance.extension:YesNoUnknownExtension`) and leaves an
-            # extension that satisfies neither half of ext-1.
             sub_ext_slices = self._subextension_slices_from_definition(
                 extension_url, lookup_path
             )
@@ -606,10 +593,6 @@ class _ExtensionRulesMixin:
                 sname = sl.get("sliceName")
                 spec = specs.get(sname, {})
                 sub_min = spec.get("min", sl.get("cardinality", {}).get("min", 0))
-                # A mapping is authored against the slice-qualified identity
-                # (`…extension:existance.extension:YesNoUnknownExtension`), not the
-                # bare repeating path, and it may sit on a descendant of the
-                # sub-extension rather than on the sub-extension itself.
                 candidates = [c for c in (sl.get("id"), sl.get("slice_identity"),
                                           sl.get("path")) if c]
                 is_mapped = any(
@@ -684,11 +667,6 @@ class _ExtensionRulesMixin:
                 parent_source_context=parent_source_context,
                 parent_target_context=f"ext-{var_suffix}",
                 automapped_mappings=child_mappings,
-                # Children address themselves from the resource root
-                # (`AllergyIntolerance.extension.value[x]`), but the context they are
-                # emitted into is the extension itself. Without this the leaf looks
-                # nested to `create_mappable_field_rule`, whose N2 guard then drops
-                # every fixed/pattern value an extension pins on its own value[x].
                 parent_path=path,
             )
             if value_rules:
@@ -696,11 +674,6 @@ class _ExtensionRulesMixin:
             elif self._extension_has_provider(
                 mapping_key, path, lookup_path, automapped_mappings
             ):
-                # A provider resolves at runtime, so the outer rule fires and writes an
-                # extension carrying nothing but its url — which violates ext-1
-                # (extension.exists() != value.exists()) and fails the whole instance.
-                # Dropping it loses the mapping, but reporting beats shipping invalid
-                # output under a mapping that looks honoured.
                 self._report_url_only_extension(
                     lookup_path, extension_url,
                     "none of its value children produced an executable rule",
@@ -724,11 +697,6 @@ class _ExtensionRulesMixin:
                 )
             if coded:
                 value_field = dict(field)
-                # The provider is authored against the extension's slice-qualified
-                # identity (`…extension:existance`), while the field still carries the
-                # unsliced repeating path. Without this the value lookup misses and the
-                # translate falls back to a TODO source that never fires, leaving the
-                # extension url-only.
                 value_field["path"] = lookup_path
                 value_field["type"] = coded["value_type"]
                 value_field["options"] = coded.get("options", [])
@@ -843,7 +811,9 @@ class _ExtensionRulesMixin:
                         f"(boolean coercion from {src_type})"
                     )
                     bool_source = StructureMapGroupRuleSource.model_construct()
-                    bool_source.context = parent_source_context
+                    bool_source.context = self._source_context_for(
+                        parent_source_context, mapped_source_element
+                    )
                     bool_source.element = mapped_source_element
                     bool_source.variable = "srcValue"
                     bool_source.condition = cond
@@ -865,7 +835,9 @@ class _ExtensionRulesMixin:
             value_rule.documentation = f"Sets the extension value (type: {value_type})"
 
             value_source = StructureMapGroupRuleSource.model_construct()
-            value_source.context = parent_source_context
+            value_source.context = self._source_context_for(
+                parent_source_context, mapped_source_element
+            )
             value_source.element = mapped_source_element or "TODO-VALUE-SOURCE"
             value_source.variable = "srcValue"
             _STRING_VALUE_TYPES = {
@@ -920,12 +892,6 @@ class _ExtensionRulesMixin:
             value_rule.target = [value_target]
             nested_rules.append(value_rule)
 
-        # Final ext-1 gate. The two checks above catch the branches they sit in,
-        # but the function can also fall through here with only the url attached —
-        # most often when every sub-extension slice was skipped or refused, which
-        # is how recursion propagates a refusal up to the parent. Checking the
-        # emitted rules instead of the branch that produced them makes the guard
-        # hold for all of those at once.
         if emits_only_url(nested_rules, f"ext-{var_suffix}") and rule_can_fire(source):
             self._report_url_only_extension(
                 lookup_path,

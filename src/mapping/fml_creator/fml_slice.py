@@ -8,6 +8,7 @@ from mapping.fml_creator.fml_helper import (
     fit_rule_name,
     is_primitive_type,
     get_transform_for_type,
+    canonical_primitive,
     clean_field_name,
     fixed_scalar_parameter,
     has_fixed_value,
@@ -444,6 +445,22 @@ class _SliceRulesMixin:
                         field, src, target_type=choice_type
                     )
                 info = get_transform_for_type(choice_type, "src-choiceval")
+                canonical_choice = canonical_primitive(choice_type) or choice_type
+                if (
+                    info.get("transform") == "copy"
+                    and str(canonical_choice).lower() not in ("string", "boolean")
+                ):
+                    info = {
+                        "transform": "cast",
+                        "parameters": [
+                            StructureMapGroupRuleTargetParameter.model_construct(
+                                valueId="src-choiceval"
+                            ),
+                            StructureMapGroupRuleTargetParameter.model_construct(
+                                valueString=canonical_choice
+                            ),
+                        ],
+                    }
                 tgt.transform = info.get("transform")
                 if info.get("parameters"):
                     tgt.parameter = info["parameters"]
@@ -1012,6 +1029,9 @@ class _SliceRulesMixin:
         rule.target = [tgt]
 
         nested = []
+        _mapped_roots = {
+            sub.split(".", 1)[0].split(":", 1)[0].replace("[x]", "") for sub, _ in subs
+        }
         if isinstance(fixed, dict):
             nested += self._fixed_pattern_rules(
                 var,
@@ -1020,6 +1040,7 @@ class _SliceRulesMixin:
                 nm,
                 parent_type=slice_type,
                 structure=slice_field,
+                skip_keys=_mapped_roots,
             )
         for extension_spec in direct_extension_specs:
             extension_rule = self._slice_sub_extension_rule(
@@ -1049,9 +1070,7 @@ class _SliceRulesMixin:
             for c in slice_children
             if len((c.get("path", "") or "").split(".")) == base_depth + 1
         ]
-        mapped_roots = {
-            sub.split(".", 1)[0].split(":", 1)[0].replace("[x]", "") for sub, _ in subs
-        }
+        mapped_roots = _mapped_roots
         slice_eid = slice_path if ":" in slice_path else f"{slice_path}:{slice_name}"
         nested += self._slice_child_fixed_rules(
             direct_children,

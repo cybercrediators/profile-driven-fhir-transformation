@@ -86,13 +86,19 @@ def conv_mappable(app_state, field):
         if conv["type"] == "Reference" and "targetProfile" in type_info.keys():
             target_profiles = type_info["targetProfile"]
             if target_profiles:
-                target_url = target_profiles[0]
+                def _unversioned(value) -> str:
+                    return str(value).split("|")[0]
+
+                target_url = _unversioned(target_profiles[0])
                 candidates = []
                 for url in target_profiles:
-                    ref_obj = resolve_url(url, app_state)
+                    plain = _unversioned(url)
+                    ref_obj = resolve_url(url, app_state) or (
+                        resolve_url(plain, app_state) if plain != str(url) else None
+                    )
                     base = (
                         get_ref_target_type(ref_obj) if ref_obj else None
-                    ) or url.split("/")[-1]
+                    ) or plain.split("/")[-1]
                     if base and base != "TYPE-NOT-FOUND" and base not in candidates:
                         candidates.append(base)
                 target_type = "|".join(candidates) if candidates else "TYPE-NOT-FOUND"
@@ -100,7 +106,11 @@ def conv_mappable(app_state, field):
                 conv["reference_target"] = target_type
                 conv["reference_target_profile"] = target_url
                 conv["reference_target_in_registry"] = bool(
-                    any(app_state.registry.get_obj_by_name(u) for u in target_profiles)
+                    any(
+                        app_state.registry.get_obj_by_name(u)
+                        or app_state.registry.get_obj_by_name(_unversioned(u))
+                        for u in target_profiles
+                    )
                 )
                 # print("Reference target type:", target_type, "for profile/resource", target_url)
         if type_info.get("profile"):

@@ -1038,8 +1038,9 @@ class _CodedRulesMixin:
         *,
         parent_type=None,
         structure=None,
+        skip_keys=None,
     ):
-        """Recursively emit a profile-fixed/pattern complex value."""
+        """Recursively emit a profile-fixed/pattern complex value"""
 
         fixed = self._fixed_value_dict(fixed)
         rules = []
@@ -1101,6 +1102,7 @@ class _CodedRulesMixin:
             r.target = [target]
             return r
 
+        skip_keys = skip_keys or set()
         for key, raw_val in fixed.items():
             if (
                 not key
@@ -1108,6 +1110,8 @@ class _CodedRulesMixin:
                 or str(key).endswith("__ext")
                 or key == "fhir_comments"
             ):
+                continue
+            if str(key).replace("[x]", "") in skip_keys:
                 continue
             child, child_type = self._fixed_child_schema(children, key)
             if child is None:
@@ -1429,8 +1433,18 @@ class _CodedRulesMixin:
         target.element = field_name
 
         if field_type == "code":
-            target.transform = "copy"
-            target.parameter = [fixed_scalar_parameter(fixed_value, field_type)]
+            if polymorphic_base:
+                target.element = polymorphic_base
+                target.transform = "cast"
+                target.parameter = [
+                    fixed_scalar_parameter(fixed_value, field_type),
+                    StructureMapGroupRuleTargetParameter.model_construct(
+                        valueString="code"
+                    ),
+                ]
+            else:
+                target.transform = "copy"
+                target.parameter = [fixed_scalar_parameter(fixed_value, field_type)]
             rule.target = [target]
             return rule
 

@@ -63,6 +63,22 @@ _re_slice = re.compile(r":[^.]+")
 logger = logging.getLogger(__name__)
 
 
+def _is_questionnaire_instance(data: Any) -> bool:
+    """True only for an actual Questionnaire resource.
+
+    ``res_type`` is read from ``StructureDefinition.type``, so a *profile*
+    constraining Questionnaire reports ``"Questionnaire"`` just as an instance
+    does. Only an instance carries the fields the questionnaire creator reads
+    (``subjectType``, ``item``); handing it a StructureDefinition raises
+    ``AttributeError`` and aborts generation for the whole project.
+    """
+    if data is None:
+        return False
+    if type(data).__name__ == "StructureDefinition":
+        return False
+    return (getattr(data, "resourceType", None) or type(data).__name__) == "Questionnaire"
+
+
 class StructureMapGenerator:
     def __init__(
         self,
@@ -2082,7 +2098,7 @@ class StructureMapGenerator:
             create_references: if references should be created
             automapped_mappings: dict of target_path -> source_field_id
         """
-        if res_type == "Questionnaire":
+        if res_type == "Questionnaire" and _is_questionnaire_instance(res_obj.data):
             logger.info(
                 f"Delegating StructureMap generation for Questionnaire {res_obj.data.id}"
             )
@@ -2110,60 +2126,62 @@ class StructureMapGenerator:
         logger.info(
             "Creating rules for mappable fields of resource %s", res_obj.data.id
         )
-        if res_type == "Questionnaire":
-            # group.rule = create_qr_response_rules(res_obj, parent_source_context="source", parent_target_context="target")
-            logger.warning("Questionnaire currently not supported!")
+        # `id` is 0..1 and published IGs do ship StructureDefinitions without one
+        # (fhir.bfarm.de is one). Keying the mapping-table lookup on a missing `id`
+        # makes every row unbindable, so each rule silently falls back to its
+        # `TODO_MAP_*` placeholder and the transform emits a well-formed but empty
+        # resource, reporting no error. `resource_identity` is the same fallback the
+        # map name, the file name and the target alias already use.
+        self.factory._current_profile_id = resource_identity(res_obj.data)
+        self.factory._current_profile_sd = res_obj.data
+        self.factory.record_unindexed_snapshot_slices(
+            res_obj.data, res_obj.mappable_fields
+        )
+        field_rules = self.factory.create_field_rules(
+            res_type,
+            res_obj.mappable_fields,
+            parent_source_context="source",
+            parent_target_context="target",
+            create_references=create_references,
+            automapped_mappings=automapped_mappings,
+        )
+        explicit_meta_profile = any(
+            path == f"{res_type}.meta.profile"
+            for path in (automapped_mappings or {})
+        )
+        if self._target_declares_meta(res_obj, res_type) and not explicit_meta_profile:
+            # Precedence: an authored mapping (handled above) > a canonical the
+            # snapshot pins on meta.profile > the StructureDefinition's own url.
+            pinned = self._snapshot_fixed_meta_profile(res_obj, res_type)
+            declared = res_obj.data.url
+            if pinned and pinned != declared:
+                self._append_diagnostic(
+                    "profile-canonical-conflict",
+                    f"{res_type}.meta.profile is pinned to {pinned} but the "
+                    f"StructureDefinition's canonical is {declared}. Stamping the "
+                    "pinned value so the instance satisfies its own profile; note "
+                    "that the pinned canonical may not resolve on the server.",
+                    path=f"{res_type}.meta.profile",
+                    severity="warning",
+                )
+            meta_rule = self.factory.create_meta_profile_rule(
+                pinned or declared,
+                source_context="source",
+                target_context="target",
+            )
+            group.rule = [meta_rule] + field_rules
         else:
-            self.factory._current_profile_id = getattr(res_obj.data, "id", None)
-            self.factory._current_profile_sd = res_obj.data
-            self.factory.record_unindexed_snapshot_slices(
-                res_obj.data, res_obj.mappable_fields
-            )
-            field_rules = self.factory.create_field_rules(
+            # matchbox resolves $transform target element names against the profile snapshot
+            # addin meta.profile on a profile whose
+            # (minimal/incomplete) snapshot omits `meta` makes the transform
+            # fail with "Unrecognised name meta on <Type>". Skip it there.
+            logger.info(
+                "Skipping meta.profile stamping for %s: snapshot does not "
+                "declare %s.meta (incomplete snapshot).",
+                res_obj.data.id,
                 res_type,
-                res_obj.mappable_fields,
-                parent_source_context="source",
-                parent_target_context="target",
-                create_references=create_references,
-                automapped_mappings=automapped_mappings,
             )
-            explicit_meta_profile = any(
-                path == f"{res_type}.meta.profile"
-                for path in (automapped_mappings or {})
-            )
-            if self._target_declares_meta(res_obj, res_type) and not explicit_meta_profile:
-                # Precedence: an authored mapping (handled above) > a canonical the
-                # snapshot pins on meta.profile > the StructureDefinition's own url.
-                pinned = self._snapshot_fixed_meta_profile(res_obj, res_type)
-                declared = res_obj.data.url
-                if pinned and pinned != declared:
-                    self._append_diagnostic(
-                        "profile-canonical-conflict",
-                        f"{res_type}.meta.profile is pinned to {pinned} but the "
-                        f"StructureDefinition's canonical is {declared}. Stamping the "
-                        "pinned value so the instance satisfies its own profile; note "
-                        "that the pinned canonical may not resolve on the server.",
-                        path=f"{res_type}.meta.profile",
-                        severity="warning",
-                    )
-                meta_rule = self.factory.create_meta_profile_rule(
-                    pinned or declared,
-                    source_context="source",
-                    target_context="target",
-                )
-                group.rule = [meta_rule] + field_rules
-            else:
-                # matchbox resolves $transform target element names against the profile snapshot
-                # addin meta.profile on a profile whose
-                # (minimal/incomplete) snapshot omits `meta` makes the transform
-                # fail with "Unrecognised name meta on <Type>". Skip it there.
-                logger.info(
-                    "Skipping meta.profile stamping for %s: snapshot does not "
-                    "declare %s.meta (incomplete snapshot).",
-                    res_obj.data.id,
-                    res_type,
-                )
-                group.rule = field_rules
+            group.rule = field_rules
         return group
 
     def _snapshot_fixed_meta_profile(self, res_obj, res_type) -> Optional[str]:
