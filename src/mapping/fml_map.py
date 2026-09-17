@@ -2230,6 +2230,8 @@ class StructureMapGenerator:
                 continue
             prefix.append(segment)
             collector.add(".".join(prefix))
+            if "[x]:" in segment:
+                collector.add(".".join(prefix[:-1] + [segment.split(":", 1)[0]]))
 
     def _collect_required_paths_from_fields(
         self,
