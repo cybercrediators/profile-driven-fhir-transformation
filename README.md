@@ -22,7 +22,7 @@ Enables the (automated) usage of standardized, profile-driven StructureMaps base
 
 ## Architecture
 
-![fhir_mapper_overview](./docs/pics/fhir_mapper_overview.png)
+![fhir_mapper_overview](./docs/pics/mapping_overview.png)
 
 - Workflow:
     - Create or select a FHIR/(FSH) project with profiled resources
