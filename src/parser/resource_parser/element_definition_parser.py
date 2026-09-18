@@ -136,11 +136,18 @@ def create_field_info(elem, elem_type, fixed_value=[]):
     """
     Create a simple field_info dict for a given ElementDefinition element
     """
+    _base = getattr(elem, "base", None)
+    _base_max = getattr(_base, "max", None) if _base is not None else None
+
     base_info = {
         "path": elem.path,
         "id": elem.id,
         "type": elem_type,
-        "cardinality": {"min": elem.min, "max": elem.max},
+        "cardinality": {
+            "min": elem.min,
+            "max": elem.max,
+            **({"base_max": _base_max} if _base_max is not None else {}),
+        },
         "description": elem.short or elem.definition,
         "is_required": elem.min is not None and elem.min > 0,
         "fixed_value": fixed_value,

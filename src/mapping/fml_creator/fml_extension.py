@@ -563,7 +563,7 @@ class _ExtensionRulesMixin:
         nested_rules = []
         # URL Rule - Fixed Value
         url_rule = StructureMapGroupRule.model_construct()
-        url_rule.name = f"set-extension-url-{var_suffix}"
+        url_rule.name = fit_rule_name(f"set-extension-url-{var_suffix}")
         url_rule.documentation = f"Sets the extension URL to {extension_url}"
 
         url_target = StructureMapGroupRuleTarget.model_construct()

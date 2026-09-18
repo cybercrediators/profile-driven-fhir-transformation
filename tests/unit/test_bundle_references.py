@@ -101,7 +101,8 @@ def test_choice_reference_field_expands_x_to_typed_name():
     ]
     out = list(BundleService._iter_reference_fields(fields))
     assert len(out) == 1
-    relative, raw, is_required, ref_only = out[0]
+    relative, raw, is_required, ref_only, extension_url = out[0]
+    assert extension_url is None  # not inside an extension
     assert relative == "codeReference"  # not "code[x]"
     assert raw == "some-profile"
     assert is_required is True
@@ -120,7 +121,7 @@ def test_ref_only_choice_still_expands_x():
             "type": [{"code": "Reference"}],
         }
     ]
-    relative, raw, is_required, ref_only = next(
+    relative, raw, is_required, ref_only, _extension_url = next(
         iter(BundleService._iter_reference_fields(fields))
     )
     assert relative == "thingReference"
@@ -622,3 +623,60 @@ def test_malformed_selectors_reject_the_whole_contract():
     specs = []
     BundleService._collect_todo_refs(rule, specs)
     assert specs == []
+
+
+def test_extension_url_is_carried_from_the_owning_extension_element():
+    # The parser records `extension_url` on the `…extension` element while the
+    # required Reference lives on its `value[x]` child. Without carrying it down,
+    # auto-wiring emits `{"valueReference": …}` with no `url` and the validator
+    # rejects it ("Extension.url is required …") — dkrehab CarePlan.extension.
+    fields = [
+        {
+            "path": "CarePlan.extension",
+            "extension_url": "http://example.org/StructureDefinition/BasedOn",
+            "cardinality": {"min": 1, "max": "1"},
+            "children": [
+                {
+                    "path": "CarePlan.extension.value[x]",
+                    "reference_target": "ServiceRequest",
+                    "cardinality": {"min": 1, "max": "1"},
+                    "type": [{"code": "Reference"}],
+                }
+            ],
+        }
+    ]
+    out = list(BundleService._iter_reference_fields(fields))
+    assert len(out) == 1
+    relative, _raw, is_required, _ref_only, extension_url = out[0]
+    assert relative == "extension.valueReference"
+    assert is_required is True
+    assert extension_url == "http://example.org/StructureDefinition/BasedOn"
+
+
+def test_stamp_extension_url_fills_only_a_url_less_container():
+    resource = {"extension": [{"valueReference": {"reference": "urn:uuid:1"}}]}
+    BundleService._stamp_extension_url(
+        resource, "extension.valueReference", "http://example.org/ext"
+    )
+    assert resource["extension"][0]["url"] == "http://example.org/ext"
+
+    # an extension the transform already identified is left alone
+    kept = {"extension": [{"url": "http://example.org/authored", "valueString": "x"}]}
+    BundleService._stamp_extension_url(
+        kept, "extension.valueString", "http://example.org/ext"
+    )
+    assert kept["extension"][0]["url"] == "http://example.org/authored"
+
+
+def test_stamp_extension_url_targets_the_outermost_extension():
+    # A complex extension wires as `extension.extension.valueReference`. The url in
+    # hand is the *outer* extension's canonical (its sub-extensions are defined by
+    # that extension's own SD), so the outer container is what must be stamped —
+    # senll NLLDispensePaperPrescription reported `Extension.url is required` on it.
+    resource = {"extension": [{"extension": [{"valueReference": {"reference": "urn:uuid:1"}}]}]}
+    BundleService._stamp_extension_url(
+        resource, "extension.extension.valueReference", "http://example.org/outer"
+    )
+    assert resource["extension"][0]["url"] == "http://example.org/outer"
+    # the inner sub-extension is not given the outer's url
+    assert "url" not in resource["extension"][0]["extension"][0]

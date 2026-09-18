@@ -1543,7 +1543,7 @@ class FMLRuleFactory(_ExtensionRulesMixin, _SliceRulesMixin, _CodedRulesMixin):
         if "." in clean_path:
             return None
         type_part = f"-{clean_field_name(res_type)}" if res_type else ""
-        rule.name = (
+        rule.name = fit_rule_name(
             f"TODO-resolve-reference{type_part}-{clean_field_name(base_field_name)}"
         )
         rule.documentation = f"Reference<{res_type}.{full_rel_path}> → {reference_target} — resolve via bundle assembler"

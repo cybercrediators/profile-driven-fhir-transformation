@@ -14,6 +14,7 @@ from mapping.fml_creator.fml_factory import FMLRuleFactory
 from mapping.fml_creator.fml_helper import (
     created_extension_variable,
     emits_only_url,
+    fit_rule_name,
     flatten_profile_fields,
     has_fixed_value,
     rebase_to_resource_identity,
@@ -492,6 +493,11 @@ class StructureMapGenerator:
             used_names: Set[str] = set()
             for rule in rules:
                 name = getattr(rule, "name", None)
+                if isinstance(name, str):
+                    capped = fit_rule_name(name)
+                    if capped != name:
+                        rule.name = capped
+                        name = capped
                 form = rule_form(rule)
                 if name and seen_forms.get(name) == form:
                     logger.debug(
@@ -515,7 +521,7 @@ class StructureMapGenerator:
                         group=group_name,
                         rule=name,
                     )
-                    rule.name = f"{name}-{suffix}"
+                    rule.name = fit_rule_name(f"{name}-{suffix}")
                     name = rule.name
                 if name:
                     used_names.add(name)

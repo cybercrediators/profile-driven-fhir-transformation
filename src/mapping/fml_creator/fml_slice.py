@@ -448,7 +448,7 @@ class _SliceRulesMixin:
                 canonical_choice = canonical_primitive(choice_type) or choice_type
                 if (
                     info.get("transform") == "copy"
-                    and str(canonical_choice).lower() not in ("string", "boolean")
+                    and str(canonical_choice).lower() != "string"
                 ):
                     info = {
                         "transform": "cast",

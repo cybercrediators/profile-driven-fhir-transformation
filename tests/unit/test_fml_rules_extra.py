@@ -784,7 +784,8 @@ def test_direct_raw_choice_mapping_narrows_from_source_primitive(factory):
     )
 
     assert rule.rule[0].target[0].element == "allowed"
-    assert rule.rule[0].target[0].transform == "copy"
+    assert rule.rule[0].target[0].transform == "cast"
+    assert rule.rule[0].target[0].parameter[-1].valueString == "boolean"
 
 
 def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factory):
@@ -807,8 +808,13 @@ def test_explicit_concrete_choice_mapping_overrides_ambiguous_source_type(factor
         parent_path="MedicationRequest.substitution",
     )
 
+    # The author named the concrete variant while the source is string-typed, which
+    # is the whole point of this case: only a cast carries that choice into the
+    # output. A `copy` lets the engine infer from the string and emit
+    # `allowedString` — an element the profile never declared.
     assert rule.rule[0].target[0].element == "allowed"
-    assert rule.rule[0].target[0].transform == "copy"
+    assert rule.rule[0].target[0].transform == "cast"
+    assert rule.rule[0].target[0].parameter[-1].valueString == "boolean"
 
 
 def test_concrete_choice_parent_does_not_gate_on_a_todo_placeholder(factory):

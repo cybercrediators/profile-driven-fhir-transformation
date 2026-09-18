@@ -314,14 +314,14 @@ class BundleService:
             path = field.get("path", "")
             parts = path.split(".")
             rel = ".".join(parts[1:]) if len(parts) > 1 else path
-            mx = str((field.get("cardinality", {}) or {}).get("max", "1"))
+            card = field.get("cardinality", {}) or {}
+            mx = str(card.get("base_max") or card.get("max", "1"))
             if rel and (mx == "*" or (mx.isdigit() and int(mx) > 1)):
                 out.add(rel)
             for key in ("children", "slices"):
                 if field.get(key):
                     BundleService._collect_array_paths(field[key], out)
 
-    @staticmethod
     @staticmethod
     def _build_profile_type_map(registry) -> dict:
         """Map a profile's last URL segment (id) → its base FHIR ``type``.
@@ -1076,6 +1076,7 @@ class BundleService:
                 raw_target,
                 is_required,
                 _ref_only,
+                ext_url,
             ) in BundleService._iter_reference_fields(obj.mappable_fields):
                 if not is_required:
                     continue
@@ -1131,12 +1132,40 @@ class BundleService:
                             value,
                             array_paths.get(source_type, set()),
                         )
+                        BundleService._stamp_extension_url(
+                            res, field_path, ext_url,
+                            array_paths.get(source_type, set()),
+                        )
                         logger.info(f"Auto-wired {source_type}.{field_path} → {ref}")
                 elif is_required:
                     logger.warning(
                         f"Required reference {source_type}.{field_path} → {target_type} "
                         f"has no value and no TODO rule — mapping may be incomplete"
                     )
+
+    @staticmethod
+    def _stamp_extension_url(
+        resource: dict, field_path: str, extension_url: str, array_paths: set = None
+    ) -> None:
+        """Set ``url`` on the extension container a wired value was just written into.
+
+        Only the deepest ``extension`` segment of the path is stamped, and only when
+        it carries no ``url`` yet, so an extension the transform already populated is
+        never rewritten.
+        """
+        if not extension_url:
+            return
+        parts = field_path.split(".")
+        idx = next(
+            (i for i, seg in enumerate(parts) if seg.split(":", 1)[0] == "extension"),
+            -1,
+        )
+        if idx < 0:
+            return
+        container = BundleService._get_nested(resource, parts[: idx + 1])
+        for entry in container if isinstance(container, list) else [container]:
+            if isinstance(entry, dict) and not entry.get("url"):
+                entry["url"] = extension_url
 
     @staticmethod
     def _collect_unresolvable_required(
@@ -1161,7 +1190,7 @@ class BundleService:
             if not source_type or source_type not in by_type:
                 continue
             obj_url = getattr(obj.data, "url", "") or ""
-            for field_path, raw_target, is_required, ref_only in BundleService._iter_reference_fields(
+            for field_path, raw_target, is_required, ref_only, _ext_url in BundleService._iter_reference_fields(
                 obj.mappable_fields
             ):
                 if not is_required or not ref_only:
@@ -1189,14 +1218,14 @@ class BundleService:
         return drop
 
     @staticmethod
-    def _iter_reference_fields(fields: list):
+    def _iter_reference_fields(fields: list, extension_url: str = None):
         """Recursively yield (relative_field_path, reference_target_last_segment,
-        is_required, ref_only)
-        """
+        is_required, ref_only, extension_url)"""
         for field in fields:
             path = field.get("path", "")
             parts = path.split(".")
             relative = ".".join(parts[1:]) if len(parts) > 1 else path
+            own_extension_url = field.get("extension_url") or extension_url
 
             target = field.get("reference_target")
             if target and target not in ("", "TYPE-NOT-FOUND"):
@@ -1216,12 +1245,16 @@ class BundleService:
                 # since this branch is Reference-typed, expand the leaf accordingly.
                 if relative.endswith("[x]"):
                     relative = relative[: -len("[x]")] + "Reference"
-                yield relative, raw, is_required, ref_only
+                yield relative, raw, is_required, ref_only, own_extension_url
 
             if field.get("children"):
-                yield from BundleService._iter_reference_fields(field["children"])
+                yield from BundleService._iter_reference_fields(
+                    field["children"], own_extension_url
+                )
             if field.get("slices"):
-                yield from BundleService._iter_reference_fields(field["slices"])
+                yield from BundleService._iter_reference_fields(
+                    field["slices"], own_extension_url
+                )
 
     @staticmethod
     def _set_nested(
