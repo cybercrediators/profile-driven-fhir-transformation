@@ -268,6 +268,8 @@ python src/main.py -c conf/kfdm_e2e.json client send-request -m transform_data \
 - [reference paper](https://www.sciencedirect.com/science/article/pii/S0010482525000952) queries run against our output
 - created profiles based on the used resources
 
+The MOTU dataset is used for the reproduction: Arcobelli V. A., Moscato S., Palumbo P., Marfoglia A., Nardini F., Randi P., Davalli A., Carbonaro A., Chiari L., Mellone S. (2024). MOTU data. MOTU on FHIR: A 10-year data collection on the clinical rehabilitation pathway of 1006 trans-femoral amputees. Zenodo. https://doi.org/10.5281/zenodo.10683153 — licensed under CC BY 4.0.
+
 ### Results
 
 - Query parity 5/5: Q1 85/85, Q2 34/34, Q3 67/67, Q4 674/674,
