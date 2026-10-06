@@ -139,7 +139,7 @@ Results can be found in `eval/reports/<project_name>.json`.
     - `python src/main.py -c conf/<project>.json pipeline run -f -mt projects/<project>/source_data/mapping_table.json -msm` (parse profiles, dervice source definitions, generate StructureMaps)
 - transform an example record:
     - `python src/main.py -c conf/<project>.json pipeline prepare-matchbox -f` (upload to matchbox)
-    - `python src/main.py -c conf/<project>.json pipeline validate` (transform and validate the source records)
+    - `python src/main.py -c conf/<project>.json pipeline validate -i <input_file> [-p <profile_url>]` (transform and validate the source records)
 - compute the metrics using the `eval/create_project_metrics.py` script:
 
 ```
@@ -250,7 +250,7 @@ Remaining open classes:
 - a live Matchbox instance is required
 - `eval/kfdm_pipeline_bundle_example.json` is the reference transaction bundle from the original
 - profiles have no public package, so `projects/kfdm_e2e/input_profile/` contains it
-- Generate the maps (use `-crm` for reference, `-msm` for minimal mode): `python src/main.py -c conf/kfdm_e2e.json pipeline run -f -msm -crm -mr projects/kfdm_e2e/source_data/mapping_table.json`
+- Generate the maps (use `-crm` for reference, `-msm` for minimal mode): `python src/main.py -c conf/kfdm_e2e.json pipeline run -f -msm -crm -mt projects/kfdm_e2e/source_data/mapping_table.json`
 - Upload profiles/maps to Matchbox: `python src/main.py -c conf/kfdm_e2e.json pipeline prepare-matchbox -f`
 - Transform a REDCap record into a bundle:
 
@@ -261,7 +261,7 @@ python src/main.py -c conf/kfdm_e2e.json client send-request -m transform_data \
   > /tmp/kfdm_record2.json
 ```
 
-- compare them and create metrics: `PYTHONPATH=.:src python3 -m eval.e15_kfdm_compare --record <n>` (writes `eval/reports/e15_kfdm_record<n>.json`)
+- compare them and create metrics: `PYTHONPATH=.:src python3 -m eval.e15_kfdm_compare --record <n> --offline` (writes `eval/reports/e15_kfdm_record<n>.json`)
 
 ## Marfoglia / MOTU (id: E10)
 
@@ -279,13 +279,13 @@ The MOTU dataset is used for the reproduction: Arcobelli V. A., Moscato S., Palu
 - Generation determinism: 0 StructureMaps and 0 ConceptMaps drifted from the committed maps.
 
 ### Reproduce
-- requires a live `matchbox` (Port: `8080`), and an HAPI FHIR server (Port: `8090`) with referential inetgrity on write disabled
+- requires a live `matchbox` (Port: `8080`), and an HAPI FHIR server (Port: `8089`) with referential inetgrity on write disabled
 - (sequential) writing to the hapi server locally takes around 1hr
 - Steps:
     - Download artifacts linked in the [reference paper](https://www.sciencedirect.com/science/article/pii/S0010482525000952) to the `eval/e10_marfoglia/_data` folder
     - Preprocess the data using the `PYTHONPATH=.:src python eval/e10_marfoglia/preprocess.py` script
     - Generate maps from the thin FSH profiles and transform the records: `PYTHONPATH=.:src python eval/e10_marfoglia/transform_d2.py --dump eval/e10_marfoglia/_data/transformed_d2`
-    - Load the bundles into the HAPI server: `PYTHONPATH=.: src python eval/e10_marfoglia/hapi_load.py --base http://localhost:8089/fhir --dir eval/e10_marfoglia/_data/transformed_d2`
+    - Load the bundles into the HAPI server: `PYTHONPATH=.:src python eval/e10_marfoglia/hapi_load.py --base http://localhost:8089/fhir --dir eval/e10_marfoglia/_data/transformed_d2`
     - Run the queries described in the paper against the HAPI server (reproduces Table 7 of the reference paper): `PYTHONPATH=.:src python eval/e10_marfoglia/queries.py --source hapi --base http://localhost:8089/fhir`
 
 # LLM/agent fix mode (id: E18)
