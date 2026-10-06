@@ -1,0 +1,1765 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-au-core-medicationrequest-9dfbb592",
+  "url": "http://example.org/StructureMap/source-definition-e16-aucore-full-spec-au-core-medicationrequest",
+  "name": "Map_006_structure_map_e16_aucore_full_spec_au_core_medicationrequest",
+  "title": "Structure Map for e16_aucore_full_spec - au-core-medicationrequest",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: au-core-medicationrequest). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-aucore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationrequest",
+      "mode": "target",
+      "alias": "au-core-medicationrequest"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-au-core-medicationrequest",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_aucore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationrequest"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationrequest"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_medicationrequest_authoredOn",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.authoredOn | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.basedOn> → CarePlan|MedicationRequest|ServiceRequest|ImmunizationRecommendation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-courseOfTherapyType",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-courseOfTherapyType"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "courseOfTherapyType",
+              "variable": "tgt-courseOfTherapyType",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.courseOfTherapyType | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-detectedIssue",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-detectedIssue"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.detectedIssue> → DetectedIssue — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dispenseRequest",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dispenseRequest"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dispenseRequest",
+              "variable": "tgt-dispenseRequest",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-dispenseInterval",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-dispenseInterval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "dispenseInterval",
+                  "variable": "tgt-dispenseInterval",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Duration"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.dispenseInterval | Type: Duration | Cardinality: 0..1"
+            },
+            {
+              "name": "map-expectedSupplyDuration",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-expectedSupplyDuration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "expectedSupplyDuration",
+                  "variable": "tgt-expectedSupplyDuration",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Duration"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.expectedSupplyDuration | Type: Duration | Cardinality: 0..1"
+            },
+            {
+              "name": "map-initialFill",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-initialFill"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "initialFill",
+                  "variable": "tgt-initialFill",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-duration",
+                  "source": [
+                    {
+                      "context": "src-initialFill",
+                      "variable": "src-duration"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-initialFill",
+                      "contextType": "variable",
+                      "element": "duration",
+                      "variable": "tgt-duration",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Duration"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.duration | Type: Duration | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-quantity",
+                  "source": [
+                    {
+                      "context": "src-initialFill",
+                      "variable": "src-quantity"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-initialFill",
+                      "contextType": "variable",
+                      "element": "quantity",
+                      "variable": "tgt-quantity",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.quantity | Type: Quantity | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill | Type: BackboneElement | Cardinality: 0..1 | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-numberOfRepeatsAllowed",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "element": "TODO_MAP_NUMBEROFREPEATSALLOWED",
+                  "variable": "src-numberOfRepeatsAllowed"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "numberOfRepeatsAllowed",
+                  "variable": "tgt-numberOfRepeatsAllowed",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-numberOfRepeatsAllowed"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.numberOfRepeatsAllowed | Type: unsignedInt | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-MedicationRequest-performer",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-performer"
+                }
+              ],
+              "documentation": "Reference<MedicationRequest.dispenseRequest.performer> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-quantity",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-quantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "quantity",
+                  "variable": "tgt-quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.quantity | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-validityPeriod",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-validityPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "validityPeriod",
+                  "variable": "tgt-validityPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.validityPeriod | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dispenseRequest | Type: BackboneElement | Cardinality: 0..1 | Complex type with 10 child elements"
+        },
+        {
+          "name": "map-doNotPerform",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DONOTPERFORM",
+              "variable": "src-doNotPerform"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "doNotPerform",
+              "variable": "tgt-doNotPerform",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-doNotPerform"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.doNotPerform | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-dosageInstruction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosageInstruction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosageInstruction",
+              "variable": "tgt-dosageInstruction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosageInstruction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-additionalInstruction",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-additionalInstruction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "additionalInstruction",
+                  "variable": "tgt-additionalInstruction",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-additionalInstruction",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.additionalInstruction | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-asNeeded",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "TODO_MAP_ASNEEDED",
+                  "variable": "src-asNeeded"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "asNeeded",
+                  "variable": "tgt-asNeeded",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-asNeeded"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.asNeeded[x] | Type: boolean, CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-doseAndRate",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-doseAndRate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "doseAndRate",
+                  "variable": "tgt-doseAndRate",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-doseAndRate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-dose",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-dose"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "dose",
+                      "variable": "tgt-dose",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Range"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.dose[x] | Type: Range, Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-rate",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-rate"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "rate",
+                      "variable": "tgt-rate",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Ratio"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.rate[x] | Type: Ratio, Range, Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-type",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "type",
+                      "variable": "tgt-type",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.type | Type: CodeableConcept | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate | Type: Element | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-maxDosePerAdministration",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerAdministration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerAdministration",
+                  "variable": "tgt-maxDosePerAdministration",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-maxDosePerLifetime",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerLifetime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerLifetime",
+                  "variable": "tgt-maxDosePerLifetime",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerLifetime | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-maxDosePerPeriod",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerPeriod",
+                  "variable": "tgt-maxDosePerPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod | Type: Ratio | Cardinality: 0..1"
+            },
+            {
+              "name": "map-method",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-method"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "method",
+                  "variable": "tgt-method",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.method | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-patientInstruction",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "TODO_MAP_PATIENTINSTRUCTION",
+                  "variable": "src-patientInstruction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "patientInstruction",
+                  "variable": "tgt-patientInstruction",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-patientInstruction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.patientInstruction | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-route",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-route"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "route",
+                  "variable": "tgt-route",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.route | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.sequence | Type: integer | Cardinality: 0..1"
+            },
+            {
+              "name": "map-site",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-site"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "site",
+                  "variable": "tgt-site",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.site | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "au_core_medicationrequest_dosageInstruction_text",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.text | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.timing | Type: Timing | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dosageInstruction | Type: Dosage | Cardinality: 0..* | Complex type with 16 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-eventHistory",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-eventHistory"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.eventHistory> → Provenance — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-sexParameterForClinicalUse",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SEXPARAMETERFORCLINICALUSE_SOURCE",
+              "variable": "src-sexParameterForClinicalUse"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-sexParameterForClinicalUse",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-sexParameterForClinicalUse",
+              "source": [
+                {
+                  "context": "src-sexParameterForClinicalUse"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-sexParameterForClinicalUse",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-sexParameterForClinicalUse",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for MedicationRequest.extension:sexParameterForClinicalUse.extension:value using TODO-resolveConceptMap"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: MedicationRequest.extension:sexParameterForClinicalUse.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse']}] | Path: MedicationRequest.extension"
+        },
+        {
+          "name": "map-extension-subsidisedConcurrentSupply",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SUBSIDISEDCONCURRENTSUPPLY_SOURCE",
+              "variable": "src-subsidisedConcurrentSupply"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-subsidisedConcurrentSupply",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-subsidisedConcurrentSupply",
+              "source": [
+                {
+                  "context": "src-subsidisedConcurrentSupply"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-subsidisedConcurrentSupply",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/subsidised-concurrent-supply"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/subsidised-concurrent-supply"
+            },
+            {
+              "name": "map-valueCoding-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODING",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-subsidisedConcurrentSupply",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCoding-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://healthterminologies.gov.au/fhir/CodeSystem/concurrent-supply-grounds-1"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-valueCoding-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-e16-aucore-full-spec/ConceptMap/cm-subsidisedConcurrentSupply-7c3f4057"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for MedicationRequest.extension:subsidisedConcurrentSupply using http://example.org/StructureMap/source-definition-e16-aucore-full-spec/ConceptMap/cm-subsidisedConcurrentSupply-7c3f4057"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/subsidised-concurrent-supply | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/subsidised-concurrent-supply'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/subsidised-concurrent-supply']}] | Path: MedicationRequest.extension"
+        },
+        {
+          "name": "map-groupIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-groupIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "groupIdentifier",
+              "variable": "tgt-groupIdentifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.groupIdentifier | Type: Identifier | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-instantiatesCanonical",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESCANONICAL",
+              "variable": "src-instantiatesCanonical"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesCanonical",
+              "variable": "tgt-instantiatesCanonical",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesCanonical",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesCanonical"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.instantiatesCanonical | Type: canonical | Cardinality: 0..*"
+        },
+        {
+          "name": "map-instantiatesUri",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESURI",
+              "variable": "src-instantiatesUri"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesUri",
+              "variable": "tgt-instantiatesUri",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesUri",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesUri"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.instantiatesUri | Type: uri | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-insurance",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-insurance"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.insurance> → Coverage|ClaimResponse — resolve via bundle assembler"
+        },
+        {
+          "name": "map-intent",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_medicationrequest_intent",
+              "variable": "src-intent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "variable": "tgt-intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-intent"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.intent | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-medication-CodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "medication",
+                  "variable": "tgt-medication-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-CodeableConcept",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-medication-CodeableConcept-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-medication-coding-system",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "au_core_medicationrequest_medication_x_medicationCodeableConcept_coding_system",
+                          "variable": "src-medication-coding-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-medication-CodeableConcept-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-medication-coding-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-medication-coding-code",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "au_core_medicationrequest_medication_x_medicationCodeableConcept_coding_code",
+                          "variable": "src-medication-coding-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-medication-CodeableConcept-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-medication-coding-code"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-medication-coding-display",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "au_core_medicationrequest_medication_x_medicationCodeableConcept_coding_display",
+                          "variable": "src-medication-coding-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-medication-CodeableConcept-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-medication-coding-display"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.medication[x] | Type: CodeableConcept, Reference | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.performer> → Practitioner|PractitionerRole|Organization|Patient|Device|RelatedPerson|CareTeam — resolve via bundle assembler"
+        },
+        {
+          "name": "map-performerType",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performerType"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performerType",
+              "variable": "tgt-performerType",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.performerType | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-priorPrescription",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-priorPrescription"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.priorPrescription> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-priority",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PRIORITY",
+              "variable": "src-priority"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "priority",
+              "variable": "tgt-priority",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-priority"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.priority | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reasonCode-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-reasonCode-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "au_core_medicationrequest_reasonCode_text",
+                  "variable": "src-reasonCode-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reasonCode-cc",
+                  "contextType": "variable",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-reasonCode-text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for MedicationRequest.reasonCode"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.reasonReference> → Condition|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-recorder",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-recorder"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.recorder> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-reported",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reported"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.reported[x]> → Patient|Practitioner|PractitionerRole|RelatedPerson|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-requester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-requester"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.requester> → Practitioner|PractitionerRole|Organization|Patient|RelatedPerson — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_medicationrequest_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.statusReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-substitution",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-substitution"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "substitution",
+              "variable": "tgt-substitution",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-allowed",
+              "source": [
+                {
+                  "context": "src-substitution",
+                  "element": "TODO_MAP_ALLOWED",
+                  "variable": "src-allowed"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-substitution",
+                  "contextType": "variable",
+                  "element": "allowed",
+                  "variable": "tgt-allowed",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-allowed"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.substitution.allowed[x] | Type: boolean, CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-reason",
+              "source": [
+                {
+                  "context": "src-substitution",
+                  "variable": "src-reason"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-substitution",
+                  "contextType": "variable",
+                  "element": "reason",
+                  "variable": "tgt-reason",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.substitution.reason | Type: CodeableConcept | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.substitution | Type: BackboneElement | Cardinality: 0..1 | Complex type with 5 child elements"
+        }
+      ]
+    }
+  ]
+}

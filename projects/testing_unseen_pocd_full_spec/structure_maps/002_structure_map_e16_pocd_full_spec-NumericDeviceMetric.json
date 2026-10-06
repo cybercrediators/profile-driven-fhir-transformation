@@ -1,0 +1,1551 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NumericDeviceMetric-49109941",
+  "url": "http://example.org/StructureMap/source-definition-e16-pocd-full-spec-NumericDeviceMetric",
+  "name": "Map_002_structure_map_e16_pocd_full_spec_NumericDeviceMetric",
+  "title": "Structure Map for e16_pocd_full_spec - NumericDeviceMetric",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NumericDeviceMetric). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-pocd-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/uv/pocd/StructureDefinition/NumericDeviceMetric",
+      "mode": "target",
+      "alias": "NumericDeviceMetric"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NumericDeviceMetric",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_pocd_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DeviceMetric",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/NumericDeviceMetric"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org/fhir/uv/pocd/StructureDefinition/NumericDeviceMetric"
+        },
+        {
+          "name": "map-calibration",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-calibration"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "calibration",
+              "variable": "tgt-calibration",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-calibration",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-calibration",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-calibration",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.calibration.state | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-calibration",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-calibration",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.calibration.time | Type: instant | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-calibration",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-calibration",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.calibration.type | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.calibration | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "numericDeviceMetric_category",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-category"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.category | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-color",
+          "source": [
+            {
+              "context": "source",
+              "element": "numericDeviceMetric_color",
+              "variable": "src-color"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "color",
+              "variable": "tgt-color",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-color"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.color | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-instance",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INSTANCE_SOURCE",
+              "variable": "src-instance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-instance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-instance",
+              "source": [
+                {
+                  "context": "src-instance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-instance",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/device-instance"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/pocd/StructureDefinition/device-instance"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/pocd/StructureDefinition/device-instance | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/pocd/StructureDefinition/device-instance'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:number', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Instance number', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'number', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:number', 'slice_selector': 'number', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:number.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [{'path': 'Extension.extension.extension.extension', 'id': 'Extension.extension:number.extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR sp… [truncated; full structure in the registry entry for http://hl7.org/fhir/uv/pocd/StructureDefinition/device-instance] | Path: DeviceMetric.extension"
+        },
+        {
+          "name": "map-extension-relation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RELATION_SOURCE",
+              "variable": "src-relation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-relation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-relation",
+              "source": [
+                {
+                  "context": "src-relation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-relation",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/relation"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/pocd/StructureDefinition/relation"
+            },
+            {
+              "name": "map-extension-kind",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-KIND_SOURCE",
+                  "variable": "src-kind"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-relation",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-kind",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-kind",
+                  "source": [
+                    {
+                      "context": "src-kind"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-kind",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "kind"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to kind"
+                },
+                {
+                  "name": "map-valueCode-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODE",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-kind",
+                      "contextType": "variable",
+                      "element": "valueCode",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-e16-pocd-full-spec/ConceptMap/cm-kind-86022098"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for DeviceMetric.extension:relation.extension:kind using http://example.org/StructureMap/source-definition-e16-pocd-full-spec/ConceptMap/cm-kind-86022098"
+                }
+              ],
+              "documentation": "Maps to extension: kind | Type: [{'code': 'Extension'}] | Path: DeviceMetric.extension:relation.extension"
+            },
+            {
+              "name": "map-extension-entries",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-ENTRIES_SOURCE",
+                  "variable": "src-entries"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-relation",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-entries",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-entries",
+                  "source": [
+                    {
+                      "context": "src-entries"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-entries",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "entries"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to entries"
+                },
+                {
+                  "name": "map-valueCode-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODE",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-entries",
+                      "contextType": "variable",
+                      "element": "valueCode",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-e16-pocd-full-spec/ConceptMap/cm-entries-f5aa26db"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for DeviceMetric.extension:relation.extension:entries using http://example.org/StructureMap/source-definition-e16-pocd-full-spec/ConceptMap/cm-entries-f5aa26db"
+                }
+              ],
+              "documentation": "Maps to extension: entries | Type: [{'code': 'Extension'}] | Path: DeviceMetric.extension:relation.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/pocd/StructureDefinition/relation | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/pocd/StructureDefinition/relation'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:kind', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Kind of relation', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'kind', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:kind', 'slice_selector': 'kind', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:kind.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [{'path': 'Extension.extension.extension.extension', 'id': 'Extension.extension:kind.extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to reta… [truncated; full structure in the registry entry for http://hl7.org/fhir/uv/pocd/StructureDefinition/relation] | Path: DeviceMetric.extension"
+        },
+        {
+          "name": "map-extension-metricAvailability",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-METRICAVAILABILITY_SOURCE",
+              "variable": "src-metricAvailability"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-metricAvailability",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-metricAvailability",
+              "source": [
+                {
+                  "context": "src-metricAvailability"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-metricAvailability",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/metric-availability"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/pocd/StructureDefinition/metric-availability"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/pocd/StructureDefinition/metric-availability | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/pocd/StructureDefinition/metric-availability'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.org/fhir/uv/pocd/StructureDefinition/metric-availability', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Metric availability', 'is_required': True, 'fixed_value': [], 'options': [{'code': 'Intr', 'display': 'Intermittent', 'system': 'http://hl7.org/fhir/uv/pocd/CodeSystem/metric-availability', 'version': '0.3.0'}, {'code': 'Cont', 'display': 'Continuous', 'system': 'http://hl7.org/fhir/uv/pocd/CodeSystem/metric-availability', 'version': '0.3.0'}], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'extensible', 'valueSetUrl': 'http://hl7.org/fhir/uv/pocd/ValueSet/metric-availability', 'children': []}]]}] | Path: DeviceMetric.extension"
+        },
+        {
+          "name": "map-extension-technicalRange",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TECHNICALRANGE_SOURCE",
+              "variable": "src-technicalRange"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-technicalRange",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-technicalRange",
+              "source": [
+                {
+                  "context": "src-technicalRange"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-technicalRange",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/technical-range"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/pocd/StructureDefinition/technical-range"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/pocd/StructureDefinition/technical-range | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/pocd/StructureDefinition/technical-range'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:lowerLimit', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Lower limit', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'lowerLimit', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:lowerLimit', 'slice_selector': 'lowerLimit', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:lowerLimit.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [{'path': 'Extension.extension.extension.extension', 'id': 'Extension.extension:lowerLimit.extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is wha… [truncated; full structure in the registry entry for http://hl7.org/fhir/uv/pocd/StructureDefinition/technical-range] | Path: DeviceMetric.extension"
+        },
+        {
+          "name": "map-extension-resolution",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RESOLUTION_SOURCE",
+              "variable": "src-resolution"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-resolution",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-resolution",
+              "source": [
+                {
+                  "context": "src-resolution"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-resolution",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/pocd/StructureDefinition/resolution"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/pocd/StructureDefinition/resolution"
+            },
+            {
+              "name": "set-extension-value-resolution",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-resolution",
+                  "contextType": "variable",
+                  "element": "valueDecimal",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDecimal)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/pocd/StructureDefinition/resolution | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/pocd/StructureDefinition/resolution'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.org/fhir/uv/pocd/StructureDefinition/resolution', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'decimal'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': '$this', 'type': 'type'}], 'ordered': False, 'rules': 'closed'}, 'slicing_type': 'type', 'discriminator_path': '$this', 'discriminator': {'path': '$this', 'type': 'type'}, 'slices': [{'path': 'Extension.value[x]', 'id': 'Extension.value[x]:valueDecimal', 'type': [{'code': 'decimal'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'valueDecimal', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.value[x]:valueDecimal', 'slice_selector': 'valueDecimal', 'slicing': {'discriminators': [{'path': '$this', 'type': 'type'}], 'ordered': False, 'rules': 'closed'}, 'children': []}], 'children': []}]]}] | Path: DeviceMetric.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-measurementPeriod",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-measurementPeriod"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "measurementPeriod",
+              "variable": "tgt-measurementPeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Timing"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-measurementPeriod",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-measurementPeriod",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.measurementPeriod.code | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-event",
+              "source": [
+                {
+                  "context": "src-measurementPeriod",
+                  "element": "TODO_MAP_EVENT",
+                  "variable": "src-event"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-measurementPeriod",
+                  "contextType": "variable",
+                  "element": "event",
+                  "variable": "tgt-event",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-event",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-event"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.measurementPeriod.event | Type: dateTime | Cardinality: 0..*"
+            },
+            {
+              "name": "map-repeat",
+              "source": [
+                {
+                  "context": "src-measurementPeriod",
+                  "variable": "src-repeat"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-measurementPeriod",
+                  "contextType": "variable",
+                  "element": "repeat",
+                  "variable": "tgt-repeat",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-bounds",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "variable": "src-bounds"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "bounds",
+                      "variable": "tgt-bounds",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Duration"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.bounds[x] | Type: Duration, Range, Period | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-count",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_COUNT",
+                      "variable": "src-count"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "count",
+                      "variable": "tgt-count",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-count"
+                        },
+                        {
+                          "valueString": "positiveInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.count | Type: positiveInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-countMax",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_COUNTMAX",
+                      "variable": "src-countMax"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "countMax",
+                      "variable": "tgt-countMax",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-countMax"
+                        },
+                        {
+                          "valueString": "positiveInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.countMax | Type: positiveInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-dayOfWeek",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_DAYOFWEEK",
+                      "variable": "src-dayOfWeek"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "dayOfWeek",
+                      "variable": "tgt-dayOfWeek",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-dayOfWeek",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-dayOfWeek"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.dayOfWeek | Type: code | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-duration",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_DURATION",
+                      "variable": "src-duration"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "duration",
+                      "variable": "tgt-duration",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-duration"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.duration | Type: decimal | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-durationMax",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_DURATIONMAX",
+                      "variable": "src-durationMax"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "durationMax",
+                      "variable": "tgt-durationMax",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-durationMax"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.durationMax | Type: decimal | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-durationUnit",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_DURATIONUNIT",
+                      "variable": "src-durationUnit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "durationUnit",
+                      "variable": "tgt-durationUnit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-durationUnit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.durationUnit | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-frequency",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_FREQUENCY",
+                      "variable": "src-frequency"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "frequency",
+                      "variable": "tgt-frequency",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-frequency"
+                        },
+                        {
+                          "valueString": "positiveInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.frequency | Type: positiveInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-frequencyMax",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_FREQUENCYMAX",
+                      "variable": "src-frequencyMax"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "frequencyMax",
+                      "variable": "tgt-frequencyMax",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-frequencyMax"
+                        },
+                        {
+                          "valueString": "positiveInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.frequencyMax | Type: positiveInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-offset",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_OFFSET",
+                      "variable": "src-offset"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "offset",
+                      "variable": "tgt-offset",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-offset"
+                        },
+                        {
+                          "valueString": "unsignedInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.offset | Type: unsignedInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-period",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_PERIOD",
+                      "variable": "src-period"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "period",
+                      "variable": "tgt-period",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-period"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.period | Type: decimal | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-periodMax",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_PERIODMAX",
+                      "variable": "src-periodMax"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "periodMax",
+                      "variable": "tgt-periodMax",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-periodMax"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.periodMax | Type: decimal | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-periodUnit",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_PERIODUNIT",
+                      "variable": "src-periodUnit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "periodUnit",
+                      "variable": "tgt-periodUnit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-periodUnit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.periodUnit | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-timeOfDay",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_TIMEOFDAY",
+                      "variable": "src-timeOfDay"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "timeOfDay",
+                      "variable": "tgt-timeOfDay",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-timeOfDay",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-timeOfDay"
+                        },
+                        {
+                          "valueString": "time"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.timeOfDay | Type: time | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-when",
+                  "source": [
+                    {
+                      "context": "src-repeat",
+                      "element": "TODO_MAP_WHEN",
+                      "variable": "src-when"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-repeat",
+                      "contextType": "variable",
+                      "element": "when",
+                      "variable": "tgt-when",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-when",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-when"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DeviceMetric.measurementPeriod.repeat.when | Type: code | Cardinality: 0..*"
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.measurementPeriod.repeat | Type: Element | Cardinality: 0..1 | Complex type with 17 child elements"
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.measurementPeriod | Type: Timing | Cardinality: 0..1 | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-operationalStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "numericDeviceMetric_operationalStatus",
+              "variable": "src-operationalStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "operationalStatus",
+              "variable": "tgt-operationalStatus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-operationalStatus"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.operationalStatus | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceMetric-parent",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-parent"
+            }
+          ],
+          "documentation": "Reference<DeviceMetric.parent> → Device — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceMetric-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<DeviceMetric.source> → Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-type-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "numericDeviceMetric_type_text",
+                  "variable": "src-type-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "contextType": "variable",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type-text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "add-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-type-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_type_coding_system",
+                      "variable": "src-type-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_type_coding_code",
+                      "variable": "src-type-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-display",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_type_coding_display",
+                      "variable": "src-type-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for DeviceMetric.type"
+        },
+        {
+          "name": "map-unit-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "unit",
+              "variable": "tgt-unit-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-unit-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "numericDeviceMetric_unit_text",
+                  "variable": "src-unit-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-unit-cc",
+                  "contextType": "variable",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-unit-text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "add-unit-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-unit-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-unit-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-unit-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_unit_coding_system",
+                      "variable": "src-unit-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-unit-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-unit-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_unit_coding_code",
+                      "variable": "src-unit-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-unit-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-unit-display",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "numericDeviceMetric_unit_coding_display",
+                      "variable": "src-unit-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-unit-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for DeviceMetric.unit"
+        }
+      ]
+    }
+  ]
+}

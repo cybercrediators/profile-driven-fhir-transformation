@@ -1,0 +1,246 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-practitionerrole-8bd0fc15",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-practitionerrole",
+  "name": "Map_001_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_practitionerrole",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-practitionerrole",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-practitionerrole). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-practitionerrole",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-practitionerrole"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-practitionerrole",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "PractitionerRole",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-practitionerrole"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-practitionerrole"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.code | Type: CodeableConcept | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-notAvailable",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-notAvailable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "notAvailable",
+              "variable": "tgt-notAvailable",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-notAvailable",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-notAvailable",
+                  "element": "prRoleNotAvail",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-notAvailable",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.notAvailable.description | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.notAvailable | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-practitioner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-practitioner"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.practitioner> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

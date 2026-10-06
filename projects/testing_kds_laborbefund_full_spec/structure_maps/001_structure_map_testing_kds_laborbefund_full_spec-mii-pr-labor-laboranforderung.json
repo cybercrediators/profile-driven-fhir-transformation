@@ -1,0 +1,619 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-labor-laboranforderung-92d7cd59",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-laborbefund-full-spec-mii-pr-labor-laboranforderung",
+  "name": "Map_001_structure_map_testing_kds_laborbefund_full_spec_mii_pr_labor_laboranforderung",
+  "title": "Structure Map for testing_kds_laborbefund_full_spec - mii-pr-labor-laboranforderung",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-labor-laboranforderung). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab",
+      "mode": "target",
+      "alias": "mii-pr-labor-laboranforderung"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-labor-laboranforderung",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ServiceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ServiceRequestLab"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "serviceAuthoredOn",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.authoredOn | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-laboratory",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-laboratory",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-laboratory-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-laboratory",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-laboratory-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-laboratory",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "laboratory"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice laboratory of ServiceRequest.category.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.category | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "serviceCodeSystem",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "serviceCode",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for ServiceRequest.code"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-anforderung",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-anforderung",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-anforderung-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-anforderung",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-identifier-anforderung-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-anforderung-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-anforderung-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-identifier-anforderung-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-anforderung-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-anforderung-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-anforderung-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-anforderung-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "PLAC"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-anforderung-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "serviceIdentSystem",
+                  "variable": "src-identifier-anforderung-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-anforderung",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-anforderung-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-anforderung-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "serviceIdentValue",
+                  "variable": "src-identifier-anforderung-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-anforderung",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-anforderung-value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-anforderung-assigner",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-anforderung",
+                  "contextType": "variable",
+                  "element": "assigner",
+                  "variable": "tgt-identifier-anforderung-assigner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Reference"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-identifier-anforderung-assigner-reference",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "serviceAssigner",
+                      "variable": "src-identifier-anforderung-assigner-reference"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-anforderung-assigner",
+                      "contextType": "variable",
+                      "element": "reference",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-identifier-anforderung-assigner-reference"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice anforderung of ServiceRequest.identifier (type Identifier)"
+        },
+        {
+          "name": "set-fixed-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "order"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for intent"
+        },
+        {
+          "name": "map-occurrence",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_OCCURRENCE",
+              "variable": "src-occurrence"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "occurrence",
+              "variable": "tgt-occurrence",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-occurrence"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.occurrence[x] | Type: dateTime, Period, Timing | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-specimen",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specimen"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.specimen> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.subject> → Patient|Group|Location|Device — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

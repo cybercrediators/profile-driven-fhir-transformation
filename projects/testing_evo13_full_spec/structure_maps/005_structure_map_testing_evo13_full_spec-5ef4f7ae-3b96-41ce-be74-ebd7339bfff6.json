@@ -1,0 +1,758 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-5ef4f7ae-3b96-41ce-be74-ebd7339bfff6-a26a94d0",
+  "url": "http://example.org/StructureMap/source-definition-testing-evo13-full-spec-5ef4f7ae-3b96-41ce-be74-ebd7339bfff6",
+  "name": "Map_005_structure_map_testing_evo13_full_spec_5ef4f7ae_3b96_41ce_be74_ebd7339bfff6",
+  "title": "Structure Map for testing_evo13_full_spec - 5ef4f7ae-3b96-41ce-be74-ebd7339bfff6",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 5ef4f7ae-3b96-41ce-be74-ebd7339bfff6). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-evo13-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.element44.de/E44_EVO13_PR_Task",
+      "mode": "target",
+      "alias": "5ef4f7ae-3b96-41ce-be74-ebd7339bfff6"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-5ef4f7ae-3b96-41ce-be74-ebd7339bfff6",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_evo13_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Task",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_PR_Task"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.element44.de/E44_EVO13_PR_Task"
+        },
+        {
+          "name": "map-extension-AcceptDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ACCEPTDATE_SOURCE",
+              "variable": "src-AcceptDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-AcceptDate",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-AcceptDate",
+              "source": [
+                {
+                  "context": "src-AcceptDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-AcceptDate",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_AcceptDate"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_AcceptDate"
+            },
+            {
+              "name": "set-extension-value-AcceptDate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-AcceptDate",
+                  "contextType": "variable",
+                  "element": "valueDateTime",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDateTime)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_AcceptDate | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_AcceptDate'], 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_AcceptDate', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'dateTime'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Task.extension"
+        },
+        {
+          "name": "map-extension-ExpiryDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "taskExpiry",
+              "variable": "src-ExpiryDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ExpiryDate",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ExpiryDate",
+              "source": [
+                {
+                  "context": "src-ExpiryDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ExpiryDate",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_ExpiryDate"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_ExpiryDate"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "taskExpiry",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-date",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "taskExpiry",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-ExpiryDate",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        },
+                        {
+                          "valueString": "date"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Task.extension.value[x] | Type: date | Cardinality: 1..1 | Choice types: date"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_ExpiryDate | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_ExpiryDate'], 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_ExpiryDate', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'date'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Task.extension"
+        },
+        {
+          "name": "map-extension-InvoiceSent",
+          "source": [
+            {
+              "context": "source",
+              "element": "taskInvoiceSent",
+              "variable": "src-InvoiceSent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-InvoiceSent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-InvoiceSent",
+              "source": [
+                {
+                  "context": "src-InvoiceSent"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-InvoiceSent",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_InvoiceSent"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_InvoiceSent"
+            },
+            {
+              "name": "set-extension-value-InvoiceSent-true",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "taskInvoiceSent",
+                  "variable": "srcValue",
+                  "condition": "$this = '1' or $this = 'true'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-InvoiceSent",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueBoolean": true
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value to True (boolean coercion from string)"
+            },
+            {
+              "name": "set-extension-value-InvoiceSent-false",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "taskInvoiceSent",
+                  "variable": "srcValue",
+                  "condition": "$this = '0' or $this = 'false'"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-InvoiceSent",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueBoolean": false
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value to False (boolean coercion from string)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_InvoiceSent | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_InvoiceSent'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_InvoiceSent', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Task.extension"
+        },
+        {
+          "name": "map-extension-AcceptedByIK",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ACCEPTEDBYIK_SOURCE",
+              "variable": "src-AcceptedByIK"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-AcceptedByIK",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-AcceptedByIK",
+              "source": [
+                {
+                  "context": "src-AcceptedByIK"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-AcceptedByIK",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_AcceptedByIK"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_AcceptedByIK"
+            },
+            {
+              "name": "set-extension-value-AcceptedByIK",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-AcceptedByIK",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_AcceptedByIK | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_AcceptedByIK'], 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_AcceptedByIK', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'string'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Task.extension"
+        },
+        {
+          "name": "map-extension-HideStornoNotification",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HIDESTORNONOTIFICATION_SOURCE",
+              "variable": "src-HideStornoNotification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-HideStornoNotification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-HideStornoNotification",
+              "source": [
+                {
+                  "context": "src-HideStornoNotification"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-HideStornoNotification",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_HideStornoNotification"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_HideStornoNotification"
+            },
+            {
+              "name": "set-extension-value-HideStornoNotification",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-HideStornoNotification",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_HideStornoNotification | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_HideStornoNotification'], 'profile': [[{'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_HideStornoNotification', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Task.extension"
+        },
+        {
+          "name": "map-extension-Warning",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-WARNING_SOURCE",
+              "variable": "src-Warning"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-Warning",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Warning",
+              "source": [
+                {
+                  "context": "src-Warning"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Warning",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_EX_Warning"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.element44.de/E44_EVO13_EX_Warning"
+            },
+            {
+              "name": "set-extension-value-Warning",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Warning",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueCoding)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.element44.de/E44_EVO13_EX_Warning | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.element44.de/E44_EVO13_EX_Warning'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.element44.de/E44_EVO13_EX_Warning', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': [{'path': 'Extension.value[x].code', 'id': 'Extension.value[x].code', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Symbol in syntax defined by the system', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'v2', 'map': 'C*E.1'}, {'identity': 'rim', 'map': './code'}, {'identity': 'orim', 'map': 'fhir:Coding.code rdfs:subPropertyOf dt:CDCoding.code'}], 'is_modifier': False, 'is_summary': True, 'requirements': 'Need to refer to a particular … [truncated; full structure in the registry entry for https://fhir.element44.de/E44_EVO13_EX_Warning] | Path: Task.extension"
+        },
+        {
+          "name": "map-identifier-ReferenceId",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-ReferenceId",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-ReferenceId-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-ReferenceId",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/NamingSystem/PrescriptionID"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-ReferenceId-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "taskPrescriptionId",
+                  "variable": "src-identifier-ReferenceId-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-ReferenceId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-ReferenceId-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice ReferenceId of Task.identifier (type Identifier)"
+        },
+        {
+          "name": "map-identifier-Secret",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-Secret",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-Secret-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-Secret",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_NS_Secret"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-Secret-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "taskSecret",
+                  "variable": "src-identifier-Secret-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-Secret",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-Secret-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice Secret of Task.identifier (type Identifier)"
+        },
+        {
+          "name": "set-fixed-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "order"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for intent"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "taskStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Task.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

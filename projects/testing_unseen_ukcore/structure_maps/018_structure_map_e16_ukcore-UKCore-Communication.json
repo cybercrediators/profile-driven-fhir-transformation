@@ -1,0 +1,744 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-Communication-5407d14e",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-UKCore-Communication",
+  "name": "Map_018_structure_map_e16_ukcore_UKCore_Communication",
+  "title": "Structure Map for e16_ukcore - UKCore-Communication",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-Communication). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Communication",
+      "mode": "target",
+      "alias": "UKCore-Communication"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-Communication",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Communication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Communication"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-Communication"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-about",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-about"
+            }
+          ],
+          "documentation": "Reference<Communication.about> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<Communication.basedOn> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Communication.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Communication-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<Communication.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Communication.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-inResponseTo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-inResponseTo"
+            }
+          ],
+          "documentation": "Reference<Communication.inResponseTo> → Communication — resolve via bundle assembler"
+        },
+        {
+          "name": "map-instantiatesCanonical",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESCANONICAL",
+              "variable": "src-instantiatesCanonical"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesCanonical",
+              "variable": "tgt-instantiatesCanonical",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesCanonical",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesCanonical"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.instantiatesCanonical | Type: canonical | Cardinality: 0..*"
+        },
+        {
+          "name": "map-instantiatesUri",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESURI",
+              "variable": "src-instantiatesUri"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesUri",
+              "variable": "tgt-instantiatesUri",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesUri",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesUri"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.instantiatesUri | Type: uri | Cardinality: 0..*"
+        },
+        {
+          "name": "map-medium",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medium"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "medium",
+              "variable": "tgt-medium",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-medium",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.medium | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Communication-author",
+              "source": [
+                {
+                  "context": "src-note",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<Communication.note.author[x]> → Organization|Practitioner|RelatedPerson|Patient — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.note.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Communication.note | Type: Annotation | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Communication.partOf> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-payload",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-payload"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payload",
+              "variable": "tgt-payload",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-payload",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Communication-content",
+              "source": [
+                {
+                  "context": "src-payload",
+                  "variable": "src-content"
+                }
+              ],
+              "documentation": "Reference<Communication.payload.content[x]> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Communication.payload | Type: BackboneElement | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-priority",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PRIORITY",
+              "variable": "src-priority"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "priority",
+              "variable": "tgt-priority",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-priority"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.priority | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<Communication.reasonReference> → Condition|Observation|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "map-received",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_RECEIVED",
+              "variable": "src-received"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "received",
+              "variable": "tgt-received",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-received"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.received | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-recipient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-recipient"
+            }
+          ],
+          "documentation": "Reference<Communication.recipient> → Device|Group|HealthcareService|Organization|Patient|Practitioner|PractitionerRole|RelatedPerson|CareTeam — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-sender",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-sender"
+            }
+          ],
+          "documentation": "Reference<Communication.sender> → Device|HealthcareService|Organization|Patient|Practitioner|PractitionerRole|RelatedPerson — resolve via bundle assembler"
+        },
+        {
+          "name": "map-sent",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_SENT",
+              "variable": "src-sent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "sent",
+              "variable": "tgt-sent",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-sent"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.sent | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.statusReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Communication.subject> → Group|Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-topic",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-topic"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "topic",
+              "variable": "tgt-topic",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.topic | Type: CodeableConcept | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

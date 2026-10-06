@@ -1,0 +1,286 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c-6f067bde",
+  "url": "http://example.org/StructureMap/source-definition-testing-evo13-full-spec-53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c",
+  "name": "Map_002_structure_map_testing_evo13_full_spec_53d35b6e_d260_4bf9_a6c2_e1b8dee8ac8c",
+  "title": "Structure Map for testing_evo13_full_spec - 53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-evo13-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.element44.de/E44_EVO13_PR_Appointment",
+      "mode": "target",
+      "alias": "53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-53d35b6e-d260-4bf9-a6c2-e1b8dee8ac8c",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_evo13_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Appointment",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.element44.de/E44_EVO13_PR_Appointment"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.element44.de/E44_EVO13_PR_Appointment"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptDescription",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.description | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "map-end",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptEnd",
+              "variable": "src-end"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "end",
+              "variable": "tgt-end",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-end"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.end | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-participant",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-participant"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "participant",
+              "variable": "tgt-participant",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-status",
+              "source": [
+                {
+                  "context": "src-participant"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant",
+                  "contextType": "variable",
+                  "element": "status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "accepted"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for status"
+            },
+            {
+              "name": "map-type-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-participant"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-text",
+                  "source": [
+                    {
+                      "context": "src-participant",
+                      "element": "apptPartTypeText",
+                      "variable": "src-type-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-cc",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Appointment.participant.type"
+            }
+          ],
+          "documentation": "Maps to Appointment.participant | Type: BackboneElement | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-start",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptStart",
+              "variable": "src-start"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "start",
+              "variable": "tgt-start",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-start"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.start | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "booked"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,512 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-documentreference-06f13b50",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-documentreference",
+  "name": "Map_003_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_documentreference",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-documentreference",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-documentreference). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-DocumentReference",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-documentreference"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-documentreference",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DocumentReference",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-DocumentReference"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-DocumentReference"
+        },
+        {
+          "name": "TODO-resolve-reference-DocumentReference-author",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-author"
+            }
+          ],
+          "documentation": "Reference<DocumentReference.author> → PractitionerRole|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-content",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-content"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "content",
+              "variable": "tgt-content",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-content",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-attachment",
+              "source": [
+                {
+                  "context": "src-content",
+                  "variable": "src-attachment"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-content",
+                  "contextType": "variable",
+                  "element": "attachment",
+                  "variable": "tgt-attachment",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Attachment"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-url",
+                  "source": [
+                    {
+                      "context": "src-attachment",
+                      "element": "docContentUrl",
+                      "variable": "src-url"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-attachment",
+                      "contextType": "variable",
+                      "element": "url",
+                      "variable": "tgt-url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-url"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to DocumentReference.content.attachment.url | Type: url | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to DocumentReference.content.attachment | Type: Attachment | Cardinality: 1..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to DocumentReference.content | Type: BackboneElement | Cardinality: 1..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-DocumentReference-custodian",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-custodian"
+            }
+          ],
+          "documentation": "Reference<DocumentReference.custodian> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DocumentReference.date | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-docStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "docDocStatus",
+              "variable": "src-docStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "docStatus",
+              "variable": "tgt-docStatus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-docStatus"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DocumentReference.docStatus | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "docIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DocumentReference.identifier.system | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "docIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DocumentReference.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DocumentReference.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-relatesTo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relatesTo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "relatesTo",
+              "variable": "tgt-relatesTo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-relatesTo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "element": "TODO_MAP_CODE",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relatesTo",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DocumentReference.relatesTo.code | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-DocumentReference-target",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "variable": "src-target"
+                }
+              ],
+              "documentation": "Reference<DocumentReference.relatesTo.target> → DocumentReference — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to DocumentReference.relatesTo | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "docStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DocumentReference.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DocumentReference-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<DocumentReference.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-fixed-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-type-coding-0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-fixed-type-coding-0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-type-coding-0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-type-coding-0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "60591-5"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for type"
+        }
+      ]
+    }
+  ]
+}

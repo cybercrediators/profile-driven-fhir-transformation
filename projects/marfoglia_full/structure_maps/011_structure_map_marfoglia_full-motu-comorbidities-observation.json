@@ -1,0 +1,289 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-comorbidities-observation-9d02f68d",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-comorbidities-observation",
+  "name": "Map_011_structure_map_marfoglia_full_motu_comorbidities_observation",
+  "title": "Structure Map for marfoglia_full - motu-comorbidities-observation",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-comorbidities-observation). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-comorbidities-observation",
+      "mode": "target",
+      "alias": "motu-comorbidities-observation"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-comorbidities-observation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-comorbidities-observation"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-comorbidities-observation"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Observation.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.code | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.value[x] | Type: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Observation.component | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EFFECTIVE",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "effective",
+              "variable": "tgt-effective",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-effective"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime, Period, Timing, instant | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "registered"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

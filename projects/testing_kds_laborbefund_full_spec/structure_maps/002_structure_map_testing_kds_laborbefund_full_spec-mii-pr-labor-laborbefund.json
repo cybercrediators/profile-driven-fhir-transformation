@@ -1,0 +1,824 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-labor-laborbefund-342f8d87",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-laborbefund-full-spec-mii-pr-labor-laborbefund",
+  "name": "Map_002_structure_map_testing_kds_laborbefund_full_spec_mii_pr_labor_laborbefund",
+  "title": "Structure Map for testing_kds_laborbefund_full_spec - mii-pr-labor-laborbefund",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-labor-laborbefund). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab",
+      "mode": "target",
+      "alias": "mii-pr-labor-laborbefund"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-labor-laborbefund",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/DiagnosticReportLab"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.basedOn> → CarePlan|ImmunizationRecommendation|MedicationRequest|NutritionOrder|ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-loinc-lab",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-loinc-lab",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-loinc-lab-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-lab",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-lab-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-lab",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "26436-6"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice loinc-lab of DiagnosticReport.category.coding (type Coding)"
+            },
+            {
+              "name": "map-coding-diagnostic-service-sections",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-diagnostic-service-sections",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-diagnostic-service-sections-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-diagnostic-service-sections",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/v2-0074"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-diagnostic-service-sections-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-diagnostic-service-sections",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "LAB"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice diagnostic-service-sections of DiagnosticReport.category.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.category | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-loinc-labReport",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-loinc-labReport",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-loinc-labReport-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-labReport",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-labReport-code",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-labReport",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "11502-2"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-labReport-code-2",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "reportCode",
+                      "variable": "src-coding-loinc-labReport-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-labReport",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-loinc-labReport-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-labReport-system-2",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "reportCodeSystem",
+                      "variable": "src-coding-loinc-labReport-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-labReport",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-loinc-labReport-system"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice loinc-labReport of DiagnosticReport.code.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-conclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_CONCLUSION",
+              "variable": "src-conclusion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "conclusion",
+              "variable": "tgt-conclusion",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-conclusion"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.conclusion | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "reportEffective",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.effective[x] | Type: dateTime | Cardinality: 1..1 | Complex type with 1 child elements | Choice types: dateTime"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-befund",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-befund",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-befund-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-befund",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-identifier-befund-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-befund-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-befund-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-identifier-befund-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-befund-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-befund-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-befund-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-befund-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "FILL"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-befund-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "reportIdentSystem",
+                  "variable": "src-identifier-befund-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-befund",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-befund-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-befund-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "reportIdentValue",
+                  "variable": "src-identifier-befund-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-befund",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-befund-value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-befund-assigner",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-befund",
+                  "contextType": "variable",
+                  "element": "assigner",
+                  "variable": "tgt-identifier-befund-assigner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Reference"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-identifier-befund-assigner-reference",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reportAssigner",
+                      "variable": "src-identifier-befund-assigner-reference"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-befund-assigner",
+                      "contextType": "variable",
+                      "element": "reference",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-identifier-befund-assigner-reference"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice befund of DiagnosticReport.identifier (type Identifier)"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportIssued",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.issued | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-media",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-media"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "media",
+              "variable": "tgt-media",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-media",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-DiagnosticReport-link",
+              "source": [
+                {
+                  "context": "src-media",
+                  "variable": "src-link"
+                }
+              ],
+              "documentation": "Reference<DiagnosticReport.media.link> → Media — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.media | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.performer> → Practitioner|PractitionerRole|Organization|CareTeam — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-result",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-result"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.result> → Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-specimen",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specimen"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.specimen> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "reportStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> → Patient|Group|Device|Location — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

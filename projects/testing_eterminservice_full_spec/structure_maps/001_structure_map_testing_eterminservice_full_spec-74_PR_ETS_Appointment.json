@@ -1,0 +1,752 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-74-PR-ETS-Appointment-de80a05a",
+  "url": "http://example.org/StructureMap/source-definition-testing-eterminservice-full-spec-74_PR_ETS_Appointment",
+  "name": "Map_001_structure_map_testing_eterminservice_full_spec_74_PR_ETS_Appointment",
+  "title": "Structure Map for testing_eterminservice_full_spec - 74_PR_ETS_Appointment",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 74_PR_ETS_Appointment). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-eterminservice-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Appointment",
+      "mode": "target",
+      "alias": "74_PR_ETS_Appointment"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-74-PR-ETS-Appointment",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_eterminservice_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Appointment",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Appointment"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Appointment"
+        },
+        {
+          "name": "map-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "basedOn",
+              "variable": "tgt-basedOn",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-basedOn",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-basedOn",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-identifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://fhir.kbv.de/identifierer/74_ID_ETS_Vermittlungscode"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "apptBasedOnValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Appointment.basedOn.identifier.value | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Appointment.basedOn.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Reference Appointment.basedOn populated from explicitly authored child mappings."
+        },
+        {
+          "name": "map-created",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_CREATED",
+              "variable": "src-created"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "created",
+              "variable": "tgt-created",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-created"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.created | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-end",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptEnd",
+              "variable": "src-end"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "end",
+              "variable": "tgt-end",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-end"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.end | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-extension-ersterVermittlungsversuch",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptFirstAttempt",
+              "variable": "src-ersterVermittlungsversuch"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ersterVermittlungsversuch",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ersterVermittlungsversuch",
+              "source": [
+                {
+                  "context": "src-ersterVermittlungsversuch"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ersterVermittlungsversuch",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.kbv.de/StructureDefinition/74_EX_ETS_ErsterVermittlungsversuch"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.kbv.de/StructureDefinition/74_EX_ETS_ErsterVermittlungsversuch"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "apptFirstAttempt",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-dateTime",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "apptFirstAttempt",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-ersterVermittlungsversuch",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Appointment.extension.value[x] | Type: dateTime | Cardinality: 1..1 | Choice types: dateTime"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.kbv.de/StructureDefinition/74_EX_ETS_ErsterVermittlungsversuch | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.kbv.de/StructureDefinition/74_EX_ETS_ErsterVermittlungsversuch'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': [], 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'dateTime'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Appointment.extension"
+        },
+        {
+          "name": "map-extension-priorityCoding",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptPrioritySystem",
+              "variable": "src-priorityCoding"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-priorityCoding",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-priorityCoding",
+              "source": [
+                {
+                  "context": "src-priorityCoding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-priorityCoding",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.kbv.de/StructureDefinition/74_EX_ETS_AppointmentPriority"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.kbv.de/StructureDefinition/74_EX_ETS_AppointmentPriority"
+            },
+            {
+              "name": "map-valueCoding-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "apptPriorityCode",
+                  "variable": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-priorityCoding",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCoding-system",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/request-priority"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-valueCoding-code",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-eterminservice-full-spec/ConceptMap/cm-value-87a19f1a"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Appointment.extension.value[x] using http://example.org/StructureMap/source-definition-testing-eterminservice-full-spec/ConceptMap/cm-value-87a19f1a"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.kbv.de/StructureDefinition/74_EX_ETS_AppointmentPriority | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.kbv.de/StructureDefinition/74_EX_ETS_AppointmentPriority'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': [], 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. Howeve… [truncated; full structure in the registry entry for https://fhir.kbv.de/StructureDefinition/74_EX_ETS_AppointmentPriority] | Path: Appointment.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "apptIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Appointment.identifier.system | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "apptIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Appointment.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Appointment.identifier | Type: Identifier | Cardinality: 0..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-participant-patient",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "participant",
+              "variable": "tgt-participant-patient",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-participant-patient-status",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "apptPartStatus",
+                  "variable": "src-participant-patient-status"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant-patient",
+                  "contextType": "variable",
+                  "element": "status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-participant-patient-status"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Appointment-actor",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-participant-patient-actor"
+                }
+              ],
+              "documentation": "Reference<Appointment.participant.actor> → https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Patient — resolve via bundle assembler"
+            },
+            {
+              "name": "set-participant-patient-type",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-PARTICIPANT-PATIENT-TYPE_SOURCE",
+                  "variable": "src-participant-patient-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant-patient",
+                  "contextType": "variable",
+                  "element": "type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice patient of Appointment.participant (type BackboneElement)"
+        },
+        {
+          "name": "map-participant-practitionerRole",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "participant",
+              "variable": "tgt-participant-practitionerRole",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Appointment-actor",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-participant-practitionerRole-actor"
+                }
+              ],
+              "documentation": "Reference<Appointment.participant.actor> → https://fhir.kbv.de/StructureDefinition/74_PR_ETS_PractitionerRole — resolve via bundle assembler"
+            },
+            {
+              "name": "set-participant-practitionerRole-status",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-PARTICIPANT-PRACTITIONERROLE-STATUS_SOURCE",
+                  "variable": "src-participant-practitionerRole-status"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant-practitionerRole",
+                  "contextType": "variable",
+                  "element": "status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-participant-practitionerRole-status"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-participant-practitionerRole-type",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-PARTICIPANT-PRACTITIONERROLE-TYPE_SOURCE",
+                  "variable": "src-participant-practitionerRole-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant-practitionerRole",
+                  "contextType": "variable",
+                  "element": "type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice practitionerRole of Appointment.participant (type BackboneElement)"
+        },
+        {
+          "name": "map-start",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptStart",
+              "variable": "src-start"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "start",
+              "variable": "tgt-start",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-start"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.start | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1425 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-List-dad667a9",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-UKCore-List",
+  "name": "Map_024_structure_map_e16_ukcore_UKCore_List",
+  "title": "Structure Map for e16_ukcore - UKCore-List",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-List). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-List",
+      "mode": "target",
+      "alias": "UKCore-List"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-List",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "List",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-List"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-List"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.code.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.code.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.code.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.code.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.code.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to List.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to List.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to List.date | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-emptyReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-emptyReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "emptyReason",
+              "variable": "tgt-emptyReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-emptyReason",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-emptyReason",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.emptyReason.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.emptyReason.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.emptyReason.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.emptyReason.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.emptyReason.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to List.emptyReason.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to List.emptyReason | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-List-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<List.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-entry",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-entry"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "entry",
+              "variable": "tgt-entry",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-entry",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-date",
+              "source": [
+                {
+                  "context": "src-entry",
+                  "element": "TODO_MAP_DATE",
+                  "variable": "src-date"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-entry",
+                  "contextType": "variable",
+                  "element": "date",
+                  "variable": "tgt-date",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-date"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.entry.date | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-deleted",
+              "source": [
+                {
+                  "context": "src-entry",
+                  "element": "TODO_MAP_DELETED",
+                  "variable": "src-deleted"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-entry",
+                  "contextType": "variable",
+                  "element": "deleted",
+                  "variable": "tgt-deleted",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-deleted"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.entry.deleted | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "map-flag",
+              "source": [
+                {
+                  "context": "src-entry",
+                  "variable": "src-flag"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-entry",
+                  "contextType": "variable",
+                  "element": "flag",
+                  "variable": "tgt-flag",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-flag",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-flag",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.entry.flag.coding.code | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.entry.flag.coding.display | Type: string | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.entry.flag.coding.system | Type: uri | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-userSelected",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_USERSELECTED",
+                          "variable": "src-userSelected"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "userSelected",
+                          "variable": "tgt-userSelected",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-userSelected"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.entry.flag.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-version",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_VERSION",
+                          "variable": "src-version"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "version",
+                          "variable": "tgt-version",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-version"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.entry.flag.coding.version | Type: string | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to List.entry.flag.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+                }
+              ],
+              "documentation": "Maps to List.entry.flag | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "TODO-resolve-reference-List-item",
+              "source": [
+                {
+                  "context": "src-entry",
+                  "variable": "src-item"
+                }
+              ],
+              "documentation": "Reference<List.entry.item> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to List.entry | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-List-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<List.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.identifier.type.coding.code | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.identifier.type.coding.display | Type: string | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.identifier.type.coding.system | Type: uri | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-userSelected",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_USERSELECTED",
+                          "variable": "src-userSelected"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "userSelected",
+                          "variable": "tgt-userSelected",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-userSelected"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.identifier.type.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-version",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_VERSION",
+                          "variable": "src-version"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "version",
+                          "variable": "tgt-version",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-version"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to List.identifier.type.coding.version | Type: string | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to List.identifier.type.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+                }
+              ],
+              "documentation": "Maps to List.identifier.type | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to List.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-mode",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MODE",
+              "variable": "src-mode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "mode",
+              "variable": "tgt-mode",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-mode"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to List.mode | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-List-author",
+              "source": [
+                {
+                  "context": "src-note",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<List.note.author[x]> → Patient|Organization|Practitioner|RelatedPerson — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to List.note.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to List.note | Type: Annotation | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-orderedBy",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-orderedBy"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "orderedBy",
+              "variable": "tgt-orderedBy",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-orderedBy",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-orderedBy",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.orderedBy.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.orderedBy.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.orderedBy.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.orderedBy.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to List.orderedBy.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to List.orderedBy.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to List.orderedBy | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-List-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<List.source> → Device|Patient|Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to List.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-List-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<List.subject> → Group|Device|Patient|Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_TITLE",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to List.title | Type: string | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

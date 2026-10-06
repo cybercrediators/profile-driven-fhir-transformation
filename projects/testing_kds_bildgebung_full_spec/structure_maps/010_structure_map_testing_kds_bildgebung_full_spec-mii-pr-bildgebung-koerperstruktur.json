@@ -1,0 +1,173 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-koerperstruktur-4ab35aca",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-full-spec-mii-pr-bildgebung-koerperstruktur",
+  "name": "Map_010_structure_map_testing_kds_bildgebung_full_spec_mii_pr_bildgebung_koerperstruktur",
+  "title": "Structure Map for testing_kds_bildgebung_full_spec - mii-pr-bildgebung-koerperstruktur",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-koerperstruktur). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-koerperstruktur"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-koerperstruktur",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "BodyStructure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-koerperstruktur"
+        },
+        {
+          "name": "map-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "location",
+              "variable": "tgt-location",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to BodyStructure.location | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-locationQualifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-locationQualifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "locationQualifier",
+              "variable": "tgt-locationQualifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-locationQualifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to BodyStructure.locationQualifier | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-morphology",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-morphology"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "morphology",
+              "variable": "tgt-morphology",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to BodyStructure.morphology | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-BodyStructure-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<BodyStructure.patient> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,494 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-person-vitalstatus-e57e56fb",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-person-full-spec-mii-pr-person-vitalstatus",
+  "name": "Map_002_structure_map_testing_kds_person_full_spec_mii_pr_person_vitalstatus",
+  "title": "Structure Map for testing_kds_person_full_spec - mii-pr-person-vitalstatus",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-person-vitalstatus). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-person-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus",
+      "mode": "target",
+      "alias": "mii-pr-person-vitalstatus"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-person-vitalstatus",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_person_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-person/StructureDefinition/Vitalstatus"
+        },
+        {
+          "name": "map-category-survey",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category-survey",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-survey-coding-0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-survey",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-category-survey-coding-0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-survey-coding-0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-survey-coding-0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-survey-coding-0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-survey-coding-0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "survey"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice survey of Observation.category (type CodeableConcept)"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-loinc",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-loinc",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-loinc-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-code",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "67162-8"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice loinc of Observation.code.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Observation.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "vitalStatusDate",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "vitalStatusDate",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime | Cardinality: 1..1 | Choice types: dateTime"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "final"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient|Group — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-value-CodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-value-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-CodeableConcept",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-value-CodeableConcept-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-value-coding-code",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "vitalStatusCode",
+                          "variable": "src-value-coding-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-CodeableConcept-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-coding-code"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-value-coding-system",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "vitalStatusSystem",
+                          "variable": "src-value-coding-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-CodeableConcept-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-coding-system"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements | Choice types: CodeableConcept"
+        }
+      ]
+    }
+  ]
+}

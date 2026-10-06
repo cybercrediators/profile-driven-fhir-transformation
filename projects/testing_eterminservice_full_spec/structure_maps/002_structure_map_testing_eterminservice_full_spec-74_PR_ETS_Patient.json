@@ -1,0 +1,621 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-74-PR-ETS-Patient-97d9a6ef",
+  "url": "http://example.org/StructureMap/source-definition-testing-eterminservice-full-spec-74_PR_ETS_Patient",
+  "name": "Map_002_structure_map_testing_eterminservice_full_spec_74_PR_ETS_Patient",
+  "title": "Structure Map for testing_eterminservice_full_spec - 74_PR_ETS_Patient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 74_PR_ETS_Patient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-eterminservice-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Patient",
+      "mode": "target",
+      "alias": "74_PR_ETS_Patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-74-PR-ETS-Patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_eterminservice_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.kbv.de/StructureDefinition/74_PR_ETS_Patient"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "patCity",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.city | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "patAddressLine",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.line | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "patPostalCode",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.postalCode | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.address | Type: Address | Cardinality: 1..1 | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "patBirthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 1..1"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "patGender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "patFamily",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.family | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "patGiven",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.given | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-prefix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_PREFIX",
+                  "variable": "src-prefix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "prefix",
+                  "variable": "tgt-prefix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-prefix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.prefix | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..1 | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-telecom-phone",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom-phone",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-telecom-phone-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-phone",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "phone"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-phone-use",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-phone",
+                  "contextType": "variable",
+                  "element": "use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-phone-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patPhone",
+                  "variable": "src-telecom-phone-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-phone",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-telecom-phone-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice phone of Patient.telecom (type ContactPoint)"
+        },
+        {
+          "name": "map-telecom-email",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom-email",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-telecom-email-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-email",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "email"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-email-use",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-email",
+                  "contextType": "variable",
+                  "element": "use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "home"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-email-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patEmail",
+                  "variable": "src-telecom-email-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-email",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-telecom-email-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice email of Patient.telecom (type ContactPoint)"
+        },
+        {
+          "name": "map-telecom-mobil",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom-mobil",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-telecom-mobil-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-mobil",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "phone"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-mobil-use",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-mobil",
+                  "contextType": "variable",
+                  "element": "use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "mobile"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-telecom-mobil-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patMobile",
+                  "variable": "src-telecom-mobil-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom-mobil",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-telecom-mobil-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice mobil of Patient.telecom (type ContactPoint)"
+        }
+      ]
+    }
+  ]
+}

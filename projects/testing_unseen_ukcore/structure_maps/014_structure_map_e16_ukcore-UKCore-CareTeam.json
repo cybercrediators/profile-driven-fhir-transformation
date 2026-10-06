@@ -1,0 +1,618 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-CareTeam-2ca8df3f",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-UKCore-CareTeam",
+  "name": "Map_014_structure_map_e16_ukcore_UKCore_CareTeam",
+  "title": "Structure Map for e16_ukcore - UKCore-CareTeam",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-CareTeam). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-CareTeam",
+      "mode": "target",
+      "alias": "UKCore-CareTeam"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-CareTeam",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CareTeam",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-CareTeam"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-CareTeam"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-CareTeam-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<CareTeam.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CareTeam-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<CareTeam.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to CareTeam.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-CareTeam-managingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-managingOrganization"
+            }
+          ],
+          "documentation": "Reference<CareTeam.managingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NAME",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.name | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CareTeam-author",
+              "source": [
+                {
+                  "context": "src-note",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<CareTeam.note.author[x]> → Practitioner|Patient|RelatedPerson|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.note.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to CareTeam.note | Type: Annotation | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-participant",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-participant"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "participant",
+              "variable": "tgt-participant",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-participant",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CareTeam-member",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "variable": "src-member"
+                }
+              ],
+              "documentation": "Reference<CareTeam.participant.member> → Practitioner|PractitionerRole|RelatedPerson|Patient|Organization|CareTeam — resolve via bundle assembler"
+            },
+            {
+              "name": "TODO-resolve-reference-CareTeam-onBehalfOf",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "variable": "src-onBehalfOf"
+                }
+              ],
+              "documentation": "Reference<CareTeam.participant.onBehalfOf> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.participant.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-role",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CareTeam.participant.role | Type: CodeableConcept | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to CareTeam.participant | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-CareTeam-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<CareTeam.reasonReference> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.status | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-CareTeam-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<CareTeam.subject> → Group|Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CareTeam.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1246 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ISiKProzedur-b37f291e",
+  "url": "http://example.org/StructureMap/source-definition-e16-isik-full-spec-ISiKProzedur",
+  "name": "Map_012_structure_map_e16_isik_full_spec_ISiKProzedur",
+  "title": "Structure Map for e16_isik_full_spec - ISiKProzedur",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ISiKProzedur). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-isik-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur",
+      "mode": "target",
+      "alias": "ISiKProzedur"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ISiKProzedur",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_isik_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Procedure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/isik/StructureDefinition/ISiKProzedur"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-asserter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-asserter"
+            }
+          ],
+          "documentation": "Reference<Procedure.asserter> → Patient|RelatedPerson|Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<Procedure.basedOn> → CarePlan|ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-bodySite",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-bodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "bodySite",
+              "variable": "tgt-bodySite",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-bodySite",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.bodySite | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-category",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_category_coding_code",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.category.coding.code | Type: code"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_category_coding_display",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.category.coding.display | Type: string"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_category_coding_system",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.category.coding.system | Type: uri"
+                }
+              ],
+              "documentation": "Maps to Procedure.category.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Procedure.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_code_coding_code",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.code.coding.code | Type: code"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_code_coding_display",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.code.coding.display | Type: string"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "iSiKProzedur_code_coding_system",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Procedure.code.coding.system | Type: uri"
+                }
+              ],
+              "documentation": "Maps to Procedure.code.coding | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-coding-OPS",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-OPS",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-OPS-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-OPS",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/CodeSystem/bfarm/ops"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-OPS-version",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "iSiKProzedur_code_coding_OPS_version",
+                      "variable": "src-coding-OPS-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-OPS",
+                      "contextType": "variable",
+                      "element": "version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-OPS-version"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-OPS-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "iSiKProzedur_code_coding_OPS_code",
+                      "variable": "src-coding-OPS-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-OPS",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-OPS-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-OPS-display",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "iSiKProzedur_code_coding_OPS_display",
+                      "variable": "src-coding-OPS-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-OPS",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-OPS-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice OPS of Procedure.code.coding (type Coding)"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-code",
+                  "element": "iSiKProzedur_code_text",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Procedure.code.text | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Procedure.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-complication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-complication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "complication",
+              "variable": "tgt-complication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-complication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.complication | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-complicationDetail",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-complicationDetail"
+            }
+          ],
+          "documentation": "Reference<Procedure.complicationDetail> → Condition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Procedure.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-Dokumentationsdatum",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DOKUMENTATIONSDATUM_SOURCE",
+              "variable": "src-Dokumentationsdatum"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-Dokumentationsdatum",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Dokumentationsdatum",
+              "source": [
+                {
+                  "context": "src-Dokumentationsdatum"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Dokumentationsdatum",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum"
+            },
+            {
+              "name": "set-extension-value-Dokumentationsdatum",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Dokumentationsdatum",
+                  "contextType": "variable",
+                  "element": "valueDateTime",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDateTime)"
+            }
+          ],
+          "documentation": "Maps to extension: http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum | Type: [{'code': 'Extension', 'profile_canonical': ['http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum'], 'profile': ['http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-focalDevice",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-focalDevice"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "focalDevice",
+              "variable": "tgt-focalDevice",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-focalDevice",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-action",
+              "source": [
+                {
+                  "context": "src-focalDevice",
+                  "variable": "src-action"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-focalDevice",
+                  "contextType": "variable",
+                  "element": "action",
+                  "variable": "tgt-action",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Procedure.focalDevice.action | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Procedure-manipulated",
+              "source": [
+                {
+                  "context": "src-focalDevice",
+                  "variable": "src-manipulated"
+                }
+              ],
+              "documentation": "Reference<Procedure.focalDevice.manipulated> → Device — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.focalDevice | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-followUp",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-followUp"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "followUp",
+              "variable": "tgt-followUp",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-followUp",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.followUp | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-instantiatesCanonical",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESCANONICAL",
+              "variable": "src-instantiatesCanonical"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesCanonical",
+              "variable": "tgt-instantiatesCanonical",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesCanonical",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesCanonical"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.instantiatesCanonical | Type: canonical | Cardinality: 0..*"
+        },
+        {
+          "name": "map-instantiatesUri",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_INSTANTIATESURI",
+              "variable": "src-instantiatesUri"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instantiatesUri",
+              "variable": "tgt-instantiatesUri",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instantiatesUri",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-instantiatesUri"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.instantiatesUri | Type: uri | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<Procedure.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "iSiKProzedur_note_text",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Procedure.note.text | Type: markdown"
+            }
+          ],
+          "documentation": "Maps to Procedure.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-outcome",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-outcome"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "outcome",
+              "variable": "tgt-outcome",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.outcome | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Procedure.partOf> → Procedure|Observation|MedicationAdministration — resolve via bundle assembler"
+        },
+        {
+          "name": "map-performed",
+          "source": [
+            {
+              "context": "source",
+              "element": "iSiKProzedur_performed_x",
+              "variable": "src-performed"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-performed-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKProzedur_performed_x_performedDateTime",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "performed",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.performed[x] | Type: dateTime, Period | Cardinality: 1..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Procedure-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Procedure.performer.actor> → Practitioner|PractitionerRole|Organization|Patient|RelatedPerson|Device — resolve via bundle assembler"
+            },
+            {
+              "name": "map-function",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-function"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-performer",
+                  "contextType": "variable",
+                  "element": "function",
+                  "variable": "tgt-function",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Procedure.performer.function | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Procedure-onBehalfOf",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-onBehalfOf"
+                }
+              ],
+              "documentation": "Reference<Procedure.performer.onBehalfOf> → Organization — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<Procedure.reasonReference> → Condition|Observation|Procedure|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-recorder",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-recorder"
+            }
+          ],
+          "documentation": "Reference<Procedure.recorder> → Patient|RelatedPerson|Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-report",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-report"
+            }
+          ],
+          "documentation": "Reference<Procedure.report> → DiagnosticReport|DocumentReference|Composition — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "iSiKProzedur_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.statusReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "subject",
+              "variable": "tgt-subject",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-subject-reference",
+              "source": [
+                {
+                  "context": "src-subject",
+                  "element": "iSiKProzedur_subject_reference",
+                  "variable": "src-reference"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-subject",
+                  "contextType": "variable",
+                  "element": "reference",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-reference"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Reference reference from 'iSiKProzedur_subject_reference' (mapped directly; not deferred to bundle assembler)"
+        },
+        {
+          "name": "map-usedCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-usedCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "usedCode",
+              "variable": "tgt-usedCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-usedCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.usedCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-usedReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-usedReference"
+            }
+          ],
+          "documentation": "Reference<Procedure.usedReference> → Device|Medication|Substance — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

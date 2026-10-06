@@ -1,0 +1,1036 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-labor-laboruntersuchung-810d5846",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-laborbefund-full-spec-mii-pr-labor-laboruntersuchung",
+  "name": "Map_003_structure_map_testing_kds_laborbefund_full_spec_mii_pr_labor_laboruntersuchung",
+  "title": "Structure Map for testing_kds_laborbefund_full_spec - mii-pr-labor-laboruntersuchung",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-labor-laboruntersuchung). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-laborbefund-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab",
+      "mode": "target",
+      "alias": "mii-pr-labor-laboruntersuchung"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-labor-laboruntersuchung",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_laborbefund_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-labor/StructureDefinition/ObservationLab"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-loinc-observation",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-loinc-observation",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-loinc-observation-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-observation",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-loinc-observation-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-loinc-observation",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "26436-6"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice loinc-observation of Observation.category.coding (type Coding)"
+            },
+            {
+              "name": "map-coding-observation-category",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-observation-category",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-observation-category-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-observation-category",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-observation-category-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-observation-category",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "laboratory"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice observation-category of Observation.category.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Observation.category | Type: CodeableConcept | Cardinality: 1..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCodeSystem",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCode",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Observation.code"
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.code | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.value[x] | Type: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Observation.component | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-dataAbsentReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dataAbsentReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dataAbsentReason",
+              "variable": "tgt-dataAbsentReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.dataAbsentReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-device",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-device"
+            }
+          ],
+          "documentation": "Reference<Observation.device> → Device|DeviceMetric — resolve via bundle assembler"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "obsEffective",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime | Cardinality: 1..1 | Complex type with 1 child elements | Choice types: dateTime"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-analyseBefundCode",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-analyseBefundCode",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-analyseBefundCode-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-analyseBefundCode",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-identifier-analyseBefundCode-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-analyseBefundCode-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-analyseBefundCode-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-identifier-analyseBefundCode-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-analyseBefundCode-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-analyseBefundCode-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-analyseBefundCode-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-analyseBefundCode-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "OBI"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-analyseBefundCode-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "obsIdentSystem",
+                  "variable": "src-identifier-analyseBefundCode-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-analyseBefundCode",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-analyseBefundCode-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-analyseBefundCode-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "obsIdentValue",
+                  "variable": "src-identifier-analyseBefundCode-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-analyseBefundCode",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-analyseBefundCode-value"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-analyseBefundCode-assigner",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-analyseBefundCode",
+                  "contextType": "variable",
+                  "element": "assigner",
+                  "variable": "tgt-identifier-analyseBefundCode-assigner",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Reference"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-identifier-analyseBefundCode-assigner-reference",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsAssigner",
+                      "variable": "src-identifier-analyseBefundCode-assigner-reference"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-analyseBefundCode-assigner",
+                      "contextType": "variable",
+                      "element": "reference",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-identifier-analyseBefundCode-assigner-reference"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice analyseBefundCode of Observation.identifier (type Identifier)"
+        },
+        {
+          "name": "map-interpretation",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-interpretation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "interpretation",
+              "variable": "tgt-interpretation",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-interpretation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.interpretation | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUED",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.issued | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-method",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-method"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "method",
+              "variable": "tgt-method",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.method | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-referenceRange",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-referenceRange"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "referenceRange",
+              "variable": "tgt-referenceRange",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-referenceRange",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.referenceRange | Type: BackboneElement | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-specimen",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specimen"
+            }
+          ],
+          "documentation": "Reference<Observation.specimen> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient|Group|Device|Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-value-Quantity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value-Quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsValueValue",
+                      "variable": "src-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-unit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsValueUnit",
+                      "variable": "src-value-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-unit"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsValueCode",
+                      "variable": "src-value-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: Quantity, CodeableConcept, Range, Ratio | Cardinality: 0..1 | Choice types: Quantity, CodeableConcept, Range, Ratio"
+        }
+      ]
+    }
+  ]
+}

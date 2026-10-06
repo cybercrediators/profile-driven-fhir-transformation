@@ -1,0 +1,3147 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Claim-4d135fb6",
+  "url": "http://example.org/StructureMap/source-definition-testing-ndhm-full-spec-Claim",
+  "name": "Map_007_structure_map_testing_ndhm_full_spec_Claim",
+  "title": "Structure Map for testing_ndhm_full_spec - Claim",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Claim). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ndhm-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Claim",
+      "mode": "target",
+      "alias": "Claim"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Claim",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ndhm_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Claim",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/Claim"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://nrces.in/ndhm/fhir/r4/StructureDefinition/Claim"
+        },
+        {
+          "name": "map-accident",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-accident"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "accident",
+              "variable": "tgt-accident",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-date",
+              "source": [
+                {
+                  "context": "src-accident",
+                  "element": "TODO_MAP_DATE",
+                  "variable": "src-date"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-accident",
+                  "contextType": "variable",
+                  "element": "date",
+                  "variable": "tgt-date",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-date"
+                    },
+                    {
+                      "valueString": "date"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.accident.date | Type: date | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.accident | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-careTeam",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-careTeam"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "careTeam",
+              "variable": "tgt-careTeam",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-careTeam",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Claim-provider",
+              "source": [
+                {
+                  "context": "src-careTeam",
+                  "variable": "src-provider"
+                }
+              ],
+              "documentation": "Reference<Claim.careTeam.provider> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-qualification",
+              "source": [
+                {
+                  "context": "src-careTeam",
+                  "variable": "src-qualification"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-careTeam",
+                  "contextType": "variable",
+                  "element": "qualification",
+                  "variable": "tgt-qualification",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-qualification",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-qualification",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.qualification.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.qualification.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.qualification.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.careTeam.qualification.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.careTeam.qualification | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-careTeam",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-careTeam",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-role",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-role",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.role.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.role.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.careTeam.role.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.careTeam.role.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.careTeam.role | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-careTeam",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-careTeam",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.careTeam.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.careTeam | Type: BackboneElement | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-created",
+          "source": [
+            {
+              "context": "source",
+              "element": "clCreated",
+              "variable": "src-created"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "created",
+              "variable": "tgt-created",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-created"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Claim.created | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-diagnosis",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-diagnosis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "diagnosis",
+              "variable": "tgt-diagnosis",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-diagnosis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-diagnosis",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "variable": "src-diagnosis-2"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-diagnosis-CodeableConcept",
+                  "source": [
+                    {
+                      "context": "src-diagnosis-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-diagnosis",
+                      "contextType": "variable",
+                      "element": "diagnosis",
+                      "variable": "tgt-diagnosis-CodeableConcept",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-diagnosis-coding",
+                      "source": [
+                        {
+                          "context": "src-diagnosis-2"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-diagnosis-CodeableConcept",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-diagnosis-CodeableConcept-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-diagnosis-coding-system",
+                          "source": [
+                            {
+                              "context": "src-diagnosis-2",
+                              "element": "clDiagSystem",
+                              "variable": "src-diagnosis-coding-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-diagnosis-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-diagnosis-coding-system"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-diagnosis-coding-code",
+                          "source": [
+                            {
+                              "context": "src-diagnosis-2",
+                              "element": "clDiagCode",
+                              "variable": "src-diagnosis-coding-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-diagnosis-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-diagnosis-coding-code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.diagnosis.diagnosis[x] | Type: CodeableConcept, Reference | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "element": "clDiagSeq",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-diagnosis",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.diagnosis.sequence | Type: positiveInt | Cardinality: 1..1"
+            },
+            {
+              "name": "map-type-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-diagnosis"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-diagnosis",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-type-coding",
+                  "source": [
+                    {
+                      "context": "src-diagnosis"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-type-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-type-system",
+                      "source": [
+                        {
+                          "context": "src-diagnosis",
+                          "element": "clDiagTypeSystem",
+                          "variable": "src-type-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-type-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-type-code",
+                      "source": [
+                        {
+                          "context": "src-diagnosis",
+                          "element": "clDiagTypeCode",
+                          "variable": "src-type-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-type-code"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-type-display",
+                      "source": [
+                        {
+                          "context": "src-diagnosis",
+                          "element": "clDiagTypeDisplay",
+                          "variable": "src-type-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-type-display"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Claim.diagnosis.type"
+            }
+          ],
+          "documentation": "Maps to Claim.diagnosis | Type: BackboneElement | Cardinality: 1..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "clIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Claim.identifier | Type: Identifier | Cardinality: 1..*"
+        },
+        {
+          "name": "map-insurance",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-insurance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "insurance",
+              "variable": "tgt-insurance",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-insurance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Claim-coverage",
+              "source": [
+                {
+                  "context": "src-insurance",
+                  "variable": "src-coverage"
+                }
+              ],
+              "documentation": "Reference<Claim.insurance.coverage> → Coverage — resolve via bundle assembler"
+            },
+            {
+              "name": "map-focal",
+              "source": [
+                {
+                  "context": "src-insurance",
+                  "element": "clInsFocal",
+                  "variable": "src-focal"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-insurance",
+                  "contextType": "variable",
+                  "element": "focal",
+                  "variable": "tgt-focal",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-focal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.insurance.focal | Type: boolean | Cardinality: 1..1"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-insurance",
+                  "element": "clInsSeq",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-insurance",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.insurance.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.insurance | Type: BackboneElement | Cardinality: 1..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Claim-insurer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-insurer"
+            }
+          ],
+          "documentation": "Reference<Claim.insurer> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-item",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-item"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "item",
+              "variable": "tgt-item",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-item",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-category",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "category",
+                  "variable": "tgt-category",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-category",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.category.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.category.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.category.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.category.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.item.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-detail",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-detail"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "detail",
+                  "variable": "tgt-detail",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-detail",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-category",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "category",
+                      "variable": "tgt-category",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-category",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-category",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_CODE",
+                              "variable": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.category.coding.code | Type: code | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_DISPLAY",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.category.coding.display | Type: string | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_SYSTEM",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.category.coding.system | Type: uri | Cardinality: 1..1"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.category.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.detail.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+                },
+                {
+                  "name": "map-productOrService",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-productOrService"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "productOrService",
+                      "variable": "tgt-productOrService",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-productOrService",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-productOrService",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_CODE",
+                              "variable": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.productOrService.coding.code | Type: code | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_DISPLAY",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.productOrService.coding.display | Type: string | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_SYSTEM",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.productOrService.coding.system | Type: uri | Cardinality: 1..1"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.productOrService.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.detail.productOrService | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+                },
+                {
+                  "name": "map-programCode",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-programCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "programCode",
+                      "variable": "tgt-programCode",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-programCode",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-programCode",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-programCode",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_CODE",
+                              "variable": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.programCode.coding.code | Type: code | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_DISPLAY",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.programCode.coding.display | Type: string | Cardinality: 1..1"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_SYSTEM",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.programCode.coding.system | Type: uri | Cardinality: 1..1"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.programCode.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.detail.programCode | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+                },
+                {
+                  "name": "map-sequence",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "element": "TODO_MAP_SEQUENCE",
+                      "variable": "src-sequence"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "sequence",
+                      "variable": "tgt-sequence",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-sequence"
+                        },
+                        {
+                          "valueString": "positiveInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.detail.sequence | Type: positiveInt | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-subDetail",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-subDetail"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "subDetail",
+                      "variable": "tgt-subDetail",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-subDetail",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "BackboneElement"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-category",
+                      "source": [
+                        {
+                          "context": "src-subDetail",
+                          "variable": "src-category"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-subDetail",
+                          "contextType": "variable",
+                          "element": "category",
+                          "variable": "tgt-category",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "CodeableConcept"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-coding",
+                          "source": [
+                            {
+                              "context": "src-category",
+                              "variable": "src-coding"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-category",
+                              "contextType": "variable",
+                              "element": "coding",
+                              "variable": "tgt-coding",
+                              "listMode": [
+                                "share"
+                              ],
+                              "listRuleId": "map-coding",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Coding"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "map-code",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_CODE",
+                                  "variable": "src-code"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "code",
+                                  "variable": "tgt-code",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-code"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.category.coding.code | Type: code | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-display",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_DISPLAY",
+                                  "variable": "src-display"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "display",
+                                  "variable": "tgt-display",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-display"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.category.coding.display | Type: string | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-system",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_SYSTEM",
+                                  "variable": "src-system"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "system",
+                                  "variable": "tgt-system",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-system"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.category.coding.system | Type: uri | Cardinality: 1..1"
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.subDetail.category.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.subDetail.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+                    },
+                    {
+                      "name": "map-productOrService",
+                      "source": [
+                        {
+                          "context": "src-subDetail",
+                          "variable": "src-productOrService"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-subDetail",
+                          "contextType": "variable",
+                          "element": "productOrService",
+                          "variable": "tgt-productOrService",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "CodeableConcept"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-coding",
+                          "source": [
+                            {
+                              "context": "src-productOrService",
+                              "variable": "src-coding"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-productOrService",
+                              "contextType": "variable",
+                              "element": "coding",
+                              "variable": "tgt-coding",
+                              "listMode": [
+                                "share"
+                              ],
+                              "listRuleId": "map-coding",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Coding"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "map-code",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_CODE",
+                                  "variable": "src-code"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "code",
+                                  "variable": "tgt-code",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-code"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.productOrService.coding.code | Type: code | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-display",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_DISPLAY",
+                                  "variable": "src-display"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "display",
+                                  "variable": "tgt-display",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-display"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.productOrService.coding.display | Type: string | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-system",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_SYSTEM",
+                                  "variable": "src-system"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "system",
+                                  "variable": "tgt-system",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-system"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.productOrService.coding.system | Type: uri | Cardinality: 1..1"
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.subDetail.productOrService.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.subDetail.productOrService | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+                    },
+                    {
+                      "name": "map-programCode",
+                      "source": [
+                        {
+                          "context": "src-subDetail",
+                          "variable": "src-programCode"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-subDetail",
+                          "contextType": "variable",
+                          "element": "programCode",
+                          "variable": "tgt-programCode",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-programCode",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "CodeableConcept"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-coding",
+                          "source": [
+                            {
+                              "context": "src-programCode",
+                              "variable": "src-coding"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-programCode",
+                              "contextType": "variable",
+                              "element": "coding",
+                              "variable": "tgt-coding",
+                              "listMode": [
+                                "share"
+                              ],
+                              "listRuleId": "map-coding",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Coding"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "map-code",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_CODE",
+                                  "variable": "src-code"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "code",
+                                  "variable": "tgt-code",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-code"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.programCode.coding.code | Type: code | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-display",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_DISPLAY",
+                                  "variable": "src-display"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "display",
+                                  "variable": "tgt-display",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-display"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.programCode.coding.display | Type: string | Cardinality: 1..1"
+                            },
+                            {
+                              "name": "map-system",
+                              "source": [
+                                {
+                                  "context": "src-coding",
+                                  "element": "TODO_MAP_SYSTEM",
+                                  "variable": "src-system"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-coding",
+                                  "contextType": "variable",
+                                  "element": "system",
+                                  "variable": "tgt-system",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-system"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Maps to Claim.item.detail.subDetail.programCode.coding.system | Type: uri | Cardinality: 1..1"
+                            }
+                          ],
+                          "documentation": "Maps to Claim.item.detail.subDetail.programCode.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.subDetail.programCode | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+                    },
+                    {
+                      "name": "map-sequence",
+                      "source": [
+                        {
+                          "context": "src-subDetail",
+                          "element": "TODO_MAP_SEQUENCE",
+                          "variable": "src-sequence"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-subDetail",
+                          "contextType": "variable",
+                          "element": "sequence",
+                          "variable": "tgt-sequence",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-sequence"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.detail.subDetail.sequence | Type: positiveInt | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.detail.subDetail | Type: BackboneElement | Cardinality: 0..* | Complex type with 4 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.item.detail | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-productOrService-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-item"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "productOrService",
+                  "variable": "tgt-productOrService-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-productOrService-coding",
+                  "source": [
+                    {
+                      "context": "src-item"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-productOrService-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-productOrService-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-productOrService-system",
+                      "source": [
+                        {
+                          "context": "src-item",
+                          "element": "clItemSystem",
+                          "variable": "src-productOrService-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-productOrService-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-productOrService-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-productOrService-code",
+                      "source": [
+                        {
+                          "context": "src-item",
+                          "element": "clItemCode",
+                          "variable": "src-productOrService-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-productOrService-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-productOrService-code"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-productOrService-display",
+                      "source": [
+                        {
+                          "context": "src-item",
+                          "element": "clItemDisplay",
+                          "variable": "src-productOrService-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-productOrService-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-productOrService-display"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Claim.item.productOrService"
+            },
+            {
+              "name": "map-programCode",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-programCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "programCode",
+                  "variable": "tgt-programCode",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-programCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-programCode",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-programCode",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.programCode.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.programCode.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.item.programCode.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.item.programCode.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.item.programCode | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-item",
+                  "element": "clItemSeq",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.item.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.item | Type: BackboneElement | Cardinality: 1..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Claim-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<Claim.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-payee",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-payee"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payee",
+              "variable": "tgt-payee",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-payee",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-payee",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.payee.type | Type: CodeableConcept | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.payee | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-priority-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "priority",
+              "variable": "tgt-priority-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-priority-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-priority-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-priority-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-priority-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "clPrioritySystem",
+                      "variable": "src-priority-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priority-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-priority-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-priority-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "clPriorityCode",
+                      "variable": "src-priority-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priority-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-priority-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Claim.priority"
+        },
+        {
+          "name": "map-procedure",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-procedure"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "procedure",
+              "variable": "tgt-procedure",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-procedure",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Claim-procedure",
+              "source": [
+                {
+                  "context": "src-procedure",
+                  "variable": "src-procedure-2"
+                }
+              ],
+              "documentation": "Reference<Claim.procedure.procedure[x]> → Procedure — resolve via bundle assembler"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-procedure",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-procedure",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.procedure.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.procedure | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Claim-provider",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-provider"
+            }
+          ],
+          "documentation": "Reference<Claim.provider> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-related",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-related"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "related",
+              "variable": "tgt-related",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-related",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-relationship",
+              "source": [
+                {
+                  "context": "src-related",
+                  "variable": "src-relationship"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-related",
+                  "contextType": "variable",
+                  "element": "relationship",
+                  "variable": "tgt-relationship",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-relationship",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-relationship",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.related.relationship.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.related.relationship.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.related.relationship.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.related.relationship.coding | Type: Coding | Cardinality: 0..1 | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.related.relationship | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to Claim.related | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "clStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Claim.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "supportingInfo",
+              "variable": "tgt-supportingInfo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-supportingInfo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-category",
+              "source": [
+                {
+                  "context": "src-supportingInfo",
+                  "variable": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-supportingInfo",
+                  "contextType": "variable",
+                  "element": "category",
+                  "variable": "tgt-category",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-category",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.category.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.category.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.category.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.supportingInfo.category.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.supportingInfo.category | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-supportingInfo",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-supportingInfo",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code-2"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code-2",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code-2"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.code.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.code.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Claim.supportingInfo.code.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to Claim.supportingInfo.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to Claim.supportingInfo.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-supportingInfo",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-supportingInfo",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Claim.supportingInfo.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Claim.supportingInfo | Type: BackboneElement | Cardinality: 0..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-type-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-type-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "clTypeSystem",
+                      "variable": "src-type-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "clTypeCode",
+                      "variable": "src-type-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Claim.type"
+        },
+        {
+          "name": "map-use",
+          "source": [
+            {
+              "context": "source",
+              "element": "clUse",
+              "variable": "src-use"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "use",
+              "variable": "tgt-use",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-use"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Claim.use | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

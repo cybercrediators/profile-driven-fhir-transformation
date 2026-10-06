@@ -1,0 +1,1192 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-genomic-study-analysis-d5bcbc76",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec-mii-pr-molgen-genomic-study-analysis",
+  "name": "Map_012_structure_map_testing_kds_molgen_full_spec_mii_pr_molgen_genomic_study_analysis",
+  "title": "Structure Map for testing_kds_molgen_full_spec - mii-pr-molgen-genomic-study-analysis",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-molgen-genomic-study-analysis). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study-analysis",
+      "mode": "target",
+      "alias": "mii-pr-molgen-genomic-study-analysis"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-genomic-study-analysis",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Procedure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study-analysis"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study-analysis"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-coding",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-fixed-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-coding-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-coding-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "laboratory"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for coding"
+            }
+          ],
+          "documentation": "Maps to Procedure.category | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-extension-method-type",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-METHOD-TYPE_SOURCE",
+              "variable": "src-method-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-method-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-method-type",
+              "source": [
+                {
+                  "context": "src-method-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-method-type",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-method-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-method-type"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-method-type",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-valueCodeableConcept-coding",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-valueCodeableConcept-system",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/uv/genomics-reporting/CodeSystem/genomic-study-method-type-cs"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-valueCodeableConcept-code",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec/ConceptMap/cm-method-type-b9a4ef45"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Procedure.extension:method-type using http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec/ConceptMap/cm-method-type-b9a4ef45"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-method-type | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-method-type'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-method-type']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-change-type",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-CHANGE-TYPE_SOURCE",
+              "variable": "src-change-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-change-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-change-type",
+              "source": [
+                {
+                  "context": "src-change-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-change-type",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-change-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-change-type"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-change-type",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCodeableConcept-coding-translate",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec/ConceptMap/cm-change-type-e68b8686"
+                        },
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Procedure.extension:change-type using http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec/ConceptMap/cm-change-type-e68b8686"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-change-type | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-change-type'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-change-type']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-genome-build",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENOME-BUILD_SOURCE",
+              "variable": "src-genome-build"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-genome-build",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-genome-build",
+              "source": [
+                {
+                  "context": "src-genome-build"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genome-build",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genome-build"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genome-build"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genome-build",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-valueCodeableConcept-coding",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Procedure.extension:genome-build using TODO-resolveConceptMap"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genome-build | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genome-build'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genome-build']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-genomic-source-class",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENOMIC-SOURCE-CLASS_SOURCE",
+              "variable": "src-genomic-source-class"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-genomic-source-class",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-genomic-source-class",
+              "source": [
+                {
+                  "context": "src-genomic-source-class"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genomic-source-class",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genomic-source-class"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genomic-source-class"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genomic-source-class",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-valueCodeableConcept-coding",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Procedure.extension:genomic-source-class using TODO-resolveConceptMap"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genomic-source-class | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genomic-source-class'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-genomic-source-class']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TITLE_SOURCE",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-title",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-title",
+              "source": [
+                {
+                  "context": "src-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-title",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-title"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-title"
+            },
+            {
+              "name": "set-extension-value-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-title",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-title | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-title'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-title']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-focus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-FOCUS_SOURCE",
+              "variable": "src-focus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-focus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-focus",
+              "source": [
+                {
+                  "context": "src-focus"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-focus",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus"
+            },
+            {
+              "name": "TODO-resolve-reference-Procedure-extension-focus",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus\"}],\"sourceKey\":null,\"sourceType\":\"Procedure\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/Resource\"],\"targetTypes\":[\"Resource\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-focus']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-specimen",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SPECIMEN_SOURCE",
+              "variable": "src-specimen"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-specimen",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-specimen",
+              "source": [
+                {
+                  "context": "src-specimen"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-specimen",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen"
+            },
+            {
+              "name": "TODO-resolve-reference-Procedure-extension-specimen",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen\"}],\"sourceKey\":null,\"sourceType\":\"Procedure\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/Specimen\"],\"targetTypes\":[\"Specimen\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-specimen']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-metrics",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-METRICS_SOURCE",
+              "variable": "src-metrics"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-metrics",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-metrics",
+              "source": [
+                {
+                  "context": "src-metrics"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-metrics",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-metrics"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-metrics"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-metrics | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-metrics'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-metrics']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-regions",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-REGIONS_SOURCE",
+              "variable": "src-regions"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-regions",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-regions",
+              "source": [
+                {
+                  "context": "src-regions"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-regions",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-regions"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-regions"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-regions | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-regions'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-regions']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-device",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DEVICE_SOURCE",
+              "variable": "src-device"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-device",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-device",
+              "source": [
+                {
+                  "context": "src-device"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-device",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-device"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-device"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-device | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-device'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-device']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-protocol-performed",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PROTOCOL-PERFORMED_SOURCE",
+              "variable": "src-protocol-performed"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-protocol-performed",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-protocol-performed",
+              "source": [
+                {
+                  "context": "src-protocol-performed"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-protocol-performed",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-protocol-performed"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-protocol-performed"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-protocol-performed | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-protocol-performed'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-protocol-performed']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-input",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INPUT_SOURCE",
+              "variable": "src-input"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-input",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-input",
+              "source": [
+                {
+                  "context": "src-input"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-input",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-input"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-input"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-input | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-input'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-input']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-output",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-OUTPUT_SOURCE",
+              "variable": "src-output"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-output",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-output",
+              "source": [
+                {
+                  "context": "src-output"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-output",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-output"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-output"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-output | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-output'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-output']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Procedure-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Procedure.performer.actor> → Practitioner|PractitionerRole|Organization|Device — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Procedure.subject> → Patient|Group — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

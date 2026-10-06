@@ -1,0 +1,1650 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-device-definition-b2db5449",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-device-definition",
+  "name": "Map_003_structure_map_marfoglia_full_motu_device_definition",
+  "title": "Structure Map for marfoglia_full - motu-device-definition",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-device-definition). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-device-definition",
+      "mode": "target",
+      "alias": "motu-device-definition"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-device-definition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DeviceDefinition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-device-definition"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-device-definition"
+        },
+        {
+          "name": "map-capability",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-capability"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "capability",
+              "variable": "tgt-capability",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-capability",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-capability",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-capability",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.capability.type | Type: CodeableConcept | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.capability | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-system",
+              "source": [
+                {
+                  "context": "src-contact"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "url"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for system"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "element": "link",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.contact.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.contact | Type: ContactPoint | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-deviceName",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-deviceName"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "deviceName",
+              "variable": "tgt-deviceName",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-deviceName",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-deviceName",
+                  "element": "prostheticKnee",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-name"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.deviceName.name | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "set-fixed-type",
+              "source": [
+                {
+                  "context": "src-deviceName"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "model-name"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for type"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.deviceName | Type: BackboneElement | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-system",
+              "source": [
+                {
+                  "context": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for system"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "deviceIdentifier",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.identifier | Type: Identifier | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-material",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-material"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "material",
+              "variable": "tgt-material",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-material",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-substance",
+              "source": [
+                {
+                  "context": "src-material",
+                  "variable": "src-substance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-material",
+                  "contextType": "variable",
+                  "element": "substance",
+                  "variable": "tgt-substance",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.material.substance | Type: CodeableConcept | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.material | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-physicalCharacteristics",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-physicalCharacteristics"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "physicalCharacteristics",
+              "variable": "tgt-physicalCharacteristics",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ProdCharacteristic"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.physicalCharacteristics | Type: ProdCharacteristic | Cardinality: 0..1"
+        },
+        {
+          "name": "map-property-weight",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property-weight",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-property-weight-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-weight",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-property-weight-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-property-weight-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-weight-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-property-weight-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-property-weight-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-weight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-weight-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-weight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "726527001"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-weight-type-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-weight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Weight"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-property-weight-valueQuantity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-weight",
+                  "contextType": "variable",
+                  "element": "valueQuantity",
+                  "variable": "tgt-property-weight-valueQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-property-weight-valueQuantity-unit",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-weight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "per kilogram"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-weight-valueQuantity-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-weight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-weight-valueQuantity-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-weight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "/kg"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-weight-valueQuantity-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "weight",
+                      "variable": "src-property-weight-valueQuantity-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-weight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-property-weight-valueQuantity-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice weight of DeviceDefinition.property (type BackboneElement)"
+        },
+        {
+          "name": "map-property-patientMaximumWeight",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property-patientMaximumWeight",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-property-patientMaximumWeight-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-patientMaximumWeight",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-property-patientMaximumWeight-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-property-patientMaximumWeight-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientMaximumWeight-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-property-patientMaximumWeight-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-property-patientMaximumWeight-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientMaximumWeight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://ahdbservices.it/CodeSystem/MotuProstheticKneeProperties"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-patientMaximumWeight-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientMaximumWeight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "PatientMaximumWeight"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-patientMaximumWeight-type-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientMaximumWeight-type-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Patient Maximum Weight"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-property-patientMaximumWeight-valueQuantity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-patientMaximumWeight",
+                  "contextType": "variable",
+                  "element": "valueQuantity",
+                  "variable": "tgt-property-patientMaximumWeight-valueQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-property-patientMaximumWeight-valueQuantity-unit",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientMaximumWeight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "kilogram"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-patientMaximumWeight-valueQuantity-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientMaximumWeight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://unitsofmeasure.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-patientMaximumWeight-valueQuantity-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientMaximumWeight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "kg"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-property-patientMaximumWeight-valueQuantity-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "patientMaximumWeight",
+                      "variable": "src-property-patientMaximumWeight-valueQuantity-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientMaximumWeight-valueQuantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-property-patientMaximumWeight-valueQuantity-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice patientMaximumWeight of DeviceDefinition.property (type BackboneElement)"
+        },
+        {
+          "name": "map-property-patientActivityLevel",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property-patientActivityLevel",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-property-patientActivityLevel-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-patientActivityLevel",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-property-patientActivityLevel-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-property-patientActivityLevel-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientActivityLevel-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-property-patientActivityLevel-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-property-patientActivityLevel-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientActivityLevel-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://ahdbservices.it/CodeSystem/MotuProstheticKneeProperties"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-patientActivityLevel-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientActivityLevel-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "PatientActivityLevel"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-patientActivityLevel-type-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-patientActivityLevel-type-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Patient Activity"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-property-patientActivityLevel-valueCode",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-patientActivityLevel",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "variable": "tgt-property-patientActivityLevel-valueCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-property-patientActivityLevel-valueCode-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "patientActivityLevel",
+                      "variable": "src-property-patientActivityLevel-valueCode-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-patientActivityLevel-valueCode",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-property-patientActivityLevel-valueCode-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice patientActivityLevel of DeviceDefinition.property (type BackboneElement)"
+        },
+        {
+          "name": "map-property-category",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property-category",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-property-category-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-category",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-property-category-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-property-category-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-category-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-property-category-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-property-category-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-category-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://ahdbservices.it/CodeSystem/MotuProstheticKneeProperties"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-category-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-category-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Category"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-property-category-type-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-category-type-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Knee Category"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-property-category-valueCode",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property-category",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "variable": "tgt-property-category-valueCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-property-category-valueCode-coding",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-property-category-valueCode",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-property-category-valueCode-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-property-category-valueCode-coding-code",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "category",
+                          "variable": "src-property-category-valueCode-coding-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-property-category-valueCode-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-property-category-valueCode-coding-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice category of DeviceDefinition.property (type BackboneElement)"
+        },
+        {
+          "name": "map-shelfLifeStorage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-shelfLifeStorage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "shelfLifeStorage",
+              "variable": "tgt-shelfLifeStorage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-shelfLifeStorage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ProductShelfLife"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.shelfLifeStorage | Type: ProductShelfLife | Cardinality: 0..*"
+        },
+        {
+          "name": "map-specialization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialization"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialization",
+              "variable": "tgt-specialization",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-systemType",
+              "source": [
+                {
+                  "context": "src-specialization",
+                  "element": "TODO_MAP_SYSTEMTYPE",
+                  "variable": "src-systemType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialization",
+                  "contextType": "variable",
+                  "element": "systemType",
+                  "variable": "tgt-systemType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-systemType"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.specialization.systemType | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.specialization | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-fixed-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-type-coding-0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-fixed-type-coding-0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-type-coding-0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-type-coding-0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "109228008"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-type-coding-0-display",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Knee joint prosthesis"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for type"
+        },
+        {
+          "name": "map-udiDeviceIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-udiDeviceIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "udiDeviceIdentifier",
+              "variable": "tgt-udiDeviceIdentifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-udiDeviceIdentifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-deviceIdentifier",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_DEVICEIDENTIFIER",
+                  "variable": "src-deviceIdentifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "deviceIdentifier",
+                  "variable": "tgt-deviceIdentifier",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-deviceIdentifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.deviceIdentifier | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-issuer",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_ISSUER",
+                  "variable": "src-issuer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "issuer",
+                  "variable": "tgt-issuer",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-issuer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.issuer | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-jurisdiction",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_JURISDICTION",
+                  "variable": "src-jurisdiction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "jurisdiction",
+                  "variable": "tgt-jurisdiction",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-jurisdiction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.jurisdiction | Type: uri | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier | Type: BackboneElement | Cardinality: 0..* | Complex type with 3 child elements"
+        }
+      ]
+    }
+  ]
+}

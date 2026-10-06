@@ -1,0 +1,900 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-encounter-81c25cc9",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-encounter",
+  "name": "Map_008_structure_map_marfoglia_full_motu_encounter",
+  "title": "Structure Map for marfoglia_full - motu-encounter",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-encounter). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-encounter",
+      "mode": "target",
+      "alias": "motu-encounter"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-encounter",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Encounter",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-encounter"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-encounter"
+        },
+        {
+          "name": "set-fixed-class",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "class",
+              "variable": "tgt-fixed-class",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-class-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-class",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://terminology.hl7.org/CodeSystem/v3-ActCode"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-fixed-class-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-class",
+                  "contextType": "variable",
+                  "element": "code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "IMP"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-fixed-class-display",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-class",
+                  "contextType": "variable",
+                  "element": "display",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "inpatient encounter"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for class"
+        },
+        {
+          "name": "map-classHistory",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-classHistory"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "classHistory",
+              "variable": "tgt-classHistory",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-classHistory",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-class",
+              "source": [
+                {
+                  "context": "src-classHistory",
+                  "variable": "src-class"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-classHistory",
+                  "contextType": "variable",
+                  "element": "class",
+                  "variable": "tgt-class",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.classHistory.class | Type: Coding | Cardinality: 1..1"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-classHistory",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-classHistory",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.classHistory.period | Type: Period | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Encounter.classHistory | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-diagnosis",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-diagnosis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "diagnosis",
+              "variable": "tgt-diagnosis",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-diagnosis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Encounter-condition",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "variable": "src-condition"
+                }
+              ],
+              "documentation": "Reference<Encounter.diagnosis.condition> → Condition|Procedure — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Encounter.diagnosis | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-hospitalization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-hospitalization"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "hospitalization",
+              "variable": "tgt-hospitalization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-reAdmission-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-hospitalization"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-hospitalization",
+                  "contextType": "variable",
+                  "element": "reAdmission",
+                  "variable": "tgt-reAdmission-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-reAdmission-coding",
+                  "source": [
+                    {
+                      "context": "src-hospitalization"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-reAdmission-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-reAdmission-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-reAdmission-system",
+                      "source": [
+                        {
+                          "context": "src-hospitalization"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-reAdmission-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0092"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-reAdmission-code",
+                      "source": [
+                        {
+                          "context": "src-hospitalization",
+                          "element": "readmission",
+                          "variable": "src-reAdmission-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-reAdmission-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-reAdmission-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Encounter.hospitalization.reAdmission"
+            }
+          ],
+          "documentation": "Maps to Encounter.hospitalization | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-system",
+              "source": [
+                {
+                  "context": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/CodeSystem/motu-encounter-id"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for system"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "motuEncounterId",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Encounter.identifier | Type: Identifier | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-length",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-length"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "length",
+              "variable": "tgt-length",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Duration"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-code",
+              "source": [
+                {
+                  "context": "src-length"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-length",
+                  "contextType": "variable",
+                  "element": "code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "d"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for code"
+            },
+            {
+              "name": "set-fixed-system",
+              "source": [
+                {
+                  "context": "src-length"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-length",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://unitsofmeasure.org"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for system"
+            },
+            {
+              "name": "set-fixed-unit",
+              "source": [
+                {
+                  "context": "src-length"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-length",
+                  "contextType": "variable",
+                  "element": "unit",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "day"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for unit"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-length",
+                  "element": "lengthOfStay",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-length",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.length.value | Type: decimal | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Encounter.length | Type: Duration | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "location",
+              "variable": "tgt-location",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-location",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Encounter-location",
+              "source": [
+                {
+                  "context": "src-location",
+                  "variable": "src-location-2"
+                }
+              ],
+              "documentation": "Reference<Encounter.location.location> → Location — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Encounter.location | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-end",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "dischargeDate",
+                  "variable": "src-end"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "end",
+                  "variable": "tgt-end",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-end"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.period.end | Type: dateTime"
+            },
+            {
+              "name": "map-start",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "admissionDate",
+                  "variable": "src-start"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "start",
+                  "variable": "tgt-start",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-start"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.period.start | Type: dateTime"
+            }
+          ],
+          "documentation": "Maps to Encounter.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "finished"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "map-statusHistory",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusHistory"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusHistory",
+              "variable": "tgt-statusHistory",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-statusHistory",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-statusHistory",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-statusHistory",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.statusHistory.period | Type: Period | Cardinality: 1..1"
+            },
+            {
+              "name": "map-status",
+              "source": [
+                {
+                  "context": "src-statusHistory",
+                  "element": "TODO_MAP_STATUS",
+                  "variable": "src-status"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-statusHistory",
+                  "contextType": "variable",
+                  "element": "status",
+                  "variable": "tgt-status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-status"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.statusHistory.status | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Encounter.statusHistory | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Encounter-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Encounter.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-type",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.type.coding | Type: Coding | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Encounter.type | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+        }
+      ]
+    }
+  ]
+}

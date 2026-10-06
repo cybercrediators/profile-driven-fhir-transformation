@@ -1,0 +1,337 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-klgateway-140-focus-condition-ac12b331",
+  "url": "http://example.org/StructureMap/source-definition-e16-dkrehab-full-spec-klgateway-140-focus-condition",
+  "name": "Map_005_structure_map_e16_dkrehab_full_spec_klgateway_140_focus_condition",
+  "title": "Structure Map for e16_dkrehab_full_spec - klgateway-140-focus-condition",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: klgateway-140-focus-condition). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-dkrehab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-focus-condition",
+      "mode": "target",
+      "alias": "klgateway-140-focus-condition"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-klgateway-140-focus-condition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_dkrehab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-focus-condition"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-focus-condition"
+        },
+        {
+          "name": "map-clinicalStatus-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-clinicalStatus-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-clinicalStatus-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-clinicalStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "fcClinSys",
+                      "variable": "src-clinicalStatus-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "fcClinCd",
+                      "variable": "src-clinicalStatus-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Condition.clinicalStatus"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-SKS-D",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-SKS-D",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-SKS-D-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-SKS-D",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "urn:oid:1.2.208.176.2.4.12"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-SKS-D-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "klgateway_140_focus_condition_code_coding_SKS_D_code",
+                      "variable": "src-coding-SKS-D-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-SKS-D",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-SKS-D-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-SKS-D-display",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "klgateway_140_focus_condition_code_coding_SKS_D_display",
+                      "variable": "src-coding-SKS-D-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-SKS-D",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-SKS-D-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice SKS-D of Condition.code.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Condition.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-verificationStatus",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-verificationStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "verificationStatus",
+              "variable": "tgt-verificationStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.verificationStatus | Type: CodeableConcept | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

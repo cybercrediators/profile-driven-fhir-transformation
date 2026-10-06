@@ -1,0 +1,387 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Substance-additive-eu-lab-c2957114",
+  "url": "http://example.org/StructureMap/source-definition-e16-eulab-Substance-additive-eu-lab",
+  "name": "Map_009_structure_map_e16_eulab_Substance_additive_eu_lab",
+  "title": "Structure Map for e16_eulab - Substance-additive-eu-lab",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Substance-additive-eu-lab). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-eulab",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.eu/fhir/laboratory/StructureDefinition/Substance-additive-eu-lab",
+      "mode": "target",
+      "alias": "Substance-additive-eu-lab"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Substance-additive-eu-lab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_eulab",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Substance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/Substance-additive-eu-lab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.eu/fhir/laboratory/StructureDefinition/Substance-additive-eu-lab"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Substance.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Substance.code | Type: CodeableConcept | Cardinality: 1..1"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Substance.description | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Substance.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-ingredient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-ingredient"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "ingredient",
+              "variable": "tgt-ingredient",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-ingredient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-quantity",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-quantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "quantity",
+                  "variable": "tgt-quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Substance.ingredient.quantity | Type: Ratio | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Substance-substance",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-substance"
+                }
+              ],
+              "documentation": "Reference<Substance.ingredient.substance[x]> → Substance — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Substance.ingredient | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-instance",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-instance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "instance",
+              "variable": "tgt-instance",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-instance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-expiry",
+              "source": [
+                {
+                  "context": "src-instance",
+                  "element": "TODO_MAP_EXPIRY",
+                  "variable": "src-expiry"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-instance",
+                  "contextType": "variable",
+                  "element": "expiry",
+                  "variable": "tgt-expiry",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-expiry"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Substance.instance.expiry | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-instance",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-instance",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Substance.instance.identifier | Type: Identifier | Cardinality: 0..1"
+            },
+            {
+              "name": "map-quantity",
+              "source": [
+                {
+                  "context": "src-instance",
+                  "variable": "src-quantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-instance",
+                  "contextType": "variable",
+                  "element": "quantity",
+                  "variable": "tgt-quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Substance.instance.quantity | Type: Quantity | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Substance.instance | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Substance.status | Type: code | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

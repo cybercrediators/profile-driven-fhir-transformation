@@ -1,0 +1,431 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NetworkMembership-fe3a8023",
+  "url": "http://example.org/StructureMap/source-definition-e16-bbmri-NetworkMembership",
+  "name": "Map_006_structure_map_e16_bbmri_NetworkMembership",
+  "title": "Structure Map for e16_bbmri - NetworkMembership",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NetworkMembership). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-bbmri",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bbmri.de/StructureDefinition/NetworkMembership",
+      "mode": "target",
+      "alias": "NetworkMembership"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NetworkMembership",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_bbmri",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "OrganizationAffiliation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/NetworkMembership"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bbmri.de/StructureDefinition/NetworkMembership"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-code",
+                  "source": [
+                    {
+                      "context": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "member"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for code"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to OrganizationAffiliation.code.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/organization-role"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to OrganizationAffiliation.code.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to OrganizationAffiliation.code.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to OrganizationAffiliation.code.coding | Type: Coding | Cardinality: 1..1 | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-participatingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-participatingOrganization"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.participatingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "map-specialty",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialty"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialty",
+              "variable": "tgt-specialty",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.specialty | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1180 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-pain-observation-9e439645",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-pain-observation",
+  "name": "Map_019_structure_map_marfoglia_full_motu_pain_observation",
+  "title": "Structure Map for marfoglia_full - motu-pain-observation",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-pain-observation). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-pain-observation",
+      "mode": "target",
+      "alias": "motu-pain-observation"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-pain-observation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-pain-observation"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-pain-observation"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Observation.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-component-back",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component-back",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-component-back-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-back",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-component-back-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-component-back-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-back-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-component-back-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-component-back-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-back-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-back-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-back-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "77568009"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-back-code-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-back-code-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Structure of back of trunk"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-component-back-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-back",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-component-back-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-component-back-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "back",
+                      "variable": "src-component-back-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-back-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-component-back-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice back of Observation.component (type BackboneElement)"
+        },
+        {
+          "name": "map-component-contralateralLimb",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component-contralateralLimb",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-component-contralateralLimb-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-contralateralLimb",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-component-contralateralLimb-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-component-contralateralLimb-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-contralateralLimb-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-component-contralateralLimb-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-component-contralateralLimb-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-contralateralLimb-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "66019005"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-contralateralLimb-code-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Limb structure"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-component-contralateralLimb-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-contralateralLimb",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-component-contralateralLimb-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-component-contralateralLimb-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contralateralLimb",
+                      "variable": "src-component-contralateralLimb-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-contralateralLimb-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-component-contralateralLimb-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice contralateralLimb of Observation.component (type BackboneElement)"
+        },
+        {
+          "name": "map-component-contralateralKnee",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component-contralateralKnee",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-component-contralateralKnee-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-contralateralKnee",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-component-contralateralKnee-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-component-contralateralKnee-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-contralateralKnee-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-component-contralateralKnee-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-component-contralateralKnee-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralKnee-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-contralateralKnee-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralKnee-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "72696002"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-contralateralKnee-code-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-contralateralKnee-code-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Knee region structure"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-component-contralateralKnee-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-contralateralKnee",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-component-contralateralKnee-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-component-contralateralKnee-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contralateralKnee",
+                      "variable": "src-component-contralateralKnee-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-contralateralKnee-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-component-contralateralKnee-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice contralateralKnee of Observation.component (type BackboneElement)"
+        },
+        {
+          "name": "map-component-stump",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component-stump",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-component-stump-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-stump",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-component-stump-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-component-stump-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-stump-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-component-stump-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-component-stump-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-stump-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-stump-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-stump-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "38033009"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-stump-code-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-stump-code-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Stump"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-component-stump-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-stump",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-component-stump-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-component-stump-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "stump",
+                      "variable": "src-component-stump-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-stump-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-component-stump-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice stump of Observation.component (type BackboneElement)"
+        },
+        {
+          "name": "map-component-phantomLimb",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component-phantomLimb",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-component-phantomLimb-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-phantomLimb",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-component-phantomLimb-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-component-phantomLimb-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-phantomLimb-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-component-phantomLimb-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-component-phantomLimb-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-phantomLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-phantomLimb-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-phantomLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "193114000"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-component-phantomLimb-code-coding-0-display",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-component-phantomLimb-code-coding-0",
+                          "contextType": "variable",
+                          "element": "display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "Phantom limb"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-component-phantomLimb-value",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component-phantomLimb",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-component-phantomLimb-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-component-phantomLimb-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "phantomLimb",
+                      "variable": "src-component-phantomLimb-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-component-phantomLimb-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-component-phantomLimb-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice phantomLimb of Observation.component (type BackboneElement)"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EFFECTIVE",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "effective",
+              "variable": "tgt-effective",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-effective"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime, Period, Timing, instant | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "registered"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "value",
+              "variable": "tgt-value",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

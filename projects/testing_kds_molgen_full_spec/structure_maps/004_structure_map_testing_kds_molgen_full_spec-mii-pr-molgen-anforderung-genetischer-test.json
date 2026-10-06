@@ -1,0 +1,323 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-anforderung-genetischer-test-819dbb2b",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec-mii-pr-molgen-anforderung-genetischer-test",
+  "name": "Map_004_structure_map_testing_kds_molgen_full_spec_mii_pr_molgen_anforderung_genetischer_test",
+  "title": "Structure Map for testing_kds_molgen_full_spec - mii-pr-molgen-anforderung-genetischer-test",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-molgen-anforderung-genetischer-test). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/anforderung-genetischer-test",
+      "mode": "target",
+      "alias": "mii-pr-molgen-anforderung-genetischer-test"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-anforderung-genetischer-test",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ServiceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/anforderung-genetischer-test"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/anforderung-genetischer-test"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AUTHOREDON",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.authoredOn | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.basedOn> → CarePlan|ServiceRequest|MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.code | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-intent",
+          "source": [
+            {
+              "context": "source",
+              "element": "srIntent",
+              "variable": "src-intent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "variable": "tgt-intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-intent"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.intent | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-occurrence",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_OCCURRENCE",
+              "variable": "src-occurrence"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "occurrence",
+              "variable": "tgt-occurrence",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-occurrence"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.occurrence[x] | Type: dateTime, Period, Timing | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.reasonReference> → Condition|Observation|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-requester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-requester"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.requester> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "srStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ServiceRequest.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ServiceRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<ServiceRequest.subject> → Patient|Group — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,628 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-acme-base-patient-67b70f40",
+  "url": "http://example.org/StructureMap/source-definition-testing-acme-full-spec-acme-base-patient",
+  "name": "Map_002_structure_map_testing_acme_full_spec_acme_base_patient",
+  "title": "Structure Map for testing_acme_full_spec - acme-base-patient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: acme-base-patient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-acme-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fake-acme.org/fhir/StructureDefinition/ACME-base-patient",
+      "mode": "target",
+      "alias": "acme-base-patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-acme-base-patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_acme_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fake-acme.org/fhir/StructureDefinition/ACME-base-patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fake-acme.org/fhir/StructureDefinition/ACME-base-patient"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.city | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.line | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.postalCode | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.state | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.address | Type: Address | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_BIRTHDATE",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.communication | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "patGender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-identifier-ACMEcorpIdentifier",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-ACMEcorpIdentifier",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-ACMEcorpIdentifier-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-ACMEcorpIdentifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fake-acme.org/fhir/NamingSystem/Patient-Identifier"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-ACMEcorpIdentifier-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "patIdValue",
+                  "variable": "src-identifier-ACMEcorpIdentifier-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-ACMEcorpIdentifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-ACMEcorpIdentifier-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice ACMEcorpIdentifier of Patient.identifier (type Identifier)"
+        },
+        {
+          "name": "map-link",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-link"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "link",
+              "variable": "tgt-link",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-link",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Patient-other",
+              "source": [
+                {
+                  "context": "src-link",
+                  "variable": "src-other"
+                }
+              ],
+              "documentation": "Reference<Patient.link.other> → Patient|RelatedPerson — resolve via bundle assembler"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-link",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.link.type | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.link | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "patFamily",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.family | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "patGiven",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.given | Type: string | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.system | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 3 child elements"
+        }
+      ]
+    }
+  ]
+}

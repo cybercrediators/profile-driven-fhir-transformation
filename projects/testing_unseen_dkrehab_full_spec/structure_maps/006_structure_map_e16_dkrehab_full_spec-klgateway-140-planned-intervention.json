@@ -1,0 +1,552 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-klgateway-140-planned-intervention-117a0641",
+  "url": "http://example.org/StructureMap/source-definition-e16-dkrehab-full-spec-klgateway-140-planned-intervention",
+  "name": "Map_006_structure_map_e16_dkrehab_full_spec_klgateway_140_planned_intervention",
+  "title": "Structure Map for e16_dkrehab_full_spec - klgateway-140-planned-intervention",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: klgateway-140-planned-intervention). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-dkrehab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-planned-intervention",
+      "mode": "target",
+      "alias": "klgateway-140-planned-intervention"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-klgateway-140-planned-intervention",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_dkrehab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CarePlan",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-planned-intervention"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-planned-intervention"
+        },
+        {
+          "name": "map-activity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-activity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "activity",
+              "variable": "tgt-activity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-detail",
+              "source": [
+                {
+                  "context": "src-activity",
+                  "variable": "src-detail"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-activity",
+                  "contextType": "variable",
+                  "element": "detail",
+                  "variable": "tgt-detail",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding-level2",
+                      "source": [
+                        {
+                          "context": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-code",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding-level2",
+                          "listMode": [
+                            "share"
+                          ],
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-coding-level2-system",
+                          "source": [
+                            {
+                              "context": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding-level2",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "urn:oid:1.2.208.176.2.21"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-coding-level2-code",
+                          "source": [
+                            {
+                              "context": "src-code",
+                              "element": "klgateway_140_planned_intervention_activity_detail_code_coding_level2_code",
+                              "variable": "src-coding-level2-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding-level2",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-coding-level2-code"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-coding-level2-display",
+                          "source": [
+                            {
+                              "context": "src-code",
+                              "element": "klgateway_140_planned_intervention_activity_detail_code_coding_level2_display",
+                              "variable": "src-coding-level2-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding-level2",
+                              "contextType": "variable",
+                              "element": "display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-coding-level2-display"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Slice level2 of CarePlan.activity.detail.code.coding (type Coding)"
+                    }
+                  ],
+                  "documentation": "Maps to CarePlan.activity.detail.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-extension-deliveryType",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "element": "TODO-MAP-DELIVERYTYPE_SOURCE",
+                      "variable": "src-deliveryType"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-deliveryType",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-deliveryType",
+                      "source": [
+                        {
+                          "context": "src-deliveryType"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-deliveryType",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/DeliveryType"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://fhir.kl.dk/rehab/StructureDefinition/DeliveryType"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://fhir.kl.dk/rehab/StructureDefinition/DeliveryType | Type: [{'code': 'Extension', 'profile_canonical': ['http://fhir.kl.dk/rehab/StructureDefinition/DeliveryType'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://fhir.kl.dk/rehab/StructureDefinition/DeliveryType', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Extension.value[x].text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: CarePlan.activity.detail.extension"
+                },
+                {
+                  "name": "TODO-resolve-reference-CarePlan-performer",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-performer"
+                    }
+                  ],
+                  "documentation": "Reference<CarePlan.activity.detail.performer> → Organization — resolve via bundle assembler"
+                },
+                {
+                  "name": "TODO-resolve-reference-CarePlan-reasonReference",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-reasonReference"
+                    }
+                  ],
+                  "documentation": "Reference<CarePlan.activity.detail.reasonReference> → Condition — resolve via bundle assembler"
+                },
+                {
+                  "name": "map-status",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "element": "klgateway_140_planned_intervention_activity_detail_status",
+                      "variable": "src-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "status",
+                      "variable": "tgt-status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-status"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to CarePlan.activity.detail.status | Type: code | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to CarePlan.activity.detail | Type: BackboneElement | Cardinality: 1..1 | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to CarePlan.activity | Type: BackboneElement | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<CarePlan.basedOn> → CarePlan — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-basedOnServiceRequest",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BASEDONSERVICEREQUEST_SOURCE",
+              "variable": "src-basedOnServiceRequest"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-basedOnServiceRequest",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-basedOnServiceRequest",
+              "source": [
+                {
+                  "context": "src-basedOnServiceRequest"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-basedOnServiceRequest",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension"
+            }
+          ],
+          "documentation": "Maps to extension: http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension | Type: [{'code': 'Extension', 'profile_canonical': ['http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-servicerequest'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': '… [truncated; full structure in the registry entry for http://fhir.kl.dk/rehab/StructureDefinition/BasedOnServiceRequestExtension] | Path: CarePlan.extension"
+        },
+        {
+          "name": "set-fixed-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "plan"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for intent"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-end",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "TODO_MAP_END",
+                  "variable": "src-end"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "end",
+                  "variable": "tgt-end",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-end"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CarePlan.period.end | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-start",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "klgateway_140_planned_intervention_period_start",
+                  "variable": "src-start"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "start",
+                  "variable": "tgt-start",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-start"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CarePlan.period.start | Type: dateTime | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to CarePlan.period | Type: Period | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "klgateway_140_planned_intervention_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CarePlan.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<CarePlan.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

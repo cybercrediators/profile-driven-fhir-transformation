@@ -1,0 +1,452 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-animal-specimen-eu-lab-215b5c28",
+  "url": "http://example.org/StructureMap/source-definition-e16-eulab-animal-specimen-eu-lab",
+  "name": "Map_001_structure_map_e16_eulab_animal_specimen_eu_lab",
+  "title": "Structure Map for e16_eulab - animal-specimen-eu-lab",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: animal-specimen-eu-lab). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-eulab",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.eu/fhir/laboratory/StructureDefinition/animal-specimen-eu-lab",
+      "mode": "target",
+      "alias": "animal-specimen-eu-lab"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-animal-specimen-eu-lab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_eulab",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "RelatedPerson",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/animal-specimen-eu-lab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.eu/fhir/laboratory/StructureDefinition/animal-specimen-eu-lab"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RelatedPerson.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_BIRTHDATE",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RelatedPerson.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-specimen-animal",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SPECIMEN-ANIMAL_SOURCE",
+              "variable": "src-specimen-animal"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-specimen-animal",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-specimen-animal",
+              "source": [
+                {
+                  "context": "src-specimen-animal"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-specimen-animal",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies|5.2.0"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies|5.2.0"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies|5.2.0 | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies|5.2.0'], 'profile': ['http://hl7.org/fhir/StructureDefinition/practitioner-animalSpecies|5.2.0']}] | Path: RelatedPerson.extension"
+        },
+        {
+          "name": "map-extension-recordedSexOrGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RECORDEDSEXORGENDER_SOURCE",
+              "variable": "src-recordedSexOrGender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-recordedSexOrGender",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-recordedSexOrGender",
+              "source": [
+                {
+                  "context": "src-recordedSexOrGender"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-recordedSexOrGender",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-recordedSexOrGender",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-valueCodeableConcept-system",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://hl7.org/fhir/administrative-gender"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-valueCodeableConcept-code",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "translate",
+                              "parameter": [
+                                {
+                                  "valueId": "src"
+                                },
+                                {
+                                  "valueString": "http://example.org/StructureMap/source-definition-e16-eulab/ConceptMap/cm-value-77ac516f"
+                                },
+                                {
+                                  "valueString": "code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for RelatedPerson.extension:recordedSexOrGender.extension:value using http://example.org/StructureMap/source-definition-e16-eulab/ConceptMap/cm-value-77ac516f"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: RelatedPerson.extension:recordedSexOrGender.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender'], 'profile': ['http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender']}] | Path: RelatedPerson.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RelatedPerson.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to RelatedPerson.name | Type: HumanName | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-RelatedPerson-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<RelatedPerson.patient> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

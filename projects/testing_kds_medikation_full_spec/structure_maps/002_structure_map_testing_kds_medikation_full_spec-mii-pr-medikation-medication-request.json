@@ -1,0 +1,1553 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-medikation-medication-request-11054fd9",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-medikation-full-spec-mii-pr-medikation-medication-request",
+  "name": "Map_002_structure_map_testing_kds_medikation_full_spec_mii_pr_medikation_medication_request",
+  "title": "Structure Map for testing_kds_medikation_full_spec - mii-pr-medikation-medication-request",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-medikation-medication-request). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest",
+      "mode": "target",
+      "alias": "mii-pr-medikation-medication-request"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-medikation-medication-request",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/MedicationRequest"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AUTHOREDON",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.authoredOn | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.basedOn> → CarePlan|MedicationRequest|ServiceRequest|ImmunizationRecommendation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosageInstruction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosageInstruction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosageInstruction",
+              "variable": "tgt-dosageInstruction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosageInstruction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-asNeeded",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "TODO_MAP_ASNEEDED",
+                  "variable": "src-asNeeded"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "asNeeded",
+                  "variable": "tgt-asNeeded",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-asNeeded"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.asNeeded[x] | Type: boolean, CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-doseAndRate",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-doseAndRate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "doseAndRate",
+                  "variable": "tgt-doseAndRate",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-doseAndRate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-dose",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-dose"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "dose",
+                      "variable": "tgt-dose",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Range"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.dose[x] | Type: Range, Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-rate",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-rate"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "rate",
+                      "variable": "tgt-rate",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Ratio"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.rate[x] | Type: Ratio, Range, Quantity | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate | Type: Element | Cardinality: 0..* | Complex type with 2 child elements"
+            },
+            {
+              "name": "map-maxDosePerAdministration",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerAdministration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerAdministration",
+                  "variable": "tgt-maxDosePerAdministration",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerAdministration",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerAdministration",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerAdministration",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerAdministration",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-unit",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerAdministration",
+                      "element": "TODO_MAP_UNIT",
+                      "variable": "src-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerAdministration",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "variable": "tgt-unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration.unit | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerAdministration",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerAdministration",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration.value | Type: decimal | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerAdministration | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-maxDosePerPeriod",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerPeriod",
+                  "variable": "tgt-maxDosePerPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-denominator",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerPeriod",
+                      "variable": "src-denominator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerPeriod",
+                      "contextType": "variable",
+                      "element": "denominator",
+                      "variable": "tgt-denominator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.system | Type: uri | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-unit",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "TODO_MAP_UNIT",
+                          "variable": "src-unit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "unit",
+                          "variable": "tgt-unit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-unit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.unit | Type: string | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "TODO_MAP_VALUE",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.value | Type: decimal | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-numerator",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerPeriod",
+                      "variable": "src-numerator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerPeriod",
+                      "contextType": "variable",
+                      "element": "numerator",
+                      "variable": "tgt-numerator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.system | Type: uri | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-unit",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "TODO_MAP_UNIT",
+                          "variable": "src-unit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "unit",
+                          "variable": "tgt-unit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-unit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.unit | Type: string | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "TODO_MAP_VALUE",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.value | Type: decimal | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod | Type: Ratio | Cardinality: 0..1 | Complex type with 2 child elements"
+            },
+            {
+              "name": "map-route",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-route"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "route",
+                  "variable": "tgt-route",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.route | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.sequence | Type: integer | Cardinality: 0..1"
+            },
+            {
+              "name": "map-site",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-site"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "site",
+                  "variable": "tgt-site",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.site | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-event",
+                  "source": [
+                    {
+                      "context": "src-timing",
+                      "element": "TODO_MAP_EVENT",
+                      "variable": "src-event"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-timing",
+                      "contextType": "variable",
+                      "element": "event",
+                      "variable": "tgt-event",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-event",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-event"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.timing.event | Type: dateTime | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-repeat",
+                  "source": [
+                    {
+                      "context": "src-timing",
+                      "variable": "src-repeat"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-timing",
+                      "contextType": "variable",
+                      "element": "repeat",
+                      "variable": "tgt-repeat",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Element"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-bounds",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "variable": "src-bounds"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "bounds",
+                          "variable": "tgt-bounds",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Duration"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.bounds[x] | Type: Duration, Range, Period | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-count",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_COUNT",
+                          "variable": "src-count"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "count",
+                          "variable": "tgt-count",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-count"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.count | Type: positiveInt | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-countMax",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_COUNTMAX",
+                          "variable": "src-countMax"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "countMax",
+                          "variable": "tgt-countMax",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-countMax"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.countMax | Type: positiveInt | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-dayOfWeek",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_DAYOFWEEK",
+                          "variable": "src-dayOfWeek"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "dayOfWeek",
+                          "variable": "tgt-dayOfWeek",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-dayOfWeek",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-dayOfWeek"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.dayOfWeek | Type: code | Cardinality: 0..*"
+                    },
+                    {
+                      "name": "map-duration",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_DURATION",
+                          "variable": "src-duration"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "duration",
+                          "variable": "tgt-duration",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-duration"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.duration | Type: decimal | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-durationMax",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_DURATIONMAX",
+                          "variable": "src-durationMax"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "durationMax",
+                          "variable": "tgt-durationMax",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-durationMax"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.durationMax | Type: decimal | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-durationUnit",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_DURATIONUNIT",
+                          "variable": "src-durationUnit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "durationUnit",
+                          "variable": "tgt-durationUnit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-durationUnit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.durationUnit | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-frequency",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_FREQUENCY",
+                          "variable": "src-frequency"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "frequency",
+                          "variable": "tgt-frequency",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-frequency"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.frequency | Type: positiveInt | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-frequencyMax",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_FREQUENCYMAX",
+                          "variable": "src-frequencyMax"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "frequencyMax",
+                          "variable": "tgt-frequencyMax",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-frequencyMax"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.frequencyMax | Type: positiveInt | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-offset",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_OFFSET",
+                          "variable": "src-offset"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "offset",
+                          "variable": "tgt-offset",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-offset"
+                            },
+                            {
+                              "valueString": "unsignedInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.offset | Type: unsignedInt | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-period",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_PERIOD",
+                          "variable": "src-period"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "period",
+                          "variable": "tgt-period",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-period"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.period | Type: decimal | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-periodMax",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_PERIODMAX",
+                          "variable": "src-periodMax"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "periodMax",
+                          "variable": "tgt-periodMax",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-periodMax"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.periodMax | Type: decimal | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-periodUnit",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_PERIODUNIT",
+                          "variable": "src-periodUnit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "periodUnit",
+                          "variable": "tgt-periodUnit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-periodUnit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.periodUnit | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-timeOfDay",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_TIMEOFDAY",
+                          "variable": "src-timeOfDay"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "timeOfDay",
+                          "variable": "tgt-timeOfDay",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-timeOfDay",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-timeOfDay"
+                            },
+                            {
+                              "valueString": "time"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.timeOfDay | Type: time | Cardinality: 0..*"
+                    },
+                    {
+                      "name": "map-when",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "TODO_MAP_WHEN",
+                          "variable": "src-when"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "when",
+                          "variable": "tgt-when",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-when",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-when"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.when | Type: code | Cardinality: 0..*"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat | Type: Element | Cardinality: 0..1 | Complex type with 15 child elements"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.timing | Type: Timing | Cardinality: 0..1 | Complex type with 3 child elements"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dosageInstruction | Type: Dosage | Cardinality: 0..* | Complex type with 10 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-intent",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestIntent",
+              "variable": "src-intent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "variable": "tgt-intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-intent"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.intent | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-medication-CodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "medication",
+                  "variable": "tgt-medication-CodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "requestMedicationText",
+                      "variable": "src-medication-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-CodeableConcept",
+                      "contextType": "variable",
+                      "element": "text",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-medication-text"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.medication[x] | Type: CodeableConcept, Reference | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-priorPrescription",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-priorPrescription"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.priorPrescription> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.reasonReference> → Condition|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-requester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-requester"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.requester> → Practitioner|PractitionerRole|Organization|Patient|RelatedPerson|Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "requestStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.subject> → Patient|Group — resolve via bundle assembler"
+        },
+        {
+          "name": "map-substitution",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-substitution"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "substitution",
+              "variable": "tgt-substitution",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-allowed",
+              "source": [
+                {
+                  "context": "src-substitution",
+                  "variable": "src-allowed"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-allowed-boolean",
+                  "source": [
+                    {
+                      "context": "src-substitution",
+                      "element": "requestSubstitutionAllowed",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-substitution",
+                      "contextType": "variable",
+                      "element": "allowed",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.substitution.allowed[x] | Type: boolean, CodeableConcept | Cardinality: 1..1 | Choice types: boolean, CodeableConcept"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.substitution | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        }
+      ]
+    }
+  ]
+}

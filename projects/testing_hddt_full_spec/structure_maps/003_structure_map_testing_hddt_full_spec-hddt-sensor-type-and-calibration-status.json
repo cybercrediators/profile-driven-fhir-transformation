@@ -1,0 +1,324 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-hddt-sensor-type-and-calibration-status-a3c5a6da",
+  "url": "http://example.org/StructureMap/source-definition-testing-hddt-full-spec-hddt-sensor-type-and-calibration-status",
+  "name": "Map_003_structure_map_testing_hddt_full_spec_hddt_sensor_type_and_calibration_status",
+  "title": "Structure Map for testing_hddt_full_spec - hddt-sensor-type-and-calibration-status",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: hddt-sensor-type-and-calibration-status). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-hddt-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/hddt/StructureDefinition/hddt-sensor-type-and-calibration-status",
+      "mode": "target",
+      "alias": "hddt-sensor-type-and-calibration-status"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-hddt-sensor-type-and-calibration-status",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_hddt_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DeviceMetric",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/hddt/StructureDefinition/hddt-sensor-type-and-calibration-status"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/hddt/StructureDefinition/hddt-sensor-type-and-calibration-status"
+        },
+        {
+          "name": "map-calibration",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-calibration"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "calibration",
+              "variable": "tgt-calibration",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-calibration",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-calibration",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-calibration",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.calibration.state | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-calibration",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-calibration",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceMetric.calibration.time | Type: instant | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.calibration | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "element": "metricCategory",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-category"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.category | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-measurementPeriod",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-measurementPeriod"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "measurementPeriod",
+              "variable": "tgt-measurementPeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Timing"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceMetric.measurementPeriod | Type: Timing | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceMetric-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<DeviceMetric.source> → Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-type-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "metricTypeSystem",
+                      "variable": "src-type-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "metricTypeCode",
+                      "variable": "src-type-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for DeviceMetric.type"
+        }
+      ]
+    }
+  ]
+}

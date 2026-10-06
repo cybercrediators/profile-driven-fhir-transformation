@@ -1,0 +1,1280 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-us-core-patient-72481bc7",
+  "url": "http://example.org/StructureMap/source-definition-testing-uscore-full-spec-us-core-patient",
+  "name": "Map_002_structure_map_testing_uscore_full_spec_us_core_patient",
+  "title": "Structure Map for testing_uscore_full_spec - us-core-patient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: us-core-patient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-uscore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient",
+      "mode": "target",
+      "alias": "us-core-patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-us-core-patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_uscore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.city | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.line | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.postalCode | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.state | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.address | Type: Address | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "birthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.communication | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-extension-race",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RACE_SOURCE",
+              "variable": "src-race"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-race",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-race",
+              "source": [
+                {
+                  "context": "src-race"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-race",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-race"
+            },
+            {
+              "name": "map-extension-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-TEXT_SOURCE",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-race",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-text",
+                  "source": [
+                    {
+                      "context": "src-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-text",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "text"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to text"
+                },
+                {
+                  "name": "set-extension-value-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-text",
+                      "contextType": "variable",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueString)"
+                }
+              ],
+              "documentation": "Maps to extension: text | Type: [{'code': 'Extension'}] | Path: Patient.extension:race.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-race | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-race'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:ombCategory', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '6'}, 'description': 'American Indian or Alaska Native|Asian|Black or African American|Native Hawaiian or Other Pacific Islander|White', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'ombCategory', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'iso11179', 'map': '/ClinicalDocument/recordTarget/patientRole/patient/raceCode'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:ombCategory', 'slice_selector': 'ombCategory', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:ombCategory.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:ombCategory… [truncated; full structure in the registry entry for http://hl7.org/fhir/us/core/StructureDefinition/us-core-race] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-ethnicity",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ETHNICITY_SOURCE",
+              "variable": "src-ethnicity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ethnicity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ethnicity",
+              "source": [
+                {
+                  "context": "src-ethnicity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ethnicity",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity"
+            },
+            {
+              "name": "map-extension-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-TEXT_SOURCE",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ethnicity",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-text",
+                  "source": [
+                    {
+                      "context": "src-text"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-text",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "text"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to text"
+                },
+                {
+                  "name": "set-extension-value-text",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-text",
+                      "contextType": "variable",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueString)"
+                }
+              ],
+              "documentation": "Maps to extension: text | Type: [{'code': 'Extension'}] | Path: Patient.extension:ethnicity.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:ombCategory', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Hispanic or Latino|Not Hispanic or Latino', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'ombCategory', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'iso11179', 'map': '/ClinicalDocument/recordTarget/patientRole/patient/ethnicGroupCode'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:ombCategory', 'slice_selector': 'ombCategory', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:ombCategory.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:ombCategory.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.Str… [truncated; full structure in the registry entry for http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-tribalAffiliation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TRIBALAFFILIATION_SOURCE",
+              "variable": "src-tribalAffiliation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-tribalAffiliation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-tribalAffiliation",
+              "source": [
+                {
+                  "context": "src-tribalAffiliation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-tribalAffiliation",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-tribal-affiliation"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-tribal-affiliation"
+            },
+            {
+              "name": "map-extension-tribalAffiliation",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-TRIBALAFFILIATION_SOURCE",
+                  "variable": "src-tribalAffiliation-2"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-tribalAffiliation",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-tribalAffiliation-2",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-tribalAffiliation",
+                  "source": [
+                    {
+                      "context": "src-tribalAffiliation-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-tribalAffiliation-2",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "tribalAffiliation"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to tribalAffiliation"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-tribalAffiliation-2",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-valueCodeableConcept-system",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://terminology.hl7.org/CodeSystem/v3-TribalEntityUS"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-valueCodeableConcept-code",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "translate",
+                              "parameter": [
+                                {
+                                  "valueId": "src"
+                                },
+                                {
+                                  "valueString": "http://example.org/StructureMap/source-definition-testing-uscore-full-spec/ConceptMap/cm-tribalAffiliation-90100709"
+                                },
+                                {
+                                  "valueString": "code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.extension:tribalAffiliation.extension:tribalAffiliation using http://example.org/StructureMap/source-definition-testing-uscore-full-spec/ConceptMap/cm-tribalAffiliation-90100709"
+                }
+              ],
+              "documentation": "Maps to extension: tribalAffiliation | Type: [{'code': 'Extension'}] | Path: Patient.extension:tribalAffiliation.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-tribal-affiliation | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-tribal-affiliation'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:tribalAffiliation', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Affiliated tribe or band name', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'tribalAffiliation', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:tribalAffiliation', 'slice_selector': 'tribalAffiliation', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:tribalAffiliation.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:tribalAffiliation.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-el… [truncated; full structure in the registry entry for http://hl7.org/fhir/us/core/StructureDefinition/us-core-tribal-affiliation] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-birthsex",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BIRTHSEX_SOURCE",
+              "variable": "src-birthsex"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-birthsex",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-birthsex",
+              "source": [
+                {
+                  "context": "src-birthsex"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-birthsex",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1021.24', 'children': []}]]}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-sex",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SEX_SOURCE",
+              "variable": "src-sex"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-sex",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-sex",
+              "source": [
+                {
+                  "context": "src-sex"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-sex",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-sex', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'extensible', 'valueSetUrl': 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1240.3', 'children': []}]]}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-genderIdentity",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENDERIDENTITY_SOURCE",
+              "variable": "src-genderIdentity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-genderIdentity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-genderIdentity",
+              "source": [
+                {
+                  "context": "src-genderIdentity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genderIdentity",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genderIdentity",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCodeableConcept-coding-translate",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-uscore-full-spec/ConceptMap/cm-genderIdentity-801d5596"
+                        },
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Patient.extension:genderIdentity using http://example.org/StructureMap/source-definition-testing-uscore-full-spec/ConceptMap/cm-genderIdentity-801d5596"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', '… [truncated; full structure in the registry entry for http://hl7.org/fhir/us/core/StructureDefinition/us-core-genderIdentity] | Path: Patient.extension"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "gender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "patientIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.system | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "patientId",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-link",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-link"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "link",
+              "variable": "tgt-link",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-link",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Patient-other",
+              "source": [
+                {
+                  "context": "src-link",
+                  "variable": "src-other"
+                }
+              ],
+              "documentation": "Reference<Patient.link.other> → Patient|RelatedPerson — resolve via bundle assembler"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-link",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.link.type | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.link | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "familyName",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.family | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "givenName",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.given | Type: string | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.system | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 3 child elements"
+        }
+      ]
+    }
+  ]
+}

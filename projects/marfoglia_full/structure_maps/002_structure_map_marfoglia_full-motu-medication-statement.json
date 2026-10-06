@@ -1,0 +1,167 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-medication-statement-52f2c3bf",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-medication-statement",
+  "name": "Map_002_structure_map_marfoglia_full_motu_medication_statement",
+  "title": "Structure Map for marfoglia_full - motu-medication-statement",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-medication-statement). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-medication-statement",
+      "mode": "target",
+      "alias": "motu-medication-statement"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-medication-statement",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationStatement",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-medication-statement"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-medication-statement"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-context",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-context"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.context> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosage",
+              "variable": "tgt-dosage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.dosage | Type: Dosage | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.medication[x]> → Medication — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

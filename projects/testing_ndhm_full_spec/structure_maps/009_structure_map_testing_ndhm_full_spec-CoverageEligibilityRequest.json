@@ -1,0 +1,818 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-CoverageEligibilityRequest-d6c1e51c",
+  "url": "http://example.org/StructureMap/source-definition-testing-ndhm-full-spec-CoverageEligibilityRequest",
+  "name": "Map_009_structure_map_testing_ndhm_full_spec_CoverageEligibilityRequest",
+  "title": "Structure Map for testing_ndhm_full_spec - CoverageEligibilityRequest",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: CoverageEligibilityRequest). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ndhm-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/CoverageEligibilityRequest",
+      "mode": "target",
+      "alias": "CoverageEligibilityRequest"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-CoverageEligibilityRequest",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ndhm_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CoverageEligibilityRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://nrces.in/ndhm/fhir/r4/StructureDefinition/CoverageEligibilityRequest"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://nrces.in/ndhm/fhir/r4/StructureDefinition/CoverageEligibilityRequest"
+        },
+        {
+          "name": "map-created",
+          "source": [
+            {
+              "context": "source",
+              "element": "cerCreated",
+              "variable": "src-created"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "created",
+              "variable": "tgt-created",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-created"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.created | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-CoverageEligibilityRequest-enterer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-enterer"
+            }
+          ],
+          "documentation": "Reference<CoverageEligibilityRequest.enterer> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-CoverageEligibilityRequest-facility",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-facility"
+            }
+          ],
+          "documentation": "Reference<CoverageEligibilityRequest.facility> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "cerIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.identifier | Type: Identifier | Cardinality: 1..1"
+        },
+        {
+          "name": "map-insurance",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-insurance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "insurance",
+              "variable": "tgt-insurance",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-insurance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CoverageEligibilityRequest-coverage",
+              "source": [
+                {
+                  "context": "src-insurance",
+                  "variable": "src-coverage"
+                }
+              ],
+              "documentation": "Reference<CoverageEligibilityRequest.insurance.coverage> → Coverage — resolve via bundle assembler"
+            },
+            {
+              "name": "map-focal",
+              "source": [
+                {
+                  "context": "src-insurance",
+                  "element": "cerInsFocal",
+                  "variable": "src-focal"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-insurance",
+                  "contextType": "variable",
+                  "element": "focal",
+                  "variable": "tgt-focal",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-focal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.insurance.focal | Type: boolean | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.insurance | Type: BackboneElement | Cardinality: 1..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-CoverageEligibilityRequest-insurer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-insurer"
+            }
+          ],
+          "documentation": "Reference<CoverageEligibilityRequest.insurer> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-item",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-item"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "item",
+              "variable": "tgt-item",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-item",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-category",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "category",
+                  "variable": "tgt-category",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-category",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.category.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.category.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.category.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to CoverageEligibilityRequest.item.category.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.item.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-diagnosis",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-diagnosis"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "diagnosis",
+                  "variable": "tgt-diagnosis",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-diagnosis",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.item.diagnosis | Type: BackboneElement | Cardinality: 0..*"
+            },
+            {
+              "name": "map-productOrService",
+              "source": [
+                {
+                  "context": "src-item",
+                  "variable": "src-productOrService"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item",
+                  "contextType": "variable",
+                  "element": "productOrService",
+                  "variable": "tgt-productOrService",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-productOrService",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-productOrService",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.productOrService.coding.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.productOrService.coding.display | Type: string | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to CoverageEligibilityRequest.item.productOrService.coding.system | Type: uri | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to CoverageEligibilityRequest.item.productOrService.coding | Type: Coding | Cardinality: 0..* | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.item.productOrService | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.item | Type: BackboneElement | Cardinality: 0..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-CoverageEligibilityRequest-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<CoverageEligibilityRequest.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-priority-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "priority",
+              "variable": "tgt-priority-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-priority-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-priority-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-priority-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-priority-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "cerPrioritySystem",
+                      "variable": "src-priority-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priority-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-priority-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-priority-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "cerPriorityCode",
+                      "variable": "src-priority-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priority-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-priority-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for CoverageEligibilityRequest.priority"
+        },
+        {
+          "name": "TODO-resolve-reference-CoverageEligibilityRequest-provider",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-provider"
+            }
+          ],
+          "documentation": "Reference<CoverageEligibilityRequest.provider> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-purpose",
+          "source": [
+            {
+              "context": "source",
+              "element": "cerPurpose",
+              "variable": "src-purpose"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "purpose",
+              "variable": "tgt-purpose",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-purpose",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-purpose"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.purpose | Type: code | Cardinality: 1..*"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "cerStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "supportingInfo",
+              "variable": "tgt-supportingInfo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-supportingInfo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CoverageEligibilityRequest-information",
+              "source": [
+                {
+                  "context": "src-supportingInfo",
+                  "variable": "src-information"
+                }
+              ],
+              "documentation": "Reference<CoverageEligibilityRequest.supportingInfo.information> → Resource — resolve via bundle assembler"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-supportingInfo",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-supportingInfo",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CoverageEligibilityRequest.supportingInfo.sequence | Type: positiveInt | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to CoverageEligibilityRequest.supportingInfo | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        }
+      ]
+    }
+  ]
+}

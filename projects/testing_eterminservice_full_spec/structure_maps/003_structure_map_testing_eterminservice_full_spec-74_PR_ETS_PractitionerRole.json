@@ -1,0 +1,285 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-74-PR-ETS-PractitionerRole-5a9e9b69",
+  "url": "http://example.org/StructureMap/source-definition-testing-eterminservice-full-spec-74_PR_ETS_PractitionerRole",
+  "name": "Map_003_structure_map_testing_eterminservice_full_spec_74_PR_ETS_PractitionerRole",
+  "title": "Structure Map for testing_eterminservice_full_spec - 74_PR_ETS_PractitionerRole",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 74_PR_ETS_PractitionerRole). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-eterminservice-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_PractitionerRole",
+      "mode": "target",
+      "alias": "74_PR_ETS_PractitionerRole"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-74-PR-ETS-PractitionerRole",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_eterminservice_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "PractitionerRole",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.kbv.de/StructureDefinition/74_PR_ETS_PractitionerRole"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.kbv.de/StructureDefinition/74_PR_ETS_PractitionerRole"
+        },
+        {
+          "name": "map-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "organization",
+              "variable": "tgt-organization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-organization",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-organization",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-identifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/NamingSystem/kbv/bsnr"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "orgIdValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to PractitionerRole.organization.identifier.value | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.organization.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Reference PractitionerRole.organization populated from explicitly authored child mappings."
+        },
+        {
+          "name": "map-practitioner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-practitioner"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "practitioner",
+              "variable": "tgt-practitioner",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-practitioner",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-practitioner",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-identifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/NamingSystem/kbv/lanr"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "practIdValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to PractitionerRole.practitioner.identifier.value | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.practitioner.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Reference PractitionerRole.practitioner populated from explicitly authored child mappings."
+        }
+      ]
+    }
+  ]
+}

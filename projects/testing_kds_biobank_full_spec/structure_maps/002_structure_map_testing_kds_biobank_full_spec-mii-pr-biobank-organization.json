@@ -1,0 +1,817 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-organization-9807c843",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec-mii-pr-biobank-organization",
+  "name": "Map_002_structure_map_testing_kds_biobank_full_spec_mii_pr_biobank_organization",
+  "title": "Structure Map for testing_kds_biobank_full_spec - mii-pr-biobank-organization",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-biobank-organization). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Organization",
+      "mode": "target",
+      "alias": "mii-pr-biobank-organization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-organization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Organization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/Organization"
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-alias",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.alias | Type: string | Cardinality: 0..*"
+        },
+        {
+          "name": "map-contact-forschungskontakt",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact-forschungskontakt",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-rolle-contact-forschungskontakt",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "contactRole",
+                  "variable": "src-rolle"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-forschungskontakt",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-rolle",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-rolle-contact-forschungskontakt",
+                  "source": [
+                    {
+                      "context": "src-rolle"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-rolle",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/KontaktRolle"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/KontaktRolle"
+                },
+                {
+                  "name": "set-extension-value-rolle-contact-forschungskontakt",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactRole",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-rolle",
+                      "contextType": "variable",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueString)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/KontaktRolle | Type: Extension | Path: Organization.contact:forschungskontakt.extension:rolle"
+            },
+            {
+              "name": "set-contact-forschungskontakt-purpose",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-forschungskontakt",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "variable": "tgt-contact-forschungskontakt-purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-contact-forschungskontakt-purpose-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-purpose",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-contact-forschungskontakt-purpose-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-contact-forschungskontakt-purpose-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-contact-forschungskontakt-purpose-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/ContactType"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-contact-forschungskontakt-purpose-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-contact-forschungskontakt-purpose-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "RESEARCH"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-forschungskontakt-name",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-forschungskontakt",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-contact-forschungskontakt-name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-contact-forschungskontakt-name-prefix",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactPrefix",
+                      "variable": "src-contact-forschungskontakt-name-prefix"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-name",
+                      "contextType": "variable",
+                      "element": "prefix",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-name-prefix"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-contact-forschungskontakt-name-family",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactFamily",
+                      "variable": "src-contact-forschungskontakt-name-family"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-name",
+                      "contextType": "variable",
+                      "element": "family",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-name-family"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-contact-forschungskontakt-name-given",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactGiven",
+                      "variable": "src-contact-forschungskontakt-name-given"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-name",
+                      "contextType": "variable",
+                      "element": "given",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-name-given"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-forschungskontakt-telecom",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-forschungskontakt",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "variable": "tgt-contact-forschungskontakt-telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-contact-forschungskontakt-telecom-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactTelecomSystem",
+                      "variable": "src-contact-forschungskontakt-telecom-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-telecom",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-telecom-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-contact-forschungskontakt-telecom-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactTelecomValue",
+                      "variable": "src-contact-forschungskontakt-telecom-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-telecom",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-telecom-value"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-forschungskontakt-address",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-forschungskontakt",
+                  "contextType": "variable",
+                  "element": "address",
+                  "variable": "tgt-contact-forschungskontakt-address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-contact-forschungskontakt-address-line",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressLine",
+                      "variable": "src-contact-forschungskontakt-address-line"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-address",
+                      "contextType": "variable",
+                      "element": "line",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-address-line"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-contact-forschungskontakt-address-postalCode",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressPostalCode",
+                      "variable": "src-contact-forschungskontakt-address-postalCode"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-address",
+                      "contextType": "variable",
+                      "element": "postalCode",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-address-postalCode"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-contact-forschungskontakt-address-city",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "contactAddressCity",
+                      "variable": "src-contact-forschungskontakt-address-city"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contact-forschungskontakt-address",
+                      "contextType": "variable",
+                      "element": "city",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-contact-forschungskontakt-address-city"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice forschungskontakt of Organization.contact (type BackboneElement)"
+        },
+        {
+          "name": "map-extension-beschreibung",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BESCHREIBUNG_SOURCE",
+              "variable": "src-beschreibung"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-beschreibung",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-beschreibung",
+              "source": [
+                {
+                  "context": "src-beschreibung"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-beschreibung",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-organization-description-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-organization-description-extension"
+            },
+            {
+              "name": "set-extension-value-beschreibung",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-beschreibung",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-organization-description-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-organization-description-extension'], 'profile': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-organization-description-extension']}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-collectionSetting",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-COLLECTIONSETTING_SOURCE",
+              "variable": "src-collectionSetting"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-collectionSetting",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-collectionSetting",
+              "source": [
+                {
+                  "context": "src-collectionSetting"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-collectionSetting",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-sample-collection-setting-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-sample-collection-setting-extension"
+            },
+            {
+              "name": "set-extension-value-collectionSetting",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-collectionSetting",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-sample-collection-setting-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-sample-collection-setting-extension'], 'profile': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-sample-collection-setting-extension']}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-collectionDesign",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-COLLECTIONDESIGN_SOURCE",
+              "variable": "src-collectionDesign"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-collectionDesign",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-collectionDesign",
+              "source": [
+                {
+                  "context": "src-collectionDesign"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-collectionDesign",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-collection-design-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-collection-design-extension"
+            },
+            {
+              "name": "set-extension-value-collectionDesign",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-collectionDesign",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-collection-design-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-collection-design-extension'], 'profile': ['https://fhir.bbmri-eric.eu/fhir/StructureDefinition/miabis-collection-design-extension']}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

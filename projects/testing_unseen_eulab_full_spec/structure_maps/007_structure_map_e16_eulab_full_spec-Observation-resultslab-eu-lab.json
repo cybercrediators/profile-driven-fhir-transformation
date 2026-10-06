@@ -1,0 +1,1730 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Observation-resultslab-eu-lab-5c3af5aa",
+  "url": "http://example.org/StructureMap/source-definition-e16-eulab-full-spec-Observation-resultslab-eu-lab",
+  "name": "Map_007_structure_map_e16_eulab_full_spec_Observation_resultslab_eu_lab",
+  "title": "Structure Map for e16_eulab_full_spec - Observation-resultslab-eu-lab",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Observation-resultslab-eu-lab). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-eulab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.eu/fhir/laboratory/StructureDefinition/Observation-resultslab-eu-lab",
+      "mode": "target",
+      "alias": "Observation-resultslab-eu-lab"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Observation-resultslab-eu-lab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_eulab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/Observation-resultslab-eu-lab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.eu/fhir/laboratory/StructureDefinition/Observation-resultslab-eu-lab"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<Observation.basedOn> → CarePlan|DeviceRequest|ImmunizationRecommendation|MedicationRequest|NutritionOrder|ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-bodySite",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-bodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "bodySite",
+              "variable": "tgt-bodySite",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.bodySite | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-category-laboratory",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category-laboratory",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-category-laboratory-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-laboratory",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-category-laboratory-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-laboratory-coding-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCatSys",
+                      "variable": "src-category-laboratory-coding-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-laboratory-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-category-laboratory-coding-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-laboratory-coding-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCatCd",
+                      "variable": "src-category-laboratory-coding-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-laboratory-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-category-laboratory-coding-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice laboratory of Observation.category (type CodeableConcept)"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCodeSys",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCodeCd",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Observation.code"
+        },
+        {
+          "name": "map-component",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-component"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "component",
+              "variable": "tgt-component",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-component",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.code | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-dataAbsentReason",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-dataAbsentReason"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "dataAbsentReason",
+                  "variable": "tgt-dataAbsentReason",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.dataAbsentReason | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-extension-value-r5",
+              "source": [
+                {
+                  "context": "src-component",
+                  "element": "TODO-MAP-VALUE-R5_SOURCE",
+                  "variable": "src-value-r5"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value-r5",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value-r5",
+                  "source": [
+                    {
+                      "context": "src-value-r5"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value-r5",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value']}] | Path: Observation.component.extension"
+            },
+            {
+              "name": "map-interpretation",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-interpretation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "interpretation",
+                  "variable": "tgt-interpretation",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-interpretation",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.interpretation | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-component",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-component",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.component.value[x] | Type: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Observation.component | Type: BackboneElement | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-dataAbsentReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dataAbsentReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dataAbsentReason",
+              "variable": "tgt-dataAbsentReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.dataAbsentReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-derivedFrom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-derivedFrom"
+            }
+          ],
+          "documentation": "Reference<Observation.derivedFrom> → Observation|ImagingStudy — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-device",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-device"
+            }
+          ],
+          "documentation": "Reference<Observation.device> → Device|DeviceMetric — resolve via bundle assembler"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "observation_resultslab_eu_lab_effective_x",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "observation_resultslab_eu_lab_effective_x_effectiveDateTime",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime, Period | Cardinality: 1..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Observation.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-bodyStructure",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BODYSTRUCTURE_SOURCE",
+              "variable": "src-bodyStructure"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-bodyStructure",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bodyStructure",
+              "source": [
+                {
+                  "context": "src-bodyStructure"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyStructure",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.bodyStructure"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.bodyStructure"
+            },
+            {
+              "name": "set-extension-value-bodyStructure",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bodyStructure",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.bodyStructure | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.bodyStructure'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.bodyStructure']}] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-triggeredBy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TRIGGEREDBY_SOURCE",
+              "variable": "src-triggeredBy"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-triggeredBy",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-triggeredBy",
+              "source": [
+                {
+                  "context": "src-triggeredBy"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-triggeredBy",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.triggeredBy"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.triggeredBy"
+            },
+            {
+              "name": "map-extension-observation",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-OBSERVATION_SOURCE",
+                  "variable": "src-observation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-triggeredBy",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-observation",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-observation",
+                  "source": [
+                    {
+                      "context": "src-observation"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-observation",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "observation"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to observation"
+                }
+              ],
+              "documentation": "Maps to extension: observation | Type: [{'code': 'Extension'}] | Path: Observation.extension.extension"
+            },
+            {
+              "name": "map-extension-type",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-TYPE_SOURCE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-triggeredBy",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-type",
+                  "source": [
+                    {
+                      "context": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-type",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "type"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to type"
+                }
+              ],
+              "documentation": "Maps to extension: type | Type: [{'code': 'Extension'}] | Path: Observation.extension.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.triggeredBy | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.triggeredBy'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.triggeredBy']}] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-value-r5",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VALUE-R5_SOURCE",
+              "variable": "src-value-r5"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-value-r5",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-value-r5",
+              "source": [
+                {
+                  "context": "src-value-r5"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-value-r5",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Observation.value']}] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SUPPORTINGINFO_SOURCE",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-supportingInfo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-supportingInfo",
+              "source": [
+                {
+                  "context": "src-supportingInfo"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-supportingInfo",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0"
+            },
+            {
+              "name": "TODO-resolve-reference-Observation-extension-supportingInfo",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0\"}],\"sourceKey\":null,\"sourceType\":\"Observation\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/Resource\"],\"targetTypes\":[\"Resource\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0 | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0'], 'profile': ['http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo|5.2.0']}] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-labTestKit",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-LABTESTKIT_SOURCE",
+              "variable": "src-labTestKit"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-labTestKit",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-labTestKit",
+              "source": [
+                {
+                  "context": "src-labTestKit"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-labTestKit",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit"
+            },
+            {
+              "name": "TODO-resolve-reference-Observation-extension-labTestKit",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit\"}],\"sourceKey\":null,\"sourceType\":\"Observation\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/StructureDefinition/Device\"],\"targetTypes\":[\"Device\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://hl7.org/fhir/StructureDefinition/Device'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'descript… [truncated; full structure in the registry entry for http://hl7.eu/fhir/laboratory/StructureDefinition/observation-deviceLabTestKit] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-certifiedRefMaterialCodeable",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-CERTIFIEDREFMATERIALCODEABLE_SOURCE",
+              "variable": "src-certifiedRefMaterialCodeable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-certifiedRefMaterialCodeable",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-certifiedRefMaterialCodeable",
+              "source": [
+                {
+                  "context": "src-certifiedRefMaterialCodeable"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-certifiedRefMaterialCodeable",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-certifiedRefMaterialCodeable",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCodeableConcept-coding-translate",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-e16-eulab-full-spec/ConceptMap/cm-certifiedRefMaterialCodeable-9ad38f61"
+                        },
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Observation.extension:certifiedRefMaterialCodeable using http://example.org/StructureMap/source-definition-e16-eulab-full-spec/ConceptMap/cm-certifiedRefMaterialCodeable-9ad38f61"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}, {'path': 'Extension.value[x].text', 'id': 'CodeableConcept.text', 'type': 'string', 'description': 'A human language representation of the concept as seen/selected/uttered by the user who entered the data and/or which represents the intended meaning of the user.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [{'code': '06/140', 'display': 'Pertussis antiserum (human), anti-PT IgG, Lyophilized, 335 IU and anti-PT IgA 65 IU / ampoule; anti-FHA IgG 130 IU and anti-FHA IgA 65 IU / ampoule; anti-69K IgG 65 IU and anti-PT IgA 42 IU / ampoule', 'system': 'http://nibsc.org'}, {'code': '00/588', 'display': 'Hepatitis B virus surface antigen, subtype adw2, genotype A, Lyophilized, 33 IU/vial.', 'system': 'http://nibsc.org'}, {'code': '01/600', 'display': 'Anti-toxoplasma serum (IgG), Lyophilized, 20 IU / ampoule… [truncated; full structure in the registry entry for http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialCodeable] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-certifiedRefMaterialIdentifer",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-CERTIFIEDREFMATERIALIDENTIFER_SOURCE",
+              "variable": "src-certifiedRefMaterialIdentifer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-certifiedRefMaterialIdentifer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-certifiedRefMaterialIdentifer",
+              "source": [
+                {
+                  "context": "src-certifiedRefMaterialIdentifer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-certifiedRefMaterialIdentifer",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer"
+            },
+            {
+              "name": "set-extension-value-certifiedRefMaterialIdentifer",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-certifiedRefMaterialIdentifer",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueIdentifier)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'type_structure': [{'path': 'Extension.value[x].assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization th… [truncated; full structure in the registry entry for http://hl7.eu/fhir/laboratory/StructureDefinition/observation-certifiedRefMaterialIdentifer] | Path: Observation.extension"
+        },
+        {
+          "name": "map-extension-accredited",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ACCREDITED_SOURCE",
+              "variable": "src-accredited"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-accredited",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-accredited",
+              "source": [
+                {
+                  "context": "src-accredited"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-accredited",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/StructureDefinition/laboratory-accredited"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/StructureDefinition/laboratory-accredited"
+            },
+            {
+              "name": "set-extension-value-accredited",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-accredited",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/StructureDefinition/laboratory-accredited | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/StructureDefinition/laboratory-accredited'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://hl7.eu/fhir/StructureDefinition/laboratory-accredited', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Observation.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-focus"
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → Patient|RelatedPerson|Group|Device|Location — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-hasMember",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-hasMember"
+            }
+          ],
+          "documentation": "Reference<Observation.hasMember> → Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-interpretation",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-interpretation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "interpretation",
+              "variable": "tgt-interpretation",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-interpretation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.interpretation | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUED",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.issued | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-method",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-method"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "method",
+              "variable": "tgt-method",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.method | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Observation.partOf> → MedicationAdministration|MedicationDispense|MedicationStatement|Procedure|Immunization|ImagingStudy — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "documentation": "Reference<Observation.performer> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-referenceRange",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-referenceRange"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "referenceRange",
+              "variable": "tgt-referenceRange",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-referenceRange",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-age",
+              "source": [
+                {
+                  "context": "src-referenceRange",
+                  "variable": "src-age"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-referenceRange",
+                  "contextType": "variable",
+                  "element": "age",
+                  "variable": "tgt-age",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Range"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.referenceRange.age | Type: Range | Cardinality: 0..1"
+            },
+            {
+              "name": "map-appliesTo",
+              "source": [
+                {
+                  "context": "src-referenceRange",
+                  "variable": "src-appliesTo"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-referenceRange",
+                  "contextType": "variable",
+                  "element": "appliesTo",
+                  "variable": "tgt-appliesTo",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-appliesTo",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.referenceRange.appliesTo | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-high",
+              "source": [
+                {
+                  "context": "src-referenceRange",
+                  "variable": "src-high"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-referenceRange",
+                  "contextType": "variable",
+                  "element": "high",
+                  "variable": "tgt-high",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.referenceRange.high | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-low",
+              "source": [
+                {
+                  "context": "src-referenceRange",
+                  "variable": "src-low"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-referenceRange",
+                  "contextType": "variable",
+                  "element": "low",
+                  "variable": "tgt-low",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.referenceRange.low | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-referenceRange",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-referenceRange",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Observation.referenceRange.type | Type: CodeableConcept | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Observation.referenceRange | Type: BackboneElement | Cardinality: 0..* | Complex type with 9 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-specimen",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specimen"
+            }
+          ],
+          "documentation": "Reference<Observation.specimen> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "observation_resultslab_eu_lab_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-value-Quantity",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value-Quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-value-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "observation_resultslab_eu_lab_value_x_valueQuantity_value",
+                      "variable": "src-value-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-unit",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "observation_resultslab_eu_lab_value_x_valueQuantity_unit",
+                      "variable": "src-value-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-unit"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "observation_resultslab_eu_lab_value_x_valueQuantity_system",
+                      "variable": "src-value-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-value-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "observation_resultslab_eu_lab_value_x_valueQuantity_code",
+                      "variable": "src-value-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-Quantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period | Cardinality: 0..1 | Choice types: Quantity, CodeableConcept, string, boolean, integer, Range, Ratio, SampledData, time, dateTime, Period"
+        }
+      ]
+    }
+  ]
+}

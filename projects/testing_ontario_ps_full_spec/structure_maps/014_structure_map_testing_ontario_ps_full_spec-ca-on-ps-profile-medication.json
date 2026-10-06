@@ -1,0 +1,427 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-medication-78b9563c",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-medication",
+  "name": "Map_014_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_medication",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-medication",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-medication). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medication",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-medication"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-medication",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Medication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medication"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medication"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "medCode",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Medication.code.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "medSystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Medication.code.coding.system | Type: uri | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Medication.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Medication.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-extension-strength",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-STRENGTH_SOURCE",
+              "variable": "src-strength"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-strength",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-strength",
+              "source": [
+                {
+                  "context": "src-strength"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-strength",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://prescribeit.ca/fhir/StructureDefinition/ext-medication-strength-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://prescribeit.ca/fhir/StructureDefinition/ext-medication-strength-description"
+            }
+          ],
+          "documentation": "Maps to extension: http://prescribeit.ca/fhir/StructureDefinition/ext-medication-strength-description | Type: [{'code': 'Extension', 'profile_canonical': ['http://prescribeit.ca/fhir/StructureDefinition/ext-medication-strength-description'], 'profile': ['http://prescribeit.ca/fhir/StructureDefinition/ext-medication-strength-description']}] | Path: Medication.extension"
+        },
+        {
+          "name": "map-form",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-form"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "form",
+              "variable": "tgt-form",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.form | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-ingredient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-ingredient"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "ingredient",
+              "variable": "tgt-ingredient",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-ingredient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-item",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-item"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-item-CodeableConcept",
+                  "source": [
+                    {
+                      "context": "src-ingredient"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-ingredient",
+                      "contextType": "variable",
+                      "element": "item",
+                      "variable": "tgt-item-CodeableConcept",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-item-coding",
+                      "source": [
+                        {
+                          "context": "src-ingredient"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-item-CodeableConcept",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-item-CodeableConcept-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-item-coding-system",
+                          "source": [
+                            {
+                              "context": "src-ingredient",
+                              "element": "medIngredientSystem",
+                              "variable": "src-item-coding-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-item-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-item-coding-system"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-item-coding-code",
+                          "source": [
+                            {
+                              "context": "src-ingredient",
+                              "element": "medIngredientCode",
+                              "variable": "src-item-coding-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-item-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-item-coding-code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.item[x] | Type: CodeableConcept, Reference | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+            },
+            {
+              "name": "map-strength",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-strength"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "strength",
+                  "variable": "tgt-strength",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.strength | Type: Ratio | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Medication.ingredient | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        }
+      ]
+    }
+  ]
+}

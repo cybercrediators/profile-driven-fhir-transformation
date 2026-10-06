@@ -1,4 +1,4 @@
-# FSH-NiFi Bridge
+# Profile-driven transformation through FHIR StructureMaps
 
 Enables the (automated) usage of standardized, profile-driven StructureMaps based on FHIR Shorthand (FSH) profiles for automated resource transformations via [Matchbox](https://github.com/ahdis/matchbox).
 
@@ -22,7 +22,7 @@ Enables the (automated) usage of standardized, profile-driven StructureMaps base
 
 ## Architecture
 
-![fhir_mapper_overview](./docs/pics/fhir_mapper_overview.png)
+![fhir_mapper_overview](./docs/pics/mapping_overview.png)
 
 - Workflow:
     - Create or select a FHIR/(FSH) project with profiled resources

@@ -1,0 +1,1525 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Biobank-c69ef71d",
+  "url": "http://example.org/StructureMap/source-definition-e16-bbmri-Biobank",
+  "name": "Map_008_structure_map_e16_bbmri_Biobank",
+  "title": "Structure Map for e16_bbmri - Biobank",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Biobank). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-bbmri",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bbmri.de/StructureDefinition/Biobank",
+      "mode": "target",
+      "alias": "Biobank"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Biobank",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_bbmri",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/Biobank"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bbmri.de/StructureDefinition/Biobank"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.city | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_COUNTRY",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.country | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-district",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_DISTRICT",
+                  "variable": "src-district"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "district",
+                  "variable": "tgt-district",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-district"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.district | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-extension-geolocation",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO-MAP-GEOLOCATION_SOURCE",
+                  "variable": "src-geolocation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-geolocation",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-geolocation",
+                  "source": [
+                    {
+                      "context": "src-geolocation"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-geolocation",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/geolocation"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/geolocation"
+                },
+                {
+                  "name": "map-extension-latitude",
+                  "source": [
+                    {
+                      "context": "src-address",
+                      "element": "TODO-MAP-LATITUDE_SOURCE",
+                      "variable": "src-latitude"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-geolocation",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-latitude",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-latitude",
+                      "source": [
+                        {
+                          "context": "src-latitude"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-latitude",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "latitude"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to latitude"
+                    },
+                    {
+                      "name": "set-extension-value-latitude",
+                      "source": [
+                        {
+                          "context": "src-address",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-latitude",
+                          "contextType": "variable",
+                          "element": "valueDecimal",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcValue"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueDecimal)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: latitude | Type: [{'code': 'Extension'}] | Path: Organization.address.extension:geolocation.extension"
+                },
+                {
+                  "name": "map-extension-longitude",
+                  "source": [
+                    {
+                      "context": "src-address",
+                      "element": "TODO-MAP-LONGITUDE_SOURCE",
+                      "variable": "src-longitude"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-geolocation",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-longitude",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-longitude",
+                      "source": [
+                        {
+                          "context": "src-longitude"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-longitude",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "longitude"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to longitude"
+                    },
+                    {
+                      "name": "set-extension-value-longitude",
+                      "source": [
+                        {
+                          "context": "src-address",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-longitude",
+                          "contextType": "variable",
+                          "element": "valueDecimal",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcValue"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueDecimal)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: longitude | Type: [{'code': 'Extension'}] | Path: Organization.address.extension:geolocation.extension"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/geolocation | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/geolocation'], 'profile': ['http://hl7.org/fhir/StructureDefinition/geolocation']}] | Path: Organization.address.extension"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.line | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-address",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.postalCode | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.state | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.type | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Organization.address | Type: Address | Cardinality: 1..* | Complex type with 12 child elements"
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.alias | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-contact-head",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact-head",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-contact-head-name",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-CONTACT-HEAD-NAME_SOURCE",
+                  "variable": "src-contact-head-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-head",
+                  "contextType": "variable",
+                  "element": "name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-head-purpose",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-CONTACT-HEAD-PURPOSE_SOURCE",
+                  "variable": "src-contact-head-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-head",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice head of Organization.contact (type BackboneElement)"
+        },
+        {
+          "name": "map-contact-contact",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact-contact",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-contact-contact-address",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-CONTACT-CONTACT-ADDRESS_SOURCE",
+                  "variable": "src-contact-contact-address"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-contact",
+                  "contextType": "variable",
+                  "element": "address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-contact-purpose",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-CONTACT-CONTACT-PURPOSE_SOURCE",
+                  "variable": "src-contact-contact-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-contact",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-contact-contact-telecom",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-CONTACT-CONTACT-TELECOM_SOURCE",
+                  "variable": "src-contact-contact-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact-contact",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice contact of Organization.contact (type BackboneElement)"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<Organization.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DESCRIPTION_SOURCE",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-description",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-description",
+              "source": [
+                {
+                  "context": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-description",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/OrganizationDescription"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/OrganizationDescription"
+            },
+            {
+              "name": "set-extension-value-description",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-description",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/OrganizationDescription | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/OrganizationDescription'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/OrganizationDescription', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'string'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-bioresourceReference",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BIORESOURCEREFERENCE_SOURCE",
+              "variable": "src-bioresourceReference"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-bioresourceReference",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-bioresourceReference",
+              "source": [
+                {
+                  "context": "src-bioresourceReference"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bioresourceReference",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/BioresourceReference"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/BioresourceReference"
+            },
+            {
+              "name": "set-extension-value-bioresourceReference",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-bioresourceReference",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/BioresourceReference | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/BioresourceReference'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/BioresourceReference', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'string'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Citation reference', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-juridicalPerson",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-JURIDICALPERSON_SOURCE",
+              "variable": "src-juridicalPerson"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-juridicalPerson",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-juridicalPerson",
+              "source": [
+                {
+                  "context": "src-juridicalPerson"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-juridicalPerson",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/JuridicalPerson"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/JuridicalPerson"
+            },
+            {
+              "name": "set-extension-value-juridicalPerson",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-juridicalPerson",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/JuridicalPerson | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/JuridicalPerson'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/JuridicalPerson', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'string'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-itSupport",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ITSUPPORT_SOURCE",
+              "variable": "src-itSupport"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-itSupport",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-itSupport",
+              "source": [
+                {
+                  "context": "src-itSupport"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-itSupport",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/ITSupport"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/ITSupport"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/ITSupport | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/ITSupport'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:itSupportAvailable', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'IT support available', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'itSupportAvailable', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:itSupportAvailable', 'slice_selector': 'itSupportAvailable', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:itSupportAvailable.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [{'path': 'Extension.extension.extension.extension', 'id': 'Extension.extension:itSupportAvailable.extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines … [truncated; full structure in the registry entry for https://fhir.bbmri.de/StructureDefinition/ITSupport] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-partnerCharterSigned",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PARTNERCHARTERSIGNED_SOURCE",
+              "variable": "src-partnerCharterSigned"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-partnerCharterSigned",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-partnerCharterSigned",
+              "source": [
+                {
+                  "context": "src-partnerCharterSigned"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-partnerCharterSigned",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/PartnerCharterSigned"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/PartnerCharterSigned"
+            },
+            {
+              "name": "set-extension-value-partnerCharterSigned",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-partnerCharterSigned",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/PartnerCharterSigned | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/PartnerCharterSigned'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/PartnerCharterSigned', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-collaboration",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-COLLABORATION_SOURCE",
+              "variable": "src-collaboration"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-collaboration",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-collaboration",
+              "source": [
+                {
+                  "context": "src-collaboration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-collaboration",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/Collaboration"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/Collaboration"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/Collaboration | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/Collaboration'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:commercial', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Commercial collaboration', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'commercial', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:commercial', 'slice_selector': 'commercial', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:commercial.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [{'path': 'Extension.extension.extension.extension', 'id': 'Extension.extension:commercial.extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions i… [truncated; full structure in the registry entry for https://fhir.bbmri.de/StructureDefinition/Collaboration] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-capabilities",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-CAPABILITIES_SOURCE",
+              "variable": "src-capabilities"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-capabilities",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-capabilities",
+              "source": [
+                {
+                  "context": "src-capabilities"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-capabilities",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/Capabilities"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/Capabilities"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-capabilities",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-valueCodeableConcept-coding",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-valueCodeableConcept-system",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://fhir.bbmri.de/CodeSystem/BiobankCapabilities"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-valueCodeableConcept-code",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-e16-bbmri/ConceptMap/cm-capabilities-e35555b7"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Organization.extension:capabilities using http://example.org/StructureMap/source-definition-e16-bbmri/ConceptMap/cm-capabilities-e35555b7"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/Capabilities | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/Capabilities'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/Capabilities', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': … [truncated; full structure in the registry entry for https://fhir.bbmri.de/StructureDefinition/Capabilities] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-qualityStandard",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-QUALITYSTANDARD_SOURCE",
+              "variable": "src-qualityStandard"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-qualityStandard",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-qualityStandard",
+              "source": [
+                {
+                  "context": "src-qualityStandard"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-qualityStandard",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/QualityStandard"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bbmri.de/StructureDefinition/QualityStandard"
+            },
+            {
+              "name": "map-valueCodeableConcept-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-qualityStandard",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-valueCodeableConcept-coding",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Organization.extension:qualityStandard using TODO-resolveConceptMap"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bbmri.de/StructureDefinition/QualityStandard | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bbmri.de/StructureDefinition/QualityStandard'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bbmri.de/StructureDefinition/QualityStandard', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_l… [truncated; full structure in the registry entry for https://fhir.bbmri.de/StructureDefinition/QualityStandard] | Path: Organization.extension"
+        },
+        {
+          "name": "map-identifier-Bbmri-EricId",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-Bbmri-EricId",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-Bbmri-EricId-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-Bbmri-EricId",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://www.bbmri-eric.eu/"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice Bbmri-EricId of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NAME",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.type | Type: CodeableConcept | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,414 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Observation-Profile-89beddef",
+  "url": "http://example.org/StructureMap/source-definition-testing-capable-full-spec-Observation_Profile",
+  "name": "Map_006_structure_map_testing_capable_full_spec_Observation_Profile",
+  "title": "Structure Map for testing_capable_full_spec - Observation_Profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Observation_Profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-capable-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://capable-project.eu/data/fhir/StructureDefinition/Observation_Profile",
+      "mode": "target",
+      "alias": "Observation_Profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Observation-Profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_capable_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Observation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://capable-project.eu/data/fhir/StructureDefinition/Observation_Profile"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://capable-project.eu/data/fhir/StructureDefinition/Observation_Profile"
+        },
+        {
+          "name": "map-bodySite",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-bodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "bodySite",
+              "variable": "tgt-bodySite",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-bodySite",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-bodySite",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Observation.bodySite.coding.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Observation.bodySite.coding.system | Type: uri | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Observation.bodySite.coding | Type: Coding | Cardinality: 1..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Observation.bodySite | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCodeSystem",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "obsCode",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Observation.code"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "obsEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "obsEffective",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.effective[x] | Type: dateTime | Cardinality: 1..1 | Choice types: dateTime"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-focus",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-focus"
+            }
+          ],
+          "documentation": "Reference<Observation.focus> → MedicationRequest|ServiceRequest|Goal|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.note | Type: Annotation | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "final"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Observation-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Observation.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-value",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-value"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "value",
+              "variable": "tgt-value",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Observation.value[x] | Type: Quantity, CodeableConcept, string | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

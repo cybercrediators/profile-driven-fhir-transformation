@@ -1,0 +1,275 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Communication-Profile-8cb45a00",
+  "url": "http://example.org/StructureMap/source-definition-testing-capable-full-spec-Communication_Profile",
+  "name": "Map_001_structure_map_testing_capable_full_spec_Communication_Profile",
+  "title": "Structure Map for testing_capable_full_spec - Communication_Profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Communication_Profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-capable-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://capable-project.eu/data/fhir/StructureDefinition/Communication_Profile",
+      "mode": "target",
+      "alias": "Communication_Profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Communication-Profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_capable_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Communication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://capable-project.eu/data/fhir/StructureDefinition/Communication_Profile"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://capable-project.eu/data/fhir/StructureDefinition/Communication_Profile"
+        },
+        {
+          "name": "map-category-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-category-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://capable-project.eu/data/dict/comm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "commCategoryCode",
+                      "variable": "src-category-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-category-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Communication.category"
+        },
+        {
+          "name": "map-payload",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-payload"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payload",
+              "variable": "tgt-payload",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-content",
+              "source": [
+                {
+                  "context": "src-payload",
+                  "element": "commPayload",
+                  "variable": "src-content"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-content-string",
+                  "source": [
+                    {
+                      "context": "src-payload",
+                      "element": "commPayload",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payload",
+                      "contextType": "variable",
+                      "element": "content",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.payload.content[x] | Type: string | Cardinality: 1..1 | Choice types: string"
+            }
+          ],
+          "documentation": "Maps to Communication.payload | Type: BackboneElement | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "in-progress"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Communication.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

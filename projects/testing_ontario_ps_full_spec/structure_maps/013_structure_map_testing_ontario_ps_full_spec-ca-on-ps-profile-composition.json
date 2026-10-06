@@ -1,0 +1,1839 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-composition-cf55f3d7",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-composition",
+  "name": "Map_013_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_composition",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-composition",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-composition). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-composition",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-composition"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-composition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Composition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-composition"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-composition"
+        },
+        {
+          "name": "map-attester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-attester"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "attester",
+              "variable": "tgt-attester",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-attester",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-mode",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "element": "compAttesterMode",
+                  "variable": "src-mode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-attester",
+                  "contextType": "variable",
+                  "element": "mode",
+                  "variable": "tgt-mode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-mode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.attester.mode | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-party",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "variable": "src-party"
+                }
+              ],
+              "documentation": "Reference<Composition.attester.party> → PractitionerRole|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-attester",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.attester.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Composition.attester | Type: BackboneElement | Cardinality: 1..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-author-slices",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"author\",\"referenceMode\":\"urn\",\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-device\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-device\"]}"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-custodian",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-custodian"
+            }
+          ],
+          "documentation": "Reference<Composition.custodian> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "compDate",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.date | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "compIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.identifier.system | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "compIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Composition.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-relatesTo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relatesTo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "relatesTo",
+              "variable": "tgt-relatesTo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-relatesTo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "element": "TODO_MAP_CODE",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relatesTo",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.relatesTo.code | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-target",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "variable": "src-target"
+                }
+              ],
+              "documentation": "Reference<Composition.relatesTo.target[x]> → Composition — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Composition.relatesTo | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-section-sectionMedications",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionMedications",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionMedications-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionMedications",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionMedications-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionMedications-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionMedications-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionMedications-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionMedications-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionMedications-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionMedications-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionMedications-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "10160-0"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionMedications-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitleMeds",
+                  "variable": "src-section-sectionMedications-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionMedications",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionMedications-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionMedications-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionMedications",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionMedications-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionMedications-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextMedsStatus",
+                      "variable": "src-section-sectionMedications-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionMedications-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionMedications-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionMedications-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextMedsDiv",
+                      "variable": "src-section-sectionMedications-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionMedications-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionMedications-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionMedic-9abee425",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"10160-0\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationstatement\",\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationrequest\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationstatement\",\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-medicationrequest\"]}"
+            }
+          ],
+          "documentation": "Slice sectionMedications of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-section-sectionAllergies",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionAllergies",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionAllergies-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionAllergies",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionAllergies-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionAllergies-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionAllergies-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionAllergies-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionAllergies-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionAllergies-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionAllergies-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionAllergies-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "48765-2"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionAllergies-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitleAllergies",
+                  "variable": "src-section-sectionAllergies-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionAllergies",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionAllergies-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionAllergies-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionAllergies",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionAllergies-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionAllergies-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextAllergiesStatus",
+                      "variable": "src-section-sectionAllergies-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionAllergies-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionAllergies-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionAllergies-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextAllergiesDiv",
+                      "variable": "src-section-sectionAllergies-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionAllergies-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionAllergies-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionAller-968755fc",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"48765-2\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-allergyintolerance\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-allergyintolerance\"]}"
+            }
+          ],
+          "documentation": "Slice sectionAllergies of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-section-sectionProblems",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionProblems",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionProblems-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProblems",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionProblems-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionProblems-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProblems-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionProblems-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionProblems-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionProblems-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionProblems-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionProblems-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "11450-4"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionProblems-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitleProblems",
+                  "variable": "src-section-sectionProblems-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProblems",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionProblems-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionProblems-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProblems",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionProblems-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionProblems-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextProblemsStatus",
+                      "variable": "src-section-sectionProblems-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProblems-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionProblems-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionProblems-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextProblemsDiv",
+                      "variable": "src-section-sectionProblems-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProblems-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionProblems-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionProbl-43b53f2f",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"11450-4\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-condition\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-condition\"]}"
+            }
+          ],
+          "documentation": "Slice sectionProblems of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-section-sectionProceduresHx",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionProceduresHx",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionProceduresHx-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProceduresHx",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionProceduresHx-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionProceduresHx-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProceduresHx-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionProceduresHx-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionProceduresHx-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionProceduresHx-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionProceduresHx-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionProceduresHx-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "47519-4"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionProceduresHx-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitleProcs",
+                  "variable": "src-section-sectionProceduresHx-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProceduresHx",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionProceduresHx-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionProceduresHx-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionProceduresHx",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionProceduresHx-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionProceduresHx-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextProcsStatus",
+                      "variable": "src-section-sectionProceduresHx-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProceduresHx-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionProceduresHx-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionProceduresHx-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextProcsDiv",
+                      "variable": "src-section-sectionProceduresHx-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionProceduresHx-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionProceduresHx-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionProce-3fcab365",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"47519-4\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-procedure\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-procedure\"]}"
+            }
+          ],
+          "documentation": "Slice sectionProceduresHx of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-section-sectionImmunizations",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionImmunizations",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionImmunizations-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionImmunizations",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionImmunizations-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionImmunizations-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionImmunizations-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionImmunizations-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionImmunizations-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionImmunizations-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionImmunizations-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionImmunizations-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "11369-6"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionImmunizations-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitleImm",
+                  "variable": "src-section-sectionImmunizations-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionImmunizations",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionImmunizations-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionImmunizations-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionImmunizations",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionImmunizations-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionImmunizations-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextImmStatus",
+                      "variable": "src-section-sectionImmunizations-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionImmunizations-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionImmunizations-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionImmunizations-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextImmDiv",
+                      "variable": "src-section-sectionImmunizations-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionImmunizations-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionImmunizations-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionImmun-477d57cd",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"11369-6\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-immunization\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-immunization\"]}"
+            }
+          ],
+          "documentation": "Slice sectionImmunizations of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-section-sectionPastIllnessHx",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section-sectionPastIllnessHx",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-section-sectionPastIllnessHx-code",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionPastIllnessHx",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-section-sectionPastIllnessHx-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-section-sectionPastIllnessHx-code-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionPastIllnessHx-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-section-sectionPastIllnessHx-code-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-section-sectionPastIllnessHx-code-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionPastIllnessHx-code-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://loinc.org"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-section-sectionPastIllnessHx-code-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-section-sectionPastIllnessHx-code-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "11348-0"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionPastIllnessHx-title",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "compTitlePastIll",
+                  "variable": "src-section-sectionPastIllnessHx-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionPastIllnessHx",
+                  "contextType": "variable",
+                  "element": "title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-section-sectionPastIllnessHx-title"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-section-sectionPastIllnessHx-text",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section-sectionPastIllnessHx",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-section-sectionPastIllnessHx-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-section-sectionPastIllnessHx-text-status",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextPastIllStatus",
+                      "variable": "src-section-sectionPastIllnessHx-text-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionPastIllnessHx-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionPastIllnessHx-text-status"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-section-sectionPastIllnessHx-text-div",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTextPastIllDiv",
+                      "variable": "src-section-sectionPastIllnessHx-text-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-section-sectionPastIllnessHx-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-section-sectionPastIllnessHx-text-div"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-section-sectionPastI-1a88a3cf",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"all\",\"path\":\"section.entry\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"code\",\"path\":\"section\",\"value\":{\"coding\":[{\"code\":\"11348-0\",\"system\":\"http://loinc.org\"}]}}],\"sourceKey\":null,\"sourceType\":\"Composition\",\"targetKey\":null,\"targetProfiles\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-condition\"],\"targetTypes\":[\"http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-condition\"]}"
+            }
+          ],
+          "documentation": "Slice sectionPastIllnessHx of Composition.section (type BackboneElement)"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "compStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Composition.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "compTitle",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.title | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "set-fixed-type",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-fixed-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-fixed-type-coding-0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-fixed-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-fixed-type-coding-0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-type-coding-0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://loinc.org"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-type-coding-0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-type-coding-0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "60591-5"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for type"
+        }
+      ]
+    }
+  ]
+}
