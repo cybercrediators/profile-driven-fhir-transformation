@@ -1,0 +1,1626 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-epa-medication-statement-a86b99c7",
+  "url": "http://example.org/StructureMap/source-definition-e16-epamed-full-spec-epa-medication-statement",
+  "name": "Map_006_structure_map_e16_epamed_full_spec_epa_medication_statement",
+  "title": "Structure Map for e16_epamed_full_spec - epa-medication-statement",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: epa-medication-statement). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-epamed-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement",
+      "mode": "target",
+      "alias": "epa-medication-statement"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-epa-medication-statement",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_epamed_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationStatement",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medication-statement"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.basedOn> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.category | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-context",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-context"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.context> → Encounter|EpisodeOfCare — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dateAsserted",
+          "source": [
+            {
+              "context": "source",
+              "element": "epa_medication_statement_dateAsserted",
+              "variable": "src-dateAsserted"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dateAsserted",
+              "variable": "tgt-dateAsserted",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-dateAsserted"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.dateAsserted | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-derivedFrom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-derivedFrom"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.derivedFrom> → MedicationRequest|MedicationDispense — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosage",
+              "variable": "tgt-dosage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-doseAndRate",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-doseAndRate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "doseAndRate",
+                  "variable": "tgt-doseAndRate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-dose",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-dose"
+                    }
+                  ],
+                  "target": [],
+                  "rule": [
+                    {
+                      "name": "map-dose-Quantity",
+                      "source": [
+                        {
+                          "context": "src-doseAndRate"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-doseAndRate",
+                          "contextType": "variable",
+                          "element": "dose",
+                          "variable": "tgt-dose-Quantity",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Quantity"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-dose-value",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "epa_medication_statement_dosage_doseAndRate_dose_x_doseQuantity_value",
+                              "variable": "src-dose-value"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "value",
+                              "transform": "cast",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-value"
+                                },
+                                {
+                                  "valueString": "decimal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-dose-unit",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "epa_medication_statement_dosage_doseAndRate_dose_x_doseQuantity_unit",
+                              "variable": "src-dose-unit"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "unit",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-unit"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-dose-system",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "epa_medication_statement_dosage_doseAndRate_dose_x_doseQuantity_system",
+                              "variable": "src-dose-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-system"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-dose-code",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "epa_medication_statement_dosage_doseAndRate_dose_x_doseQuantity_code",
+                              "variable": "src-dose-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.dosage.doseAndRate.dose[x] | Type: Quantity | Cardinality: 0..1 | Choice types: Quantity"
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.doseAndRate | Type: Element | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-repeat",
+                  "source": [
+                    {
+                      "context": "src-timing",
+                      "variable": "src-repeat"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-timing",
+                      "contextType": "variable",
+                      "element": "repeat",
+                      "variable": "tgt-repeat",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "BackboneElement"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-frequency",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "epa_medication_statement_dosage_timing_repeat_frequency",
+                          "variable": "src-frequency"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "frequency",
+                          "variable": "tgt-frequency",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-frequency"
+                            },
+                            {
+                              "valueString": "positiveInt"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationStatement.dosage.timing.repeat.frequency | Type: positiveInt"
+                    },
+                    {
+                      "name": "map-period",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "epa_medication_statement_dosage_timing_repeat_period",
+                          "variable": "src-period"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "period",
+                          "variable": "tgt-period",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-period"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationStatement.dosage.timing.repeat.period | Type: decimal"
+                    },
+                    {
+                      "name": "map-periodUnit",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "element": "epa_medication_statement_dosage_timing_repeat_periodUnit",
+                          "variable": "src-periodUnit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-repeat",
+                          "contextType": "variable",
+                          "element": "periodUnit",
+                          "variable": "tgt-periodUnit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-periodUnit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationStatement.dosage.timing.repeat.periodUnit | Type: code"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.dosage.timing.repeat | Type: BackboneElement"
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.timing | Type: Timing | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.dosage | Type: Dosage | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-Period",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "variable": "tgt-effective-Period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-effective-start",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "epa_medication_statement_effective_x_effectivePeriod_start",
+                      "variable": "src-effective-start"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-effective-Period",
+                      "contextType": "variable",
+                      "element": "start",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-effective-start"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.effective[x] | Type: dateTime, Period | Cardinality: 0..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "map-extension-context",
+          "source": [
+            {
+              "context": "source",
+              "element": "epa_medication_statement_extension_context_value_x",
+              "variable": "src-context"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-context",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-context",
+              "source": [
+                {
+                  "context": "src-context"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-context",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/epa-medication/StructureDefinition/context-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/epa-medication/StructureDefinition/context-extension"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "epa_medication_statement_extension_context_value_x",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "epa_medication_statement_extension_context_value_x",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-context",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.extension.value[x] | Type: code | Cardinality: 1..1 | Choice types: code"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/epa-medication/StructureDefinition/context-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/epa-medication/StructureDefinition/context-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/epa-medication/StructureDefinition/context-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Context of the resource', 'is_required': True, 'fixed_value': [], 'options': [{'code': 'PRESCRIPTION', 'display': 'Prescription', 'system': 'https://gematik.de/fhir/epa-medication/CodeSystem/context-code', 'version': '1.3.0'}, {'code': 'MANUAL', 'display': 'Manual Entry', 'system': 'https://gematik.de/fhir/epa-medication/CodeSystem/context-code', 'version': '1.3.0'}, {'code': 'EMP', 'display': 'eMP', 'system': 'https://gematik.de/fhir/epa-medication/CodeSystem/context-code', 'version': '1.3.0'}], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'https://gematik.de/fhir/epa-medication/ValueSet/context-code', 'children': []}]]}] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-extension-rxPrescriptionProcessIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RXPRESCRIPTIONPROCESSIDENTIFIER_SOURCE",
+              "variable": "src-rxPrescriptionProcessIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-rxPrescriptionProcessIdentifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-rxPrescriptionProcessIdentifier",
+              "source": [
+                {
+                  "context": "src-rxPrescriptionProcessIdentifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-rxPrescriptionProcessIdentifier",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-rxPrescriptionProcessIdentifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-resolve-reference-assigner",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "variable": "src-assigner"
+                    }
+                  ],
+                  "documentation": "Reference<.assigner> → Organization — resolve via bundle assembler"
+                },
+                {
+                  "name": "map-period",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "variable": "src-period"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "period",
+                      "variable": "tgt-period",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Period"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.extension.value[x].period | Type: Period | Cardinality: 0..1"
+                },
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://gematik.de/fhir/epa-medication/sid/rx-prescription-process-identifier"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-type",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "variable": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "type",
+                      "variable": "tgt-type",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-type",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_CODE",
+                              "variable": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to MedicationStatement.extension.value[x].type.coding.code | Type: code | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_DISPLAY",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to MedicationStatement.extension.value[x].type.coding.display | Type: string | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_SYSTEM",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to MedicationStatement.extension.value[x].type.coding.system | Type: uri | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-userSelected",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_USERSELECTED",
+                              "variable": "src-userSelected"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "userSelected",
+                              "variable": "tgt-userSelected",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-userSelected"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to MedicationStatement.extension.value[x].type.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-version",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_VERSION",
+                              "variable": "src-version"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "version",
+                              "variable": "tgt-version",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-version"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to MedicationStatement.extension.value[x].type.coding.version | Type: string | Cardinality: 0..1"
+                        }
+                      ],
+                      "documentation": "Maps to MedicationStatement.extension.value[x].type.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.extension.value[x].type | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-use",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "element": "TODO_MAP_USE",
+                      "variable": "src-use"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "use",
+                      "variable": "tgt-use",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-use"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.extension.value[x].use | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.extension.value[x].value | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.extension.value[x] | Type: Identifier | Cardinality: 0..1 | Complex type with 8 child elements"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'profile_canonical': ['https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier'], 'profile': [[{'path': 'Identifier.assigner', 'id': 'Identifier.assigner', 'type': [{'code': 'Reference', 'targetProfile': ['http://hl7.org/fhir/StructureDefinition/Organization|4.0.1'], 'type_structure': [{'path': 'Identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Identifier.assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Identifier.assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Identifier.assigner.identifier.assigner.identifier.assigner', 'id': 'Identifi… [truncated; full structure in the registry entry for https://gematik.de/fhir/epa-medication/StructureDefinition/rx-prescription-process-identifier-extension] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-extension-processingEvent",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PROCESSINGEVENT_SOURCE",
+              "variable": "src-processingEvent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-processingEvent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-processingEvent",
+              "source": [
+                {
+                  "context": "src-processingEvent"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-processingEvent",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medicationstatement-processing-event-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medicationstatement-processing-event-extension"
+            },
+            {
+              "name": "map-extension-event",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-EVENT_SOURCE",
+                  "variable": "src-event"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-processingEvent",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-event",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-event",
+                  "source": [
+                    {
+                      "context": "src-event"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-event",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "event"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to event"
+                }
+              ],
+              "documentation": "Maps to extension: event | Type: [{'code': 'Extension'}] | Path: MedicationStatement.extension.extension"
+            },
+            {
+              "name": "map-extension-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-DATETIME_SOURCE",
+                  "variable": "src-dateTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-processingEvent",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-dateTime",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-dateTime",
+                  "source": [
+                    {
+                      "context": "src-dateTime"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-dateTime",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to dateTime"
+                }
+              ],
+              "documentation": "Maps to extension: dateTime | Type: [{'code': 'Extension'}] | Path: MedicationStatement.extension.extension"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medicationstatement-processing-event-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medicationstatement-processing-event-extension'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 2, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:event', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'event', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:event', 'slice_selector': 'event', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:event.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '0'}, 'description': 'Extension', 'is_required': False, 'is_prohibited': True, 'fixed_value': [], 'options': [], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:event.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:event.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'event', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:event.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Verarbeitungsereignis', 'is_required': T… [truncated; full structure in the registry entry for https://gematik.de/fhir/epa-medication/StructureDefinition/epa-medicationstatement-processing-event-extension] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-extension-renderedDosageInstruction",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RENDEREDDOSAGEINSTRUCTION_SOURCE",
+              "variable": "src-renderedDosageInstruction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-renderedDosageInstruction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-renderedDosageInstruction",
+              "source": [
+                {
+                  "context": "src-renderedDosageInstruction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-renderedDosageInstruction",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationStatement.renderedDosageInstruction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationStatement.renderedDosageInstruction"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationStatement.renderedDosageInstruction | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationStatement.renderedDosageInstruction'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-MedicationStatement.renderedDosageInstruction']}] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-extension-generatedDosageInstructionsMeta",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENERATEDDOSAGEINSTRUCTIONSMETA_SOURCE",
+              "variable": "src-generatedDosageInstructionsMeta"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-generatedDosageInstructionsMeta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-generatedDosageInstructionsMeta",
+              "source": [
+                {
+                  "context": "src-generatedDosageInstructionsMeta"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-generatedDosageInstructionsMeta",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta"
+            },
+            {
+              "name": "map-extension-language",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-LANGUAGE_SOURCE",
+                  "variable": "src-language"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-generatedDosageInstructionsMeta",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-language",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-language",
+                  "source": [
+                    {
+                      "context": "src-language"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-language",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "language"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to language"
+                }
+              ],
+              "documentation": "Maps to extension: language | Type: [{'code': 'Extension'}] | Path: MedicationStatement.extension.extension"
+            },
+            {
+              "name": "map-extension-algorithmVersion",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-ALGORITHMVERSION_SOURCE",
+                  "variable": "src-algorithmVersion"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-generatedDosageInstructionsMeta",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-algorithmVersion",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-algorithmVersion",
+                  "source": [
+                    {
+                      "context": "src-algorithmVersion"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-algorithmVersion",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "algorithmVersion"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to algorithmVersion"
+                }
+              ],
+              "documentation": "Maps to extension: algorithmVersion | Type: [{'code': 'Extension'}] | Path: MedicationStatement.extension.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta | Type: [{'code': 'Extension', 'profile_canonical': ['http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta'], 'profile': ['http://ig.fhir.de/igs/medication/StructureDefinition/GeneratedDosageInstructionsMeta']}] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-informationSource",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-informationSource"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.informationSource> → Patient|Practitioner|PractitionerRole|RelatedPerson|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.medication[x]> → Medication — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.partOf> → MedicationAdministration|MedicationDispense|MedicationStatement|Procedure|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.reasonReference> → Condition|Observation|DiagnosticReport — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "epa_medication_statement_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.statusReason | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "subject",
+              "variable": "tgt-subject",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-subject",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-subject",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "epa_medication_statement_subject_identifier_system",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.subject.identifier.system | Type: uri"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "epa_medication_statement_subject_identifier_value",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.subject.identifier.value | Type: string"
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.subject.identifier | Type: Identifier | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Reference MedicationStatement.subject populated from explicitly authored child mappings."
+        }
+      ]
+    }
+  ]
+}

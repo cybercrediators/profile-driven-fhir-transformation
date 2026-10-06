@@ -1,0 +1,434 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-genomic-study-2bbef3ac",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec-mii-pr-molgen-genomic-study",
+  "name": "Map_016_structure_map_testing_kds_molgen_full_spec_mii_pr_molgen_genomic_study",
+  "title": "Structure Map for testing_kds_molgen_full_spec - mii-pr-molgen-genomic-study",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-molgen-genomic-study). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study",
+      "mode": "target",
+      "alias": "mii-pr-molgen-genomic-study"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-genomic-study",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Procedure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/mii-pr-molgen-genomic-study"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-coding",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-fixed-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-coding-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/observation-category"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-coding-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "laboratory"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for coding"
+            }
+          ],
+          "documentation": "Maps to Procedure.category | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.code | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Procedure.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-genomic-study-analysis",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENOMIC-STUDY-ANALYSIS_SOURCE",
+              "variable": "src-genomic-study-analysis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-genomic-study-analysis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-genomic-study-analysis",
+              "source": [
+                {
+                  "context": "src-genomic-study-analysis"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genomic-study-analysis",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext"
+            },
+            {
+              "name": "TODO-resolve-reference-Procedure-extension-genomic-stud-4517f680",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "documentation": "FHIRBRIDGE_REFERENCE:{\"match\":\"byOrder\",\"path\":\"extension.valueReference\",\"referenceMode\":\"urn\",\"selectors\":[{\"discriminator\":\"url\",\"path\":\"extension\",\"value\":\"http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext\"}],\"sourceKey\":null,\"sourceType\":\"Procedure\",\"targetKey\":null,\"targetProfiles\":[\"http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis\"],\"targetTypes\":[\"Procedure\"]}"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-analysis-ext']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-referrer",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-REFERRER_SOURCE",
+              "variable": "src-referrer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-referrer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-referrer",
+              "source": [
+                {
+                  "context": "src-referrer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-referrer",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-referrer-ext"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-referrer-ext"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-referrer-ext | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-referrer-ext'], 'profile': ['http://hl7.org/fhir/uv/genomics-reporting/StructureDefinition/genomic-study-referrer-ext']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-performed",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PERFORMED",
+              "variable": "src-performed"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performed",
+              "variable": "tgt-performed",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-performed"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.performed[x] | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Procedure-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Procedure.performer.actor> → Practitioner|PractitionerRole|Organization|Patient|RelatedPerson|Device — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<Procedure.reasonReference> → Condition|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "procStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Procedure.subject> → Patient|Group — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

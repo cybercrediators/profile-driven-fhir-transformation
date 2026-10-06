@@ -1,0 +1,524 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-imr-diagnosticreport-72c61407",
+  "url": "http://example.org/StructureMap/source-definition-e16-imr-imr-diagnosticreport",
+  "name": "Map_003_structure_map_e16_imr_imr_diagnosticreport",
+  "title": "Structure Map for e16_imr - imr-diagnosticreport",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: imr-diagnosticreport). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-imr",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-diagnosticreport",
+      "mode": "target",
+      "alias": "imr-diagnosticreport"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-imr-diagnosticreport",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_imr",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-diagnosticreport"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-diagnosticreport"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.code | Type: CodeableConcept | Cardinality: 1..1"
+        },
+        {
+          "name": "map-conclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_CONCLUSION",
+              "variable": "src-conclusion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "conclusion",
+              "variable": "tgt-conclusion",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-conclusion"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.conclusion | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-conclusionCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-conclusionCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "conclusionCode",
+              "variable": "tgt-conclusionCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-conclusionCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.conclusionCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EFFECTIVE",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "effective",
+              "variable": "tgt-effective",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-effective"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.effective[x] | Type: dateTime, Period | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-associatedStudy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ASSOCIATEDSTUDY_SOURCE",
+              "variable": "src-associatedStudy"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-associatedStudy",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-associatedStudy",
+              "source": [
+                {
+                  "context": "src-associatedStudy"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-associatedStudy",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy"
+            }
+          ],
+          "documentation": "Maps to extension: https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy | Type: [{'code': 'Extension', 'profile_canonical': ['https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://hl7.org/fhir/StructureDefinition/ImagingStudy', 'http://hl7.org/fhir/StructureDefinition/DiagnosticReport'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner.display', 'id': 'R… [truncated; full structure in the registry entry for https://profiles.ihe.net/RAD/IMR/StructureDefinition/associatedStudy] | Path: DiagnosticReport.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-imagingStudy",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-imagingStudy"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.imagingStudy> → ImagingStudy — resolve via bundle assembler"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUED",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.issued | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-media",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-media"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "media",
+              "variable": "tgt-media",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-media",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-comment",
+              "source": [
+                {
+                  "context": "src-media",
+                  "element": "TODO_MAP_COMMENT",
+                  "variable": "src-comment"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-media",
+                  "contextType": "variable",
+                  "element": "comment",
+                  "variable": "tgt-comment",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-comment"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DiagnosticReport.media.comment | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-DiagnosticReport-link",
+              "source": [
+                {
+                  "context": "src-media",
+                  "variable": "src-link"
+                }
+              ],
+              "documentation": "Reference<DiagnosticReport.media.link> → Media — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.media | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-presentedForm-html",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "presentedForm",
+              "variable": "tgt-presentedForm-html",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Attachment"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-presentedForm-html-contentType",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-presentedForm-html",
+                  "contextType": "variable",
+                  "element": "contentType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "text/html"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice html of DiagnosticReport.presentedForm (type Attachment)"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-result",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-result"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.result> → Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-resultsInterpreter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-resultsInterpreter"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.resultsInterpreter> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-specimen",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specimen"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.specimen> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

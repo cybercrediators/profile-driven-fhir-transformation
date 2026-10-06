@@ -1,0 +1,395 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-MedicationAdministration-db89a0d8",
+  "url": "http://example.org/StructureMap/source-definition-testing-capable-full-spec-MedicationAdministration",
+  "name": "Map_003_structure_map_testing_capable_full_spec_MedicationAdministration",
+  "title": "Structure Map for testing_capable_full_spec - MedicationAdministration",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: MedicationAdministration). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-capable-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://capable-project.eu/data/fhir/StructureDefinition/MedicationAdministration",
+      "mode": "target",
+      "alias": "MedicationAdministration"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-MedicationAdministration",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_capable_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationAdministration",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://capable-project.eu/data/fhir/StructureDefinition/MedicationAdministration"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://capable-project.eu/data/fhir/StructureDefinition/MedicationAdministration"
+        },
+        {
+          "name": "map-dosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosage",
+              "variable": "tgt-dosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-dose",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-dose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "dose",
+                  "variable": "tgt-dose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-dose",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-dose",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationAdministration.dosage.dose.value | Type: decimal | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to MedicationAdministration.dosage.dose | Type: Quantity | Cardinality: 0..1 | Complex type with 3 child elements"
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.dosage | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "medAdminEffective",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "medAdminEffective",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.effective[x] | Type: dateTime | Cardinality: 1..1 | Choice types: dateTime"
+        },
+        {
+          "name": "map-medication-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "medication",
+              "variable": "tgt-medication-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-medication-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-medication-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-medication-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-medication-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "medAdminCode",
+                      "variable": "src-medication-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-medication-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for MedicationAdministration.medication[x]"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-request",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-request"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.request> → MedicationRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "medAdminStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationAdministration.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationAdministration-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationAdministration.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

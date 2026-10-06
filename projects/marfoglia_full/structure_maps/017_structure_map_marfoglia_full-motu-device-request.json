@@ -1,0 +1,167 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-device-request-75016bca",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-device-request",
+  "name": "Map_017_structure_map_marfoglia_full_motu_device_request",
+  "title": "Structure Map for marfoglia_full - motu-device-request",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-device-request). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-device-request",
+      "mode": "target",
+      "alias": "motu-device-request"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-device-request",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DeviceRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-device-request"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-device-request"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceRequest-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "documentation": "Reference<DeviceRequest.code[x]> → DeviceDefinition — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceRequest-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<DeviceRequest.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "order"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for intent"
+        },
+        {
+          "name": "map-occurrence",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_OCCURRENCE",
+              "variable": "src-occurrence"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "occurrence",
+              "variable": "tgt-occurrence",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-occurrence"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceRequest.occurrence[x] | Type: dateTime, Period, Timing | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<DeviceRequest.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

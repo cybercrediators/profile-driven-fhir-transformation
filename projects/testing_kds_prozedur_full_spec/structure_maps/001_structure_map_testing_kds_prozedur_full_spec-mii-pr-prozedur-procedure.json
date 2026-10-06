@@ -1,0 +1,693 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-prozedur-procedure-74f674e9",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-prozedur-full-spec-mii-pr-prozedur-procedure",
+  "name": "Map_001_structure_map_testing_kds_prozedur_full_spec_mii_pr_prozedur_procedure",
+  "title": "Structure Map for testing_kds_prozedur_full_spec - mii-pr-prozedur-procedure",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-prozedur-procedure). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-prozedur-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure",
+      "mode": "target",
+      "alias": "mii-pr-prozedur-procedure"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-prozedur-procedure",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_prozedur_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Procedure",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Procedure"
+        },
+        {
+          "name": "map-bodySite",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-bodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "bodySite",
+              "variable": "tgt-bodySite",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-bodySite",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.bodySite | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-sct",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-sct",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-sct-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-code",
+                  "source": [
+                    {
+                      "context": "src-category",
+                      "element": "categoryCode",
+                      "variable": "src-coding-sct-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-sct-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice sct of Procedure.category.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Procedure.category | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-sct",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-sct",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-sct-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "procedureCode",
+                      "variable": "src-coding-sct-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-sct-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice sct of Procedure.code.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Procedure.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-extension-Dokumentationsdatum",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DOKUMENTATIONSDATUM_SOURCE",
+              "variable": "src-Dokumentationsdatum"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-Dokumentationsdatum",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-Dokumentationsdatum",
+              "source": [
+                {
+                  "context": "src-Dokumentationsdatum"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Dokumentationsdatum",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum"
+            },
+            {
+              "name": "set-extension-value-Dokumentationsdatum",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-Dokumentationsdatum",
+                  "contextType": "variable",
+                  "element": "valueDateTime",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDateTime)"
+            }
+          ],
+          "documentation": "Maps to extension: http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum | Type: [{'code': 'Extension', 'profile_canonical': ['http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum'], 'profile': ['http://fhir.de/StructureDefinition/ProzedurDokumentationsdatum']}] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-extension-durchfuehrungsabsicht",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DURCHFUEHRUNGSABSICHT_SOURCE",
+              "variable": "src-durchfuehrungsabsicht"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-durchfuehrungsabsicht",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-durchfuehrungsabsicht",
+              "source": [
+                {
+                  "context": "src-durchfuehrungsabsicht"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-durchfuehrungsabsicht",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht"
+            },
+            {
+              "name": "map-valueCoding-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODING",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-durchfuehrungsabsicht",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCoding-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-valueCoding-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-prozedur-full-spec/ConceptMap/cm-durchfuehrungsabsicht-b4cd0f7c"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Procedure.extension:durchfuehrungsabsicht using http://example.org/StructureMap/source-definition-testing-kds-prozedur-full-spec/ConceptMap/cm-durchfuehrungsabsicht-b4cd0f7c"
+            }
+          ],
+          "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht | Type: [{'code': 'Extension', 'profile_canonical': ['https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [{'code': '262202000', 'display': 'Therapeutic', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '363676003', 'display': 'Palliative intent', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '261004008', 'display': 'Diagnostic intent', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '264931009', 'display': 'Symptomatic', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '255231005', 'display': 'Revision - value', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '255302009', 'display': 'Complicated', 'system': 'http://snomed.info/sct', 'version': 'http://snomed.info/sct/900000000000207008/version/20240701'}, {'code': '129428001', 'display': 'Preventive intent', 'system': 'http… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/core/modul-prozedur/StructureDefinition/Durchfuehrungsabsicht] | Path: Procedure.extension"
+        },
+        {
+          "name": "map-focalDevice",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-focalDevice"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "focalDevice",
+              "variable": "tgt-focalDevice",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-focalDevice",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Procedure-manipulated",
+              "source": [
+                {
+                  "context": "src-focalDevice",
+                  "variable": "src-manipulated"
+                }
+              ],
+              "documentation": "Reference<Procedure.focalDevice.manipulated> → Device — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.focalDevice | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-performed",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performed"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-performed-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "performedDateTime",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "performed",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.performed[x] | Type: dateTime, Period | Cardinality: 1..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Procedure-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Procedure.performer.actor> → Practitioner|PractitionerRole|Organization|Patient|RelatedPerson|Device — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Procedure.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Procedure.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Procedure-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Procedure.subject> → Patient|Group — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

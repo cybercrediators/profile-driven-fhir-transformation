@@ -1,0 +1,635 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-PractitionerRole-cbf01ffd",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-full-spec-UKCore-PractitionerRole",
+  "name": "Map_019_structure_map_e16_ukcore_full_spec_UKCore_PractitionerRole",
+  "title": "Structure Map for e16_ukcore_full_spec - UKCore-PractitionerRole",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-PractitionerRole). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-PractitionerRole",
+      "mode": "target",
+      "alias": "UKCore-PractitionerRole"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-PractitionerRole",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "PractitionerRole",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-PractitionerRole"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-PractitionerRole"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-availabilityExceptions",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AVAILABILITYEXCEPTIONS",
+              "variable": "src-availabilityExceptions"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "availabilityExceptions",
+              "variable": "tgt-availabilityExceptions",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-availabilityExceptions"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.availabilityExceptions | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-availableTime",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-availableTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "availableTime",
+              "variable": "tgt-availableTime",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-availableTime",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-allDay",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_ALLDAY",
+                  "variable": "src-allDay"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "allDay",
+                  "variable": "tgt-allDay",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-allDay"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.availableTime.allDay | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "map-availableEndTime",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_AVAILABLEENDTIME",
+                  "variable": "src-availableEndTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "availableEndTime",
+                  "variable": "tgt-availableEndTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-availableEndTime"
+                    },
+                    {
+                      "valueString": "time"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.availableTime.availableEndTime | Type: time | Cardinality: 0..1"
+            },
+            {
+              "name": "map-availableStartTime",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_AVAILABLESTARTTIME",
+                  "variable": "src-availableStartTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "availableStartTime",
+                  "variable": "tgt-availableStartTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-availableStartTime"
+                    },
+                    {
+                      "valueString": "time"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.availableTime.availableStartTime | Type: time | Cardinality: 0..1"
+            },
+            {
+              "name": "map-daysOfWeek",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_DAYSOFWEEK",
+                  "variable": "src-daysOfWeek"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "daysOfWeek",
+                  "variable": "tgt-daysOfWeek",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-daysOfWeek",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-daysOfWeek"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.availableTime.daysOfWeek | Type: code | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.availableTime | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-healthcareService",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-healthcareService"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.healthcareService> → HealthcareService — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-sdsRoleProfileID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-sdsRoleProfileID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-sdsRoleProfileID-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-sdsRoleProfileID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.nhs.uk/Id/sds-role-profile-id"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-sdsRoleProfileID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "uKCore_PractitionerRole_identifier_sdsRoleProfileID_value",
+                  "variable": "src-identifier-sdsRoleProfileID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-sdsRoleProfileID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-sdsRoleProfileID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice sdsRoleProfileID of PractitionerRole.identifier (type Identifier)"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-notAvailable",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-notAvailable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "notAvailable",
+              "variable": "tgt-notAvailable",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-notAvailable",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-notAvailable",
+                  "element": "TODO_MAP_DESCRIPTION",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-notAvailable",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.notAvailable.description | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-during",
+              "source": [
+                {
+                  "context": "src-notAvailable",
+                  "variable": "src-during"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-notAvailable",
+                  "contextType": "variable",
+                  "element": "during",
+                  "variable": "tgt-during",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.notAvailable.during | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.notAvailable | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-practitioner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-practitioner"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.practitioner> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-specialty",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialty"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialty",
+              "variable": "tgt-specialty",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.specialty | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_PractitionerRole_telecom_system",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.system | Type: code"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_PractitionerRole_telecom_use",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.use | Type: code"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_PractitionerRole_telecom_value",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

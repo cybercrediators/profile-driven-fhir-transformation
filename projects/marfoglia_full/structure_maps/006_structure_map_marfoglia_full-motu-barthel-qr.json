@@ -1,0 +1,129 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-barthel-qr-80943a21",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-barthel-qr",
+  "name": "Map_006_structure_map_marfoglia_full_motu_barthel_qr",
+  "title": "Structure Map for marfoglia_full - motu-barthel-qr",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-barthel-qr). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-barthel-qr",
+      "mode": "target",
+      "alias": "motu-barthel-qr"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-barthel-qr",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "QuestionnaireResponse",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-barthel-qr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-barthel-qr"
+        },
+        {
+          "name": "TODO-resolve-reference-QuestionnaireResponse-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<QuestionnaireResponse.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-QuestionnaireResponse-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<QuestionnaireResponse.source> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        }
+      ]
+    }
+  ]
+}

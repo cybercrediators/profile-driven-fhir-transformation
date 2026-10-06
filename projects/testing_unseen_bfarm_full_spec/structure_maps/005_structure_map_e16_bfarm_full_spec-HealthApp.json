@@ -1,0 +1,1358 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-HealthApp-8f87c15d",
+  "url": "http://example.org/StructureMap/source-definition-e16-bfarm-full-spec-HealthApp",
+  "name": "Map_005_structure_map_e16_bfarm_full_spec_HealthApp",
+  "title": "Structure Map for e16_bfarm_full_spec - HealthApp",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: HealthApp). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-bfarm-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bfarm.de/StructureDefinition/HealthApp",
+      "mode": "target",
+      "alias": "HealthApp"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-HealthApp",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_bfarm_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DeviceDefinition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthApp"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bfarm.de/StructureDefinition/HealthApp"
+        },
+        {
+          "name": "map-capability",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-capability"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "capability",
+              "variable": "tgt-capability",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-capability",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-capability",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-capability",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-description",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.capability.description | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-capability",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-capability",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.capability.type | Type: CodeableConcept | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.capability | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.contact | Type: ContactPoint | Cardinality: 0..*"
+        },
+        {
+          "name": "map-deviceName",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-deviceName"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "deviceName",
+              "variable": "tgt-deviceName",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-deviceName",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-deviceName",
+                  "element": "profile_HealthApp_deviceName_name",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-name"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.deviceName.name | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-deviceName",
+                  "element": "profile_HealthApp_deviceName_type",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.deviceName.type | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.deviceName | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-extension-handbook",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HANDBOOK_SOURCE",
+              "variable": "src-handbook"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-handbook",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-handbook",
+              "source": [
+                {
+                  "context": "src-handbook"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-handbook",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook"
+            },
+            {
+              "name": "set-extension-value-handbook",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-handbook",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Attachment"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueAttachment)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Attachment', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/AttachmentHealthApp'], 'profile': [[{'path': 'Attachment.contentType', 'id': 'Attachment.contentType', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Mime type of the content, with charset etc.', 'is_required': False, 'fixed_value': [], 'options': [{'code': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'display': 'Excel', 'system': 'urn:ietf:bcp:13'}, {'code': 'application/json', 'display': 'JSON', 'system': 'urn:ietf:bcp:13'}, {'code': 'application/pdf', 'display': 'PDF', 'system': 'urn:ietf:bcp:13'}, {'code': 'application/xml', 'display': 'XML', 'system': 'urn:ietf:bcp:13'}, {'code': 'text/xml', 'display': 'XML', 'system': 'urn:ietf:bcp:13'}], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'v2', 'map': 'ED.2+ED.3/RP.2+RP.3. Note conversion may be needed if old style values are being used'}, {'identity': 'rim', 'map': './mediaType, ./charset'}], 'is_modifier': False,… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppHandbook] | Path: DeviceDefinition.extension"
+        },
+        {
+          "name": "map-extension-media",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-MEDIA_SOURCE",
+              "variable": "src-media"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-media",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-media",
+              "source": [
+                {
+                  "context": "src-media"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-media",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppMedia"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppMedia"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppMedia | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppMedia'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:icon', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Icon/Logo', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'icon', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:icon', 'slice_selector': 'icon', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:icon.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:icon.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map'… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppMedia] | Path: DeviceDefinition.extension"
+        },
+        {
+          "name": "map-extension-nutzungshinweis",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NUTZUNGSHINWEIS_SOURCE",
+              "variable": "src-nutzungshinweis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nutzungshinweis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nutzungshinweis",
+              "source": [
+                {
+                  "context": "src-nutzungshinweis"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nutzungshinweis",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppNutzungshinweis"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppNutzungshinweis"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppNutzungshinweis | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppNutzungshinweis'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:hoechstdauer', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Höchstdauer', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'hoechstdauer', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:hoechstdauer', 'slice_selector': 'hoechstdauer', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:hoechstdauer.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:hoechstdauer.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppNutzungshinweis] | Path: DeviceDefinition.extension"
+        },
+        {
+          "name": "map-extension-summaries",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SUMMARIES_SOURCE",
+              "variable": "src-summaries"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-summaries",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-summaries",
+              "source": [
+                {
+                  "context": "src-summaries"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-summaries",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppSummaries"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppSummaries"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppSummaries | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppSummaries'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:bewertungsentscheidung', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Bewertungsentscheidung', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'bewertungsentscheidung', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:bewertungsentscheidung', 'slice_selector': 'bewertungsentscheidung', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:bewertungsentscheidung.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:bewertungsentscheidung.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id f… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppSummaries] | Path: DeviceDefinition.extension"
+        },
+        {
+          "name": "map-identifier-digaId",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-digaId",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-digaId-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-digaId",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/Identifier/DigaId"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-digaId-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "profile_HealthApp_identifier_digaId_value",
+                  "variable": "src-identifier-digaId-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-digaId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-digaId-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice digaId of DeviceDefinition.identifier (type Identifier)"
+        },
+        {
+          "name": "map-identifier-healthAppId",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-healthAppId",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-healthAppId-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-healthAppId",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/Identifier/HealthAppId"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-healthAppId-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "profile_HealthApp_identifier_healthAppId_value",
+                  "variable": "src-identifier-healthAppId-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-healthAppId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-healthAppId-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice healthAppId of DeviceDefinition.identifier (type Identifier)"
+        },
+        {
+          "name": "map-languageCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-languageCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "languageCode",
+              "variable": "tgt-languageCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-languageCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.languageCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceDefinition-manufacturer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-manufacturer"
+            }
+          ],
+          "documentation": "Reference<DeviceDefinition.manufacturer[x]> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-material",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-material"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "material",
+              "variable": "tgt-material",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-material",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-allergenicIndicator",
+              "source": [
+                {
+                  "context": "src-material",
+                  "element": "TODO_MAP_ALLERGENICINDICATOR",
+                  "variable": "src-allergenicIndicator"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-material",
+                  "contextType": "variable",
+                  "element": "allergenicIndicator",
+                  "variable": "tgt-allergenicIndicator",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-allergenicIndicator"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.material.allergenicIndicator | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "map-alternate",
+              "source": [
+                {
+                  "context": "src-material",
+                  "element": "TODO_MAP_ALTERNATE",
+                  "variable": "src-alternate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-material",
+                  "contextType": "variable",
+                  "element": "alternate",
+                  "variable": "tgt-alternate",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-alternate"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.material.alternate | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "map-substance",
+              "source": [
+                {
+                  "context": "src-material",
+                  "variable": "src-substance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-material",
+                  "contextType": "variable",
+                  "element": "substance",
+                  "variable": "tgt-substance",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.material.substance | Type: CodeableConcept | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.material | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-modelNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MODELNUMBER",
+              "variable": "src-modelNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "modelNumber",
+              "variable": "tgt-modelNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-modelNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.modelNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-onlineInformation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ONLINEINFORMATION",
+              "variable": "src-onlineInformation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "onlineInformation",
+              "variable": "tgt-onlineInformation",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-onlineInformation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.onlineInformation | Type: uri | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceDefinition-owner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-owner"
+            }
+          ],
+          "documentation": "Reference<DeviceDefinition.owner> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-DeviceDefinition-parentDevice",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-parentDevice"
+            }
+          ],
+          "documentation": "Reference<DeviceDefinition.parentDevice> → DeviceDefinition — resolve via bundle assembler"
+        },
+        {
+          "name": "map-physicalCharacteristics",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-physicalCharacteristics"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "physicalCharacteristics",
+              "variable": "tgt-physicalCharacteristics",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ProdCharacteristic"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.physicalCharacteristics | Type: ProdCharacteristic | Cardinality: 0..1"
+        },
+        {
+          "name": "map-property",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-property"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-property",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.property.type | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-valueCode",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-valueCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "variable": "tgt-valueCode",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-valueCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.property.valueCode | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-valueQuantity",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-valueQuantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "valueQuantity",
+                  "variable": "tgt-valueQuantity",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-valueQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.property.valueQuantity | Type: Quantity | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.property | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-quantity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-quantity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "quantity",
+              "variable": "tgt-quantity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.quantity | Type: Quantity | Cardinality: 0..1"
+        },
+        {
+          "name": "map-safety",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-safety"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "safety",
+              "variable": "tgt-safety",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-safety",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.safety | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-shelfLifeStorage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-shelfLifeStorage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "shelfLifeStorage",
+              "variable": "tgt-shelfLifeStorage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-shelfLifeStorage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ProductShelfLife"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.shelfLifeStorage | Type: ProductShelfLife | Cardinality: 0..*"
+        },
+        {
+          "name": "map-specialization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialization"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialization",
+              "variable": "tgt-specialization",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-systemType",
+              "source": [
+                {
+                  "context": "src-specialization",
+                  "element": "TODO_MAP_SYSTEMTYPE",
+                  "variable": "src-systemType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialization",
+                  "contextType": "variable",
+                  "element": "systemType",
+                  "variable": "tgt-systemType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-systemType"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.specialization.systemType | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-version",
+              "source": [
+                {
+                  "context": "src-specialization",
+                  "element": "TODO_MAP_VERSION",
+                  "variable": "src-version"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialization",
+                  "contextType": "variable",
+                  "element": "version",
+                  "variable": "tgt-version",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-version"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.specialization.version | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.specialization | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.type | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-udiDeviceIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-udiDeviceIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "udiDeviceIdentifier",
+              "variable": "tgt-udiDeviceIdentifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-udiDeviceIdentifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-deviceIdentifier",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_DEVICEIDENTIFIER",
+                  "variable": "src-deviceIdentifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "deviceIdentifier",
+                  "variable": "tgt-deviceIdentifier",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-deviceIdentifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.deviceIdentifier | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-issuer",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_ISSUER",
+                  "variable": "src-issuer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "issuer",
+                  "variable": "tgt-issuer",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-issuer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.issuer | Type: uri | Cardinality: 1..1"
+            },
+            {
+              "name": "map-jurisdiction",
+              "source": [
+                {
+                  "context": "src-udiDeviceIdentifier",
+                  "element": "TODO_MAP_JURISDICTION",
+                  "variable": "src-jurisdiction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiDeviceIdentifier",
+                  "contextType": "variable",
+                  "element": "jurisdiction",
+                  "variable": "tgt-jurisdiction",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-jurisdiction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier.jurisdiction | Type: uri | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.udiDeviceIdentifier | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-url",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_URL",
+              "variable": "src-url"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "url",
+              "variable": "tgt-url",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-url"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.url | Type: uri | Cardinality: 0..1"
+        },
+        {
+          "name": "map-version",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_VERSION",
+              "variable": "src-version"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "version",
+              "variable": "tgt-version",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-version",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-version"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DeviceDefinition.version | Type: string | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,218 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-cio-RegistrationInformation-fcaee182",
+  "url": "http://example.org/StructureMap/source-definition-testing-nictiz-cio-full-spec-cio-RegistrationInformation",
+  "name": "Map_008_structure_map_testing_nictiz_cio_full_spec_cio_RegistrationInformation",
+  "title": "Structure Map for testing_nictiz_cio_full_spec - cio-RegistrationInformation",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: cio-RegistrationInformation). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-nictiz-cio-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://nictiz.nl/fhir/StructureDefinition/cio-RegistrationInformation",
+      "mode": "target",
+      "alias": "cio-RegistrationInformation"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-cio-RegistrationInformation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_nictiz_cio_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Provenance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/cio-RegistrationInformation"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://nictiz.nl/fhir/StructureDefinition/cio-RegistrationInformation"
+        },
+        {
+          "name": "map-entity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-entity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "entity",
+              "variable": "tgt-entity",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-entity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-entity",
+                  "element": "TODO_MAP_ROLE",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-entity",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-role"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Provenance.entity.role | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Provenance-what",
+              "source": [
+                {
+                  "context": "src-entity",
+                  "variable": "src-what"
+                }
+              ],
+              "documentation": "Reference<Provenance.entity.what> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Provenance.entity | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-recorded",
+          "source": [
+            {
+              "context": "source",
+              "element": "provRecorded",
+              "variable": "src-recorded"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "recorded",
+              "variable": "tgt-recorded",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-recorded"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.recorded | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-signature",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-signature"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "signature",
+              "variable": "tgt-signature",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-signature",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Signature"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.signature | Type: Signature | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Provenance-target",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-target"
+            }
+          ],
+          "documentation": "Reference<Provenance.target> → Resource|Flag|AllergyIntolerance|Observation|Condition — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

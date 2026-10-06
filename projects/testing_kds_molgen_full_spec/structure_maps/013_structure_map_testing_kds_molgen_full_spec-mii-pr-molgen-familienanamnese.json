@@ -1,0 +1,341 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-molgen-familienanamnese-7b133004",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-molgen-full-spec-mii-pr-molgen-familienanamnese",
+  "name": "Map_013_structure_map_testing_kds_molgen_full_spec_mii_pr_molgen_familienanamnese",
+  "title": "Structure Map for testing_kds_molgen_full_spec - mii-pr-molgen-familienanamnese",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-molgen-familienanamnese). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-molgen-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/familienanamnese",
+      "mode": "target",
+      "alias": "mii-pr-molgen-familienanamnese"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-molgen-familienanamnese",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_molgen_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "FamilyMemberHistory",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/familienanamnese"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-molgen/StructureDefinition/familienanamnese"
+        },
+        {
+          "name": "map-condition",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-condition"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "condition",
+              "variable": "tgt-condition",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-condition",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-condition",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-condition",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to FamilyMemberHistory.condition.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.condition | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.date | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-FamilyMemberHistory-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<FamilyMemberHistory.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.reasonCode | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-FamilyMemberHistory-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<FamilyMemberHistory.reasonReference> → Condition|Observation|AllergyIntolerance|QuestionnaireResponse|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "map-relationship",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relationship"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "relationship",
+              "variable": "tgt-relationship",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-snomed",
+              "source": [
+                {
+                  "context": "src-relationship"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relationship",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-snomed",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-snomed-system",
+                  "source": [
+                    {
+                      "context": "src-relationship"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-snomed",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice snomed of FamilyMemberHistory.relationship.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.relationship | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-sex",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-sex"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "sex",
+              "variable": "tgt-sex",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.sex | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "fmhStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to FamilyMemberHistory.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

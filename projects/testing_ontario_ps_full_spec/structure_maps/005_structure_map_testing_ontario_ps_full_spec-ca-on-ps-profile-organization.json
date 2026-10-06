@@ -1,0 +1,192 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-organization-72b2a1d9",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-organization",
+  "name": "Map_005_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_organization",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-organization",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-organization). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-organization",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-organization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-organization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-organization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-organization"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "orgIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "orgIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Organization.identifier | Type: Identifier | Cardinality: 1..*"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

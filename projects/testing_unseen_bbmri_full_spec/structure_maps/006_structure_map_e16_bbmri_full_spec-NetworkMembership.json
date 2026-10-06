@@ -1,0 +1,351 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NetworkMembership-c3b0ab55",
+  "url": "http://example.org/StructureMap/source-definition-e16-bbmri-full-spec-NetworkMembership",
+  "name": "Map_006_structure_map_e16_bbmri_full_spec_NetworkMembership",
+  "title": "Structure Map for e16_bbmri_full_spec - NetworkMembership",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NetworkMembership). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-bbmri-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bbmri.de/StructureDefinition/NetworkMembership",
+      "mode": "target",
+      "alias": "NetworkMembership"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NetworkMembership",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_bbmri_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "OrganizationAffiliation",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bbmri.de/StructureDefinition/NetworkMembership"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bbmri.de/StructureDefinition/NetworkMembership"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-code-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-cc-coding0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "member"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-cc-coding0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/organization-role"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for OrganizationAffiliation.code"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-OrganizationAffiliation-participatingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-participatingOrganization"
+            }
+          ],
+          "documentation": "Reference<OrganizationAffiliation.participatingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "map-specialty",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialty"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialty",
+              "variable": "tgt-specialty",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.specialty | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to OrganizationAffiliation.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

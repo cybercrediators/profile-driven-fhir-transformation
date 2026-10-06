@@ -1,0 +1,926 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-medikation-medication-ccec50d4",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-medikation-full-spec-mii-pr-medikation-medication",
+  "name": "Map_004_structure_map_testing_kds_medikation_full_spec_mii_pr_medikation_medication",
+  "title": "Structure Map for testing_kds_medikation_full_spec - mii-pr-medikation-medication",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-medikation-medication). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-medikation-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication",
+      "mode": "target",
+      "alias": "mii-pr-medikation-medication"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-medikation-medication",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_medikation_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Medication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/Medication"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-Pharmazentralnummer",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-Pharmazentralnummer",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-Pharmazentralnummer-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-Pharmazentralnummer",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/CodeSystem/ifa/pzn"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-Pharmazentralnummer-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "medicationPzn",
+                      "variable": "src-coding-Pharmazentralnummer-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-Pharmazentralnummer",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-Pharmazentralnummer-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice Pharmazentralnummer of Medication.code.coding (type Coding)"
+            },
+            {
+              "name": "map-coding-atcClassDe",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-atcClassDe",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-atcClassDe-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-atcClassDe",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/CodeSystem/bfarm/atc"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-atcClassDe-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "medicationAtc",
+                      "variable": "src-coding-atcClassDe-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-atcClassDe",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-atcClassDe-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-atcClassDe-version",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "medicationAtcVersion",
+                      "variable": "src-coding-atcClassDe-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-atcClassDe",
+                      "contextType": "variable",
+                      "element": "version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-atcClassDe-version"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice atcClassDe of Medication.code.coding (type Coding)"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-code",
+                  "element": "medicationText",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.code.text | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Medication.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-form",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-form"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "form",
+              "variable": "tgt-form",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.form | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-ingredient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-ingredient"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "ingredient",
+              "variable": "tgt-ingredient",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-ingredient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-Wirkstofftyp",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "element": "TODO-MAP-WIRKSTOFFTYP_SOURCE",
+                  "variable": "src-Wirkstofftyp"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-Wirkstofftyp",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-Wirkstofftyp",
+                  "source": [
+                    {
+                      "context": "src-Wirkstofftyp"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Wirkstofftyp",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp"
+                },
+                {
+                  "name": "map-valueCoding-translate",
+                  "source": [
+                    {
+                      "context": "src-ingredient",
+                      "element": "TODO-SOURCE-FOR-VALUECODING",
+                      "variable": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Wirkstofftyp",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-valueCoding-system",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/CodeSystem/wirkstofftyp"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-valueCoding-code",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-kds-medikation-full-spec/ConceptMap/cm-Wirkstofftyp-bac73a69"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Medication.ingredient.extension:Wirkstofftyp using http://example.org/StructureMap/source-definition-testing-kds-medikation-full-spec/ConceptMap/cm-Wirkstofftyp-bac73a69"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp | Type: [{'code': 'Extension', 'profile_canonical': ['https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [{'code': 'IN', 'display': 'ingredient', 'system': 'https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/CodeSystem/wirkstofftyp', 'version': '2026.0.1'}, {'code': 'PIN', 'display': 'precise ingredient', 'system': 'https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/CodeSystem/wirkstofftyp', 'version': '2026.0.1'}, {'code': 'MIN', 'display': 'multiple ingredients', 'system': 'https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/CodeSystem/wirkstofftyp', 'version': '2026.0.1'}], 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'binding_strength': 'required', 'valueSetUrl': 'https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/ValueSet/wirkstofftyp', 'children': [{'path': 'Extension.value[x].code', 'id': 'Extension.value[x… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstofftyp] | Path: Medication.ingredient.extension"
+            },
+            {
+              "name": "map-extension-Wirkstoffrelation",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "element": "TODO-MAP-WIRKSTOFFRELATION_SOURCE",
+                  "variable": "src-Wirkstoffrelation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-Wirkstoffrelation",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-Wirkstoffrelation",
+                  "source": [
+                    {
+                      "context": "src-Wirkstoffrelation"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-Wirkstoffrelation",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstoffrelation"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstoffrelation"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstoffrelation | Type: [{'code': 'Extension', 'profile_canonical': ['https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstoffrelation'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': \"exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])\", 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:ingredientReference', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'ingredientReference', 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': \"exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])\", 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'aliases': ['extensions', 'user content'], 'slice_identity': 'Extension.extension:ingredientReference', 'slice_selector': 'ingredientReference', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:ingredientReference.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '0'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'is_prohibited': True, 'fixed_value': [], 'options': [], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:ingredientReference.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [],… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/core/modul-medikation/StructureDefinition/wirkstoffrelation] | Path: Medication.ingredient.extension"
+            },
+            {
+              "name": "map-item",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-item"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-item-CodeableConcept",
+                  "source": [
+                    {
+                      "context": "src-ingredient"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-ingredient",
+                      "contextType": "variable",
+                      "element": "item",
+                      "variable": "tgt-item-CodeableConcept",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-item-coding",
+                      "source": [
+                        {
+                          "context": "src-ingredient"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-item-CodeableConcept",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-item-CodeableConcept-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-item-coding-code",
+                          "source": [
+                            {
+                              "context": "src-ingredient",
+                              "element": "ingredientCode",
+                              "variable": "src-item-coding-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-item-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-item-coding-code"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-item-coding-system",
+                          "source": [
+                            {
+                              "context": "src-ingredient",
+                              "element": "ingredientSystem",
+                              "variable": "src-item-coding-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-item-CodeableConcept-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-item-coding-system"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.item[x] | Type: CodeableConcept, Reference | Cardinality: 1..1 | Choice types: CodeableConcept, Reference"
+            },
+            {
+              "name": "map-strength",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-strength"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "strength",
+                  "variable": "tgt-strength",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-denominator",
+                  "source": [
+                    {
+                      "context": "src-strength",
+                      "variable": "src-denominator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-strength",
+                      "contextType": "variable",
+                      "element": "denominator",
+                      "variable": "tgt-denominator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "strengthDenCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.denominator.code | Type: code"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "strengthDenSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.denominator.system | Type: uri"
+                    },
+                    {
+                      "name": "map-unit",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "strengthDenUnit",
+                          "variable": "src-unit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "unit",
+                          "variable": "tgt-unit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-unit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.denominator.unit | Type: string"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "strengthDenValue",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.denominator.value | Type: decimal"
+                    }
+                  ],
+                  "documentation": "Maps to Medication.ingredient.strength.denominator | Type: Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-numerator",
+                  "source": [
+                    {
+                      "context": "src-strength",
+                      "variable": "src-numerator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-strength",
+                      "contextType": "variable",
+                      "element": "numerator",
+                      "variable": "tgt-numerator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "strengthNumCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.numerator.code | Type: code"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "strengthNumSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.numerator.system | Type: uri"
+                    },
+                    {
+                      "name": "map-unit",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "strengthNumUnit",
+                          "variable": "src-unit"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "unit",
+                          "variable": "tgt-unit",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-unit"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.numerator.unit | Type: string"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "strengthNumValue",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Medication.ingredient.strength.numerator.value | Type: decimal"
+                    }
+                  ],
+                  "documentation": "Maps to Medication.ingredient.strength.numerator | Type: Quantity | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.strength | Type: Ratio | Cardinality: 0..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Medication.ingredient | Type: BackboneElement | Cardinality: 1..* | Complex type with 3 child elements"
+        }
+      ]
+    }
+  ]
+}

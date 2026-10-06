@@ -1,0 +1,1285 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-cio-Reaction-01eb6fa7",
+  "url": "http://example.org/StructureMap/source-definition-testing-nictiz-cio-full-spec-cio-Reaction",
+  "name": "Map_005_structure_map_testing_nictiz_cio_full_spec_cio_Reaction",
+  "title": "Structure Map for testing_nictiz_cio_full_spec - cio-Reaction",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: cio-Reaction). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-nictiz-cio-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://nictiz.nl/fhir/StructureDefinition/cio-Reaction",
+      "mode": "target",
+      "alias": "cio-Reaction"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-cio-Reaction",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_nictiz_cio_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "AllergyIntolerance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/cio-Reaction"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://nictiz.nl/fhir/StructureDefinition/cio-Reaction"
+        },
+        {
+          "name": "TODO-resolve-reference-AllergyIntolerance-asserter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-asserter"
+            }
+          ],
+          "documentation": "Reference<AllergyIntolerance.asserter> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-clinicalStatus-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-clinicalStatus-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-clinicalStatus-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-clinicalStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reactClinicalSystem",
+                      "variable": "src-clinicalStatus-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reactClinicalCode",
+                      "variable": "src-clinicalStatus-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for AllergyIntolerance.clinicalStatus"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reactCodeSystem",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reactCode",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for AllergyIntolerance.code"
+        },
+        {
+          "name": "map-extension-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-type",
+              "source": [
+                {
+                  "context": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-type",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type"
+            },
+            {
+              "name": "set-fixed-valueCodeableConcept",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-type",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-fixed-valueCodeableConcept",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-fixed-valueCodeableConcept-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-valueCodeableConcept",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-fixed-valueCodeableConcept-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-fixed-valueCodeableConcept-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-fixed-valueCodeableConcept-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-fixed-valueCodeableConcept-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-fixed-valueCodeableConcept-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "281647001"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for valueCodeableConcept"
+            }
+          ],
+          "documentation": "Maps to extension: http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/5.0/StructureDefinition/extension-AllergyIntolerance.type] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-extension-diagnosticInsightDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "reactInsightDate",
+              "variable": "src-diagnosticInsightDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-diagnosticInsightDate",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-diagnosticInsightDate",
+              "source": [
+                {
+                  "context": "src-diagnosticInsightDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-diagnosticInsightDate",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "reactInsightDate",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-dateTime",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "reactInsightDate",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-diagnosticInsightDate",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.extension.value[x] | Type: dateTime | Cardinality: 1..1 | Choice types: dateTime"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate'], 'profile': ['http://hl7.org/fhir/StructureDefinition/allergyintolerance-assertedDate']}] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-extension-wayOfDetermination",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-WAYOFDETERMINATION_SOURCE",
+              "variable": "src-wayOfDetermination"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-wayOfDetermination",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-wayOfDetermination",
+              "source": [
+                {
+                  "context": "src-wayOfDetermination"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-wayOfDetermination",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination"
+            }
+          ],
+          "documentation": "Maps to extension: http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'CodeableConcept', 'type_structure': [{'path': 'Extension.value[x].coding', 'id': 'CodeableConcept.coding', 'type': 'Coding', 'description': 'A reference to a code defined by a terminology system.', 'is_required': False, 'is_list': True, 'type_structure': [{'path': 'Extension.value[x].coding.code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].coding.userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required'… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/StructureDefinition/ext-WayOfDetermination] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-extension-relationCondition",
+          "source": [
+            {
+              "context": "source",
+              "element": "reactRelCondRef",
+              "variable": "src-relationCondition"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-relationCondition",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-relationCondition",
+              "source": [
+                {
+                  "context": "src-relationCondition"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-relationCondition",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-Reference",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-relationCondition",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value-Reference",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Reference"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-value-reference",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "reactRelCondRef",
+                          "variable": "src-value-reference"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-Reference",
+                          "contextType": "variable",
+                          "element": "reference",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-reference"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.extension.value[x] | Type: Reference | Cardinality: 0..1 | Choice types: Reference"
+            }
+          ],
+          "documentation": "Maps to extension: http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://nictiz.nl/fhir/StructureDefinition/cio-Condition'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/StructureDefinition/ext-RelationCondition] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-extension-relationHypersensitivityIntolerance",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RELATIONHYPERSENSITIVITYINTOLERANCE_SOURCE",
+              "variable": "src-relationHypersensitivityIntolerance"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-relationHypersensitivityIntolerance",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-relationHypersensitivityIntolerance",
+              "source": [
+                {
+                  "context": "src-relationHypersensitivityIntolerance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-relationHypersensitivityIntolerance",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance"
+            }
+          ],
+          "documentation": "Maps to extension: http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://nictiz.nl/fhir/StructureDefinition/cio-HypersensitivityIntolerance'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Refe… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.RelationHypersensitivityIntolerance] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-extension-medicationHypersensitivityIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "reactMhIdSystem",
+              "variable": "src-medicationHypersensitivityIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-medicationHypersensitivityIdentifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-medicationHypersensitivityIdentifier",
+              "source": [
+                {
+                  "context": "src-medicationHypersensitivityIdentifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-medicationHypersensitivityIdentifier",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "source",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-value-Identifier",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-medicationHypersensitivityIdentifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value-Identifier",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Identifier"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-value-system",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "reactMhIdSystem",
+                          "variable": "src-value-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-Identifier",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-value-value",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "reactMhIdValue",
+                          "variable": "src-value-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-Identifier",
+                          "contextType": "variable",
+                          "element": "value",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-value"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.extension.value[x] | Type: Identifier | Cardinality: 0..1 | Complex type with 2 child elements | Choice types: Identifier"
+            }
+          ],
+          "documentation": "Maps to extension: http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'type_structure': [{'path': 'Extension.value[x].assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_l… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/StructureDefinition/ext-MedicationHypersensitivity.Identifier] | Path: AllergyIntolerance.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "reactIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "reactIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.identifier | Type: Identifier | Cardinality: 1..*"
+        },
+        {
+          "name": "TODO-resolve-reference-AllergyIntolerance-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<AllergyIntolerance.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reaction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reaction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reaction",
+              "variable": "tgt-reaction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-latencyTime",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "element": "TODO-MAP-LATENCYTIME_SOURCE",
+                  "variable": "src-latencyTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-latencyTime",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-latencyTime",
+                  "source": [
+                    {
+                      "context": "src-latencyTime"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-latencyTime",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime"
+                },
+                {
+                  "name": "set-extension-value-latencyTime",
+                  "source": [
+                    {
+                      "context": "src-reaction",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-latencyTime",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueExtension)"
+                }
+              ],
+              "documentation": "Maps to extension: http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime | Type: [{'code': 'Extension', 'profile_canonical': ['http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Quantity', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Quantity.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].comparator', 'id': 'Quantity.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Quantity.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].unit', 'id': 'Quantity.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].value', 'id': 'Quantity.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}, {'code': 'Range', 'type_structure': [{'p… [truncated; full structure in the registry entry for http://nictiz.nl/fhir/StructureDefinition/ext-Reaction.LatencyTime] | Path: AllergyIntolerance.reaction.extension"
+            },
+            {
+              "name": "map-manifestation-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-reaction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "manifestation",
+                  "variable": "tgt-manifestation-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-manifestation-coding",
+                  "source": [
+                    {
+                      "context": "src-reaction"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-manifestation-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-manifestation-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-manifestation-system",
+                      "source": [
+                        {
+                          "context": "src-reaction",
+                          "element": "reactManifestSystem",
+                          "variable": "src-manifestation-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-manifestation-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-manifestation-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-manifestation-code",
+                      "source": [
+                        {
+                          "context": "src-reaction",
+                          "element": "reactManifestCode",
+                          "variable": "src-manifestation-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-manifestation-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-manifestation-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for AllergyIntolerance.reaction.manifestation"
+            },
+            {
+              "name": "map-note",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "variable": "src-note"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "note",
+                  "variable": "tgt-note",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Annotation"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.reaction.note | Type: Annotation | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-substance-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-reaction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "substance",
+                  "variable": "tgt-substance-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-substance-coding",
+                  "source": [
+                    {
+                      "context": "src-reaction"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-substance-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-substance-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-substance-system",
+                      "source": [
+                        {
+                          "context": "src-reaction",
+                          "element": "reactSubstanceSystem",
+                          "variable": "src-substance-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-substance-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-substance-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-substance-code",
+                      "source": [
+                        {
+                          "context": "src-reaction",
+                          "element": "reactSubstanceCode",
+                          "variable": "src-substance-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-substance-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-substance-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for AllergyIntolerance.reaction.substance"
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.reaction | Type: BackboneElement | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-recordedDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "reactRecorded",
+              "variable": "src-recordedDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "recordedDate",
+              "variable": "tgt-recordedDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-recordedDate"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.recordedDate | Type: dateTime | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

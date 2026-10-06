@@ -1,0 +1,556 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-HealthAppCatalogEntry-f2a5e90c",
+  "url": "http://example.org/StructureMap/source-definition-e16-bfarm-HealthAppCatalogEntry",
+  "name": "Map_003_structure_map_e16_bfarm_HealthAppCatalogEntry",
+  "title": "Structure Map for e16_bfarm - HealthAppCatalogEntry",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: HealthAppCatalogEntry). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-bfarm",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntry",
+      "mode": "target",
+      "alias": "HealthAppCatalogEntry"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-HealthAppCatalogEntry",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_bfarm",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CatalogEntry",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntry"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntry"
+        },
+        {
+          "name": "map-additionalCharacteristic",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-additionalCharacteristic"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "additionalCharacteristic",
+              "variable": "tgt-additionalCharacteristic",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-additionalCharacteristic",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.additionalCharacteristic | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-additionalClassification",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-additionalClassification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "additionalClassification",
+              "variable": "tgt-additionalClassification",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-additionalClassification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.additionalClassification | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-classification",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-classification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "classification",
+              "variable": "tgt-classification",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-classification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.classification | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-extension-history",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HISTORY_SOURCE",
+              "variable": "src-history"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-history",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-history",
+              "source": [
+                {
+                  "context": "src-history"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-history",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryHistory"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryHistory"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryHistory | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryHistory'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:entry', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Eintrag', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'entry', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:entry', 'slice_selector': 'entry', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:entry.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 2, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:entry.extension:date', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Datum', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'date', 'must_support': True, 'constraints': [{'key': 'e… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryHistory] | Path: CatalogEntry.extension"
+        },
+        {
+          "name": "map-extension-trialPeriod",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-TRIALPERIOD_SOURCE",
+              "variable": "src-trialPeriod"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-trialPeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-trialPeriod",
+              "source": [
+                {
+                  "context": "src-trialPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-trialPeriod",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryTrialPeriod"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryTrialPeriod"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryTrialPeriod | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryTrialPeriod'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:start', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Beginn', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'start', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:start', 'slice_selector': 'start', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:start.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, '… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppCatalogEntryTrialPeriod] | Path: CatalogEntry.extension"
+        },
+        {
+          "name": "map-lastUpdated",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_LASTUPDATED",
+              "variable": "src-lastUpdated"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "lastUpdated",
+              "variable": "tgt-lastUpdated",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-lastUpdated"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.lastUpdated | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-orderable",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ORDERABLE",
+              "variable": "src-orderable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "orderable",
+              "variable": "tgt-orderable",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-orderable"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.orderable | Type: boolean | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-CatalogEntry-referencedItem",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-referencedItem"
+            }
+          ],
+          "documentation": "Reference<CatalogEntry.referencedItem> → Medication|Device|Organization|Practitioner|PractitionerRole|HealthcareService|ActivityDefinition|PlanDefinition|SpecimenDefinition|ObservationDefinition|Binary — resolve via bundle assembler"
+        },
+        {
+          "name": "map-relatedEntry",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relatedEntry"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "relatedEntry",
+              "variable": "tgt-relatedEntry",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-relatedEntry",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-CatalogEntry-item",
+              "source": [
+                {
+                  "context": "src-relatedEntry",
+                  "variable": "src-item"
+                }
+              ],
+              "documentation": "Reference<CatalogEntry.relatedEntry.item> → CatalogEntry — resolve via bundle assembler"
+            },
+            {
+              "name": "map-relationtype",
+              "source": [
+                {
+                  "context": "src-relatedEntry",
+                  "element": "TODO_MAP_RELATIONTYPE",
+                  "variable": "src-relationtype"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relatedEntry",
+                  "contextType": "variable",
+                  "element": "relationtype",
+                  "variable": "tgt-relationtype",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-relationtype"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CatalogEntry.relatedEntry.relationtype | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.relatedEntry | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.type | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-validTo",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_VALIDTO",
+              "variable": "src-validTo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "validTo",
+              "variable": "tgt-validTo",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-validTo"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.validTo | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-validityPeriod",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-validityPeriod"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "validityPeriod",
+              "variable": "tgt-validityPeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-end",
+              "source": [
+                {
+                  "context": "src-validityPeriod",
+                  "element": "TODO_MAP_END",
+                  "variable": "src-end"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-validityPeriod",
+                  "contextType": "variable",
+                  "element": "end",
+                  "variable": "tgt-end",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-end"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CatalogEntry.validityPeriod.end | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-start",
+              "source": [
+                {
+                  "context": "src-validityPeriod",
+                  "element": "TODO_MAP_START",
+                  "variable": "src-start"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-validityPeriod",
+                  "contextType": "variable",
+                  "element": "start",
+                  "variable": "tgt-start",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-start"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to CatalogEntry.validityPeriod.start | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to CatalogEntry.validityPeriod | Type: Period | Cardinality: 0..1 | Complex type with 4 child elements"
+        }
+      ]
+    }
+  ]
+}

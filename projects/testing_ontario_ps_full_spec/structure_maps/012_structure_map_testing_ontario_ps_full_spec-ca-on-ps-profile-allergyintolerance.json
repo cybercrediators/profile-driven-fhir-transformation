@@ -1,0 +1,516 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-allergyintolerance-03744688",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-allergyintolerance",
+  "name": "Map_012_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_allergyintolerance",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-allergyintolerance",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-allergyintolerance). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-allergyintolerance",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-allergyintolerance"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-allergyintolerance",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "AllergyIntolerance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-allergyintolerance"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-allergyintolerance"
+        },
+        {
+          "name": "map-clinicalStatus-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-clinicalStatus-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-clinicalStatus-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-clinicalStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "aiClinicalSystem",
+                      "variable": "src-clinicalStatus-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "aiClinicalCode",
+                      "variable": "src-clinicalStatus-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for AllergyIntolerance.clinicalStatus"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "allergyCode",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to AllergyIntolerance.code.coding.code | Type: code"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "allergySystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to AllergyIntolerance.code.coding.system | Type: uri"
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.code.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-onset",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ONSET",
+              "variable": "src-onset"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "onset",
+              "variable": "tgt-onset",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-onset"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.onset[x] | Type: dateTime, Age, Period, Range, string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-AllergyIntolerance-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<AllergyIntolerance.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reaction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reaction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reaction",
+              "variable": "tgt-reaction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reaction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-manifestation",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "variable": "src-manifestation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "manifestation",
+                  "variable": "tgt-manifestation",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-manifestation",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-manifestation",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-manifestation",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "allergyManifestCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to AllergyIntolerance.reaction.manifestation.coding.code | Type: code"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "allergyManifestSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to AllergyIntolerance.reaction.manifestation.coding.system | Type: uri"
+                    }
+                  ],
+                  "documentation": "Maps to AllergyIntolerance.reaction.manifestation.coding | Type: Coding | Cardinality: 0..*"
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.reaction.manifestation | Type: CodeableConcept | Cardinality: 1..* | Complex type with 2 child elements"
+            },
+            {
+              "name": "map-severity",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "element": "TODO_MAP_SEVERITY",
+                  "variable": "src-severity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "severity",
+                  "variable": "tgt-severity",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-severity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to AllergyIntolerance.reaction.severity | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.reaction | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_TYPE",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-type"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to AllergyIntolerance.type | Type: code | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

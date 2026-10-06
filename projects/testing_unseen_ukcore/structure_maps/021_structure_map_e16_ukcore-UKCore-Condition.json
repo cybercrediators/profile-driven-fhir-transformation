@@ -1,0 +1,999 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-Condition-17928492",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-UKCore-Condition",
+  "name": "Map_021_structure_map_e16_ukcore_UKCore_Condition",
+  "title": "Structure Map for e16_ukcore - UKCore-Condition",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-Condition). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Condition",
+      "mode": "target",
+      "alias": "UKCore-Condition"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-Condition",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Condition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Condition"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-Condition"
+        },
+        {
+          "name": "map-abatement",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ABATEMENT",
+              "variable": "src-abatement"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "abatement",
+              "variable": "tgt-abatement",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-abatement"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.abatement[x] | Type: dateTime, Age, Period, Range, string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-asserter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-asserter"
+            }
+          ],
+          "documentation": "Reference<Condition.asserter> → Practitioner|PractitionerRole|Patient|RelatedPerson — resolve via bundle assembler"
+        },
+        {
+          "name": "map-bodySite",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-bodySite"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "bodySite",
+              "variable": "tgt-bodySite",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-bodySite",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.bodySite | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.category | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-clinicalStatus-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "clinicalStatus",
+              "variable": "tgt-clinicalStatus-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-clinicalStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-clinicalStatus-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-clinicalStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-clinicalStatus-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "condClinSystem",
+                      "variable": "src-clinicalStatus-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-clinicalStatus-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "condClinCode",
+                      "variable": "src-clinicalStatus-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-clinicalStatus-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-clinicalStatus-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Condition.clinicalStatus"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "condCodeCode",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Condition.code.coding.code | Type: code"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "condCodeDisplay",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Condition.code.coding.display | Type: string"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "condCodeSystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Condition.code.coding.system | Type: uri"
+                }
+              ],
+              "documentation": "Maps to Condition.code.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Condition.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Condition.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-evidence",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-evidence"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "evidence",
+              "variable": "tgt-evidence",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-evidence",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-evidence",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-evidence",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.evidence.code | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "TODO-resolve-reference-Condition-detail",
+              "source": [
+                {
+                  "context": "src-evidence",
+                  "variable": "src-detail"
+                }
+              ],
+              "documentation": "Reference<Condition.evidence.detail> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Condition.evidence | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Condition-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<Condition.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Condition.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Condition-author",
+              "source": [
+                {
+                  "context": "src-note",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<Condition.note.author[x]> → Practitioner|Patient|RelatedPerson|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.note.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Condition.note | Type: Annotation | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-onset",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ONSET",
+              "variable": "src-onset"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "onset",
+              "variable": "tgt-onset",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-onset"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.onset[x] | Type: dateTime, Age, Period, Range, string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-recordedDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_RECORDEDDATE",
+              "variable": "src-recordedDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "recordedDate",
+              "variable": "tgt-recordedDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-recordedDate"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.recordedDate | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-recorder",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-recorder"
+            }
+          ],
+          "documentation": "Reference<Condition.recorder> → Practitioner|PractitionerRole|Patient|RelatedPerson — resolve via bundle assembler"
+        },
+        {
+          "name": "map-severity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-severity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "severity",
+              "variable": "tgt-severity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Condition.severity | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-stage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-stage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "stage",
+              "variable": "tgt-stage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-stage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Condition-assessment",
+              "source": [
+                {
+                  "context": "src-stage",
+                  "variable": "src-assessment"
+                }
+              ],
+              "documentation": "Reference<Condition.stage.assessment> → ClinicalImpression|DiagnosticReport|Observation — resolve via bundle assembler"
+            },
+            {
+              "name": "map-summary",
+              "source": [
+                {
+                  "context": "src-stage",
+                  "variable": "src-summary"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-stage",
+                  "contextType": "variable",
+                  "element": "summary",
+                  "variable": "tgt-summary",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.stage.summary | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-stage",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-stage",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Condition.stage.type | Type: CodeableConcept | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Condition.stage | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Condition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Condition.subject> → Group|Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-verificationStatus-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "verificationStatus",
+              "variable": "tgt-verificationStatus-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-verificationStatus-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-verificationStatus-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-verificationStatus-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-verificationStatus-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "condVerSystem",
+                      "variable": "src-verificationStatus-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-verificationStatus-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-verificationStatus-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-verificationStatus-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "condVerCode",
+                      "variable": "src-verificationStatus-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-verificationStatus-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-verificationStatus-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Condition.verificationStatus"
+        }
+      ]
+    }
+  ]
+}

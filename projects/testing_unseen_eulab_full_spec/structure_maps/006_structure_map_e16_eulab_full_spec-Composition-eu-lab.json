@@ -1,0 +1,1014 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Composition-eu-lab-b23f9c55",
+  "url": "http://example.org/StructureMap/source-definition-e16-eulab-full-spec-Composition-eu-lab",
+  "name": "Map_006_structure_map_e16_eulab_full_spec_Composition_eu_lab",
+  "title": "Structure Map for e16_eulab_full_spec - Composition-eu-lab",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Composition-eu-lab). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-eulab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.eu/fhir/laboratory/StructureDefinition/Composition-eu-lab",
+      "mode": "target",
+      "alias": "Composition-eu-lab"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Composition-eu-lab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_eulab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Composition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/Composition-eu-lab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.eu/fhir/laboratory/StructureDefinition/Composition-eu-lab"
+        },
+        {
+          "name": "map-attester",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-attester"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "attester",
+              "variable": "tgt-attester",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-attester",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-mode",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "element": "composition_eu_lab_attester_mode",
+                  "variable": "src-mode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-attester",
+                  "contextType": "variable",
+                  "element": "mode",
+                  "variable": "tgt-mode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-mode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.attester.mode | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-attester",
+                  "element": "composition_eu_lab_attester_time",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-attester",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.attester.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Composition.attester | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-author",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-author"
+            }
+          ],
+          "documentation": "Reference<Composition.author> → Practitioner|PractitionerRole|Organization|Device|Patient|RelatedPerson — resolve via bundle assembler"
+        },
+        {
+          "name": "map-confidentiality",
+          "source": [
+            {
+              "context": "source",
+              "element": "composition_eu_lab_confidentiality",
+              "variable": "src-confidentiality"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "confidentiality",
+              "variable": "tgt-confidentiality",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-confidentiality"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.confidentiality | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-custodian",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-custodian"
+            }
+          ],
+          "documentation": "Reference<Composition.custodian> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "composition_eu_lab_date",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.date | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Composition.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-event",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-event"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "event",
+              "variable": "tgt-event",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-event",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-event",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-event",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.event.code | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-detail",
+              "source": [
+                {
+                  "context": "src-event",
+                  "variable": "src-detail"
+                }
+              ],
+              "documentation": "Reference<Composition.event.detail> → Resource — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-event",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-event",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.event.period | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Composition.event | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-extension-version",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VERSION_SOURCE",
+              "variable": "src-version"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-version",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-version",
+              "source": [
+                {
+                  "context": "src-version"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-version",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Composition.version"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Composition.version"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Composition.version | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Composition.version'], 'profile': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Composition.version']}] | Path: Composition.extension"
+        },
+        {
+          "name": "map-extension-informationRecipient",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INFORMATIONRECIPIENT_SOURCE",
+              "variable": "src-informationRecipient"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-informationRecipient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-informationRecipient",
+              "source": [
+                {
+                  "context": "src-informationRecipient"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-informationRecipient",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/StructureDefinition/information-recipient"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/StructureDefinition/information-recipient"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/StructureDefinition/information-recipient | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/StructureDefinition/information-recipient'], 'profile': ['http://hl7.eu/fhir/StructureDefinition/information-recipient']}] | Path: Composition.extension"
+        },
+        {
+          "name": "map-extension-diagnosticReport",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DIAGNOSTICREPORT_SOURCE",
+              "variable": "src-diagnosticReport"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-diagnosticReport",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-diagnosticReport",
+              "source": [
+                {
+                  "context": "src-diagnosticReport"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-diagnosticReport",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/extensions/StructureDefinition/composition-diagnosticReportReference"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.eu/fhir/extensions/StructureDefinition/composition-diagnosticReportReference"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.eu/fhir/extensions/StructureDefinition/composition-diagnosticReportReference | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.eu/fhir/extensions/StructureDefinition/composition-diagnosticReportReference'], 'profile': ['http://hl7.eu/fhir/extensions/StructureDefinition/composition-diagnosticReportReference']}] | Path: Composition.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "composition_eu_lab_identifier_system",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "composition_eu_lab_identifier_value",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Composition.identifier | Type: Identifier | Cardinality: 1..1"
+        },
+        {
+          "name": "map-relatesTo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-relatesTo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "relatesTo",
+              "variable": "tgt-relatesTo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-relatesTo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "element": "TODO_MAP_CODE",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-relatesTo",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-code"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.relatesTo.code | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Composition-target",
+              "source": [
+                {
+                  "context": "src-relatesTo",
+                  "variable": "src-target"
+                }
+              ],
+              "documentation": "Reference<Composition.relatesTo.target[x]> → Composition — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Composition.relatesTo | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-section",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-section"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "section",
+              "variable": "tgt-section",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-section",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-section"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-code-coding",
+                  "source": [
+                    {
+                      "context": "src-section"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-code-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-code-system",
+                      "source": [
+                        {
+                          "context": "src-section",
+                          "element": "compSecCodeSys",
+                          "variable": "src-code-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-code-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-code-code",
+                      "source": [
+                        {
+                          "context": "src-section",
+                          "element": "compSecCodeCd",
+                          "variable": "src-code-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-code-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Composition.section.code"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-section",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Narrative"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-div",
+                  "source": [
+                    {
+                      "context": "src-text",
+                      "element": "composition_eu_lab_section_text_div",
+                      "variable": "src-div"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-text",
+                      "contextType": "variable",
+                      "element": "div",
+                      "variable": "tgt-div",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-div"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Composition.section.text.div | Type: xhtml"
+                },
+                {
+                  "name": "map-status",
+                  "source": [
+                    {
+                      "context": "src-text",
+                      "element": "composition_eu_lab_section_text_status",
+                      "variable": "src-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-text",
+                      "contextType": "variable",
+                      "element": "status",
+                      "variable": "tgt-status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-status"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Composition.section.text.status | Type: code"
+                }
+              ],
+              "documentation": "Maps to Composition.section.text | Type: Narrative | Cardinality: 1..1"
+            },
+            {
+              "name": "map-title",
+              "source": [
+                {
+                  "context": "src-section",
+                  "element": "composition_eu_lab_section_title",
+                  "variable": "src-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-section",
+                  "contextType": "variable",
+                  "element": "title",
+                  "variable": "tgt-title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-title"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Composition.section.title | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Composition.section | Type: BackboneElement | Cardinality: 1..* | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "composition_eu_lab_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Composition-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Composition.subject> → Patient|Group|Location|Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "composition_eu_lab_title",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Composition.title | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "map-type-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-type-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-type-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-type-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTypeSys",
+                      "variable": "src-type-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-type-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "compTypeCd",
+                      "variable": "src-type-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Composition.type"
+        }
+      ]
+    }
+  ]
+}

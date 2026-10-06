@@ -1,0 +1,1212 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-MedicationRequest-Profile-9900ffef",
+  "url": "http://example.org/StructureMap/source-definition-testing-capable-full-spec-MedicationRequest_Profile",
+  "name": "Map_005_structure_map_testing_capable_full_spec_MedicationRequest_Profile",
+  "title": "Structure Map for testing_capable_full_spec - MedicationRequest_Profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: MedicationRequest_Profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-capable-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://capable-project.eu/data/fhir/StructureDefinition/MedicationRequest_Profile",
+      "mode": "target",
+      "alias": "MedicationRequest_Profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-MedicationRequest-Profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_capable_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationRequest",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://capable-project.eu/data/fhir/StructureDefinition/MedicationRequest_Profile"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://capable-project.eu/data/fhir/StructureDefinition/MedicationRequest_Profile"
+        },
+        {
+          "name": "map-authoredOn",
+          "source": [
+            {
+              "context": "source",
+              "element": "medReqAuthoredOn",
+              "variable": "src-authoredOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "authoredOn",
+              "variable": "tgt-authoredOn",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-authoredOn"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.authoredOn | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-courseOfTherapyType-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "courseOfTherapyType",
+              "variable": "tgt-courseOfTherapyType-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-courseOfTherapyType-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-courseOfTherapyType-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-courseOfTherapyType-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-courseOfTherapyType-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-courseOfTherapyType-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-courseOfTherapyType-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "medReqCourseCode",
+                      "variable": "src-courseOfTherapyType-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-courseOfTherapyType-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-courseOfTherapyType-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for MedicationRequest.courseOfTherapyType"
+        },
+        {
+          "name": "map-dispenseRequest",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dispenseRequest"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dispenseRequest",
+              "variable": "tgt-dispenseRequest",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-initialFill",
+              "source": [
+                {
+                  "context": "src-dispenseRequest",
+                  "variable": "src-initialFill"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dispenseRequest",
+                  "contextType": "variable",
+                  "element": "initialFill",
+                  "variable": "tgt-initialFill",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-quantity",
+                  "source": [
+                    {
+                      "context": "src-initialFill",
+                      "variable": "src-quantity"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-initialFill",
+                      "contextType": "variable",
+                      "element": "quantity",
+                      "variable": "tgt-quantity",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-quantity",
+                          "element": "medReqFillCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-quantity",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.quantity.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-quantity",
+                          "element": "medReqFillSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-quantity",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.quantity.system | Type: uri | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-quantity",
+                          "element": "medReqFillValue",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-quantity",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.quantity.value | Type: decimal | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill.quantity | Type: Quantity | Cardinality: 1..1 | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dispenseRequest.initialFill | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dispenseRequest | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-dosageInstruction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosageInstruction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosageInstruction",
+              "variable": "tgt-dosageInstruction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-doseAndRate",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-doseAndRate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "doseAndRate",
+                  "variable": "tgt-doseAndRate",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-doseAndRate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-dose",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-dose"
+                    }
+                  ],
+                  "target": [],
+                  "rule": [
+                    {
+                      "name": "map-dose-Quantity",
+                      "source": [
+                        {
+                          "context": "src-doseAndRate"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-doseAndRate",
+                          "contextType": "variable",
+                          "element": "dose",
+                          "variable": "tgt-dose-Quantity",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Quantity"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-dose-value",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "medReqDoseValue",
+                              "variable": "src-dose-value"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "value",
+                              "transform": "cast",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-value"
+                                },
+                                {
+                                  "valueString": "decimal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-dose-code",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate",
+                              "element": "medReqDoseCode",
+                              "variable": "src-dose-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-dose-code"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-dose-system",
+                          "source": [
+                            {
+                              "context": "src-doseAndRate"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-dose-Quantity",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://unitsofmeasure.org"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate.dose[x] | Type: Quantity | Cardinality: 1..1 | Complex type with 3 child elements | Choice types: Quantity"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.doseAndRate | Type: Element | Cardinality: 0..* | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-maxDosePerPeriod",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-maxDosePerPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "maxDosePerPeriod",
+                  "variable": "tgt-maxDosePerPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-denominator",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerPeriod",
+                      "variable": "src-denominator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerPeriod",
+                      "contextType": "variable",
+                      "element": "denominator",
+                      "variable": "tgt-denominator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "medReqMaxDenCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "set-fixed-system",
+                      "source": [
+                        {
+                          "context": "src-denominator"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://unitsofmeasure.org"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets fixed value for system"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-denominator",
+                          "element": "medReqMaxDenValue",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-denominator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator.value | Type: decimal | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.denominator | Type: Quantity | Cardinality: 1..1 | Complex type with 3 child elements"
+                },
+                {
+                  "name": "map-numerator",
+                  "source": [
+                    {
+                      "context": "src-maxDosePerPeriod",
+                      "variable": "src-numerator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-maxDosePerPeriod",
+                      "contextType": "variable",
+                      "element": "numerator",
+                      "variable": "tgt-numerator",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Quantity"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "medReqMaxNumCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "medReqMaxNumSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.system | Type: uri | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-numerator",
+                          "element": "medReqMaxNumValue",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-numerator",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator.value | Type: decimal | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod.numerator | Type: Quantity | Cardinality: 1..1 | Complex type with 3 child elements"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.maxDosePerPeriod | Type: Ratio | Cardinality: 0..1 | Complex type with 2 child elements"
+            },
+            {
+              "name": "map-route-copy",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "element": "medReqRouteCode",
+                  "variable": "src"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "route",
+                  "variable": "tgt-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-route-coding",
+                  "source": [
+                    {
+                      "context": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-route-system",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-route-code",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Direct copy for MedicationRequest.dosageInstruction.route (filter-based/open VS, system: http://snomed.info/sct)"
+            },
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosageInstruction",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosageInstruction",
+                  "contextType": "variable",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-repeat",
+                  "source": [
+                    {
+                      "context": "src-timing",
+                      "variable": "src-repeat"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-timing",
+                      "contextType": "variable",
+                      "element": "repeat",
+                      "variable": "tgt-repeat",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Element"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-bounds",
+                      "source": [
+                        {
+                          "context": "src-repeat",
+                          "variable": "src-bounds"
+                        }
+                      ],
+                      "target": [],
+                      "rule": [
+                        {
+                          "name": "map-bounds-Period",
+                          "source": [
+                            {
+                              "context": "src-repeat"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-repeat",
+                              "contextType": "variable",
+                              "element": "bounds",
+                              "variable": "tgt-bounds-Period",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Period"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "set-bounds-start",
+                              "source": [
+                                {
+                                  "context": "src-repeat",
+                                  "element": "medReqBoundsStart",
+                                  "variable": "src-bounds-start"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "tgt-bounds-Period",
+                                  "contextType": "variable",
+                                  "element": "start",
+                                  "transform": "cast",
+                                  "parameter": [
+                                    {
+                                      "valueId": "src-bounds-start"
+                                    },
+                                    {
+                                      "valueString": "dateTime"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat.bounds[x] | Type: Period | Cardinality: 0..1 | Complex type with 1 child elements | Choice types: Period"
+                    }
+                  ],
+                  "documentation": "Maps to MedicationRequest.dosageInstruction.timing.repeat | Type: Element | Cardinality: 1..1 | Complex type with 1 child elements"
+                }
+              ],
+              "documentation": "Maps to MedicationRequest.dosageInstruction.timing | Type: Timing | Cardinality: 0..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.dosageInstruction | Type: Dosage | Cardinality: 0..1 | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-intent",
+          "source": [
+            {
+              "context": "source",
+              "element": "medReqIntent",
+              "variable": "src-intent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "variable": "tgt-intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-intent"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.intent | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-medication-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "medication",
+              "variable": "tgt-medication-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-medication-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-medication-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-medication-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-medication-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://www.nlm.nih.gov/research/umls/rxnorm"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-medication-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "medReqCode",
+                      "variable": "src-medication-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-medication-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-medication-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for MedicationRequest.medication[x]"
+        },
+        {
+          "name": "map-performerType-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performerType",
+              "variable": "tgt-performerType-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-performerType-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-performerType-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-performerType-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-performerType-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-performerType-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-performerType-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "medReqPerformerCode",
+                      "variable": "src-performerType-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-performerType-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-performerType-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for MedicationRequest.performerType"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "medReqStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationRequest.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationRequest-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationRequest.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

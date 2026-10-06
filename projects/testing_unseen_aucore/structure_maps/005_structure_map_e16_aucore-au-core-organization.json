@@ -1,0 +1,711 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-au-core-organization-c43efdc3",
+  "url": "http://example.org/StructureMap/source-definition-e16-aucore-au-core-organization",
+  "name": "Map_005_structure_map_e16_aucore_au_core_organization",
+  "title": "Structure Map for e16_aucore - au-core-organization",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: au-core-organization). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-aucore",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-organization",
+      "mode": "target",
+      "alias": "au-core-organization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-au-core-organization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_aucore",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-organization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org.au/fhir/core/StructureDefinition/au-core-organization"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.address | Type: Address | Cardinality: 0..*"
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-alias",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.alias | Type: string | Cardinality: 0..*"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-address",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-address"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "address",
+                  "variable": "tgt-address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.address | Type: Address | Cardinality: 0..1"
+            },
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.name | Type: HumanName | Cardinality: 0..1"
+            },
+            {
+              "name": "map-purpose",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "variable": "tgt-purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.purpose | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-telecom",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "variable": "tgt-telecom",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.telecom | Type: ContactPoint | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Organization.contact | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<Organization.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "orgIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "orgIdTypeCode",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Organization.identifier.type.coding.code | Type: code"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "orgIdTypeSystem",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Organization.identifier.type.coding.system | Type: uri"
+                    }
+                  ],
+                  "documentation": "Maps to Organization.identifier.type.coding | Type: Coding"
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.type | Type: CodeableConcept"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "orgIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Organization.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.telecom.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-rank",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_RANK",
+                  "variable": "src-rank"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "rank",
+                  "variable": "tgt-rank",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-rank"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.telecom.rank | Type: positiveInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.telecom.system | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.telecom.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Organization.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.type | Type: CodeableConcept | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

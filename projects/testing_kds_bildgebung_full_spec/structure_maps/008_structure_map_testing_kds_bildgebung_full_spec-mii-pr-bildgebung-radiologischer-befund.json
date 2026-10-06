@@ -1,0 +1,618 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-bildgebung-radiologischer-befund-5fb70366",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-bildgebung-full-spec-mii-pr-bildgebung-radiologischer-befund",
+  "name": "Map_008_structure_map_testing_kds_bildgebung_full_spec_mii_pr_bildgebung_radiologischer_befund",
+  "title": "Structure Map for testing_kds_bildgebung_full_spec - mii-pr-bildgebung-radiologischer-befund",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-bildgebung-radiologischer-befund). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-bildgebung-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund",
+      "mode": "target",
+      "alias": "mii-pr-bildgebung-radiologischer-befund"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-bildgebung-radiologischer-befund",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_bildgebung_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DiagnosticReport",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-bildgebung/StructureDefinition/mii-pr-bildgebung-radiologischer-befund"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.basedOn> → ServiceRequest|CarePlan — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-sct",
+              "source": [
+                {
+                  "context": "src-category"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-sct",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-sct-system",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-code",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "4201000179104"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-display",
+                  "source": [
+                    {
+                      "context": "src-category"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Imaging report (record artifact)"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice sct of DiagnosticReport.category.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.category | Type: CodeableConcept | Cardinality: 1..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-sct",
+              "source": [
+                {
+                  "context": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-sct",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-sct-system",
+                  "source": [
+                    {
+                      "context": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-code",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "drCode",
+                      "variable": "src-coding-sct-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-sct-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice sct of DiagnosticReport.code.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-conclusion",
+          "source": [
+            {
+              "context": "source",
+              "element": "drConclusion",
+              "variable": "src-conclusion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "conclusion",
+              "variable": "tgt-conclusion",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-conclusion"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.conclusion | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-conclusionCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-conclusionCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "conclusionCode",
+              "variable": "tgt-conclusionCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-conclusionCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.conclusionCode | Type: CodeableConcept | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-effective-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "drEffective",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "effective",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.effective[x] | Type: dateTime, Period | Cardinality: 0..1 | Choice types: dateTime, Period"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-supportingInfo",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SUPPORTINGINFO_SOURCE",
+              "variable": "src-supportingInfo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-supportingInfo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-supportingInfo",
+              "source": [
+                {
+                  "context": "src-supportingInfo"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-supportingInfo",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo'], 'profile': ['http://hl7.org/fhir/StructureDefinition/workflow-supportingInfo']}] | Path: DiagnosticReport.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-imagingStudy",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-imagingStudy"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.imagingStudy> → ImagingStudy — resolve via bundle assembler"
+        },
+        {
+          "name": "map-issued",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUED",
+              "variable": "src-issued"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "issued",
+              "variable": "tgt-issued",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-issued"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.issued | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-media",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-media"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "media",
+              "variable": "tgt-media",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-media",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-DiagnosticReport-link",
+              "source": [
+                {
+                  "context": "src-media",
+                  "variable": "src-link"
+                }
+              ],
+              "documentation": "Reference<DiagnosticReport.media.link> → Media — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.media | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-presentedForm",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-presentedForm"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "presentedForm",
+              "variable": "tgt-presentedForm",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-presentedForm",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Attachment"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.presentedForm | Type: Attachment | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-result",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-result"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.result> → Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "drStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DiagnosticReport.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-DiagnosticReport-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<DiagnosticReport.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

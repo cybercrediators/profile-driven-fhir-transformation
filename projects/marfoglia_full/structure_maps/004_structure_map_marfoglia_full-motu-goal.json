@@ -1,0 +1,249 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-goal-87145b06",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-goal",
+  "name": "Map_004_structure_map_marfoglia_full_motu_goal",
+  "title": "Structure Map for marfoglia_full - motu-goal",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-goal). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-goal",
+      "mode": "target",
+      "alias": "motu-goal"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-goal",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Goal",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-goal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-goal"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Goal.description | Type: CodeableConcept | Cardinality: 1..1"
+        },
+        {
+          "name": "map-lifecycleStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_LIFECYCLESTATUS",
+              "variable": "src-lifecycleStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "lifecycleStatus",
+              "variable": "tgt-lifecycleStatus",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-lifecycleStatus"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Goal.lifecycleStatus | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-outcomeCode-translate",
+          "source": [
+            {
+              "context": "source",
+              "element": "rehabGoal",
+              "variable": "src",
+              "condition": "$this != ''"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "outcomeCode",
+              "variable": "tgt-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-outcomeCode-coding",
+              "source": [
+                {
+                  "context": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-outcomeCode-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-outcomeCode-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-marfoglia-full/ConceptMap/cm-outcomeCode-028749e3"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Translate mapping for Goal.outcomeCode using http://example.org/StructureMap/source-definition-marfoglia-full/ConceptMap/cm-outcomeCode-028749e3"
+        },
+        {
+          "name": "TODO-resolve-reference-Goal-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Goal.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

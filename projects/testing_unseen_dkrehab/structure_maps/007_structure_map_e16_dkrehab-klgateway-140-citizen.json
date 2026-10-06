@@ -1,0 +1,283 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-klgateway-140-citizen-1408ed7f",
+  "url": "http://example.org/StructureMap/source-definition-e16-dkrehab-klgateway-140-citizen",
+  "name": "Map_007_structure_map_e16_dkrehab_klgateway_140_citizen",
+  "title": "Structure Map for e16_dkrehab - klgateway-140-citizen",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: klgateway-140-citizen). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-dkrehab",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-citizen",
+      "mode": "target",
+      "alias": "klgateway-140-citizen"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-klgateway-140-citizen",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_dkrehab",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-citizen"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-citizen"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-deceased",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DECEASED",
+              "variable": "src-deceased"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "deceased",
+              "variable": "tgt-deceased",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-deceased"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.deceased[x] | Type: boolean | Cardinality: 1..1"
+        },
+        {
+          "name": "map-extension-municipalityCode",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-MUNICIPALITYCODE_SOURCE",
+              "variable": "src-municipalityCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-municipalityCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-municipalityCode",
+              "source": [
+                {
+                  "context": "src-municipalityCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-municipalityCode",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.dk/fhir/core/StructureDefinition/dk-core-municipalityCodes"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.dk/fhir/core/StructureDefinition/dk-core-municipalityCodes"
+            },
+            {
+              "name": "set-extension-value-municipalityCode",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-municipalityCode",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.dk/fhir/core/StructureDefinition/dk-core-municipalityCodes | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.dk/fhir/core/StructureDefinition/dk-core-municipalityCodes'], 'profile': ['http://hl7.dk/fhir/core/StructureDefinition/dk-core-municipalityCodes']}] | Path: Patient.address.extension"
+        },
+        {
+          "name": "map-extension-regionalSubDivisionCodes",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-REGIONALSUBDIVISIONCODES_SOURCE",
+              "variable": "src-regionalSubDivisionCodes"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-regionalSubDivisionCodes",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-regionalSubDivisionCodes",
+              "source": [
+                {
+                  "context": "src-regionalSubDivisionCodes"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-regionalSubDivisionCodes",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.dk/fhir/core/StructureDefinition/dk-core-RegionalSubDivisionCodes"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.dk/fhir/core/StructureDefinition/dk-core-RegionalSubDivisionCodes"
+            },
+            {
+              "name": "set-extension-value-regionalSubDivisionCodes",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-regionalSubDivisionCodes",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.dk/fhir/core/StructureDefinition/dk-core-RegionalSubDivisionCodes | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.dk/fhir/core/StructureDefinition/dk-core-RegionalSubDivisionCodes'], 'profile': ['http://hl7.dk/fhir/core/StructureDefinition/dk-core-RegionalSubDivisionCodes']}] | Path: Patient.address.extension"
+        }
+      ]
+    }
+  ]
+}

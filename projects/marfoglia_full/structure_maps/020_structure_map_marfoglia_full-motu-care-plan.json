@@ -1,0 +1,266 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-care-plan-5d63f9f2",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-care-plan",
+  "name": "Map_020_structure_map_marfoglia_full_motu_care_plan",
+  "title": "Structure Map for marfoglia_full - motu-care-plan",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-care-plan). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-care-plan",
+      "mode": "target",
+      "alias": "motu-care-plan"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-care-plan",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "CarePlan",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-care-plan"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-care-plan"
+        },
+        {
+          "name": "map-activity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-activity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "activity",
+              "variable": "tgt-activity",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-activity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-detail",
+              "source": [
+                {
+                  "context": "src-activity",
+                  "variable": "src-detail"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-activity",
+                  "contextType": "variable",
+                  "element": "detail",
+                  "variable": "tgt-detail",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-scheduled",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "variable": "src-scheduled"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "scheduled",
+                      "variable": "tgt-scheduled",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Timing"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to CarePlan.activity.detail.scheduled[x] | Type: Timing, Period, string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-status",
+                  "source": [
+                    {
+                      "context": "src-detail",
+                      "element": "TODO_MAP_STATUS",
+                      "variable": "src-status"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-detail",
+                      "contextType": "variable",
+                      "element": "status",
+                      "variable": "tgt-status",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-status"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to CarePlan.activity.detail.status | Type: code | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to CarePlan.activity.detail | Type: BackboneElement | Cardinality: 0..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to CarePlan.activity | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<CarePlan.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-goal",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-goal"
+            }
+          ],
+          "documentation": "Reference<CarePlan.goal> → Goal — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-intent",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "intent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "order"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for intent"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-CarePlan-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<CarePlan.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

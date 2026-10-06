@@ -1,0 +1,525 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-Medication-84f42f8b",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-full-spec-UKCore-Medication",
+  "name": "Map_013_structure_map_e16_ukcore_full_spec_UKCore_Medication",
+  "title": "Structure Map for e16_ukcore_full_spec - UKCore-Medication",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-Medication). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Medication",
+      "mode": "target",
+      "alias": "UKCore-Medication"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-Medication",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Medication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Medication"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-Medication"
+        },
+        {
+          "name": "map-amount",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-amount"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "amount",
+              "variable": "tgt-amount",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Ratio"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.amount | Type: Ratio | Cardinality: 0..1"
+        },
+        {
+          "name": "map-batch",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-batch"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "batch",
+              "variable": "tgt-batch",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-expirationDate",
+              "source": [
+                {
+                  "context": "src-batch",
+                  "element": "uKCore_Medication_batch_expirationDate",
+                  "variable": "src-expirationDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-batch",
+                  "contextType": "variable",
+                  "element": "expirationDate",
+                  "variable": "tgt-expirationDate",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-expirationDate"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.batch.expirationDate | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-lotNumber",
+              "source": [
+                {
+                  "context": "src-batch",
+                  "element": "uKCore_Medication_batch_lotNumber",
+                  "variable": "src-lotNumber"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-batch",
+                  "contextType": "variable",
+                  "element": "lotNumber",
+                  "variable": "tgt-lotNumber",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-lotNumber"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.batch.lotNumber | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Medication.batch | Type: BackboneElement | Cardinality: 0..1 | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.code | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-form",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-form"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "form",
+              "variable": "tgt-form",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.form | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Medication-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<Medication.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Medication.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-ingredient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-ingredient"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "ingredient",
+              "variable": "tgt-ingredient",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-ingredient",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-isActive",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "element": "TODO_MAP_ISACTIVE",
+                  "variable": "src-isActive"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "isActive",
+                  "variable": "tgt-isActive",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-isActive"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.isActive | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Medication-item",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-item"
+                }
+              ],
+              "documentation": "Reference<Medication.ingredient.item[x]> → Substance|Medication — resolve via bundle assembler"
+            },
+            {
+              "name": "map-strength",
+              "source": [
+                {
+                  "context": "src-ingredient",
+                  "variable": "src-strength"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-ingredient",
+                  "contextType": "variable",
+                  "element": "strength",
+                  "variable": "tgt-strength",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Medication.ingredient.strength | Type: Ratio | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Medication.ingredient | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Medication-manufacturer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-manufacturer"
+            }
+          ],
+          "documentation": "Reference<Medication.manufacturer> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Medication.status | Type: code | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

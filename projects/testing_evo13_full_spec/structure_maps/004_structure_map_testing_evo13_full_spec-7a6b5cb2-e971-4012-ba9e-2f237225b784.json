@@ -1,0 +1,418 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-7a6b5cb2-e971-4012-ba9e-2f237225b784-865e92e7",
+  "url": "http://example.org/StructureMap/source-definition-testing-evo13-full-spec-7a6b5cb2-e971-4012-ba9e-2f237225b784",
+  "name": "Map_004_structure_map_testing_evo13_full_spec_7a6b5cb2_e971_4012_ba9e_2f237225b784",
+  "title": "Structure Map for testing_evo13_full_spec - 7a6b5cb2-e971-4012-ba9e-2f237225b784",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: 7a6b5cb2-e971-4012-ba9e-2f237225b784). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-evo13-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.element44.de/E44_EVO13_PR_CorrectionRequest",
+      "mode": "target",
+      "alias": "7a6b5cb2-e971-4012-ba9e-2f237225b784"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-7a6b5cb2-e971-4012-ba9e-2f237225b784",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_evo13_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Communication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.element44.de/E44_EVO13_PR_CorrectionRequest"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://fhir.element44.de/E44_EVO13_PR_CorrectionRequest"
+        },
+        {
+          "name": "map-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "basedOn",
+              "variable": "tgt-basedOn",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Reference"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-basedOn",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-basedOn",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-identifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://gematik.de/fhir/NamingSystem/PrescriptionID"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "commBasedOnValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Communication.basedOn.identifier.value | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Communication.basedOn.identifier | Type: Identifier | Cardinality: 1..1 | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Reference Communication.basedOn populated from explicitly authored child mappings."
+        },
+        {
+          "name": "map-category-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-category-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "commCategorySystem",
+                      "variable": "src-category-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-category-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "commCategoryCode",
+                      "variable": "src-category-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-category-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Communication.category"
+        },
+        {
+          "name": "map-payload",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-payload"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payload",
+              "variable": "tgt-payload",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-payload",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-content",
+              "source": [
+                {
+                  "context": "src-payload",
+                  "element": "commPayload",
+                  "variable": "src-content"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-content-string",
+                  "source": [
+                    {
+                      "context": "src-payload",
+                      "element": "commPayload",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payload",
+                      "contextType": "variable",
+                      "element": "content",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.payload.content[x] | Type: string | Cardinality: 1..1 | Choice types: string"
+            }
+          ],
+          "documentation": "Maps to Communication.payload | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "map-topic-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "topic",
+              "variable": "tgt-topic-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-topic-text",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "commTopicText",
+                  "variable": "src-topic-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-topic-cc",
+                  "contextType": "variable",
+                  "element": "text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-topic-text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Communication.topic"
+        }
+      ]
+    }
+  ]
+}

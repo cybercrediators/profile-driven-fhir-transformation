@@ -1,0 +1,424 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-cio-ReplyProposalContraIndication-2231f788",
+  "url": "http://example.org/StructureMap/source-definition-testing-nictiz-cio-full-spec-cio-ReplyProposalContraIndication",
+  "name": "Map_001_structure_map_testing_nictiz_cio_full_spec_cio_ReplyProposalContraIndication",
+  "title": "Structure Map for testing_nictiz_cio_full_spec - cio-ReplyProposalContraIndication",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: cio-ReplyProposalContraIndication). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-nictiz-cio-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://nictiz.nl/fhir/StructureDefinition/cio-ReplyProposalContraIndication",
+      "mode": "target",
+      "alias": "cio-ReplyProposalContraIndication"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-cio-ReplyProposalContraIndication",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_nictiz_cio_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Communication",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://nictiz.nl/fhir/StructureDefinition/cio-ReplyProposalContraIndication"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://nictiz.nl/fhir/StructureDefinition/cio-ReplyProposalContraIndication"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<Communication.basedOn> → Resource|Flag — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "commIdSystem",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "commIdValue",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Communication.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Communication.identifier | Type: Identifier | Cardinality: 1..1"
+        },
+        {
+          "name": "map-payload-responseProposalContraIndication",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payload",
+              "variable": "tgt-payload-responseProposalContraIndication",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-payload-responseProposalContraIndication-content-x",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "commPayload",
+                  "variable": "src-payload-responseProposalContraIndication-content-x"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-payload-responseProposalContraIndication",
+                  "contextType": "variable",
+                  "element": "contentString",
+                  "variable": "tgt-payload-responseProposalContraIndication-content",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-payload-responseProposalContraIndication-content-x"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-contentCodeableConcept-payload-responseProposalContraIndication-content",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-MAP-CONTENTCODEABLECONCEPT_SOURCE",
+                      "variable": "src-contentCodeableConcept"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payload-responseProposalContraIndication-content",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-contentCodeableConcept",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-contentCodeableConcept-payload-responseProposalContraIndication-content",
+                      "source": [
+                        {
+                          "context": "src-contentCodeableConcept"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-contentCodeableConcept",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://nictiz.nl/fhir/5.0/StructureDefinition/extension-Communication.payload.content%5Bx%5D:contentCodeableConcept"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://nictiz.nl/fhir/5.0/StructureDefinition/extension-Communication.payload.content%5Bx%5D:contentCodeableConcept"
+                    },
+                    {
+                      "name": "set-extension-value-contentCodeableConcept-payload-responseProposalContraIndication-content",
+                      "source": [
+                        {
+                          "context": "source",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-contentCodeableConcept",
+                          "contextType": "variable",
+                          "element": "value",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "CodeableConcept"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueCodeableConcept)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://nictiz.nl/fhir/5.0/StructureDefinition/extension-Communication.payload.content%5Bx%5D:contentCodeableConcept | Type: Extension | Path: Communication.payload:responseProposalContraIndication.content[x].extension:contentCodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice responseProposalContraIndication of Communication.payload (type BackboneElement)"
+        },
+        {
+          "name": "map-payload-comment",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payload",
+              "variable": "tgt-payload-comment",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-payload-comment-content-x",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "commComment",
+                  "variable": "src-payload-comment-content-x"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-payload-comment",
+                  "contextType": "variable",
+                  "element": "contentString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-payload-comment-content-x"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice comment of Communication.payload (type BackboneElement)"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-sender",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-sender"
+            }
+          ],
+          "documentation": "Reference<Communication.sender> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-sent",
+          "source": [
+            {
+              "context": "source",
+              "element": "commSent",
+              "variable": "src-sent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "sent",
+              "variable": "tgt-sent",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-sent"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.sent | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "commStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Communication.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Communication-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Communication.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

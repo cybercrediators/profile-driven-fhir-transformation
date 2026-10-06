@@ -1,0 +1,461 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Appointment-Profile-4143c1f3",
+  "url": "http://example.org/StructureMap/source-definition-testing-capable-full-spec-Appointment_Profile",
+  "name": "Map_008_structure_map_testing_capable_full_spec_Appointment_Profile",
+  "title": "Structure Map for testing_capable_full_spec - Appointment_Profile",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Appointment_Profile). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-capable-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://capable-project.eu/data/fhir/StructureDefinition/Appointment_Profile",
+      "mode": "target",
+      "alias": "Appointment_Profile"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Appointment-Profile",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_capable_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Appointment",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://capable-project.eu/data/fhir/StructureDefinition/Appointment_Profile"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://capable-project.eu/data/fhir/StructureDefinition/Appointment_Profile"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "apptId",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Appointment.identifier.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Appointment.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-participant",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-participant"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "participant",
+              "variable": "tgt-participant",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Appointment-actor",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Appointment.participant.actor> → Patient — resolve via bundle assembler"
+            },
+            {
+              "name": "map-status",
+              "source": [
+                {
+                  "context": "src-participant",
+                  "element": "apptPartStatus",
+                  "variable": "src-status"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-participant",
+                  "contextType": "variable",
+                  "element": "status",
+                  "variable": "tgt-status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-status"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Appointment.participant.status | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Appointment.participant | Type: BackboneElement | Cardinality: 1..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-reasonCode-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-reasonCode-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reasonCode-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-reasonCode-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-reasonCode-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-reasonCode-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-reasonCode-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "apptReasonCode",
+                      "variable": "src-reasonCode-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-reasonCode-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-reasonCode-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Appointment.reasonCode"
+        },
+        {
+          "name": "map-serviceType-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "serviceType",
+              "variable": "tgt-serviceType-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-serviceType-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-serviceType-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-serviceType-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-serviceType-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-serviceType-cc-coding0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "308335008"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-serviceType-coding0-display",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-serviceType-cc-coding0",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "Patient encounter procedure"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-serviceType-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-serviceType-cc-coding0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for Appointment.serviceType"
+        },
+        {
+          "name": "map-start",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptStart",
+              "variable": "src-start"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "start",
+              "variable": "tgt-start",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-start"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.start | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "apptStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Appointment.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1452 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-mii-pr-biobank-specimen-core-91455bb9",
+  "url": "http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec-mii-pr-biobank-specimen-core",
+  "name": "Map_011_structure_map_testing_kds_biobank_full_spec_mii_pr_biobank_specimen_core",
+  "title": "Structure Map for testing_kds_biobank_full_spec - mii-pr-biobank-specimen-core",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: mii-pr-biobank-specimen-core). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-kds-biobank-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/SpecimenCore",
+      "mode": "target",
+      "alias": "mii-pr-biobank-specimen-core"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-mii-pr-biobank-specimen-core",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_kds_biobank_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Specimen",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/SpecimenCore"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/SpecimenCore"
+        },
+        {
+          "name": "map-collection",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-collection"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "collection",
+              "variable": "tgt-collection",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-bodySite",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "variable": "src-bodySite"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "contextType": "variable",
+                  "element": "bodySite",
+                  "variable": "tgt-bodySite",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Specimen.collection.bodySite | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
+            },
+            {
+              "name": "map-collected",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "variable": "src-collected"
+                }
+              ],
+              "target": [],
+              "rule": [
+                {
+                  "name": "map-collected-dateTime",
+                  "source": [
+                    {
+                      "context": "src-collection",
+                      "element": "specimenCollected",
+                      "variable": "src-choiceval"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-collection",
+                      "contextType": "variable",
+                      "element": "collected",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-choiceval"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Specimen.collection.collected[x] | Type: dateTime, Period | Cardinality: 1..1 | Choice types: dateTime, Period"
+            },
+            {
+              "name": "map-extension-einstellungBlutversorgung",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "element": "TODO-MAP-EINSTELLUNGBLUTVERSORGUNG_SOURCE",
+                  "variable": "src-einstellungBlutversorgung"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-einstellungBlutversorgung",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-einstellungBlutversorgung",
+                  "source": [
+                    {
+                      "context": "src-einstellungBlutversorgung"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-einstellungBlutversorgung",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung"
+                },
+                {
+                  "name": "set-extension-value-einstellungBlutversorgung",
+                  "source": [
+                    {
+                      "context": "src-collection",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-einstellungBlutversorgung",
+                      "contextType": "variable",
+                      "element": "valueDateTime",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueDateTime)"
+                }
+              ],
+              "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung | Type: [{'code': 'Extension', 'profile_canonical': ['https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/EinstellungBlutversorgung', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'dateTime'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'children': []}]]}] | Path: Specimen.collection.extension"
+            },
+            {
+              "name": "map-fastingStatus",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "variable": "src-fastingStatus"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "contextType": "variable",
+                  "element": "fastingStatus",
+                  "variable": "tgt-fastingStatus",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Specimen.collection.fastingStatus[x] | Type: CodeableConcept, Duration | Cardinality: 0..1"
+            },
+            {
+              "name": "map-quantity",
+              "source": [
+                {
+                  "context": "src-collection",
+                  "variable": "src-quantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-collection",
+                  "contextType": "variable",
+                  "element": "quantity",
+                  "variable": "tgt-quantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-quantity",
+                      "element": "specimenCollQtyCode",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.collection.quantity.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-quantity",
+                      "element": "specimenCollQtySystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.collection.quantity.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-unit",
+                  "source": [
+                    {
+                      "context": "src-quantity",
+                      "element": "specimenCollQtyUnit",
+                      "variable": "src-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "variable": "tgt-unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.collection.quantity.unit | Type: string | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-quantity",
+                      "element": "specimenCollQtyValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-quantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.collection.quantity.value | Type: decimal | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Specimen.collection.quantity | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+            }
+          ],
+          "documentation": "Maps to Specimen.collection | Type: BackboneElement | Cardinality: 1..1 | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-container",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-container"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "container",
+              "variable": "tgt-container",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-container",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Specimen-additive",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-additive"
+                }
+              ],
+              "documentation": "Reference<Specimen.container.additive[x]> → Substance — resolve via bundle assembler"
+            },
+            {
+              "name": "map-capacity",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-capacity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "contextType": "variable",
+                  "element": "capacity",
+                  "variable": "tgt-capacity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "specimenContCapCode",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.capacity.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "specimenContCapSystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.capacity.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-unit",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "specimenContCapUnit",
+                      "variable": "src-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "variable": "tgt-unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.capacity.unit | Type: string | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-capacity",
+                      "element": "specimenContCapValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-capacity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.capacity.value | Type: decimal | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Specimen.container.capacity | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-specimenQuantity",
+              "source": [
+                {
+                  "context": "src-container",
+                  "variable": "src-specimenQuantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "contextType": "variable",
+                  "element": "specimenQuantity",
+                  "variable": "tgt-specimenQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-specimenQuantity",
+                      "element": "specimenContSpecQtyCode",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-specimenQuantity",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.specimenQuantity.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-specimenQuantity",
+                      "element": "specimenContSpecQtySystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-specimenQuantity",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.specimenQuantity.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-unit",
+                  "source": [
+                    {
+                      "context": "src-specimenQuantity",
+                      "element": "specimenContSpecQtyUnit",
+                      "variable": "src-unit"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-specimenQuantity",
+                      "contextType": "variable",
+                      "element": "unit",
+                      "variable": "tgt-unit",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-unit"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.specimenQuantity.unit | Type: string | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-specimenQuantity",
+                      "element": "specimenContSpecQtyValue",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-specimenQuantity",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Specimen.container.specimenQuantity.value | Type: decimal | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Specimen.container.specimenQuantity | Type: Quantity | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-type-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-container"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-container",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-type-coding",
+                  "source": [
+                    {
+                      "context": "src-container"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-type-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-type-system",
+                      "source": [
+                        {
+                          "context": "src-container",
+                          "element": "specimenContTypeSystem",
+                          "variable": "src-type-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-type-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-type-code",
+                      "source": [
+                        {
+                          "context": "src-container",
+                          "element": "specimenContTypeCode",
+                          "variable": "src-type-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-type-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Specimen.container.type"
+            }
+          ],
+          "documentation": "Maps to Specimen.container | Type: BackboneElement | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-extension-feature",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-FEATURE_SOURCE",
+              "variable": "src-feature"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-feature",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-feature",
+              "source": [
+                {
+                  "context": "src-feature"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-feature",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/5.0/StructureDefinition/extension-Specimen.feature"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/5.0/StructureDefinition/extension-Specimen.feature"
+            },
+            {
+              "name": "map-extension-type",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-TYPE_SOURCE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-feature",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-type",
+                  "source": [
+                    {
+                      "context": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-type",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "type"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to type"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-type",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-valueCodeableConcept-system",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://snomed.info/sct"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-valueCodeableConcept-code",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "translate",
+                              "parameter": [
+                                {
+                                  "valueId": "src"
+                                },
+                                {
+                                  "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec/ConceptMap/cm-type-b64d8af6"
+                                },
+                                {
+                                  "valueString": "code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Specimen.extension:feature.extension:type using http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec/ConceptMap/cm-type-b64d8af6"
+                }
+              ],
+              "documentation": "Maps to extension: type | Type: [{'code': 'Extension'}] | Path: Specimen.extension:feature.extension"
+            },
+            {
+              "name": "map-extension-description",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-DESCRIPTION_SOURCE",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-feature",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-description",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-description",
+                  "source": [
+                    {
+                      "context": "src-description"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-description",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "description"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to description"
+                },
+                {
+                  "name": "set-extension-value-description",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-description",
+                      "contextType": "variable",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueString)"
+                }
+              ],
+              "documentation": "Maps to extension: description | Type: [{'code': 'Extension'}] | Path: Specimen.extension:feature.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/5.0/StructureDefinition/extension-Specimen.feature | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/5.0/StructureDefinition/extension-Specimen.feature'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 2, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': True, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': \"exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])\", 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:type', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Additional content defined by implementations', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'type', 'must_support': True, 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': \"exists(f:extension)!=exists(f:*[starts-with(local-name(.), 'value')])\", 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'aliases': ['extensions', 'user content'], 'slice_identity': 'Extension.extension:type', 'slice_selector': 'type', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:type.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '0'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'is_prohibited': True, 'fixed_value': [], 'options': [], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:type.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'children': []}, {'path': 'Extension.extension.url', 'id':… [truncated; full structure in the registry entry for http://hl7.org/fhir/5.0/StructureDefinition/extension-Specimen.feature] | Path: Specimen.extension"
+        },
+        {
+          "name": "map-extension-probenebene",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-PROBENEBENE_SOURCE",
+              "variable": "src-probenebene"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-probenebene",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-probenebene",
+              "source": [
+                {
+                  "context": "src-probenebene"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-probenebene",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene"
+            },
+            {
+              "name": "map-valueCoding-translate",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-SOURCE-FOR-VALUECODING",
+                  "variable": "src",
+                  "condition": "$this != ''"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-probenebene",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-valueCoding-system",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/mii-cs-biobank-probenebene"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-valueCoding-code",
+                  "source": [
+                    {
+                      "context": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "translate",
+                      "parameter": [
+                        {
+                          "valueId": "src"
+                        },
+                        {
+                          "valueString": "http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec/ConceptMap/cm-probenebene-ee28fa04"
+                        },
+                        {
+                          "valueString": "code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Translate mapping for Specimen.extension:probenebene using http://example.org/StructureMap/source-definition-testing-kds-biobank-full-spec/ConceptMap/cm-probenebene-ee28fa04"
+            }
+          ],
+          "documentation": "Maps to extension: https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene | Type: [{'code': 'Extension', 'profile_canonical': ['https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [{'code': 'PRIMÄRPROBE', 'display': 'Primärprobe', 'system': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/mii-cs-biobank-probenebene', 'version': '2026.0.1'}, {'code': 'ALIQUOTGRUPPE', 'display': 'Aliquotgruppe', 'system': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/mii-cs-biobank-probenebene', 'version': '2026.0.1'}, {'code': 'ALIQUOT', 'display': 'Aliquot', 'system': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/CodeSystem/mii-cs-biobank-probenebene', 'version': '2026.0.1'}], 'conditions': ['ele-1'], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}, {'identity': 'rim', 'map': 'N/A'}], 'binding_strength': 'required', 'valueSetUrl': 'https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/ValueSet/mii-vs-biobank-probenebene', 'children': []}]]}… [truncated; full structure in the registry entry for https://www.medizininformatik-initiative.de/fhir/ext/modul-biobank/StructureDefinition/mii-ex-biobank-ebene] | Path: Specimen.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-parent",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-parent"
+            }
+          ],
+          "documentation": "Reference<Specimen.parent> → Specimen — resolve via bundle assembler"
+        },
+        {
+          "name": "map-receivedTime",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_RECEIVEDTIME",
+              "variable": "src-receivedTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "receivedTime",
+              "variable": "tgt-receivedTime",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-receivedTime"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.receivedTime | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-request",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-request"
+            }
+          ],
+          "documentation": "Reference<Specimen.request> → ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "specimenStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Specimen.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Specimen-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Specimen.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding-sct",
+              "source": [
+                {
+                  "context": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding-sct",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-coding-sct-system",
+                  "source": [
+                    {
+                      "context": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://snomed.info/sct"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-system-2",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "element": "specimenTypeSystem",
+                      "variable": "src-coding-sct-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-sct-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-coding-sct-code",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "element": "specimenTypeCode",
+                      "variable": "src-coding-sct-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding-sct",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-coding-sct-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice sct of Specimen.type.coding (type Coding)"
+            }
+          ],
+          "documentation": "Maps to Specimen.type | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
+        }
+      ]
+    }
+  ]
+}

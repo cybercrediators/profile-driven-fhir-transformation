@@ -1,0 +1,730 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ISiKOrganisation-1653256f",
+  "url": "http://example.org/StructureMap/source-definition-e16-isik-full-spec-ISiKOrganisation",
+  "name": "Map_025_structure_map_e16_isik_full_spec_ISiKOrganisation",
+  "title": "Structure Map for e16_isik_full_spec - ISiKOrganisation",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ISiKOrganisation). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-isik-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/isik/StructureDefinition/ISiKOrganisation",
+      "mode": "target",
+      "alias": "ISiKOrganisation"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ISiKOrganisation",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_isik_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/isik/StructureDefinition/ISiKOrganisation"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/isik/StructureDefinition/ISiKOrganisation"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-alias",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.alias | Type: string | Cardinality: 0..*"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-address",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-address"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "address",
+                  "variable": "tgt-address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.address | Type: Address | Cardinality: 0..1"
+            },
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.name | Type: HumanName | Cardinality: 0..1"
+            },
+            {
+              "name": "map-purpose",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "variable": "tgt-purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.purpose | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-telecom",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "variable": "tgt-telecom",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.telecom | Type: ContactPoint | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Organization.contact | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<Organization.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-IKNR",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-IKNR",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-IKNR-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_IKNR_system",
+                  "variable": "src-identifier-IKNR-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-IKNR",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-IKNR-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-IKNR-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_IKNR_value",
+                  "variable": "src-identifier-IKNR-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-IKNR",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-IKNR-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice IKNR of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-identifier-BSNR",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-BSNR",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-BSNR-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_BSNR_system",
+                  "variable": "src-identifier-BSNR-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-BSNR",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-BSNR-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-BSNR-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_BSNR_value",
+                  "variable": "src-identifier-BSNR-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-BSNR",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-BSNR-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice BSNR of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-identifier-OrganisationseinheitenID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-OrganisationseinheitenID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-OrganisationseinheitenID-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-OrganisationseinheitenID",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-identifier-OrganisationseinheitenID-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-OrganisationseinheitenID-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-OrganisationseinheitenID-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-identifier-OrganisationseinheitenID-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-OrganisationseinheitenID-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-OrganisationseinheitenID-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://snomed.info/sct"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-OrganisationseinheitenID-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-OrganisationseinheitenID-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "43741000"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-OrganisationseinheitenID-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_OrganisationseinheitenID_system",
+                  "variable": "src-identifier-OrganisationseinheitenID-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-OrganisationseinheitenID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-OrganisationseinheitenID-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-OrganisationseinheitenID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_OrganisationseinheitenID_value",
+                  "variable": "src-identifier-OrganisationseinheitenID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-OrganisationseinheitenID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-OrganisationseinheitenID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice OrganisationseinheitenID of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-identifier-TelematikID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-TelematikID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-TelematikID-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_TelematikID_system",
+                  "variable": "src-identifier-TelematikID-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-TelematikID-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-TelematikID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "iSiKOrganisation_identifier_TelematikID_value",
+                  "variable": "src-identifier-TelematikID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-TelematikID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice TelematikID of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "iSiKOrganisation_name",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

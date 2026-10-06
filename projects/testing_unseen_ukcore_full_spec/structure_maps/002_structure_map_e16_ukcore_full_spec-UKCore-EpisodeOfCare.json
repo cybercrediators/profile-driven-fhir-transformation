@@ -1,0 +1,558 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-EpisodeOfCare-3296073a",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-full-spec-UKCore-EpisodeOfCare",
+  "name": "Map_002_structure_map_e16_ukcore_full_spec_UKCore_EpisodeOfCare",
+  "title": "Structure Map for e16_ukcore_full_spec - UKCore-EpisodeOfCare",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-EpisodeOfCare). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-EpisodeOfCare",
+      "mode": "target",
+      "alias": "UKCore-EpisodeOfCare"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-EpisodeOfCare",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "EpisodeOfCare",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-EpisodeOfCare"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-EpisodeOfCare"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-account",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-account"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.account> → Account — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-careManager",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-careManager"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.careManager> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-diagnosis",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-diagnosis"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "diagnosis",
+              "variable": "tgt-diagnosis",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-diagnosis",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-EpisodeOfCare-condition",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "variable": "src-condition"
+                }
+              ],
+              "documentation": "Reference<EpisodeOfCare.diagnosis.condition> → Condition — resolve via bundle assembler"
+            },
+            {
+              "name": "map-rank",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "element": "TODO_MAP_RANK",
+                  "variable": "src-rank"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-diagnosis",
+                  "contextType": "variable",
+                  "element": "rank",
+                  "variable": "tgt-rank",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-rank"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.diagnosis.rank | Type: positiveInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-diagnosis",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-diagnosis",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.diagnosis.role | Type: CodeableConcept | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.diagnosis | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-EpisodeOfCare-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<EpisodeOfCare.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-managingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-managingOrganization"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.managingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-referralRequest",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-referralRequest"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.referralRequest> → ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "uKCore_EpisodeOfCare_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusHistory",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusHistory"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusHistory",
+              "variable": "tgt-statusHistory",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-statusHistory",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-statusHistory",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-statusHistory",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.statusHistory.period | Type: Period | Cardinality: 1..1"
+            },
+            {
+              "name": "map-status",
+              "source": [
+                {
+                  "context": "src-statusHistory",
+                  "element": "TODO_MAP_STATUS",
+                  "variable": "src-status"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-statusHistory",
+                  "contextType": "variable",
+                  "element": "status",
+                  "variable": "tgt-status",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-status"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to EpisodeOfCare.statusHistory.status | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.statusHistory | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-EpisodeOfCare-team",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-team"
+            }
+          ],
+          "documentation": "Reference<EpisodeOfCare.team> → CareTeam — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to EpisodeOfCare.type | Type: CodeableConcept | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}

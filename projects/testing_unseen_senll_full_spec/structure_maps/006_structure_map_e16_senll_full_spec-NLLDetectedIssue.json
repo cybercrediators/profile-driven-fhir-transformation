@@ -1,0 +1,601 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NLLDetectedIssue-771bb9e6",
+  "url": "http://example.org/StructureMap/source-definition-e16-senll-full-spec-NLLDetectedIssue",
+  "name": "Map_006_structure_map_e16_senll_full_spec_NLLDetectedIssue",
+  "title": "Structure Map for e16_senll_full_spec - NLLDetectedIssue",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NLLDetectedIssue). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-senll-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://electronichealth.se/fhir/StructureDefinition/NLLDetectedIssue",
+      "mode": "target",
+      "alias": "NLLDetectedIssue"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NLLDetectedIssue",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_senll_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "DetectedIssue",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLDetectedIssue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://electronichealth.se/fhir/StructureDefinition/NLLDetectedIssue"
+        },
+        {
+          "name": "TODO-resolve-reference-DetectedIssue-author",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-author"
+            }
+          ],
+          "documentation": "Reference<DetectedIssue.author> → Practitioner|PractitionerRole|Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-code-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "nLLDetectedIssue_code_coding_system",
+                      "variable": "src-code-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "nLLDetectedIssue_code_coding_code",
+                      "variable": "src-code-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for DetectedIssue.code"
+        },
+        {
+          "name": "map-detail",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DETAIL",
+              "variable": "src-detail"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "detail",
+              "variable": "tgt-detail",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-detail"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.detail | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-evidence",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-evidence"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "evidence",
+              "variable": "tgt-evidence",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-evidence",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-evidence",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-evidence",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DetectedIssue.evidence.code | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "TODO-resolve-reference-DetectedIssue-detail",
+              "source": [
+                {
+                  "context": "src-evidence",
+                  "variable": "src-detail"
+                }
+              ],
+              "documentation": "Reference<DetectedIssue.evidence.detail> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.evidence | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-extension-nllDispatchRowNo",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NLLDISPATCHROWNO_SOURCE",
+              "variable": "src-nllDispatchRowNo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nllDispatchRowNo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nllDispatchRowNo",
+              "source": [
+                {
+                  "context": "src-nllDispatchRowNo"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllDispatchRowNo",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLDispatchRowNo"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLDispatchRowNo"
+            },
+            {
+              "name": "set-extension-value-nllDispatchRowNo",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllDispatchRowNo",
+                  "contextType": "variable",
+                  "element": "valueDecimal",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDecimal)"
+            }
+          ],
+          "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLDispatchRowNo | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLDispatchRowNo'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/NLLDispatchRowNo', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'decimal'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Identier for MedicationDispense within dispatch', 'is_required': True, 'fixed_value': [], 'options': [], 'comment': 'This is an integer (a 64-bit value)', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'EHM', 'map': 'ExpeditionsRadNummer'}, {'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: DetectedIssue.extension"
+        },
+        {
+          "name": "map-identified",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_IDENTIFIED",
+              "variable": "src-identified"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identified",
+              "variable": "tgt-identified",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-identified"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.identified[x] | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-DetectedIssue-implicated",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-implicated"
+            }
+          ],
+          "documentation": "Reference<DetectedIssue.implicated> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-mitigation",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-mitigation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "mitigation",
+              "variable": "tgt-mitigation",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-mitigation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-action",
+              "source": [
+                {
+                  "context": "src-mitigation",
+                  "variable": "src-action"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-mitigation",
+                  "contextType": "variable",
+                  "element": "action",
+                  "variable": "tgt-action",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DetectedIssue.mitigation.action | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-DetectedIssue-author",
+              "source": [
+                {
+                  "context": "src-mitigation",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<DetectedIssue.mitigation.author> → Practitioner|PractitionerRole — resolve via bundle assembler"
+            },
+            {
+              "name": "map-date",
+              "source": [
+                {
+                  "context": "src-mitigation",
+                  "element": "TODO_MAP_DATE",
+                  "variable": "src-date"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-mitigation",
+                  "contextType": "variable",
+                  "element": "date",
+                  "variable": "tgt-date",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-date"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to DetectedIssue.mitigation.date | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.mitigation | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-DetectedIssue-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<DetectedIssue.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reference",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_REFERENCE",
+              "variable": "src-reference"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reference",
+              "variable": "tgt-reference",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-reference"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.reference | Type: uri | Cardinality: 0..1"
+        },
+        {
+          "name": "map-severity",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_SEVERITY",
+              "variable": "src-severity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "severity",
+              "variable": "tgt-severity",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-severity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.severity | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to DetectedIssue.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

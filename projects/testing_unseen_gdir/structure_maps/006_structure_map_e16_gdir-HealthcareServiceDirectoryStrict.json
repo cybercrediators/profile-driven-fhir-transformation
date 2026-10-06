@@ -1,0 +1,963 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-HealthcareServiceDirectoryStrict-71b1e3f3",
+  "url": "http://example.org/StructureMap/source-definition-e16-gdir-HealthcareServiceDirectoryStrict",
+  "name": "Map_006_structure_map_e16_gdir_HealthcareServiceDirectoryStrict",
+  "title": "Structure Map for e16_gdir - HealthcareServiceDirectoryStrict",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: HealthcareServiceDirectoryStrict). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-gdir",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/directory/StructureDefinition/HealthcareServiceDirectoryStrict",
+      "mode": "target",
+      "alias": "HealthcareServiceDirectoryStrict"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-HealthcareServiceDirectoryStrict",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_gdir",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "HealthcareService",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/HealthcareServiceDirectoryStrict"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/directory/StructureDefinition/HealthcareServiceDirectoryStrict"
+        },
+        {
+          "name": "map-appointmentRequired",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_APPOINTMENTREQUIRED",
+              "variable": "src-appointmentRequired"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "appointmentRequired",
+              "variable": "tgt-appointmentRequired",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-appointmentRequired"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to HealthcareService.appointmentRequired | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-availabilityExceptions",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_AVAILABILITYEXCEPTIONS",
+              "variable": "src-availabilityExceptions"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "availabilityExceptions",
+              "variable": "tgt-availabilityExceptions",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-availabilityExceptions"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to HealthcareService.availabilityExceptions | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-availableTime",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-availableTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "availableTime",
+              "variable": "tgt-availableTime",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-availableTime",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-availableEndTime",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_AVAILABLEENDTIME",
+                  "variable": "src-availableEndTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "availableEndTime",
+                  "variable": "tgt-availableEndTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-availableEndTime"
+                    },
+                    {
+                      "valueString": "time"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.availableTime.availableEndTime | Type: time | Cardinality: 0..1"
+            },
+            {
+              "name": "map-availableStartTime",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_AVAILABLESTARTTIME",
+                  "variable": "src-availableStartTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "availableStartTime",
+                  "variable": "tgt-availableStartTime",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-availableStartTime"
+                    },
+                    {
+                      "valueString": "time"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.availableTime.availableStartTime | Type: time | Cardinality: 0..1"
+            },
+            {
+              "name": "map-daysOfWeek",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO_MAP_DAYSOFWEEK",
+                  "variable": "src-daysOfWeek"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "daysOfWeek",
+                  "variable": "tgt-daysOfWeek",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-daysOfWeek"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.availableTime.daysOfWeek | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-extension-specialOpeningTimes",
+              "source": [
+                {
+                  "context": "src-availableTime",
+                  "element": "TODO-MAP-SPECIALOPENINGTIMES_SOURCE",
+                  "variable": "src-specialOpeningTimes"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-availableTime",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-specialOpeningTimes",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-specialOpeningTimes",
+                  "source": [
+                    {
+                      "context": "src-specialOpeningTimes"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-specialOpeningTimes",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://gematik.de/fhir/directory/StructureDefinition/SpecialOpeningTimesEX"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/SpecialOpeningTimesEX"
+                },
+                {
+                  "name": "map-extension-qualifier",
+                  "source": [
+                    {
+                      "context": "src-availableTime",
+                      "element": "TODO-MAP-QUALIFIER_SOURCE",
+                      "variable": "src-qualifier"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-specialOpeningTimes",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-qualifier",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-qualifier",
+                      "source": [
+                        {
+                          "context": "src-qualifier"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-qualifier",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "qualifier"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to qualifier"
+                    }
+                  ],
+                  "documentation": "Maps to extension: qualifier | Type: [{'code': 'Extension'}] | Path: HealthcareService.availableTime.extension.extension"
+                }
+              ],
+              "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/SpecialOpeningTimesEX | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/SpecialOpeningTimesEX'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 2, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:period', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'sliceName': 'period', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:period', 'slice_selector': 'period', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:period.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '0'}, 'description': 'Extension', 'is_required': False, 'is_prohibited': True, 'fixed_value': [], 'options': [], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:period.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.extension.url', 'id': 'Extension.extension:period.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'period', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.extension.value[x]', 'id': 'Extension.extension:period.value[x]', 'type': [{'code': 'Period', 'type_structure': [{'path': 'Extension.extension.value[x].end', 'id': 'Period.end', 'type': 'dateTime', 'description': '… [truncated; full structure in the registry entry for https://gematik.de/fhir/directory/StructureDefinition/SpecialOpeningTimesEX] | Path: HealthcareService.availableTime.extension"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.availableTime | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-category",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.category.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.category | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-communication",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-communication",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.communication.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.communication | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-HealthcareService-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<HealthcareService.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-holderId",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HOLDERID_SOURCE",
+              "variable": "src-holderId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-holderId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-holderId",
+              "source": [
+                {
+                  "context": "src-holderId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-holderId",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex"
+            },
+            {
+              "name": "set-extension-value-holderId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-holderId",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueCode)"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: HealthcareService.extension"
+        },
+        {
+          "name": "map-extension-ownerTelematikId",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-OWNERTELEMATIKID_SOURCE",
+              "variable": "src-ownerTelematikId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ownerTelematikId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ownerTelematikId",
+              "source": [
+                {
+                  "context": "src-ownerTelematikId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+            },
+            {
+              "name": "set-extension-value-ownerTelematikId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueIdentifier)"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'profile_canonical': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'profile': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'type_structure': [{'path': 'Extension.value[x].assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.i… [truncated; full structure in the registry entry for https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx] | Path: HealthcareService.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-HealthcareService-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<HealthcareService.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NAME",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to HealthcareService.name | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-notAvailable",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-notAvailable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "notAvailable",
+              "variable": "tgt-notAvailable",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-notAvailable",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-notAvailable",
+                  "element": "TODO_MAP_DESCRIPTION",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-notAvailable",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.notAvailable.description | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-during",
+              "source": [
+                {
+                  "context": "src-notAvailable",
+                  "variable": "src-during"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-notAvailable",
+                  "contextType": "variable",
+                  "element": "during",
+                  "variable": "tgt-during",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.notAvailable.during | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.notAvailable | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-HealthcareService-providedBy",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-providedBy"
+            }
+          ],
+          "documentation": "Reference<HealthcareService.providedBy> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-specialty",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialty"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialty",
+              "variable": "tgt-specialty",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialty",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-specialty",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialty",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.specialty.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.specialty | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.telecom.system | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.telecom.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-type",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-type",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to HealthcareService.type.coding | Type: Coding | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to HealthcareService.type | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        }
+      ]
+    }
+  ]
+}

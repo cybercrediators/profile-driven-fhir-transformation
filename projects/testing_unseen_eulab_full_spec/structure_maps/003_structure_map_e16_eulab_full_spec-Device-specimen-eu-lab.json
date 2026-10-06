@@ -1,0 +1,1109 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-Device-specimen-eu-lab-23f1d4f5",
+  "url": "http://example.org/StructureMap/source-definition-e16-eulab-full-spec-Device-specimen-eu-lab",
+  "name": "Map_003_structure_map_e16_eulab_full_spec_Device_specimen_eu_lab",
+  "title": "Structure Map for e16_eulab_full_spec - Device-specimen-eu-lab",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: Device-specimen-eu-lab). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-eulab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.eu/fhir/laboratory/StructureDefinition/Device-specimen-eu-lab",
+      "mode": "target",
+      "alias": "Device-specimen-eu-lab"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-Device-specimen-eu-lab",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_eulab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Device",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.eu/fhir/laboratory/StructureDefinition/Device-specimen-eu-lab"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.eu/fhir/laboratory/StructureDefinition/Device-specimen-eu-lab"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.contact | Type: ContactPoint | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Device-definition",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-definition"
+            }
+          ],
+          "documentation": "Reference<Device.definition> → DeviceDefinition — resolve via bundle assembler"
+        },
+        {
+          "name": "map-deviceName",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-deviceName"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "deviceName",
+              "variable": "tgt-deviceName",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-deviceName",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-deviceName",
+                  "element": "TODO_MAP_NAME",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-name"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.deviceName.name | Type: string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-deviceName",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-deviceName",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.deviceName.type | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Device.deviceName | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-distinctIdentifier",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DISTINCTIDENTIFIER",
+              "variable": "src-distinctIdentifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "distinctIdentifier",
+              "variable": "tgt-distinctIdentifier",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-distinctIdentifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.distinctIdentifier | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-expirationDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EXPIRATIONDATE",
+              "variable": "src-expirationDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "expirationDate",
+              "variable": "tgt-expirationDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-expirationDate"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.expirationDate | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Device-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<Device.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-lotNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_LOTNUMBER",
+              "variable": "src-lotNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "lotNumber",
+              "variable": "tgt-lotNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-lotNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.lotNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-manufactureDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MANUFACTUREDATE",
+              "variable": "src-manufactureDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "manufactureDate",
+              "variable": "tgt-manufactureDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-manufactureDate"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.manufactureDate | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-manufacturer",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MANUFACTURER",
+              "variable": "src-manufacturer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "manufacturer",
+              "variable": "tgt-manufacturer",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-manufacturer"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.manufacturer | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-modelNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MODELNUMBER",
+              "variable": "src-modelNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "modelNumber",
+              "variable": "tgt-modelNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-modelNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.modelNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Device-owner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-owner"
+            }
+          ],
+          "documentation": "Reference<Device.owner> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Device-parent",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-parent"
+            }
+          ],
+          "documentation": "Reference<Device.parent> → Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-partNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PARTNUMBER",
+              "variable": "src-partNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "partNumber",
+              "variable": "tgt-partNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-partNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.partNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Device-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<Device.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-property",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-property"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "property",
+              "variable": "tgt-property",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-property",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.property.type | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-valueCode",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-valueCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "variable": "tgt-valueCode",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-valueCode",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.property.valueCode | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-valueQuantity",
+              "source": [
+                {
+                  "context": "src-property",
+                  "variable": "src-valueQuantity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-property",
+                  "contextType": "variable",
+                  "element": "valueQuantity",
+                  "variable": "tgt-valueQuantity",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-valueQuantity",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.property.valueQuantity | Type: Quantity | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Device.property | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-safety",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-safety"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "safety",
+              "variable": "tgt-safety",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-safety",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.safety | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-serialNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_SERIALNUMBER",
+              "variable": "src-serialNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "serialNumber",
+              "variable": "tgt-serialNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-serialNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.serialNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-specialization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-specialization"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "specialization",
+              "variable": "tgt-specialization",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-specialization",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-systemType",
+              "source": [
+                {
+                  "context": "src-specialization",
+                  "variable": "src-systemType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialization",
+                  "contextType": "variable",
+                  "element": "systemType",
+                  "variable": "tgt-systemType",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.specialization.systemType | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "map-version",
+              "source": [
+                {
+                  "context": "src-specialization",
+                  "element": "TODO_MAP_VERSION",
+                  "variable": "src-version"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-specialization",
+                  "contextType": "variable",
+                  "element": "version",
+                  "variable": "tgt-version",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-version"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.specialization.version | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Device.specialization | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_STATUS",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.status | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.statusReason | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.type | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-udiCarrier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-udiCarrier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "udiCarrier",
+              "variable": "tgt-udiCarrier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-udiCarrier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-carrierAIDC",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_CARRIERAIDC",
+                  "variable": "src-carrierAIDC"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "carrierAIDC",
+                  "variable": "tgt-carrierAIDC",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-carrierAIDC"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.carrierAIDC | Type: base64Binary | Cardinality: 0..1"
+            },
+            {
+              "name": "map-carrierHRF",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_CARRIERHRF",
+                  "variable": "src-carrierHRF"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "carrierHRF",
+                  "variable": "tgt-carrierHRF",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-carrierHRF"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.carrierHRF | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-deviceIdentifier",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_DEVICEIDENTIFIER",
+                  "variable": "src-deviceIdentifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "deviceIdentifier",
+                  "variable": "tgt-deviceIdentifier",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-deviceIdentifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.deviceIdentifier | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-entryType",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_ENTRYTYPE",
+                  "variable": "src-entryType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "entryType",
+                  "variable": "tgt-entryType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-entryType"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.entryType | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-issuer",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_ISSUER",
+                  "variable": "src-issuer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "issuer",
+                  "variable": "tgt-issuer",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-issuer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.issuer | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-jurisdiction",
+              "source": [
+                {
+                  "context": "src-udiCarrier",
+                  "element": "TODO_MAP_JURISDICTION",
+                  "variable": "src-jurisdiction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-udiCarrier",
+                  "contextType": "variable",
+                  "element": "jurisdiction",
+                  "variable": "tgt-jurisdiction",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-jurisdiction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.udiCarrier.jurisdiction | Type: uri | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Device.udiCarrier | Type: BackboneElement | Cardinality: 0..* | Complex type with 9 child elements"
+        },
+        {
+          "name": "map-url",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_URL",
+              "variable": "src-url"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "url",
+              "variable": "tgt-url",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-url"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Device.url | Type: uri | Cardinality: 0..1"
+        },
+        {
+          "name": "map-version",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-version"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "version",
+              "variable": "tgt-version",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-version",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-component",
+              "source": [
+                {
+                  "context": "src-version",
+                  "variable": "src-component"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-version",
+                  "contextType": "variable",
+                  "element": "component",
+                  "variable": "tgt-component",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.version.component | Type: Identifier | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-version",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-version",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.version.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-version",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-version",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Device.version.value | Type: string | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Device.version | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        }
+      ]
+    }
+  ]
+}

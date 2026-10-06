@@ -1,0 +1,440 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-PractitionerRoleDirectoryStrict-a0def7c7",
+  "url": "http://example.org/StructureMap/source-definition-e16-gdir-PractitionerRoleDirectoryStrict",
+  "name": "Map_005_structure_map_e16_gdir_PractitionerRoleDirectoryStrict",
+  "title": "Structure Map for e16_gdir - PractitionerRoleDirectoryStrict",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: PractitionerRoleDirectoryStrict). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-gdir",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectoryStrict",
+      "mode": "target",
+      "alias": "PractitionerRoleDirectoryStrict"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-PractitionerRoleDirectoryStrict",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_gdir",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "PractitionerRole",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectoryStrict"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/directory/StructureDefinition/PractitionerRoleDirectoryStrict"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-extension-holderId",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-HOLDERID_SOURCE",
+              "variable": "src-holderId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-holderId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-holderId",
+              "source": [
+                {
+                  "context": "src-holderId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-holderId",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex"
+            },
+            {
+              "name": "set-extension-value-holderId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-holderId",
+                  "contextType": "variable",
+                  "element": "valueCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueCode)"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/holder-id-ex', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: PractitionerRole.extension"
+        },
+        {
+          "name": "map-extension-ownerTelematikId",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-OWNERTELEMATIKID_SOURCE",
+              "variable": "src-ownerTelematikId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ownerTelematikId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ownerTelematikId",
+              "source": [
+                {
+                  "context": "src-ownerTelematikId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+            },
+            {
+              "name": "set-extension-value-ownerTelematikId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueIdentifier)"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'profile_canonical': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'profile': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'type_structure': [{'path': 'Extension.value[x].assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.i… [truncated; full structure in the registry entry for https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx] | Path: PractitionerRole.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-healthcareService",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-healthcareService"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.healthcareService> → HealthcareService — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-PractitionerRole-practitioner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-practitioner"
+            }
+          ],
+          "documentation": "Reference<PractitionerRole.practitioner> → Practitioner — resolve via bundle assembler"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-rank",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_RANK",
+                  "variable": "src-rank"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "rank",
+                  "variable": "tgt-rank",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-rank"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.rank | Type: positiveInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.system | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to PractitionerRole.telecom.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to PractitionerRole.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 7 child elements"
+        }
+      ]
+    }
+  ]
+}

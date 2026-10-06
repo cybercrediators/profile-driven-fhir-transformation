@@ -1,0 +1,999 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ca-on-ps-profile-immunization-ef3bd94b",
+  "url": "http://example.org/StructureMap/source-definition-testing-ontario-ps-full-spec-ca-on-ps-profile-immunization",
+  "name": "Map_007_structure_map_testing_ontario_ps_full_spec_ca_on_ps_profile_immunization",
+  "title": "Structure Map for testing_ontario_ps_full_spec - ca-on-ps-profile-immunization",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ca-on-ps-profile-immunization). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-ontario-ps-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-immunization",
+      "mode": "target",
+      "alias": "ca-on-ps-profile-immunization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ca-on-ps-profile-immunization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_ontario_ps_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Immunization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-immunization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ontariohealth.ca/fhir/StructureDefinition/ca-on-ps-profile-immunization"
+        },
+        {
+          "name": "map-occurrence",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-occurrence"
+            }
+          ],
+          "target": [],
+          "rule": [
+            {
+              "name": "map-occurrence-dateTime",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "immOccurrence",
+                  "variable": "src-choiceval"
+                }
+              ],
+              "target": [
+                {
+                  "context": "target",
+                  "contextType": "variable",
+                  "element": "occurrence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-choiceval"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.occurrence[x] | Type: dateTime, string | Cardinality: 1..1 | Complex type with 1 child elements | Choice types: dateTime, string"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<Immunization.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Immunization-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Immunization.performer.actor> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Immunization.performer | Type: BackboneElement | Cardinality: 0..1 | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-protocolApplied",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-protocolApplied"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "protocolApplied",
+              "variable": "tgt-protocolApplied",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-protocolApplied",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-doseNumber",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "element": "TODO_MAP_DOSENUMBER",
+                  "variable": "src-doseNumber"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "doseNumber",
+                  "variable": "tgt-doseNumber",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-doseNumber"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.doseNumber[x] | Type: positiveInt, string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-targetDisease",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "variable": "src-targetDisease"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "targetDisease",
+                  "variable": "tgt-targetDisease",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-targetDisease",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.targetDisease | Type: CodeableConcept | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Immunization.protocolApplied | Type: BackboneElement | Cardinality: 0..* | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-route",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-route"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "route",
+              "variable": "tgt-route",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-route",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-route",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.route.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-extension-translation",
+                      "source": [
+                        {
+                          "context": "src-display",
+                          "element": "TODO-MAP-TRANSLATION_SOURCE",
+                          "variable": "src-translation"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-display",
+                          "contextType": "variable",
+                          "element": "extension",
+                          "variable": "ext-translation",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Extension"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-extension-url-translation",
+                          "source": [
+                            {
+                              "context": "src-translation"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "url",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://hl7.org/fhir/StructureDefinition/translation"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/translation"
+                        },
+                        {
+                          "name": "map-extension-lang",
+                          "source": [
+                            {
+                              "context": "src-display",
+                              "element": "TODO-MAP-LANG_SOURCE",
+                              "variable": "src-lang"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "extension",
+                              "variable": "ext-lang",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Extension"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "set-extension-url-lang",
+                              "source": [
+                                {
+                                  "context": "src-lang"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "ext-lang",
+                                  "contextType": "variable",
+                                  "element": "url",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueString": "lang"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Sets the extension URL to lang"
+                            }
+                          ],
+                          "documentation": "Maps to extension: lang | Type: [{'code': 'Extension'}] | Path: Immunization.route.coding.display.extension.extension"
+                        },
+                        {
+                          "name": "map-extension-content",
+                          "source": [
+                            {
+                              "context": "src-display",
+                              "element": "TODO-MAP-CONTENT_SOURCE",
+                              "variable": "src-content"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "extension",
+                              "variable": "ext-content",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Extension"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "set-extension-url-content",
+                              "source": [
+                                {
+                                  "context": "src-content"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "ext-content",
+                                  "contextType": "variable",
+                                  "element": "url",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueString": "content"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Sets the extension URL to content"
+                            }
+                          ],
+                          "documentation": "Maps to extension: content | Type: [{'code': 'Extension'}] | Path: Immunization.route.coding.display.extension.extension"
+                        }
+                      ],
+                      "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/translation | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/translation'], 'profile': ['http://hl7.org/fhir/StructureDefinition/translation']}] | Path: Immunization.route.coding.display.extension"
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.route.coding.display | Type: string | Cardinality: 0..1 | Complex type with 1 child elements"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.route.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.route.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Immunization.route.coding | Type: Coding | Cardinality: 0..* | Complex type with 4 child elements"
+            }
+          ],
+          "documentation": "Maps to Immunization.route | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-site",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-site"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "site",
+              "variable": "tgt-site",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-site",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-site",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.site.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-extension-translation",
+                      "source": [
+                        {
+                          "context": "src-display",
+                          "element": "TODO-MAP-TRANSLATION_SOURCE",
+                          "variable": "src-translation"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-display",
+                          "contextType": "variable",
+                          "element": "extension",
+                          "variable": "ext-translation",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Extension"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-extension-url-translation",
+                          "source": [
+                            {
+                              "context": "src-translation"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "url",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://hl7.org/fhir/StructureDefinition/translation"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/translation"
+                        },
+                        {
+                          "name": "map-extension-lang",
+                          "source": [
+                            {
+                              "context": "src-display",
+                              "element": "TODO-MAP-LANG_SOURCE",
+                              "variable": "src-lang"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "extension",
+                              "variable": "ext-lang",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Extension"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "set-extension-url-lang",
+                              "source": [
+                                {
+                                  "context": "src-lang"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "ext-lang",
+                                  "contextType": "variable",
+                                  "element": "url",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueString": "lang"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Sets the extension URL to lang"
+                            }
+                          ],
+                          "documentation": "Maps to extension: lang | Type: [{'code': 'Extension'}] | Path: Immunization.site.coding.display.extension.extension"
+                        },
+                        {
+                          "name": "map-extension-content",
+                          "source": [
+                            {
+                              "context": "src-display",
+                              "element": "TODO-MAP-CONTENT_SOURCE",
+                              "variable": "src-content"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "ext-translation",
+                              "contextType": "variable",
+                              "element": "extension",
+                              "variable": "ext-content",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Extension"
+                                }
+                              ]
+                            }
+                          ],
+                          "rule": [
+                            {
+                              "name": "set-extension-url-content",
+                              "source": [
+                                {
+                                  "context": "src-content"
+                                }
+                              ],
+                              "target": [
+                                {
+                                  "context": "ext-content",
+                                  "contextType": "variable",
+                                  "element": "url",
+                                  "transform": "copy",
+                                  "parameter": [
+                                    {
+                                      "valueString": "content"
+                                    }
+                                  ]
+                                }
+                              ],
+                              "documentation": "Sets the extension URL to content"
+                            }
+                          ],
+                          "documentation": "Maps to extension: content | Type: [{'code': 'Extension'}] | Path: Immunization.site.coding.display.extension.extension"
+                        }
+                      ],
+                      "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/translation | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/translation'], 'profile': ['http://hl7.org/fhir/StructureDefinition/translation']}] | Path: Immunization.site.coding.display.extension"
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.site.coding.display | Type: string | Cardinality: 0..1 | Complex type with 1 child elements"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.site.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.site.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Immunization.site.coding | Type: Coding | Cardinality: 0..* | Complex type with 4 child elements"
+            }
+          ],
+          "documentation": "Maps to Immunization.site | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 2 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "immStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-vaccineCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-vaccineCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "vaccineCode",
+              "variable": "tgt-vaccineCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-vaccineCode",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-vaccineCode",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "immVaccineCode",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.vaccineCode.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "immVaccineSystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Immunization.vaccineCode.coding.system | Type: uri | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Immunization.vaccineCode.coding | Type: Coding | Cardinality: 0..* | Complex type with 2 child elements"
+            }
+          ],
+          "documentation": "Maps to Immunization.vaccineCode | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 2 child elements"
+        }
+      ]
+    }
+  ]
+}

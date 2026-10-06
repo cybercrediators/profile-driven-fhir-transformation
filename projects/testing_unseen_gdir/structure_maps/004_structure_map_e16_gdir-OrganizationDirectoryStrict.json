@@ -1,0 +1,1266 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-OrganizationDirectoryStrict-16b20c09",
+  "url": "http://example.org/StructureMap/source-definition-e16-gdir-OrganizationDirectoryStrict",
+  "name": "Map_004_structure_map_e16_gdir_OrganizationDirectoryStrict",
+  "title": "Structure Map for e16_gdir - OrganizationDirectoryStrict",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: OrganizationDirectoryStrict). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-gdir",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectoryStrict",
+      "mode": "target",
+      "alias": "OrganizationDirectoryStrict"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-OrganizationDirectoryStrict",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_gdir",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Organization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectoryStrict"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/directory/StructureDefinition/OrganizationDirectoryStrict"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.city | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_COUNTRY",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.country | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-district",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_DISTRICT",
+                  "variable": "src-district"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "district",
+                  "variable": "tgt-district",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-district"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.district | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.line | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-address",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.postalCode | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.state | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.type | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.address.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Organization.address | Type: Address | Cardinality: 0..* | Complex type with 12 child elements"
+        },
+        {
+          "name": "map-alias",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ALIAS",
+              "variable": "src-alias"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "alias",
+              "variable": "tgt-alias",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-alias",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-alias"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.alias | Type: string | Cardinality: 0..*"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-address",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-address"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "address",
+                  "variable": "tgt-address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.address | Type: Address | Cardinality: 0..1"
+            },
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-family",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "element": "TODO_MAP_FAMILY",
+                      "variable": "src-family"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "family",
+                      "variable": "tgt-family",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-family"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.family | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-given",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "element": "TODO_MAP_GIVEN",
+                      "variable": "src-given"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "given",
+                      "variable": "tgt-given",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-given",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-given"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.given | Type: string | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-period",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "variable": "src-period"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "period",
+                      "variable": "tgt-period",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Period"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.period | Type: Period | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-prefix",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "element": "TODO_MAP_PREFIX",
+                      "variable": "src-prefix"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "prefix",
+                      "variable": "tgt-prefix",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-prefix",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-prefix"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.prefix | Type: string | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-suffix",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "element": "TODO_MAP_SUFFIX",
+                      "variable": "src-suffix"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "suffix",
+                      "variable": "tgt-suffix",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-suffix",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-suffix"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.suffix | Type: string | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-use",
+                  "source": [
+                    {
+                      "context": "src-name",
+                      "element": "TODO_MAP_USE",
+                      "variable": "src-use"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-name",
+                      "contextType": "variable",
+                      "element": "use",
+                      "variable": "tgt-use",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-use"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Organization.contact.name.use | Type: code | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Organization.contact.name | Type: HumanName | Cardinality: 0..1 | Complex type with 9 child elements"
+            },
+            {
+              "name": "map-purpose",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "variable": "tgt-purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.purpose | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-telecom",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "variable": "tgt-telecom",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.contact.telecom | Type: ContactPoint | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Organization.contact | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-extension-ncpehCountryEx",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NCPEHCOUNTRYEX_SOURCE",
+              "variable": "src-ncpehCountryEx"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ncpehCountryEx",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ncpehCountryEx",
+              "source": [
+                {
+                  "context": "src-ncpehCountryEx"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ncpehCountryEx",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/ti/StructureDefinition/ncpeh-country-extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/ti/StructureDefinition/ncpeh-country-extension"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/ti/StructureDefinition/ncpeh-country-extension | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/ti/StructureDefinition/ncpeh-country-extension'], 'profile': ['https://gematik.de/fhir/ti/StructureDefinition/ncpeh-country-extension']}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-extension-organizationVisibility",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ORGANIZATIONVISIBILITY_SOURCE",
+              "variable": "src-organizationVisibility"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-organizationVisibility",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-organizationVisibility",
+              "source": [
+                {
+                  "context": "src-organizationVisibility"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-organizationVisibility",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Coding', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Coding.code', 'type': 'code', 'description': 'A symbol in syntax defined by the system. The symbol may be a predefined code or an expression in a syntax defined by the coding system (e.g. post-coordination).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].display', 'id': 'Coding.display', 'type': 'string', 'description': 'A representation of the meaning of the code in the system, following the rules of the system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Coding.system', 'type': 'uri', 'description': 'The identification of the code system that defines the meaning of the symbol in the code.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].userSelected', 'id': 'Coding.userSelected', 'type': 'boolean', 'description': 'Indicates that this coding was chosen by a user directly - e.g. off a pick list of available items (codes or displays).', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].version', 'id': 'Coding.version', 'type': 'string', 'description': 'The version of the code system which was used when choosing this code. Note that a well-maintained code system does not need the version reported, because the meaning of codes is consistent across versions. However this cannot consistently be assured, and when the meaning is not guaranteed to be consistent, the version SHOULD be exchanged.', 'is_required': False, 'is_list': False}]}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [{'code': 'hide-versicherte', 'display': 'Eintrag für Versicherte verbergen', 'system': 'https://gematik.de/fhir/directory/CodeSystem/OrganizationVisibilityCS', 'version': '1.2.0'}], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'CodingSytemCodeInv', 'severity': 'warning', 'human': 'System and Code SHOULD be present', 'expression': 'system.exists() and code.exists()', 'source': 'https://gematik.de/fhir/directory/StructureDefinition/OrganizationVisibility'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'binding_strength': 'required', 'valueSetUrl': 'https://gematik.de/fhir/directory/ValueSet/OrganizationVisibilityVS', 'children': []}]]}] | Path: Organization.extension"
+        },
+        {
+          "name": "map-identifier-TelematikID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-TelematikID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-TelematikID-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/sid/telematik-id"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-TelematikID-type",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-identifier-TelematikID-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-identifier-TelematikID-type-coding-0",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier-TelematikID-type",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-identifier-TelematikID-type-coding-0",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-identifier-TelematikID-type-coding-0-system",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-TelematikID-type-coding-0",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://terminology.hl7.org/CodeSystem/v2-0203"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-identifier-TelematikID-type-coding-0-code",
+                      "source": [
+                        {
+                          "context": "source"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-identifier-TelematikID-type-coding-0",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "PRN"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-TelematikID-system-2",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "orgIdSystem",
+                  "variable": "src-identifier-TelematikID-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-TelematikID-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-TelematikID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "orgIdValue",
+                  "variable": "src-identifier-TelematikID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-TelematikID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-TelematikID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice TelematikID of Organization.identifier (type Identifier)"
+        },
+        {
+          "name": "map-meta",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-meta"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-lastUpdated",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_LASTUPDATED",
+                  "variable": "src-lastUpdated"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "lastUpdated",
+                  "variable": "tgt-lastUpdated",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-lastUpdated"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.meta.lastUpdated | Type: instant | Cardinality: 0..1"
+            },
+            {
+              "name": "map-profile",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_PROFILE",
+                  "variable": "src-profile"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "variable": "tgt-profile",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-profile"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.meta.profile | Type: canonical | Cardinality: 0..*"
+            },
+            {
+              "name": "map-security",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "variable": "src-security"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "security",
+                  "variable": "tgt-security",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-security",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.meta.security | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-source",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_SOURCE",
+                  "variable": "src-source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "source",
+                  "variable": "tgt-source",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-source"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.meta.source | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-tag-Origin",
+              "source": [
+                {
+                  "context": "src-meta"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "tag",
+                  "variable": "tgt-tag-Origin",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-tag-Origin-system",
+                  "source": [
+                    {
+                      "context": "src-meta"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://gematik.de/fhir/directory/CodeSystem/Origin"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-tag-Origin-system-2",
+                  "source": [
+                    {
+                      "context": "src-meta",
+                      "element": "metaTagSystem",
+                      "variable": "src-tag-Origin-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tag-Origin-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-tag-Origin-code",
+                  "source": [
+                    {
+                      "context": "src-meta",
+                      "element": "metaTagCode",
+                      "variable": "src-tag-Origin-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tag-Origin-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice Origin of Organization.meta.tag (type Coding)"
+            },
+            {
+              "name": "map-versionId",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_VERSIONID",
+                  "variable": "src-versionId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "versionId",
+                  "variable": "tgt-versionId",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-versionId"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Organization.meta.versionId | Type: id | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Organization.meta | Type: Meta | Cardinality: 0..1 | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "orgName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Organization.name | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Organization-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Organization.partOf> → Organization — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

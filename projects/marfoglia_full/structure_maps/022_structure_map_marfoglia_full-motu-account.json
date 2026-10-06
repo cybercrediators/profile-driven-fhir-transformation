@@ -1,0 +1,199 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-account-2efe64d4",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-account",
+  "name": "Map_022_structure_map_marfoglia_full_motu_account",
+  "title": "Structure Map for marfoglia_full - motu-account",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-account). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-account",
+      "mode": "target",
+      "alias": "motu-account"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-account",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Account",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-account"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-account"
+        },
+        {
+          "name": "map-coverage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-coverage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "coverage",
+              "variable": "tgt-coverage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-coverage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Account-coverage",
+              "source": [
+                {
+                  "context": "src-coverage",
+                  "variable": "src-coverage-2"
+                }
+              ],
+              "documentation": "Reference<Account.coverage.coverage> → Coverage — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Account.coverage | Type: BackboneElement | Cardinality: 1..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "map-guarantor",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-guarantor"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "guarantor",
+              "variable": "tgt-guarantor",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-guarantor",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Account-party",
+              "source": [
+                {
+                  "context": "src-guarantor",
+                  "variable": "src-party"
+                }
+              ],
+              "documentation": "Reference<Account.guarantor.party> → Patient|RelatedPerson|Organization — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Account.guarantor | Type: BackboneElement | Cardinality: 0..* | Complex type with 1 child elements"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "inactive"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        },
+        {
+          "name": "TODO-resolve-reference-Account-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Account.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

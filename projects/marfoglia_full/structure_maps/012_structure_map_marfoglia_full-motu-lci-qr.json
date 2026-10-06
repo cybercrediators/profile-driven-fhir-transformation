@@ -1,0 +1,228 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-motu-lci-qr-4a0eb6f5",
+  "url": "http://example.org/StructureMap/source-definition-marfoglia-full-motu-lci-qr",
+  "name": "Map_012_structure_map_marfoglia_full_motu_lci_qr",
+  "title": "Structure Map for marfoglia_full - motu-lci-qr",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: motu-lci-qr). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-marfoglia-full",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://ahdbservices.it/StructureDefinition/motu-lci-qr",
+      "mode": "target",
+      "alias": "motu-lci-qr"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-motu-lci-qr",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_marfoglia_full",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "QuestionnaireResponse",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://ahdbservices.it/StructureDefinition/motu-lci-qr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://ahdbservices.it/StructureDefinition/motu-lci-qr"
+        },
+        {
+          "name": "TODO-resolve-reference-QuestionnaireResponse-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<QuestionnaireResponse.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-item-score",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "item",
+              "variable": "tgt-item-score",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-item-score-linkId",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item-score",
+                  "contextType": "variable",
+                  "element": "linkId",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "1.1"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-item-score-answer",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-item-score",
+                  "contextType": "variable",
+                  "element": "answer",
+                  "variable": "tgt-item-score-answer",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-item-score-answer-value",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "score",
+                      "variable": "src-item-score-answer-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-item-score-answer",
+                      "contextType": "variable",
+                      "element": "value",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-item-score-answer-value"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice score of QuestionnaireResponse.item (type BackboneElement)"
+        },
+        {
+          "name": "TODO-resolve-reference-QuestionnaireResponse-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<QuestionnaireResponse.source> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "set-fixed-status",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueString": "completed"
+                }
+              ]
+            }
+          ],
+          "documentation": "Sets fixed value for status"
+        }
+      ]
+    }
+  ]
+}

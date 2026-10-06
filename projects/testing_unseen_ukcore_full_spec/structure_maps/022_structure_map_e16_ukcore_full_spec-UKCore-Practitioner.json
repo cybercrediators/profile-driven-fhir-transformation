@@ -1,0 +1,1538 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-Practitioner-1d9dca6a",
+  "url": "http://example.org/StructureMap/source-definition-e16-ukcore-full-spec-UKCore-Practitioner",
+  "name": "Map_022_structure_map_e16_ukcore_full_spec_UKCore_Practitioner",
+  "title": "Structure Map for e16_ukcore_full_spec - UKCore-Practitioner",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-Practitioner). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-e16-ukcore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Practitioner",
+      "mode": "target",
+      "alias": "UKCore-Practitioner"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-Practitioner",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_e16_ukcore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Practitioner",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Practitioner"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-Practitioner"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "uKCore_Practitioner_address_city",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.city | Type: string"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "uKCore_Practitioner_address_country",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.country | Type: string"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "uKCore_Practitioner_address_line",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.line | Type: string"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "uKCore_Practitioner_address_postalCode",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.postalCode | Type: string"
+            }
+          ],
+          "documentation": "Maps to Practitioner.address | Type: Address | Cardinality: 0..*"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_BIRTHDATE",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-communication",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-communication",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.communication.coding.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.communication.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.communication.coding.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.communication.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.communication.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Practitioner.communication.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to Practitioner.communication | Type: CodeableConcept | Cardinality: 0..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "uKCore_Practitioner_gender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.gender | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier-sdsUserID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-sdsUserID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-sdsUserID-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-sdsUserID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.nhs.uk/Id/sds-user-id"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-sdsUserID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "uKCore_Practitioner_identifier_sdsUserID_value",
+                  "variable": "src-identifier-sdsUserID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-sdsUserID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-sdsUserID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice sdsUserID of Practitioner.identifier (type Identifier)"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "uKCore_Practitioner_name_family",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.family | Type: string"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "uKCore_Practitioner_name_given",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.given | Type: string"
+            },
+            {
+              "name": "map-prefix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "uKCore_Practitioner_name_prefix",
+                  "variable": "src-prefix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "prefix",
+                  "variable": "tgt-prefix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-prefix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.prefix | Type: string"
+            }
+          ],
+          "documentation": "Maps to Practitioner.name | Type: HumanName | Cardinality: 0..*"
+        },
+        {
+          "name": "map-photo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-photo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "photo",
+              "variable": "tgt-photo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-photo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Attachment"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-contentType",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_CONTENTTYPE",
+                  "variable": "src-contentType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "contentType",
+                  "variable": "tgt-contentType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-contentType"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.contentType | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-creation",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_CREATION",
+                  "variable": "src-creation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "creation",
+                  "variable": "tgt-creation",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-creation"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.creation | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-data",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_DATA",
+                  "variable": "src-data"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "data",
+                  "variable": "tgt-data",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-data"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.data | Type: base64Binary | Cardinality: 0..1"
+            },
+            {
+              "name": "map-hash",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_HASH",
+                  "variable": "src-hash"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "hash",
+                  "variable": "tgt-hash",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-hash"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.hash | Type: base64Binary | Cardinality: 0..1"
+            },
+            {
+              "name": "map-size",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_SIZE",
+                  "variable": "src-size"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "size",
+                  "variable": "tgt-size",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-size"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.size | Type: unsignedInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-title",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_TITLE",
+                  "variable": "src-title"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "title",
+                  "variable": "tgt-title",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-title"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.title | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-url",
+              "source": [
+                {
+                  "context": "src-photo",
+                  "element": "TODO_MAP_URL",
+                  "variable": "src-url"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-photo",
+                  "contextType": "variable",
+                  "element": "url",
+                  "variable": "tgt-url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-url"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.photo.url | Type: url | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Practitioner.photo | Type: Attachment | Cardinality: 0..* | Complex type with 10 child elements"
+        },
+        {
+          "name": "map-qualification",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-qualification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "qualification",
+              "variable": "tgt-qualification",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-qualification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-qualification",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-coding",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "variable": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-coding",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code-2"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code-2",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code-2"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.code.coding.code | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.code.coding.display | Type: string | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-system",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_SYSTEM",
+                          "variable": "src-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "variable": "tgt-system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-system"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.code.coding.system | Type: uri | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-userSelected",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_USERSELECTED",
+                          "variable": "src-userSelected"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "userSelected",
+                          "variable": "tgt-userSelected",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-userSelected"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.code.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-version",
+                      "source": [
+                        {
+                          "context": "src-coding",
+                          "element": "TODO_MAP_VERSION",
+                          "variable": "src-version"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "version",
+                          "variable": "tgt-version",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-version"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.code.coding.version | Type: string | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.code.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+                }
+              ],
+              "documentation": "Maps to Practitioner.qualification.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-qualification",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-identifier",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-resolve-reference-Practitioner-assigner",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "variable": "src-assigner"
+                    }
+                  ],
+                  "documentation": "Reference<Practitioner.qualification.identifier.assigner> → Organization — resolve via bundle assembler"
+                },
+                {
+                  "name": "map-period",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "variable": "src-period"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "period",
+                      "variable": "tgt-period",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Period"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.identifier.period | Type: Period | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.identifier.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-type",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "variable": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "type",
+                      "variable": "tgt-type",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-type",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-type",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_CODE",
+                              "variable": "src-code"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Practitioner.qualification.identifier.type.coding.code | Type: code | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_DISPLAY",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Practitioner.qualification.identifier.type.coding.display | Type: string | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_SYSTEM",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Practitioner.qualification.identifier.type.coding.system | Type: uri | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-userSelected",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_USERSELECTED",
+                              "variable": "src-userSelected"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "userSelected",
+                              "variable": "tgt-userSelected",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-userSelected"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Practitioner.qualification.identifier.type.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-version",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "TODO_MAP_VERSION",
+                              "variable": "src-version"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "version",
+                              "variable": "tgt-version",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-version"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to Practitioner.qualification.identifier.type.coding.version | Type: string | Cardinality: 0..1"
+                        }
+                      ],
+                      "documentation": "Maps to Practitioner.qualification.identifier.type.coding | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.identifier.type | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-use",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "TODO_MAP_USE",
+                      "variable": "src-use"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "use",
+                      "variable": "tgt-use",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-use"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.identifier.use | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-identifier",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-identifier",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Practitioner.qualification.identifier.value | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Practitioner.qualification.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+            },
+            {
+              "name": "TODO-resolve-reference-Practitioner-issuer",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-issuer"
+                }
+              ],
+              "documentation": "Reference<Practitioner.qualification.issuer> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-qualification",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.qualification.period | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Practitioner.qualification | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_Practitioner_telecom_system",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.system | Type: code"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_Practitioner_telecom_use",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.use | Type: code"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "uKCore_Practitioner_telecom_value",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Practitioner.telecom | Type: ContactPoint | Cardinality: 0..*"
+        }
+      ]
+    }
+  ]
+}
