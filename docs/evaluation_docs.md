@@ -133,6 +133,7 @@ Results can be found in `eval/reports/<project_name>.json`.
 - configs are provided, paths have to be adjusted accordingly
 
 ### Reproduce
+- obtain the package (e.g. from `simplifier`) and init the project: `python src/main.py -c conf/<conf_name>.json init <package_folder_path>/` (DO NOT rename the project folder when using existing projects, since the source definitions and existing maps won't be named correctly otherwise)
 - preserve the shipped structure maps (from `structure_maps/` directory)
 - generate the maps first:
     - `python src/main.py -c conf/<project>.json pipeline run -f -mt projects/<project>/source_data/mapping_table.json -msm` (parse profiles, dervice source definitions, generate StructureMaps)
