@@ -6,6 +6,7 @@ Usage: PYTHONPATH=.:src python3 -m eval.synthetic_eval
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -20,7 +21,7 @@ _SNAP_DIRS = [
 ]
 # define temporary path and default matchbox URL
 _WORK = Path("/tmp/synthetic-eval")
-MATCHBOX = "http://localhost:8080/matchboxv3/"
+MATCHBOX = os.environ.get("MATCHBOX", "http://localhost:8080/matchboxv3/")
 
 # define FHIR shorthand profiles including the corresponding constructs
 LADDER = [
