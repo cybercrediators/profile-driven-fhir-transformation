@@ -96,7 +96,7 @@ def load_project(name: str) -> ProjectArtifacts:
                     art.registry[p.name] = obj
 
     cm_dir = pdir / "source_data" / "concept_maps"
-    if cm_dir.is_dir() and cm_dir.glob("*.json"):
+    if cm_dir.is_dir() and any(cm_dir.glob("*.json")):
         art.concept_mapped_fields = _detect_concept_mapped_fields(art)
 
     return art
