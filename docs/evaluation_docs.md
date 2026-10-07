@@ -131,21 +131,32 @@ Results can be found in `eval/reports/<project_name>.json`.
 - projects already contain used maps and source records already. The projects themselves have to be obtained individually!
 - source structuremaps can be re-generated/derived by the profiles
 - configs are provided, paths have to be adjusted accordingly
+- inputs are staged from the published package with `scripts/setup_simplifier_project.py` (resource profiles + their dependency closure)
+- packages shipping differentials only are snapshotted by that script with the HL7 validator `validator_cli.jar` 6.9.12 (place it at `data/tools/validator_cli.jar`): capable, bfarm, gdir, isik, senll
 
 ### Reproduce
 - obtain the package (e.g. from `simplifier`) and init the project: `python src/main.py -c conf/<conf_name>.json init <package_folder_path>/` (DO NOT rename the project folder when using existing projects, since the source definitions and existing maps won't be named correctly otherwise)
+    - you could also use the setup script:
+```
+cp conf/<project>.json /tmp/<project>.json
+python scripts/setup_simplifier_project.py --package <package> --version <version> --project <project> --force
+cp /tmp/<project>.json conf/<project>.json
+```
+
 - preserve the shipped structure maps (from `structure_maps/` directory)
 - generate the maps first:
     - `python src/main.py -c conf/<project>.json pipeline run -f -mt projects/<project>/source_data/mapping_table.json -msm` (parse profiles, dervice source definitions, generate StructureMaps)
-- transform an example record:
+- transform and validate an example record:
     - `python src/main.py -c conf/<project>.json pipeline prepare-matchbox -f` (upload to matchbox)
-    - `python src/main.py -c conf/<project>.json pipeline validate -i <input_file> [-p <profile_url>]` (transform and validate the source records)
+    - `python src/main.py -c conf/<project>.json server start`
+    - `python src/main.py -c conf/<project>.json client send-request -m transform_data -p '{"bundle": true}' -d "<source record>" > out.json`
+    - `python src/main.py -c conf/<project>.json pipeline validate -i out.json`
 - compute the metrics using the `eval/create_project_metrics.py` script:
 
 ```
 PYTHONPATH=.:src python3 -m eval.create_project_metrics projects/<project> \
   --existing /tmp/existing-<project> \
-  --output <transform result from step 5> \
+  --output out.json \
   --report eval/reports/<project>.json
 ```
 
@@ -261,7 +272,7 @@ python src/main.py -c conf/kfdm_e2e.json client send-request -m transform_data \
   > /tmp/kfdm_record2.json
 ```
 
-- compare them and create metrics: `PYTHONPATH=.:src python3 -m eval.e15_kfdm_compare --record <n> --offline` (writes `eval/reports/e15_kfdm_record<n>.json`)
+- compare them and create metrics: `PYTHONPATH=.:src python3 -m eval.e15_kfdm_compare --record <n> --offline /tmp/kfdm_record2.json` (writes `eval/reports/e15_kfdm_record<n>.json`)
 
 ## Marfoglia / MOTU (id: E10)
 
