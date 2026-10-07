@@ -125,9 +125,9 @@ Results can be found in `eval/reports/<project_name>.json`.
 
 ## Reproduce
 ### Prerequisities
-- all projects are built directly from the published simplifier package
-- for profiles without provided `snapshots`, the HL7 validator is required to compile from differentials
+- all projects are built from the published simplifier package (see the setup step below)
 - further, a live matchbox (and potentially `valkey` depending on the configured cache service) is required
+- use a fresh matchbox instance per project: installed packages are shared server state, e.g. `bbmri` installs `de.basisprofil.r4` 0.9.6, which then shadows the 1.5.x versions `bfarm`, `epamed` and `isik` depend on and changes their `$validate` results
 - projects already contain used maps and source records already. The projects themselves have to be obtained individually!
 - source structuremaps can be re-generated/derived by the profiles
 - configs are provided, paths have to be adjusted accordingly
@@ -135,13 +135,11 @@ Results can be found in `eval/reports/<project_name>.json`.
 - packages shipping differentials only are snapshotted by that script with the HL7 validator `validator_cli.jar` 6.9.12 (place it at `data/tools/validator_cli.jar`): capable, bfarm, gdir, isik, senll
 
 ### Reproduce
-- obtain the package (e.g. from `simplifier`) and init the project: `python src/main.py -c conf/<conf_name>.json init <package_folder_path>/` (DO NOT rename the project folder when using existing projects, since the source definitions and existing maps won't be named correctly otherwise)
-    - you could also use the setup script:
+- stage the package into the project with the setup script (downloads the package, stages the resource profiles + their dependency closure, snapshots differential-only profiles, runs `init`; `--keep-conf` keeps the shipped conf). DO NOT rename the project folder, since the source definitions and existing maps won't be named correctly otherwise:
 ```
-cp conf/<project>.json /tmp/<project>.json
-python scripts/setup_simplifier_project.py --package <package> --version <version> --project <project> --force
-cp /tmp/<project>.json conf/<project>.json
+python scripts/setup_simplifier_project.py --package <package> --version <version> --project <project> --keep-conf
 ```
+- a plain `python src/main.py -c conf/<project>.json init <package_folder_path>/` also works, but stages the whole package, so regenerated maps can differ from the shipped ones
 
 - preserve the shipped structure maps (from `structure_maps/` directory)
 - generate the maps first:
@@ -161,7 +159,7 @@ PYTHONPATH=.:src python3 -m eval.create_project_metrics projects/<project> \
 ```
 
 # (Unseen) real-world profiles (simplifier)
-- for the following projects, the tool with release 0.0.6 was used (without modifications) to identify problems to fix
+- for the following projects, the unmodified generator of release 0.0.6 was used to identify problems to fix; the shipped maps and the results below were regenerated and measured with this release (`v0.0.6.post1`, generator code identical to `v0.0.6`)
 - reproduction of the results works similar to the previous profiles
 - provided example instances were used as target concepts for source records and mapping tables
 
@@ -185,25 +183,24 @@ Project list:
 |---|---|---|---|---|---|---|
 | aucore | 25 | 24/25 | 24/24 | 22/24 | 175 | 88.6% |
 | bbmri | 11 | 11/11 | 9/11 | 7/11 | 87 | 94.4% |
-| bfarm | 7 | 6/7 | 4/6 | 0/3 | 145 | 65.6% |
+| bfarm | 3 | 3/3 | 1/3 | 0/3 | 57 | 33.3% |
 | dkrehab | 8 | 8/8 | 2/8 | 3/8 | 16 | 97.0% |
-| epamed | 9 | 9/9 | 6/9 | 5/9 | 216 | 89.3% |
+| epamed | 9 | 9/9 | 6/9 | 5/9 | 216 | 92.0% |
 | eulab | 10 | 10/10 | 6/10 | 5/10 | 98 | 94.4% |
 | gdir | 12 | 12/12 | 10/12 | 10/12 | 253 | 96.6% |
 | imr | 5 | 5/5 | 3/5 | 4/5 | 25 | 97.1% |
-| isik | 27 | 27/27 | 23/27 | 7/27 | 187 | 93.4% |
+| isik | 27 | 27/27 | 23/27 | 10/27 | 187 | 93.4% |
 | pocd | 13 | 13/13 | 11/13 | 8/13 | 250 | 94.5% |
 | senll | 25 | 25/25 | 8/25 | 6/25 | 437 | 87.1% |
-| ukcore | 31 | 31/31 | 27/30 | 26/30 | 522 | 99.2% |
+| ukcore | 31 | 31/31 | 27/30 | 26/30 | 522 | 98.4% |
 
-- 183 resources expected, 181 transformed, 2 transform errors: 
-    - `aucore`
-    - `au-core-bloodpressure`
-    - `bfarm` / `HealthAppQuestionnaire` each returned no output (engine errors), so neither reaches validation and both are absent from the values
+- 179 resources expected, 178 transformed, 1 transform error: `aucore` / `au-core-bloodpressure` returned no output (engine error), so it doesn't reach validation and is absent from the values
+- `bfarm`: v0.0.6 aborts generation on its Questionnaire profiles (`'StructureDefinition' object has no attribute 'subjectType'`), so only 3 of its 7 profiles get a map; both failing resources miss their required reference to `HealthApp`, whose map was never generated
 - Intended-profile `$validate`:
-  - single mode: 133/180 (73.9%)
-- 2411 remaining TODO rules (numbers inflated by using non-minimal mode and therefore include all optional fields as well)
-- Data preservation ranges from 65.6% (`bfarm`) to 99.2% (`ukcore`).
+  - single mode: 130/177 (73.4%)
+- 2323 remaining TODO rules (numbers inflated by using non-minimal mode and therefore include all optional fields as well)
+- Data preservation ranges from 33.3% (`bfarm`) to 98.4% (`ukcore`).
+- measured sequentially on one matchbox instance, except `bfarm`, `epamed` and `isik`: they depend on `de.basisprofil.r4` 1.5.x and were each re-measured on a fresh instance after the sequential run showed the 0.9.6 conflict from `bbmri` (see the prerequisites above)
 - `ukcore` produced 31 resources but validated 30
 
 ### Additional info: example-validation experiments
@@ -293,7 +290,7 @@ The MOTU dataset is used for the reproduction: Arcobelli V. A., Moscato S., Palu
 - requires a live `matchbox` (Port: `8080`), and an HAPI FHIR server (Port: `8089`) with referential inetgrity on write disabled
 - (sequential) writing to the hapi server locally takes around 1hr
 - Steps:
-    - Download artifacts linked in the [reference paper](https://www.sciencedirect.com/science/article/pii/S0010482525000952) to the `eval/e10_marfoglia/_data` folder
+    - Download the artifacts linked in the [reference paper](https://www.sciencedirect.com/science/article/pii/S0010482525000952) with `eval/e10_marfoglia/fetch.sh` (into `eval/e10_marfoglia/_data`) and verify them against the data used here: `cd eval/e10_marfoglia/_data && sha256sum -c ../data_manifest.sha256`
     - Preprocess the data using the `PYTHONPATH=.:src python eval/e10_marfoglia/preprocess.py` script
     - Generate maps from the thin FSH profiles and transform the records: `PYTHONPATH=.:src python eval/e10_marfoglia/transform_d2.py --dump eval/e10_marfoglia/_data/transformed_d2`
     - Load the bundles into the HAPI server: `PYTHONPATH=.:src python eval/e10_marfoglia/hapi_load.py --base http://localhost:8089/fhir --dir eval/e10_marfoglia/_data/transformed_d2`
