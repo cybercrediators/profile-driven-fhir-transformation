@@ -289,9 +289,11 @@ def generate_snapshots(
     }
 
 
-def write_conf(project: str, force: bool) -> Path:
-    """Write conf/<project>.json from the corpus template with project paths set."""
+def write_conf(project: str, force: bool, keep: bool = False) -> Path:
+    """write conf/<project>.json from the corpus template with project paths set"""
     conf_path = _REPO / "conf" / f"{project}.json"
+    if conf_path.exists() and keep:
+        return conf_path
     if conf_path.exists() and not force:
         raise FileExistsError(f"{conf_path} exists (use --force)")
     conf = json.loads(_CONF_TEMPLATE.read_text(encoding="utf-8"))
@@ -307,6 +309,7 @@ def setup(
     force: bool,
     include_wrappers: bool = False,
     validator_jar: Path = _DEFAULT_VALIDATOR,
+    keep_conf: bool = False,
 ) -> dict:
     """Create conf + project folder, populate input_profile/ and examples/."""
     resources = load_resources(package_path)
@@ -317,7 +320,7 @@ def setup(
             "(constraint StructureDefinitions with kind='resource')"
         )
 
-    conf_path = write_conf(project, force)
+    conf_path = write_conf(project, force, keep_conf)
 
     supporting = dependency_closure(staged, resources)
 
@@ -380,7 +383,13 @@ def main():
     parser.add_argument("--project", required=True, help="project name")
     parser.add_argument("--prefix", type=Path, default=_DEFAULT_PREFIX)
     parser.add_argument("--registry-url", default="https://packages.simplifier.net")
-    parser.add_argument("--force", action="store_true", help="overwrite an existing conf")
+    conf_mode = parser.add_mutually_exclusive_group()
+    conf_mode.add_argument("--force", action="store_true", help="overwrite an existing conf")
+    conf_mode.add_argument(
+        "--keep-conf",
+        action="store_true",
+        help="use an existing conf as it is (for re-staging a shipped project)",
+    )
     parser.add_argument(
         "--include-wrappers",
         action="store_true",
@@ -408,6 +417,7 @@ def main():
         args.force,
         args.include_wrappers,
         args.validator_jar,
+        args.keep_conf,
     )
     report["source"] = str(package_path)
     print(json.dumps(report, indent=2, ensure_ascii=False))
