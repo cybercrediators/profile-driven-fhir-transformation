@@ -111,9 +111,11 @@ class ProjectContext:
             packages = Path(cache_root) / "local_packages" / "node_modules"
             leaf = url.rsplit("/", 1)[-1]
             if packages.is_dir():
-                candidates.extend(packages.glob(f"*/StructureDefinition-{leaf}.json"))
+                # Sorted, so a leaf name shipped by two packages resolves the same
+                # way on every machine instead of by file-system order.
+                candidates.extend(sorted(packages.glob(f"*/StructureDefinition-{leaf}.json")))
                 candidates.extend(
-                    packages.glob(f"*/package/StructureDefinition-{leaf}.json")
+                    sorted(packages.glob(f"*/package/StructureDefinition-{leaf}.json"))
                 )
 
         found: Optional[Dict[str, Any]] = None

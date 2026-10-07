@@ -271,3 +271,38 @@ def test_clear_project_folders_removes_files(data_io):
     (folder_path / "sm.json").write_text("{}", encoding="utf-8")
     data_io.clear_project_folders()
     assert list(folder_path.iterdir()) == []
+
+
+# --------------------------------------------------------------------------- #
+# deterministic listing order
+# --------------------------------------------------------------------------- #
+
+# Created out of alphabetical order on purpose: `iterdir()` returns creation order
+# on tmpfs and hash order on ext4, and the generator carries state from one profile
+# to the next, so an unsorted listing made the generated maps machine-dependent
+# (bbmri, pocd and bfarm differed between a tmpfs and an ext4 checkout).
+_UNSORTED = ["zeta.json", "alpha.json", "mid.json", "Beta.json"]
+
+
+def _populate(folder):
+    for name in _UNSORTED:
+        (folder / name).write_text("{}", encoding="utf-8")
+
+
+def test_profile_files_are_listed_in_sorted_order(data_io):
+    _populate(data_io.project_dir / DataIO.ProjectFolders.INPUT_PROFILE.value)
+    names = [p.name for p in data_io.get_json_profile_files("")]
+    assert names == sorted(_UNSORTED)
+
+
+def test_project_folder_listings_are_sorted(data_io):
+    folder = DataIO.ProjectFolders.STRUCTURE_MAPS
+    _populate(data_io.project_dir / folder.value)
+    assert [p.name for p in data_io.get_structure_map_files()] == sorted(_UNSORTED)
+    assert [name for name, _ in data_io.load_project_files(folder)] == sorted(_UNSORTED)
+
+
+def test_first_tarred_profile_is_chosen_by_name(data_io):
+    for name in ("a-profile.tgz", "c-profile.tgz", "b-profile.tgz"):
+        (data_io.project_dir / name).write_bytes(b"")
+    assert data_io.find_tarred_profile().name == "a-profile.tgz"

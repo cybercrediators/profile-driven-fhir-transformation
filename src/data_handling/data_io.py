@@ -193,7 +193,7 @@ class DataIO:
             return []
 
         loaded_files = []
-        for file in folder_dir.iterdir():
+        for file in sorted(folder_dir.iterdir()):
             if file.suffix == ".json":
                 res_json = utils.get_json(file)
                 loaded_files.append((file.name, res_json))
@@ -202,8 +202,7 @@ class DataIO:
         return loaded_files
 
     def get_filenames(self, path):
-        # logger.info(f"Loading files from directory: {path}")
-        return list(Path(path).iterdir())
+        return sorted(Path(path).iterdir())
 
     def get_json_profile_files(self, path):
         profile_dir = self.project_dir / self.ProjectFolders.INPUT_PROFILE.value
@@ -250,7 +249,7 @@ class DataIO:
 
         # check project folder for tarred profile
         profile_dir = self.project_dir
-        for file in profile_dir.iterdir():
+        for file in sorted(profile_dir.iterdir()):
             if file.suffix in [".tar", ".tgz"]:
                 logger.info(f"Found tarred profile: {file}")
                 return file
@@ -355,7 +354,7 @@ class DataIO:
         """Get all json files from a given project folder"""
         json_files = []
         folder_dir = self.project_dir / folder.value
-        for file in folder_dir.iterdir():
+        for file in sorted(folder_dir.iterdir()):
             if file.suffix == ".json":
                 json_files.append(file)
         return json_files
