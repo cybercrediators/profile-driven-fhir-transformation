@@ -1,0 +1,473 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-a59e5c6f-1485-4ff3-9ee0-228f8dc099db-48ec82b0",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec-a59e5c6f-1485-4ff3-9ee0-228f8dc099db",
+  "name": "Map_023_structure_map_testing_unseen_senll_full_spec_a59e5c6f_1485_4ff3_9ee0_228f8dc099db",
+  "title": "Structure Map for testing_unseen_senll_full_spec - a59e5c6f-1485-4ff3-9ee0-228f8dc099db",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: a59e5c6f-1485-4ff3-9ee0-228f8dc099db). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-senll-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://electronichealth.se/fhir/StructureDefinition/NLLMedicationListInfo",
+      "mode": "target",
+      "alias": "a59e5c6f-1485-4ff3-9ee0-228f8dc099db"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-a59e5c6f-1485-4ff3-9ee0-228f8dc099db",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_senll_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Basic",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLMedicationListInfo"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://electronichealth.se/fhir/StructureDefinition/NLLMedicationListInfo"
+        },
+        {
+          "name": "TODO-resolve-reference-Basic-author",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-author"
+            }
+          ],
+          "documentation": "Reference<Basic.author> → Practitioner|PractitionerRole|Patient|RelatedPerson|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-code-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-code-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-code-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-code-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-cc-coding0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "medlistinfo"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-code-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-code-cc-coding0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://ehalsomyndigheten.se/fhir/CodeSystem/basic-resource-types"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for Basic.code"
+        },
+        {
+          "name": "map-created",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_CREATED",
+              "variable": "src-created"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "created",
+              "variable": "tgt-created",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-created"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Basic.created | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-nllControlledDrugs",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NLLCONTROLLEDDRUGS_SOURCE",
+              "variable": "src-nllControlledDrugs"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nllControlledDrugs",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nllControlledDrugs",
+              "source": [
+                {
+                  "context": "src-nllControlledDrugs"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllControlledDrugs",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLControlledDrugs"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLControlledDrugs"
+            },
+            {
+              "name": "set-extension-value-nllControlledDrugs",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllControlledDrugs",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLControlledDrugs | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLControlledDrugs'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/NLLControlledDrugs', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Basic.extension"
+        },
+        {
+          "name": "map-extension-nllMedicationlistVersion",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NLLMEDICATIONLISTVERSION_SOURCE",
+              "variable": "src-nllMedicationlistVersion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nllMedicationlistVersion",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nllMedicationlistVersion",
+              "source": [
+                {
+                  "context": "src-nllMedicationlistVersion"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllMedicationlistVersion",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/Version"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/Version"
+            },
+            {
+              "name": "set-extension-value-nllMedicationlistVersion",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllMedicationlistVersion",
+                  "contextType": "variable",
+                  "element": "valueInteger",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueInteger)"
+            }
+          ],
+          "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/Version | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/Version'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/Version', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'integer'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Basic.extension"
+        },
+        {
+          "name": "map-extension-nllPrivacyLock",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NLLPRIVACYLOCK_SOURCE",
+              "variable": "src-nllPrivacyLock"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nllPrivacyLock",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nllPrivacyLock",
+              "source": [
+                {
+                  "context": "src-nllPrivacyLock"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllPrivacyLock",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLPrivacyLock"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLPrivacyLock"
+            },
+            {
+              "name": "set-extension-value-nllPrivacyLock",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllPrivacyLock",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLPrivacyLock | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLPrivacyLock'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/NLLPrivacyLock', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Basic.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Basic.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Basic-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Basic.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -184,10 +184,11 @@
           "documentation": "Maps to Observation.bodySite | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 1 child elements"
         },
         {
-          "name": "map-code-authored-coded-leaves",
+          "name": "map-code",
           "source": [
             {
-              "context": "source"
+              "context": "source",
+              "variable": "src-code"
             }
           ],
           "target": [
@@ -195,7 +196,7 @@
               "context": "target",
               "contextType": "variable",
               "element": "code",
-              "variable": "tgt-code-cc",
+              "variable": "tgt-code",
               "transform": "create",
               "parameter": [
                 {
@@ -206,18 +207,19 @@
           ],
           "rule": [
             {
-              "name": "add-code-coding",
+              "name": "map-coding",
               "source": [
                 {
-                  "context": "source"
+                  "context": "src-code",
+                  "variable": "src-coding"
                 }
               ],
               "target": [
                 {
-                  "context": "tgt-code-cc",
+                  "context": "tgt-code",
                   "contextType": "variable",
                   "element": "coding",
-                  "variable": "tgt-code-coding",
+                  "variable": "tgt-coding",
                   "transform": "create",
                   "parameter": [
                     {
@@ -228,55 +230,60 @@
               ],
               "rule": [
                 {
-                  "name": "set-code-system",
+                  "name": "map-code",
                   "source": [
                     {
-                      "context": "source",
-                      "element": "obsCodeSystem",
-                      "variable": "src-code-system"
-                    }
-                  ],
-                  "target": [
-                    {
-                      "context": "tgt-code-coding",
-                      "contextType": "variable",
-                      "element": "system",
-                      "transform": "copy",
-                      "parameter": [
-                        {
-                          "valueId": "src-code-system"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "set-code-code",
-                  "source": [
-                    {
-                      "context": "source",
+                      "context": "src-coding",
                       "element": "obsCode",
-                      "variable": "src-code-code"
+                      "variable": "src-code-2"
                     }
                   ],
                   "target": [
                     {
-                      "context": "tgt-code-coding",
+                      "context": "tgt-coding",
                       "contextType": "variable",
                       "element": "code",
+                      "variable": "tgt-code-2",
                       "transform": "copy",
                       "parameter": [
                         {
-                          "valueId": "src-code-code"
+                          "valueId": "src-code-2"
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "documentation": "Maps to Observation.code.coding.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "obsCodeSystem",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Observation.code.coding.system | Type: uri | Cardinality: 1..1"
                 }
-              ]
+              ],
+              "documentation": "Maps to Observation.code.coding | Type: Coding | Cardinality: 1..1 | Complex type with 2 child elements"
             }
           ],
-          "documentation": "Explicit coded leaf mappings for Observation.code"
+          "documentation": "Maps to Observation.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 1 child elements"
         },
         {
           "name": "map-effective",

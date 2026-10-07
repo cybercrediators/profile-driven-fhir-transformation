@@ -1,0 +1,522 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-imaging-study-endpoint-f8021683",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-imr-full-spec-imaging-study-endpoint",
+  "name": "Map_002_structure_map_testing_unseen_imr_full_spec_imaging_study_endpoint",
+  "title": "Structure Map for testing_unseen_imr_full_spec - imaging-study-endpoint",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: imaging-study-endpoint). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-imr-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imaging-study-endpoint",
+      "mode": "target",
+      "alias": "imaging-study-endpoint"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-imaging-study-endpoint",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_imr_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Endpoint",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imaging-study-endpoint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://profiles.ihe.net/RAD/IMR/StructureDefinition/imaging-study-endpoint"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "element": "imaging_study_endpoint_address",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-address"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.address | Type: url | Cardinality: 1..1"
+        },
+        {
+          "name": "map-connectionType-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "connectionType",
+              "variable": "tgt-connectionType-coding",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-connectionType-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imaging_study_endpoint_connectionType_system",
+                  "variable": "src-connectionType-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-connectionType-coding",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-connectionType-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-connectionType-code",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imaging_study_endpoint_connectionType_code",
+                  "variable": "src-connectionType-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-connectionType-coding",
+                  "contextType": "variable",
+                  "element": "code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-connectionType-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-connectionType-display",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imaging_study_endpoint_connectionType_display",
+                  "variable": "src-connectionType-display"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-connectionType-coding",
+                  "contextType": "variable",
+                  "element": "display",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-connectionType-display"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Endpoint.connectionType"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.contact | Type: ContactPoint | Cardinality: 0..*"
+        },
+        {
+          "name": "map-header",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_HEADER",
+              "variable": "src-header"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "header",
+              "variable": "tgt-header",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-header",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-header"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.header | Type: string | Cardinality: 0..*"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Endpoint-managingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-managingOrganization"
+            }
+          ],
+          "documentation": "Reference<Endpoint.managingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NAME",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.name | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-payloadMimeType",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PAYLOADMIMETYPE",
+              "variable": "src-payloadMimeType"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payloadMimeType",
+              "variable": "tgt-payloadMimeType",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-payloadMimeType",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-payloadMimeType"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.payloadMimeType | Type: code | Cardinality: 0..*"
+        },
+        {
+          "name": "map-payloadType-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "payloadType",
+              "variable": "tgt-payloadType-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-payloadType-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-payloadType-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-payloadType-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-payloadType-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "imaging_study_endpoint_payloadType_coding_system",
+                      "variable": "src-payloadType-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payloadType-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-payloadType-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-payloadType-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "imaging_study_endpoint_payloadType_coding_code",
+                      "variable": "src-payloadType-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payloadType-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-payloadType-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-payloadType-display",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "imaging_study_endpoint_payloadType_coding_display",
+                      "variable": "src-payloadType-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payloadType-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-payloadType-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Endpoint.payloadType"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.period | Type: Period | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "imaging_study_endpoint_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Endpoint.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

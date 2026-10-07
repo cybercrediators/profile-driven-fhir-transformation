@@ -1,0 +1,1513 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-ISiKValueSet-81b789cc",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-isik-full-spec-ISiKValueSet",
+  "name": "Map_002_structure_map_testing_unseen_isik_full_spec_ISiKValueSet",
+  "title": "Structure Map for testing_unseen_isik_full_spec - ISiKValueSet",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: ISiKValueSet). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-isik-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/isik/StructureDefinition/ISiKValueSet",
+      "mode": "target",
+      "alias": "ISiKValueSet"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-ISiKValueSet",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_isik_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ValueSet",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/isik/StructureDefinition/ISiKValueSet"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/isik/StructureDefinition/ISiKValueSet"
+        },
+        {
+          "name": "map-compose",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-compose"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "compose",
+              "variable": "tgt-compose",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-inactive",
+              "source": [
+                {
+                  "context": "src-compose",
+                  "element": "TODO_MAP_INACTIVE",
+                  "variable": "src-inactive"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-compose",
+                  "contextType": "variable",
+                  "element": "inactive",
+                  "variable": "tgt-inactive",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-inactive"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.compose.inactive | Type: boolean | Cardinality: 0..1"
+            },
+            {
+              "name": "map-include",
+              "source": [
+                {
+                  "context": "src-compose",
+                  "variable": "src-include"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-compose",
+                  "contextType": "variable",
+                  "element": "include",
+                  "variable": "tgt-include",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-include",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-concept",
+                  "source": [
+                    {
+                      "context": "src-include",
+                      "variable": "src-concept"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-include",
+                      "contextType": "variable",
+                      "element": "concept",
+                      "variable": "tgt-concept",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-concept",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "BackboneElement"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-code",
+                      "source": [
+                        {
+                          "context": "src-concept",
+                          "element": "TODO_MAP_CODE",
+                          "variable": "src-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-concept",
+                          "contextType": "variable",
+                          "element": "code",
+                          "variable": "tgt-code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.concept.code | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-designation",
+                      "source": [
+                        {
+                          "context": "src-concept",
+                          "variable": "src-designation"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-concept",
+                          "contextType": "variable",
+                          "element": "designation",
+                          "variable": "tgt-designation",
+                          "listMode": [
+                            "share"
+                          ],
+                          "listRuleId": "map-designation",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "BackboneElement"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-use",
+                          "source": [
+                            {
+                              "context": "src-designation",
+                              "variable": "src-use"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-designation",
+                              "contextType": "variable",
+                              "element": "use",
+                              "variable": "tgt-use",
+                              "transform": "create",
+                              "parameter": [
+                                {
+                                  "valueString": "Coding"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to ValueSet.compose.include.concept.designation.use | Type: Coding | Cardinality: 0..1"
+                        },
+                        {
+                          "name": "map-value",
+                          "source": [
+                            {
+                              "context": "src-designation",
+                              "element": "TODO_MAP_VALUE",
+                              "variable": "src-value"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-designation",
+                              "contextType": "variable",
+                              "element": "value",
+                              "variable": "tgt-value",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-value"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to ValueSet.compose.include.concept.designation.value | Type: string | Cardinality: 1..1"
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.concept.designation | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+                    },
+                    {
+                      "name": "map-display",
+                      "source": [
+                        {
+                          "context": "src-concept",
+                          "element": "TODO_MAP_DISPLAY",
+                          "variable": "src-display"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-concept",
+                          "contextType": "variable",
+                          "element": "display",
+                          "variable": "tgt-display",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-display"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.concept.display | Type: string | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.compose.include.concept | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+                },
+                {
+                  "name": "map-filter",
+                  "source": [
+                    {
+                      "context": "src-include",
+                      "variable": "src-filter"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-include",
+                      "contextType": "variable",
+                      "element": "filter",
+                      "variable": "tgt-filter",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-filter",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "BackboneElement"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-op",
+                      "source": [
+                        {
+                          "context": "src-filter",
+                          "element": "TODO_MAP_OP",
+                          "variable": "src-op"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-filter",
+                          "contextType": "variable",
+                          "element": "op",
+                          "variable": "tgt-op",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-op"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.filter.op | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-property",
+                      "source": [
+                        {
+                          "context": "src-filter",
+                          "element": "TODO_MAP_PROPERTY",
+                          "variable": "src-property"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-filter",
+                          "contextType": "variable",
+                          "element": "property",
+                          "variable": "tgt-property",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-property"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.filter.property | Type: code | Cardinality: 1..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-filter",
+                          "element": "TODO_MAP_VALUE",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-filter",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ValueSet.compose.include.filter.value | Type: string | Cardinality: 1..1"
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.compose.include.filter | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-include",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-include",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.compose.include.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-valueSet",
+                  "source": [
+                    {
+                      "context": "src-include",
+                      "element": "TODO_MAP_VALUESET",
+                      "variable": "src-valueSet"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-include",
+                      "contextType": "variable",
+                      "element": "valueSet",
+                      "variable": "tgt-valueSet",
+                      "listMode": [
+                        "share"
+                      ],
+                      "listRuleId": "map-valueSet",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-valueSet"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.compose.include.valueSet | Type: canonical | Cardinality: 0..*"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-include",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-include",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.compose.include.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to ValueSet.compose.include | Type: BackboneElement | Cardinality: 1..* | Complex type with 8 child elements"
+            },
+            {
+              "name": "map-lockedDate",
+              "source": [
+                {
+                  "context": "src-compose",
+                  "element": "TODO_MAP_LOCKEDDATE",
+                  "variable": "src-lockedDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-compose",
+                  "contextType": "variable",
+                  "element": "lockedDate",
+                  "variable": "tgt-lockedDate",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-lockedDate"
+                    },
+                    {
+                      "valueString": "date"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.compose.lockedDate | Type: date | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to ValueSet.compose | Type: BackboneElement | Cardinality: 0..1 | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactDetail"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.contact | Type: ContactDetail | Cardinality: 0..*"
+        },
+        {
+          "name": "map-copyright",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_COPYRIGHT",
+              "variable": "src-copyright"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "copyright",
+              "variable": "tgt-copyright",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-copyright"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.copyright | Type: markdown | Cardinality: 0..1"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.date | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.description | Type: markdown | Cardinality: 0..1"
+        },
+        {
+          "name": "map-expansion",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-expansion"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "expansion",
+              "variable": "tgt-expansion",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-contains",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "variable": "src-contains"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "contains",
+                  "variable": "tgt-contains",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-contains",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-abstract",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "TODO_MAP_ABSTRACT",
+                      "variable": "src-abstract"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "abstract",
+                      "variable": "tgt-abstract",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-abstract"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.abstract | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "valueSet_contains_cd",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "valueSet_contains_disp",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.display | Type: string | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-inactive",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "TODO_MAP_INACTIVE",
+                      "variable": "src-inactive"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "inactive",
+                      "variable": "tgt-inactive",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-inactive"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.inactive | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "valueSet_contains_sys",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.system | Type: uri | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-contains",
+                      "element": "valueSet_contains_ver",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-contains",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.contains.version | Type: string | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.contains | Type: BackboneElement | Cardinality: 1..* | Complex type with 11 child elements"
+            },
+            {
+              "name": "map-identifier",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "element": "vsExpIdent",
+                  "variable": "src-identifier"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "identifier",
+                  "variable": "tgt-identifier",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.identifier | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-offset",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "element": "TODO_MAP_OFFSET",
+                  "variable": "src-offset"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "offset",
+                  "variable": "tgt-offset",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-offset"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.offset | Type: integer | Cardinality: 0..1"
+            },
+            {
+              "name": "map-parameter",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "variable": "src-parameter"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "parameter",
+                  "variable": "tgt-parameter",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-parameter",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-name",
+                  "source": [
+                    {
+                      "context": "src-parameter",
+                      "element": "TODO_MAP_NAME",
+                      "variable": "src-name"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-parameter",
+                      "contextType": "variable",
+                      "element": "name",
+                      "variable": "tgt-name",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-name"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.parameter.name | Type: string | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-value",
+                  "source": [
+                    {
+                      "context": "src-parameter",
+                      "element": "TODO_MAP_VALUE",
+                      "variable": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-parameter",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-value",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ValueSet.expansion.parameter.value[x] | Type: string, boolean, integer, decimal, uri, code, dateTime | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.parameter | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-timestamp",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "element": "vsExpTs",
+                  "variable": "src-timestamp"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "timestamp",
+                  "variable": "tgt-timestamp",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-timestamp"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.timestamp | Type: dateTime | Cardinality: 1..1"
+            },
+            {
+              "name": "map-total",
+              "source": [
+                {
+                  "context": "src-expansion",
+                  "element": "TODO_MAP_TOTAL",
+                  "variable": "src-total"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-expansion",
+                  "contextType": "variable",
+                  "element": "total",
+                  "variable": "tgt-total",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-total"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ValueSet.expansion.total | Type: integer | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to ValueSet.expansion | Type: BackboneElement | Cardinality: 1..1 | Complex type with 9 child elements"
+        },
+        {
+          "name": "map-experimental",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EXPERIMENTAL",
+              "variable": "src-experimental"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "experimental",
+              "variable": "tgt-experimental",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-experimental"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.experimental | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-immutable",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_IMMUTABLE",
+              "variable": "src-immutable"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "immutable",
+              "variable": "tgt-immutable",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-immutable"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.immutable | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-jurisdiction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-jurisdiction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "jurisdiction",
+              "variable": "tgt-jurisdiction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-jurisdiction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.jurisdiction | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "vsName",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.name | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "map-publisher",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PUBLISHER",
+              "variable": "src-publisher"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "publisher",
+              "variable": "tgt-publisher",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-publisher"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.publisher | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-purpose",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PURPOSE",
+              "variable": "src-purpose"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "purpose",
+              "variable": "tgt-purpose",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-purpose"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.purpose | Type: markdown | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "vsStatus",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_TITLE",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.title | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-url",
+          "source": [
+            {
+              "context": "source",
+              "element": "vsUrl",
+              "variable": "src-url"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "url",
+              "variable": "tgt-url",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-url"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.url | Type: uri | Cardinality: 1..1"
+        },
+        {
+          "name": "map-useContext",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-useContext"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "useContext",
+              "variable": "tgt-useContext",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-useContext",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "UsageContext"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-fixed-code",
+              "source": [
+                {
+                  "context": "src-useContext"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-useContext",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-fixed-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-fixed-code-system",
+                  "source": [
+                    {
+                      "context": "src-useContext"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/usage-context-type"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-fixed-code-code",
+                  "source": [
+                    {
+                      "context": "src-useContext"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-fixed-code",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "focus"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for code"
+            },
+            {
+              "name": "map-value-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-useContext"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-useContext",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value-cc",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "add-value-coding",
+                  "source": [
+                    {
+                      "context": "src-useContext"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value-cc",
+                      "contextType": "variable",
+                      "element": "coding",
+                      "variable": "tgt-value-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-value-system",
+                      "source": [
+                        {
+                          "context": "src-useContext",
+                          "element": "vsUcValSys",
+                          "variable": "src-value-system"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-system"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-value-code",
+                      "source": [
+                        {
+                          "context": "src-useContext",
+                          "element": "vsUcValCode",
+                          "variable": "src-value-code"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-value-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-value-code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for ValueSet.useContext.value[x]"
+            }
+          ],
+          "documentation": "Maps to ValueSet.useContext | Type: UsageContext | Cardinality: 1..* | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-version",
+          "source": [
+            {
+              "context": "source",
+              "element": "vsVersion",
+              "variable": "src-version"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "version",
+              "variable": "tgt-version",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-version"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ValueSet.version | Type: string | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

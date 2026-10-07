@@ -1,0 +1,1719 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NLLPractitioner-a2493bf0",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec-NLLPractitioner",
+  "name": "Map_012_structure_map_testing_unseen_senll_full_spec_NLLPractitioner",
+  "title": "Structure Map for testing_unseen_senll_full_spec - NLLPractitioner",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NLLPractitioner). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-senll-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://electronichealth.se/fhir/StructureDefinition/NLLPractitioner",
+      "mode": "target",
+      "alias": "NLLPractitioner"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NLLPractitioner",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_senll_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Practitioner",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLPractitioner"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://electronichealth.se/fhir/StructureDefinition/NLLPractitioner"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_CITY",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-city",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-city",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-city",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.address.city.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.address.city.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.city | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_COUNTRY",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-country",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-country",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-country",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.address.country.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.address.country.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.country | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-district",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_DISTRICT",
+                  "variable": "src-district"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "district",
+                  "variable": "tgt-district",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-district"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.district | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_LINE",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-line",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-line",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-line",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.address.line.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.address.line.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.line | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-address",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_POSTALCODE",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-postalCode",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-postalCode",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-postalCode",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.address.postalCode.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.address.postalCode.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.postalCode | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_STATE",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.state | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.type | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.address.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Practitioner.address | Type: Address | Cardinality: 0..* | Complex type with 12 child elements"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_BIRTHDATE",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.birthDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.communication | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-extension-userAcronym",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-USERACRONYM_SOURCE",
+              "variable": "src-userAcronym"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-userAcronym",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-userAcronym",
+              "source": [
+                {
+                  "context": "src-userAcronym"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-userAcronym",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://electronichealth.se/fhir/StructureDefinition/NLLUserAcronym"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://electronichealth.se/fhir/StructureDefinition/NLLUserAcronym"
+            }
+          ],
+          "documentation": "Maps to extension: https://electronichealth.se/fhir/StructureDefinition/NLLUserAcronym | Type: [{'code': 'Extension', 'profile_canonical': ['https://electronichealth.se/fhir/StructureDefinition/NLLUserAcronym'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://electronichealth.se/fhir/StructureDefinition/NLLUserAcronym', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'string'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'Maximum string length: 255', 'max_length': 255, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Practitioner.extension"
+        },
+        {
+          "name": "map-extension-nllApplicableWorkplace",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-NLLAPPLICABLEWORKPLACE_SOURCE",
+              "variable": "src-nllApplicableWorkplace"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-nllApplicableWorkplace",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-nllApplicableWorkplace",
+              "source": [
+                {
+                  "context": "src-nllApplicableWorkplace"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-nllApplicableWorkplace",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLWorkplaceSummary"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLWorkplaceSummary"
+            }
+          ],
+          "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLWorkplaceSummary | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLWorkplaceSummary'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:workplaceIdentifier', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Workplace identifier', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'workplaceIdentifier', 'must_support': True, 'comment': 'Maximum string length: 13', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'EHM', 'map': 'Arbetsplats-id'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:workplaceIdentifier', 'slice_selector': 'workplaceIdentifier', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:workplaceIdentifier.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:workplaceIdentifier.id', 'type': [{'code': 'http://hl7.org/fh… [truncated; full structure in the registry entry for http://electronichealth.se/fhir/StructureDefinition/NLLWorkplaceSummary] | Path: Practitioner.extension"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_GENDER",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.gender | Type: code | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_FAMILY",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-family",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-family",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-family",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.name.family.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.name.family.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.family | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_GIVEN",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-given",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-given",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-given",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.name.given.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.name.given.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.given | Type: string | Cardinality: 0..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-name",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-prefix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_PREFIX",
+                  "variable": "src-prefix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "prefix",
+                  "variable": "tgt-prefix",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-prefix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-prefix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.prefix | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-suffix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_SUFFIX",
+                  "variable": "src-suffix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "suffix",
+                  "variable": "tgt-suffix",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-suffix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-suffix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.suffix | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.name.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Practitioner.name | Type: HumanName | Cardinality: 0..1 | Complex type with 9 child elements"
+        },
+        {
+          "name": "map-photo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-photo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "photo",
+              "variable": "tgt-photo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-photo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Attachment"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Practitioner.photo | Type: Attachment | Cardinality: 0..*"
+        },
+        {
+          "name": "map-qualification",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-qualification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "qualification",
+              "variable": "tgt-qualification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-qualification",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.qualification.code | Type: CodeableConcept | Cardinality: 1..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "TODO-resolve-reference-Practitioner-issuer",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-issuer"
+                }
+              ],
+              "documentation": "Reference<Practitioner.qualification.issuer> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-qualification",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-qualification",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.qualification.period | Type: Period | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Practitioner.qualification | Type: BackboneElement | Cardinality: 0..1 | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-nllAvailableToPatient",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO-MAP-NLLAVAILABLETOPATIENT_SOURCE",
+                  "variable": "src-nllAvailableToPatient"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-nllAvailableToPatient",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-nllAvailableToPatient",
+                  "source": [
+                    {
+                      "context": "src-nllAvailableToPatient"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-nllAvailableToPatient",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLAvailableToPatient"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLAvailableToPatient"
+                },
+                {
+                  "name": "set-extension-value-nllAvailableToPatient",
+                  "source": [
+                    {
+                      "context": "src-telecom",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-nllAvailableToPatient",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueBoolean)"
+                }
+              ],
+              "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLAvailableToPatient | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLAvailableToPatient'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/NLLAvailableToPatient', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'boolean'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Practitioner.telecom.extension"
+            },
+            {
+              "name": "map-extension-nllContactPointType",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO-MAP-NLLCONTACTPOINTTYPE_SOURCE",
+                  "variable": "src-nllContactPointType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-nllContactPointType",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-nllContactPointType",
+                  "source": [
+                    {
+                      "context": "src-nllContactPointType"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-nllContactPointType",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLContactPointType"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://electronichealth.se/fhir/StructureDefinition/NLLContactPointType"
+                }
+              ],
+              "documentation": "Maps to extension: http://electronichealth.se/fhir/StructureDefinition/NLLContactPointType | Type: [{'code': 'Extension', 'profile_canonical': ['http://electronichealth.se/fhir/StructureDefinition/NLLContactPointType'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://electronichealth.se/fhir/StructureDefinition/NLLContactPointType', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'code'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Value of extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: Practitioner.telecom.extension"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-rank",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_RANK",
+                  "variable": "src-rank"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "rank",
+                  "variable": "tgt-rank",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-rank"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.rank | Type: positiveInt | Cardinality: 1..1"
+            },
+            {
+              "name": "set-fixed-system",
+              "source": [
+                {
+                  "context": "src-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "phone"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for system"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "practTelValue",
+                  "variable": "src-value",
+                  "check": "($this.toString().length() <= 15)"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-NLLdataAbsentReason",
+                  "source": [
+                    {
+                      "context": "src-value",
+                      "element": "TODO-MAP-NLLDATAABSENTREASON_SOURCE",
+                      "variable": "src-NLLdataAbsentReason"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-value",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-NLLdataAbsentReason",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-NLLdataAbsentReason",
+                      "source": [
+                        {
+                          "context": "src-NLLdataAbsentReason"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/data-absent-reason"
+                    },
+                    {
+                      "name": "map-valueCode-translate",
+                      "source": [
+                        {
+                          "context": "src-value",
+                          "element": "TODO-SOURCE-FOR-VALUECODE",
+                          "variable": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-NLLdataAbsentReason",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Translate mapping for Practitioner.telecom.value.extension:NLLdataAbsentReason using http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec/ConceptMap/cm-NLLdataAbsentReason-64827bef"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/data-absent-reason | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason'], 'profile': ['http://hl7.org/fhir/StructureDefinition/data-absent-reason']}] | Path: Practitioner.telecom.value.extension"
+                }
+              ],
+              "documentation": "Maps to Practitioner.telecom.value | Type: string | Cardinality: 1..1 | Complex type with 3 child elements"
+            }
+          ],
+          "documentation": "Maps to Practitioner.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 7 child elements"
+        }
+      ]
+    }
+  ]
+}

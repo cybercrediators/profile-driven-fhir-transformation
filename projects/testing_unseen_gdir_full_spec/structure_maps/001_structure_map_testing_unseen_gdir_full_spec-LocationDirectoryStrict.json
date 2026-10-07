@@ -1,0 +1,875 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-LocationDirectoryStrict-eb160ab2",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-gdir-full-spec-LocationDirectoryStrict",
+  "name": "Map_001_structure_map_testing_unseen_gdir_full_spec_LocationDirectoryStrict",
+  "title": "Structure Map for testing_unseen_gdir_full_spec - LocationDirectoryStrict",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: LocationDirectoryStrict). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-gdir-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/directory/StructureDefinition/LocationDirectoryStrict",
+      "mode": "target",
+      "alias": "LocationDirectoryStrict"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-LocationDirectoryStrict",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_gdir_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Location",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/LocationDirectoryStrict"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/directory/StructureDefinition/LocationDirectoryStrict"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_city",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.city | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_country",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.country | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-district",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_DISTRICT",
+                  "variable": "src-district"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "district",
+                  "variable": "tgt-district",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-district"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.district | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_line",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.line | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-address",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_postalCode",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.postalCode | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_state",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.state | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "locationDirectoryStrict_address_text",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.text | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.type | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.address.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Location.address | Type: Address | Cardinality: 1..1 | Complex type with 12 child elements"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "locationDirectoryStrict_description",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Location.description | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-ownerTelematikId",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-OWNERTELEMATIKID_SOURCE",
+              "variable": "src-ownerTelematikId"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ownerTelematikId",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ownerTelematikId",
+              "source": [
+                {
+                  "context": "src-ownerTelematikId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx"
+            },
+            {
+              "name": "set-extension-value-ownerTelematikId",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ownerTelematikId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Identifier"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueIdentifier)"
+            }
+          ],
+          "documentation": "Maps to extension: https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx | Type: [{'code': 'Extension', 'profile_canonical': ['https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Identifier', 'profile_canonical': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'profile': ['http://fhir.de/StructureDefinition/identifier-telematik-id'], 'type_structure': [{'path': 'Extension.value[x].assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].assigner.identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].assigner.i… [truncated; full structure in the registry entry for https://gematik.de/fhir/directory/StructureDefinition/OwnerTelematikIdEx] | Path: Location.extension"
+        },
+        {
+          "name": "TODO-resolve-reference-Location-managingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-managingOrganization"
+            }
+          ],
+          "documentation": "Reference<Location.managingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-meta",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-meta"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-lastUpdated",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_LASTUPDATED",
+                  "variable": "src-lastUpdated"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "lastUpdated",
+                  "variable": "tgt-lastUpdated",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-lastUpdated"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.meta.lastUpdated | Type: instant | Cardinality: 0..1"
+            },
+            {
+              "name": "map-profile",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_PROFILE",
+                  "variable": "src-profile"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "variable": "tgt-profile",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-profile"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.meta.profile | Type: canonical | Cardinality: 0..*"
+            },
+            {
+              "name": "map-security",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "variable": "src-security"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "security",
+                  "variable": "tgt-security",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-security",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.meta.security | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-source",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_SOURCE",
+                  "variable": "src-source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "source",
+                  "variable": "tgt-source",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-source"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.meta.source | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-tag-Origin",
+              "source": [
+                {
+                  "context": "src-meta"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "tag",
+                  "variable": "tgt-tag-Origin",
+                  "listMode": [
+                    "share"
+                  ],
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-tag-Origin-system",
+                  "source": [
+                    {
+                      "context": "src-meta"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://gematik.de/fhir/directory/CodeSystem/Origin"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-tag-Origin-code",
+                  "source": [
+                    {
+                      "context": "src-meta",
+                      "element": "locationDirectoryStrict_meta_tag_Origin_code",
+                      "variable": "src-tag-Origin-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tag-Origin-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-tag-Origin-system-2",
+                  "source": [
+                    {
+                      "context": "src-meta",
+                      "element": "metaTag_LocationDirectoryStrict_system",
+                      "variable": "src-tag-Origin-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-Origin",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tag-Origin-system"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Slice Origin of Location.meta.tag (type Coding)"
+            },
+            {
+              "name": "map-versionId",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_VERSIONID",
+                  "variable": "src-versionId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "versionId",
+                  "variable": "tgt-versionId",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-versionId"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.meta.versionId | Type: id | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Location.meta | Type: Meta | Cardinality: 0..1 | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "element": "locationDirectoryStrict_name",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-name"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Location.name | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Location-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<Location.partOf> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-position",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-position"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "position",
+              "variable": "tgt-position",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-altitude",
+              "source": [
+                {
+                  "context": "src-position",
+                  "element": "TODO_MAP_ALTITUDE",
+                  "variable": "src-altitude"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-position",
+                  "contextType": "variable",
+                  "element": "altitude",
+                  "variable": "tgt-altitude",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-altitude"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.position.altitude | Type: decimal | Cardinality: 0..1"
+            },
+            {
+              "name": "map-latitude",
+              "source": [
+                {
+                  "context": "src-position",
+                  "element": "TODO_MAP_LATITUDE",
+                  "variable": "src-latitude"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-position",
+                  "contextType": "variable",
+                  "element": "latitude",
+                  "variable": "tgt-latitude",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-latitude"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.position.latitude | Type: decimal | Cardinality: 1..1"
+            },
+            {
+              "name": "map-longitude",
+              "source": [
+                {
+                  "context": "src-position",
+                  "element": "TODO_MAP_LONGITUDE",
+                  "variable": "src-longitude"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-position",
+                  "contextType": "variable",
+                  "element": "longitude",
+                  "variable": "tgt-longitude",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-longitude"
+                    },
+                    {
+                      "valueString": "decimal"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Location.position.longitude | Type: decimal | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Location.position | Type: BackboneElement | Cardinality: 0..1 | Complex type with 6 child elements"
+        }
+      ]
+    }
+  ]
+}

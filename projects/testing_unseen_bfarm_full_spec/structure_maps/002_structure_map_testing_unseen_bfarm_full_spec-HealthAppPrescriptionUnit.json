@@ -1,0 +1,1857 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-HealthAppPrescriptionUnit-c31d7e3e",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-bfarm-full-spec-HealthAppPrescriptionUnit",
+  "name": "Map_002_structure_map_testing_unseen_bfarm_full_spec_HealthAppPrescriptionUnit",
+  "title": "Structure Map for testing_unseen_bfarm_full_spec - HealthAppPrescriptionUnit",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: HealthAppPrescriptionUnit). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-bfarm-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnit",
+      "mode": "target",
+      "alias": "HealthAppPrescriptionUnit"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-HealthAppPrescriptionUnit",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_bfarm_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ChargeItemDefinition",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnit"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnit"
+        },
+        {
+          "name": "map-applicability",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-applicability"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "applicability",
+              "variable": "tgt-applicability",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-applicability",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-applicability",
+                  "element": "TODO_MAP_DESCRIPTION",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-applicability",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.applicability.description | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-expression",
+              "source": [
+                {
+                  "context": "src-applicability",
+                  "element": "TODO_MAP_EXPRESSION",
+                  "variable": "src-expression"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-applicability",
+                  "contextType": "variable",
+                  "element": "expression",
+                  "variable": "tgt-expression",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-expression"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.applicability.expression | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.applicability | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-approvalDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_APPROVALDATE",
+              "variable": "src-approvalDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "approvalDate",
+              "variable": "tgt-approvalDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-approvalDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.approvalDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-code",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-code"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "code",
+              "variable": "tgt-code",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-coding",
+              "source": [
+                {
+                  "context": "src-code",
+                  "variable": "src-coding"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "profile_HealthAppPrescriptionUnit_code_coding_code",
+                      "variable": "src-code-2"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code-2",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code-2"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.code.coding.code | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.code.coding.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "set-fixed-system",
+                  "source": [
+                    {
+                      "context": "src-coding"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://fhir.de/CodeSystem/ifa/pzn"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets fixed value for system"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.code.coding.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-coding",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-coding",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.code.coding.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.code.coding | Type: Coding | Cardinality: 1..1 | Complex type with 7 child elements"
+            },
+            {
+              "name": "map-extension-validUntil",
+              "source": [
+                {
+                  "context": "src-code",
+                  "element": "TODO-MAP-VALIDUNTIL_SOURCE",
+                  "variable": "src-validUntil"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-code",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-validUntil",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-validUntil",
+                  "source": [
+                    {
+                      "context": "src-validUntil"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-validUntil",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitCodeValidUntil"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitCodeValidUntil"
+                },
+                {
+                  "name": "set-extension-value-validUntil",
+                  "source": [
+                    {
+                      "context": "src-code",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-validUntil",
+                      "contextType": "variable",
+                      "element": "valueDateTime",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueDateTime)"
+                }
+              ],
+              "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitCodeValidUntil | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitCodeValidUntil'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitCodeValidUntil', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'dateTime'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'Value of extension', 'is_required': True, 'fixed_value': [], 'options': [], 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}], 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'children': []}]]}] | Path: ChargeItemDefinition.code.extension"
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactDetail"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.contact | Type: ContactDetail | Cardinality: 0..*"
+        },
+        {
+          "name": "map-copyright",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_COPYRIGHT",
+              "variable": "src-copyright"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "copyright",
+              "variable": "tgt-copyright",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-copyright"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.copyright | Type: markdown | Cardinality: 0..1"
+        },
+        {
+          "name": "map-date",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATE",
+              "variable": "src-date"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "date",
+              "variable": "tgt-date",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-date"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.date | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-derivedFromUri",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DERIVEDFROMURI",
+              "variable": "src-derivedFromUri"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "derivedFromUri",
+              "variable": "tgt-derivedFromUri",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-derivedFromUri",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-derivedFromUri"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.derivedFromUri | Type: uri | Cardinality: 0..*"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.description | Type: markdown | Cardinality: 0..1"
+        },
+        {
+          "name": "map-effectivePeriod",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-effectivePeriod"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "effectivePeriod",
+              "variable": "tgt-effectivePeriod",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-end",
+              "source": [
+                {
+                  "context": "src-effectivePeriod",
+                  "element": "profile_HealthAppPrescriptionUnit_effectivePeriod_end",
+                  "variable": "src-end"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-effectivePeriod",
+                  "contextType": "variable",
+                  "element": "end",
+                  "variable": "tgt-end",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-end"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.effectivePeriod.end | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-start",
+              "source": [
+                {
+                  "context": "src-effectivePeriod",
+                  "element": "profile_HealthAppPrescriptionUnit_effectivePeriod_start",
+                  "variable": "src-start"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-effectivePeriod",
+                  "contextType": "variable",
+                  "element": "start",
+                  "variable": "tgt-start",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-start"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.effectivePeriod.start | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.effectivePeriod | Type: Period | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-experimental",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EXPERIMENTAL",
+              "variable": "src-experimental"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "experimental",
+              "variable": "tgt-experimental",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-experimental"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.experimental | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-anwendungsdauer",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ANWENDUNGSDAUER_SOURCE",
+              "variable": "src-anwendungsdauer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-anwendungsdauer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-anwendungsdauer",
+              "source": [
+                {
+                  "context": "src-anwendungsdauer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-anwendungsdauer",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer"
+            },
+            {
+              "name": "set-extension-value-anwendungsdauer",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-anwendungsdauer",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Duration"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDuration)"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [], 'children': []}, {'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Duration', 'type_structure': [{'path': 'Extension.value[x].code', 'id': 'Duration.code', 'type': 'code', 'description': 'A computer processable form of the unit in some unit representation system.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].comparator', 'id': 'Duration.comparator', 'type': 'code', 'description': 'How the value should be understood and represented - whether the actual value is greater or less than the stated value due to measurement issues; e.g. if the comparator is \"<\" , then the real value is < stated value.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].system', 'id': 'Duration.system', 'type': 'uri', 'description': 'The identification of the system that provides the coded form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].unit', 'id': 'Duration.unit', 'type': 'string', 'description': 'A human-readable form of the unit.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].value', 'id': 'Duration.value', 'type': 'decimal', 'description': 'The value of the measured amount. The value includes an implicit precision in the presentation of the value.', 'is_required': False, 'is_list': False}]}], 'cardin… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitAnwendungsdauer] | Path: ChargeItemDefinition.extension"
+        },
+        {
+          "name": "map-extension-ergaenzendeUnterstuetzungsleistungen",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-ERGAENZENDEUNTERSTUETZUNGSLEISTUNGEN_SOURCE",
+              "variable": "src-ergaenzendeUnterstuetzungsleistungen"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-ergaenzendeUnterstuetzungsleistungen",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-ergaenzendeUnterstuetzungsleistungen",
+              "source": [
+                {
+                  "context": "src-ergaenzendeUnterstuetzungsleistungen"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ergaenzendeUnterstuetzungsleistungen",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitErgaenzendeUnterstuetzungsleistungen"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitErgaenzendeUnterstuetzungsleistungen"
+            },
+            {
+              "name": "map-extension-required",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-REQUIRED_SOURCE",
+                  "variable": "src-required"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-ergaenzendeUnterstuetzungsleistungen",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-required",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-required",
+                  "source": [
+                    {
+                      "context": "src-required"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-required",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "required"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to required"
+                },
+                {
+                  "name": "set-extension-value-required",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-required",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueBoolean)"
+                }
+              ],
+              "documentation": "Maps to extension: required | Type: [{'code': 'Extension'}] | Path: ChargeItemDefinition.extension:ergaenzendeUnterstuetzungsleistungen.extension"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitErgaenzendeUnterstuetzungsleistungen | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitErgaenzendeUnterstuetzungsleistungen'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:description', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Beschreibung', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'description', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:description', 'slice_selector': 'description', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:description.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:description.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitErgaenzendeUnterstuetzungsleistungen] | Path: ChargeItemDefinition.extension"
+        },
+        {
+          "name": "map-extension-indikation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INDIKATION_SOURCE",
+              "variable": "src-indikation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-indikation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-indikation",
+              "source": [
+                {
+                  "context": "src-indikation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-indikation",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitIndikation"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitIndikation"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitIndikation | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitIndikation'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:diagnose', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'ICD-Diagnosen', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'diagnose', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:diagnose', 'slice_selector': 'diagnose', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:diagnose.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'valu… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitIndikation] | Path: ChargeItemDefinition.extension"
+        },
+        {
+          "name": "map-extension-kontraindikation",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-KONTRAINDIKATION_SOURCE",
+              "variable": "src-kontraindikation"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-kontraindikation",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-kontraindikation",
+              "source": [
+                {
+                  "context": "src-kontraindikation"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-kontraindikation",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitKontraindikation"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitKontraindikation"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitKontraindikation | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitKontraindikation'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:ausschlusskriterien', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Ausschlusskriterien', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'ausschlusskriterien', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:ausschlusskriterien', 'slice_selector': 'ausschlusskriterien', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:ausschlusskriterien.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:ausschlusskriterien.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitKontraindikation] | Path: ChargeItemDefinition.extension"
+        },
+        {
+          "name": "map-extension-vertragsaerztlicheLeistungen",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VERTRAGSAERZTLICHELEISTUNGEN_SOURCE",
+              "variable": "src-vertragsaerztlicheLeistungen"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-vertragsaerztlicheLeistungen",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-vertragsaerztlicheLeistungen",
+              "source": [
+                {
+                  "context": "src-vertragsaerztlicheLeistungen"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vertragsaerztlicheLeistungen",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitVertragsaerztlicheLeistungen"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitVertragsaerztlicheLeistungen"
+            },
+            {
+              "name": "map-extension-required",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-REQUIRED_SOURCE",
+                  "variable": "src-required"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-vertragsaerztlicheLeistungen",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-required",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-required",
+                  "source": [
+                    {
+                      "context": "src-required"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-required",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "required"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to required"
+                },
+                {
+                  "name": "set-extension-value-required",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-required",
+                      "contextType": "variable",
+                      "element": "valueBoolean",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueBoolean)"
+                }
+              ],
+              "documentation": "Maps to extension: required | Type: [{'code': 'Extension'}] | Path: ChargeItemDefinition.extension:vertragsaerztlicheLeistungen.extension"
+            }
+          ],
+          "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitVertragsaerztlicheLeistungen | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitVertragsaerztlicheLeistungen'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 1, 'max': '*'}, 'description': 'Extension', 'is_required': True, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:description', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Beschreibung', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'description', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:description', 'slice_selector': 'description', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:description.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:description.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_require… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitVertragsaerztlicheLeistungen] | Path: ChargeItemDefinition.extension"
+        },
+        {
+          "name": "map-identifier-digaVeId",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-digaVeId",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-digaVeId-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-digaVeId",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.bfarm.de/Identifier/DigaVeId"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-digaVeId-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "profile_HealthAppPrescriptionUnit_identifier_digaVeId_value",
+                  "variable": "src-identifier-digaVeId-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-digaVeId",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-digaVeId-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice digaVeId of ChargeItemDefinition.identifier (type Identifier)"
+        },
+        {
+          "name": "TODO-resolve-reference-ChargeItemDefinition-instance",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-instance"
+            }
+          ],
+          "documentation": "Reference<ChargeItemDefinition.instance> → Medication|Substance|Device — resolve via bundle assembler"
+        },
+        {
+          "name": "map-jurisdiction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-jurisdiction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "jurisdiction",
+              "variable": "tgt-jurisdiction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-jurisdiction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.jurisdiction | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-lastReviewDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_LASTREVIEWDATE",
+              "variable": "src-lastReviewDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "lastReviewDate",
+              "variable": "tgt-lastReviewDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-lastReviewDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.lastReviewDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-partOf",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PARTOF",
+              "variable": "src-partOf"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "partOf",
+              "variable": "tgt-partOf",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-partOf",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-partOf"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.partOf | Type: canonical | Cardinality: 0..*"
+        },
+        {
+          "name": "map-propertyGroup",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-propertyGroup"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "propertyGroup",
+              "variable": "tgt-propertyGroup",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-nonRefundable",
+              "source": [
+                {
+                  "context": "src-propertyGroup",
+                  "element": "TODO-MAP-NONREFUNDABLE_SOURCE",
+                  "variable": "src-nonRefundable"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-propertyGroup",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-nonRefundable",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-nonRefundable",
+                  "source": [
+                    {
+                      "context": "src-nonRefundable"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-nonRefundable",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitPropertyGroupNonRefundable"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitPropertyGroupNonRefundable"
+                },
+                {
+                  "name": "map-extension-required",
+                  "source": [
+                    {
+                      "context": "src-propertyGroup",
+                      "element": "TODO-MAP-REQUIRED_SOURCE",
+                      "variable": "src-required"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-nonRefundable",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-required",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-required",
+                      "source": [
+                        {
+                          "context": "src-required"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-required",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "required"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to required"
+                    },
+                    {
+                      "name": "set-extension-value-required",
+                      "source": [
+                        {
+                          "context": "src-propertyGroup",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-required",
+                          "contextType": "variable",
+                          "element": "valueBoolean",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "srcValue"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueBoolean)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: required | Type: [{'code': 'Extension'}] | Path: ChargeItemDefinition.propertyGroup.extension:nonRefundable.extension"
+                }
+              ],
+              "documentation": "Maps to extension: https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitPropertyGroupNonRefundable | Type: [{'code': 'Extension', 'profile_canonical': ['https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitPropertyGroupNonRefundable'], 'profile': [[{'path': 'Extension.extension', 'id': 'Extension.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Extension', 'is_required': False, 'fixed_value': [], 'options': [], 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': [{'path': 'Extension.extension', 'id': 'Extension.extension:description', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Beschreibung', 'is_required': False, 'fixed_value': [], 'options': [], 'sliceName': 'description', 'must_support': True, 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'is_modifier': False, 'is_summary': False, 'slice_identity': 'Extension.extension:description', 'slice_selector': 'description', 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'children': [{'path': 'Extension.extension.extension', 'id': 'Extension.extension:description.extension', 'type': [{'code': 'Extension'}], 'cardinality': {'min': 0, 'max': '*'}, 'description': 'Additional content defined by implementations', 'is_required': False, 'fixed_value': [], 'options': [], 'comment': 'There can be no stigma associated with the use of extensions by any application, project, or standard - regardless of the institution or jurisdiction that uses or defines the extensions.  The use of extensions is what allows the FHIR specification to retain a core level of simplicity for everyone.', 'constraints': [{'key': 'ele-1', 'severity': 'error', 'human': 'All FHIR elements must have a @value or children', 'expression': 'hasValue() or (children().count() > id.count())', 'xpath': '@value|f:*|h:div', 'source': 'http://hl7.org/fhir/StructureDefinition/Element'}, {'key': 'ext-1', 'severity': 'error', 'human': 'Must have either extensions or value[x], not both', 'expression': 'extension.exists() != value.exists()', 'xpath': 'exists(f:extension)!=exists(f:*[starts-with(local-name(.), \"value\")])', 'source': 'http://hl7.org/fhir/StructureDefinition/Extension'}], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'aliases': ['extensions', 'user content'], 'children': [], 'slicing': {'discriminators': [{'path': 'url', 'type': 'value'}], 'ordered': False, 'rules': 'open'}, 'slicing_type': 'value', 'discriminator_path': 'url', 'discriminator': {'path': 'url', 'type': 'value'}, 'slices': []}, {'path': 'Extension.extension.id', 'id': 'Extension.extension:description.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required… [truncated; full structure in the registry entry for https://fhir.bfarm.de/StructureDefinition/HealthAppPrescriptionUnitPropertyGroupNonRefundable] | Path: ChargeItemDefinition.propertyGroup.extension"
+            },
+            {
+              "name": "map-priceComponent",
+              "source": [
+                {
+                  "context": "src-propertyGroup",
+                  "variable": "src-priceComponent"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-propertyGroup",
+                  "contextType": "variable",
+                  "element": "priceComponent",
+                  "variable": "tgt-priceComponent",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-priceComponent",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-amount",
+                  "source": [
+                    {
+                      "context": "src-priceComponent",
+                      "variable": "src-amount"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priceComponent",
+                      "contextType": "variable",
+                      "element": "amount",
+                      "variable": "tgt-amount",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Money"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-currency",
+                      "source": [
+                        {
+                          "context": "src-amount",
+                          "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_amount_currency",
+                          "variable": "src-currency"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-amount",
+                          "contextType": "variable",
+                          "element": "currency",
+                          "variable": "tgt-currency",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueId": "src-currency"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.amount.currency | Type: code | Cardinality: 0..1"
+                    },
+                    {
+                      "name": "map-value",
+                      "source": [
+                        {
+                          "context": "src-amount",
+                          "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_amount_value",
+                          "variable": "src-value"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-amount",
+                          "contextType": "variable",
+                          "element": "value",
+                          "variable": "tgt-value",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "src-value"
+                            },
+                            {
+                              "valueString": "decimal"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.amount.value | Type: decimal | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.amount | Type: Money | Cardinality: 0..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-priceComponent",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priceComponent",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "map-coding",
+                      "source": [
+                        {
+                          "context": "src-code",
+                          "variable": "src-coding"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-code",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "map-code",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_code_coding_code",
+                              "variable": "src-code-3"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "variable": "tgt-code-3",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-code-3"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.code.coding.code | Type: code"
+                        },
+                        {
+                          "name": "map-display",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_code_coding_display",
+                              "variable": "src-display"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "display",
+                              "variable": "tgt-display",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-display"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.code.coding.display | Type: string"
+                        },
+                        {
+                          "name": "map-system",
+                          "source": [
+                            {
+                              "context": "src-coding",
+                              "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_code_coding_system",
+                              "variable": "src-system"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "variable": "tgt-system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueId": "src-system"
+                                }
+                              ]
+                            }
+                          ],
+                          "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.code.coding.system | Type: uri"
+                        }
+                      ],
+                      "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.code.coding | Type: Coding | Cardinality: 0..1"
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.code | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+                },
+                {
+                  "name": "map-factor",
+                  "source": [
+                    {
+                      "context": "src-priceComponent",
+                      "element": "TODO_MAP_FACTOR",
+                      "variable": "src-factor"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priceComponent",
+                      "contextType": "variable",
+                      "element": "factor",
+                      "variable": "tgt-factor",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-factor"
+                        },
+                        {
+                          "valueString": "decimal"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.factor | Type: decimal | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-type",
+                  "source": [
+                    {
+                      "context": "src-priceComponent",
+                      "element": "profile_HealthAppPrescriptionUnit_propertyGroup_priceComponent_type",
+                      "variable": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-priceComponent",
+                      "contextType": "variable",
+                      "element": "type",
+                      "variable": "tgt-type",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-type"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent.type | Type: code | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to ChargeItemDefinition.propertyGroup.priceComponent | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.propertyGroup | Type: BackboneElement | Cardinality: 0..1 | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-publisher",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PUBLISHER",
+              "variable": "src-publisher"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "publisher",
+              "variable": "tgt-publisher",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-publisher"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.publisher | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-replaces",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_REPLACES",
+              "variable": "src-replaces"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "replaces",
+              "variable": "tgt-replaces",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-replaces",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-replaces"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.replaces | Type: canonical | Cardinality: 0..*"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "profile_HealthAppPrescriptionUnit_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-title",
+          "source": [
+            {
+              "context": "source",
+              "element": "profile_HealthAppPrescriptionUnit_title",
+              "variable": "src-title"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "title",
+              "variable": "tgt-title",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-title"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.title | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-url",
+          "source": [
+            {
+              "context": "source",
+              "element": "profile_HealthAppPrescriptionUnit_url",
+              "variable": "src-url"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "url",
+              "variable": "tgt-url",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-url"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.url | Type: uri | Cardinality: 1..1"
+        },
+        {
+          "name": "map-version",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_VERSION",
+              "variable": "src-version"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "version",
+              "variable": "tgt-version",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-version"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ChargeItemDefinition.version | Type: string | Cardinality: 0..1"
+        }
+      ]
+    }
+  ]
+}

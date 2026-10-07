@@ -1,0 +1,482 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NLLProvenanceConsentMultiDose-651bbc8d",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec-NLLProvenanceConsentMultiDose",
+  "name": "Map_024_structure_map_testing_unseen_senll_full_spec_NLLProvenanceConsentMultiDose",
+  "title": "Structure Map for testing_unseen_senll_full_spec - NLLProvenanceConsentMultiDose",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NLLProvenanceConsentMultiDose). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-senll-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://electronichealth.se/fhir/StructureDefinition/NLLProvenanceConsentMultiDose",
+      "mode": "target",
+      "alias": "NLLProvenanceConsentMultiDose"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NLLProvenanceConsentMultiDose",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_senll_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Provenance",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLProvenanceConsentMultiDose"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://electronichealth.se/fhir/StructureDefinition/NLLProvenanceConsentMultiDose"
+        },
+        {
+          "name": "map-activity-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "activity",
+              "variable": "tgt-activity-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-activity-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-activity-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-activity-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-activity-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "nLLProvenanceConsentMultiDose_activity_coding_system",
+                      "variable": "src-activity-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-activity-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-activity-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-activity-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "nLLProvenanceConsentMultiDose_activity_coding_code",
+                      "variable": "src-activity-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-activity-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-activity-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Provenance.activity"
+        },
+        {
+          "name": "map-agent",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-agent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "agent",
+              "variable": "tgt-agent",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-agent",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Provenance-onBehalfOf",
+              "source": [
+                {
+                  "context": "src-agent",
+                  "variable": "src-onBehalfOf"
+                }
+              ],
+              "documentation": "Reference<Provenance.agent.onBehalfOf> → Practitioner|PractitionerRole|RelatedPerson|Patient|Device|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-agent",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-agent",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-role",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Provenance.agent.role | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-agent",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-agent",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Provenance.agent.type | Type: CodeableConcept | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Provenance-who",
+              "source": [
+                {
+                  "context": "src-agent",
+                  "variable": "src-who"
+                }
+              ],
+              "documentation": "Reference<Provenance.agent.who> → Practitioner — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Provenance.agent | Type: BackboneElement | Cardinality: 1..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-entity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-entity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "entity",
+              "variable": "tgt-entity",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-entity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-role",
+              "source": [
+                {
+                  "context": "src-entity",
+                  "element": "TODO_MAP_ROLE",
+                  "variable": "src-role"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-entity",
+                  "contextType": "variable",
+                  "element": "role",
+                  "variable": "tgt-role",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-role"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Provenance.entity.role | Type: code | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Provenance-what",
+              "source": [
+                {
+                  "context": "src-entity",
+                  "variable": "src-what"
+                }
+              ],
+              "documentation": "Reference<Provenance.entity.what> → Resource — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Provenance.entity | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Provenance-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<Provenance.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-occurred",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_OCCURRED",
+              "variable": "src-occurred"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "occurred",
+              "variable": "tgt-occurred",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-occurred"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.occurred[x] | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-policy",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_POLICY",
+              "variable": "src-policy"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "policy",
+              "variable": "tgt-policy",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-policy",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-policy"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.policy | Type: uri | Cardinality: 0..*"
+        },
+        {
+          "name": "map-recorded",
+          "source": [
+            {
+              "context": "source",
+              "element": "nLLProvenanceConsentMultiDose_recorded",
+              "variable": "src-recorded"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "recorded",
+              "variable": "tgt-recorded",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-recorded"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.recorded | Type: instant | Cardinality: 1..1"
+        },
+        {
+          "name": "map-signature",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-signature"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "signature",
+              "variable": "tgt-signature",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-signature",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Signature"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Provenance.signature | Type: Signature | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Provenance-target",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-target"
+            }
+          ],
+          "documentation": "Reference<Provenance.target> → Consent — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

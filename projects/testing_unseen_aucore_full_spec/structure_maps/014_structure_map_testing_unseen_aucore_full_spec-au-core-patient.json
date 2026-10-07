@@ -1,0 +1,2534 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-au-core-patient-c6375294",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec-au-core-patient",
+  "name": "Map_014_structure_map_testing_unseen_aucore_full_spec_au_core_patient",
+  "title": "Structure Map for testing_unseen_aucore_full_spec - au-core-patient",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: au-core-patient). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-aucore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-patient",
+      "mode": "target",
+      "alias": "au-core-patient"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-au-core-patient",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_aucore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Patient",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-patient"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org.au/fhir/core/StructureDefinition/au-core-patient"
+        },
+        {
+          "name": "map-active",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ACTIVE",
+              "variable": "src-active"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "active",
+              "variable": "tgt-active",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-active"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.active | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-address",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-address"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "address",
+              "variable": "tgt-address",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-address",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Address"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-city",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "au_core_patient_address_city",
+                  "variable": "src-city"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "city",
+                  "variable": "tgt-city",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-city"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.city | Type: string"
+            },
+            {
+              "name": "map-country",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "au_core_patient_address_country",
+                  "variable": "src-country"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "country",
+                  "variable": "tgt-country",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-country"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.country | Type: string"
+            },
+            {
+              "name": "map-line",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "au_core_patient_address_line",
+                  "variable": "src-line"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "line",
+                  "variable": "tgt-line",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-line"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.line | Type: string"
+            },
+            {
+              "name": "map-postalCode",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "au_core_patient_address_postalCode",
+                  "variable": "src-postalCode"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "postalCode",
+                  "variable": "tgt-postalCode",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-postalCode"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.postalCode | Type: string"
+            },
+            {
+              "name": "map-state",
+              "source": [
+                {
+                  "context": "src-address",
+                  "element": "au_core_patient_address_state",
+                  "variable": "src-state"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-address",
+                  "contextType": "variable",
+                  "element": "state",
+                  "variable": "tgt-state",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-state"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.address.state | Type: string"
+            }
+          ],
+          "documentation": "Maps to Patient.address | Type: Address | Cardinality: 0..*"
+        },
+        {
+          "name": "map-birthDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_patient_birthDate",
+              "variable": "src-birthDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "birthDate",
+              "variable": "tgt-birthDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-birthDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-accuracyIndicator",
+              "source": [
+                {
+                  "context": "src-birthDate",
+                  "element": "TODO-MAP-ACCURACYINDICATOR_SOURCE",
+                  "variable": "src-accuracyIndicator"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-birthDate",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-accuracyIndicator",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-accuracyIndicator",
+                  "source": [
+                    {
+                      "context": "src-accuracyIndicator"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-accuracyIndicator",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org.au/fhir/StructureDefinition/date-accuracy-indicator"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/date-accuracy-indicator"
+                },
+                {
+                  "name": "map-valueCoding-translate",
+                  "source": [
+                    {
+                      "context": "src-birthDate",
+                      "element": "TODO-SOURCE-FOR-VALUECODING",
+                      "variable": "src",
+                      "condition": "$this != ''"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-accuracyIndicator",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-coding",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-valueCoding-system",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "system",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "https://healthterminologies.gov.au/fhir/CodeSystem/date-accuracy-indicator-1"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "set-valueCoding-code",
+                      "source": [
+                        {
+                          "context": "src",
+                          "condition": "$this != ''"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-coding",
+                          "contextType": "variable",
+                          "element": "code",
+                          "transform": "translate",
+                          "parameter": [
+                            {
+                              "valueId": "src"
+                            },
+                            {
+                              "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec/ConceptMap/cm-accuracyIndicator-5def1875"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.birthDate.extension:accuracyIndicator using http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec/ConceptMap/cm-accuracyIndicator-5def1875"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/date-accuracy-indicator | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/date-accuracy-indicator'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/date-accuracy-indicator']}] | Path: Patient.birthDate.extension"
+            },
+            {
+              "name": "map-extension-birthTime",
+              "source": [
+                {
+                  "context": "src-birthDate",
+                  "element": "TODO-MAP-BIRTHTIME_SOURCE",
+                  "variable": "src-birthTime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-birthDate",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-birthTime",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-birthTime",
+                  "source": [
+                    {
+                      "context": "src-birthTime"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-birthTime",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-birthTime"
+                },
+                {
+                  "name": "set-extension-value-birthTime",
+                  "source": [
+                    {
+                      "context": "src-birthDate",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-birthTime",
+                      "contextType": "variable",
+                      "element": "valueDateTime",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueDateTime)"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-birthTime | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-birthTime'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-birthTime']}] | Path: Patient.birthDate.extension"
+            }
+          ],
+          "documentation": "Maps to Patient.birthDate | Type: date | Cardinality: 1..1 | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-communication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-communication"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "communication",
+              "variable": "tgt-communication",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-communication",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-preferred",
+              "source": [
+                {
+                  "context": "src-communication",
+                  "element": "TODO_MAP_PREFERRED",
+                  "variable": "src-preferred"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-communication",
+                  "contextType": "variable",
+                  "element": "preferred",
+                  "variable": "tgt-preferred",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-preferred"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.communication.preferred | Type: boolean | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.communication | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-address",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-address"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "address",
+                  "variable": "tgt-address",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.address | Type: Address | Cardinality: 0..1"
+            },
+            {
+              "name": "map-gender",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "element": "TODO_MAP_GENDER",
+                  "variable": "src-gender"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "gender",
+                  "variable": "tgt-gender",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-gender"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.gender | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-name",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-name"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "name",
+                  "variable": "tgt-name",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "HumanName"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.name | Type: HumanName | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Patient-organization",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-organization"
+                }
+              ],
+              "documentation": "Reference<Patient.contact.organization> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-relationship",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-relationship"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "relationship",
+                  "variable": "tgt-relationship",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-relationship",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.relationship | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-telecom",
+              "source": [
+                {
+                  "context": "src-contact",
+                  "variable": "src-telecom"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-contact",
+                  "contextType": "variable",
+                  "element": "telecom",
+                  "variable": "tgt-telecom",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-telecom",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "ContactPoint"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.contact.telecom | Type: ContactPoint | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Patient.contact | Type: BackboneElement | Cardinality: 0..* | Complex type with 10 child elements"
+        },
+        {
+          "name": "map-deceased",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DECEASED",
+              "variable": "src-deceased"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "deceased",
+              "variable": "tgt-deceased",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-deceased"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.deceased[x] | Type: boolean, dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-birthPlace",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BIRTHPLACE_SOURCE",
+              "variable": "src-birthPlace"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-birthPlace",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-birthPlace",
+              "source": [
+                {
+                  "context": "src-birthPlace"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-birthPlace",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/patient-birthPlace"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-birthPlace"
+            },
+            {
+              "name": "set-extension-value-birthPlace",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-birthPlace",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Address"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueAddress)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-birthPlace | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-birthPlace'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-birthPlace']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-indigenousStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INDIGENOUSSTATUS_SOURCE",
+              "variable": "src-indigenousStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-indigenousStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-indigenousStatus",
+              "source": [
+                {
+                  "context": "src-indigenousStatus"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-indigenousStatus",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/indigenous-status"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/indigenous-status"
+            },
+            {
+              "name": "set-extension-value-indigenousStatus",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-indigenousStatus",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueCoding)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/indigenous-status | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/indigenous-status'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/indigenous-status']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-veteranStatus",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-VETERANSTATUS_SOURCE",
+              "variable": "src-veteranStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-veteranStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-veteranStatus",
+              "source": [
+                {
+                  "context": "src-veteranStatus"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-veteranStatus",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/veteran-status"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/veteran-status"
+            },
+            {
+              "name": "set-extension-value-veteranStatus",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-veteranStatus",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueExtension)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/veteran-status | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/veteran-status'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/veteran-status']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-closingTheGapRegistration",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-CLOSINGTHEGAPREGISTRATION_SOURCE",
+              "variable": "src-closingTheGapRegistration"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-closingTheGapRegistration",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-closingTheGapRegistration",
+              "source": [
+                {
+                  "context": "src-closingTheGapRegistration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-closingTheGapRegistration",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/closing-the-gap-registration"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/closing-the-gap-registration"
+            },
+            {
+              "name": "set-extension-value-closingTheGapRegistration",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-closingTheGapRegistration",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/closing-the-gap-registration | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/closing-the-gap-registration'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/closing-the-gap-registration']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-mothersMaidenName",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-MOTHERSMAIDENNAME_SOURCE",
+              "variable": "src-mothersMaidenName"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-mothersMaidenName",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-mothersMaidenName",
+              "source": [
+                {
+                  "context": "src-mothersMaidenName"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-mothersMaidenName",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName"
+            },
+            {
+              "name": "set-extension-value-mothersMaidenName",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-mothersMaidenName",
+                  "contextType": "variable",
+                  "element": "valueString",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueString)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-interpreterRequired",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INTERPRETERREQUIRED_SOURCE",
+              "variable": "src-interpreterRequired"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-interpreterRequired",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-interpreterRequired",
+              "source": [
+                {
+                  "context": "src-interpreterRequired"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-interpreterRequired",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired"
+            },
+            {
+              "name": "set-extension-value-interpreterRequired",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-interpreterRequired",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-interpreterRequired']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-dateOfArrival",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-DATEOFARRIVAL_SOURCE",
+              "variable": "src-dateOfArrival"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-dateOfArrival",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-dateOfArrival",
+              "source": [
+                {
+                  "context": "src-dateOfArrival"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-dateOfArrival",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/date-of-arrival"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/date-of-arrival"
+            },
+            {
+              "name": "set-extension-value-dateOfArrival",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-dateOfArrival",
+                  "contextType": "variable",
+                  "element": "valueDate",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueDate)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/date-of-arrival | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/date-of-arrival'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/date-of-arrival']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-genderIdentity",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-GENDERIDENTITY_SOURCE",
+              "variable": "src-genderIdentity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-genderIdentity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-genderIdentity",
+              "source": [
+                {
+                  "context": "src-genderIdentity"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genderIdentity",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/individual-genderIdentity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/individual-genderIdentity"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-genderIdentity",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.extension:genderIdentity.extension:value using TODO-resolveConceptMap"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: Patient.extension:genderIdentity.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/individual-genderIdentity | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'], 'profile': ['http://hl7.org/fhir/StructureDefinition/individual-genderIdentity']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-individualPronouns",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-INDIVIDUALPRONOUNS_SOURCE",
+              "variable": "src-individualPronouns"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-individualPronouns",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-individualPronouns",
+              "source": [
+                {
+                  "context": "src-individualPronouns"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-individualPronouns",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/individual-pronouns"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/individual-pronouns"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-individualPronouns",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.extension:individualPronouns.extension:value using TODO-resolveConceptMap"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: Patient.extension:individualPronouns.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/individual-pronouns | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/individual-pronouns'], 'profile': ['http://hl7.org/fhir/StructureDefinition/individual-pronouns']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-recordedSexOrGender",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-RECORDEDSEXORGENDER_SOURCE",
+              "variable": "src-recordedSexOrGender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-recordedSexOrGender",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-recordedSexOrGender",
+              "source": [
+                {
+                  "context": "src-recordedSexOrGender"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-recordedSexOrGender",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-recordedSexOrGender",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "rule": [
+                        {
+                          "name": "set-valueCodeableConcept-system",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "system",
+                              "transform": "copy",
+                              "parameter": [
+                                {
+                                  "valueString": "http://hl7.org/fhir/administrative-gender"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "set-valueCodeableConcept-code",
+                          "source": [
+                            {
+                              "context": "src"
+                            }
+                          ],
+                          "target": [
+                            {
+                              "context": "tgt-coding",
+                              "contextType": "variable",
+                              "element": "code",
+                              "transform": "translate",
+                              "parameter": [
+                                {
+                                  "valueId": "src"
+                                },
+                                {
+                                  "valueString": "http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec/ConceptMap/cm-value-77ac516f"
+                                },
+                                {
+                                  "valueString": "code"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.extension:recordedSexOrGender.extension:value using http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec/ConceptMap/cm-value-77ac516f"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: Patient.extension:recordedSexOrGender.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender'], 'profile': ['http://hl7.org/fhir/StructureDefinition/individual-recordedSexOrGender']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-extension-sexParameterForClinicalUse",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-SEXPARAMETERFORCLINICALUSE_SOURCE",
+              "variable": "src-sexParameterForClinicalUse"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-sexParameterForClinicalUse",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-sexParameterForClinicalUse",
+              "source": [
+                {
+                  "context": "src-sexParameterForClinicalUse"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-sexParameterForClinicalUse",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse"
+            },
+            {
+              "name": "map-extension-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-MAP-VALUE_SOURCE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-sexParameterForClinicalUse",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-value",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-value",
+                  "source": [
+                    {
+                      "context": "src-value"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "value"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to value"
+                },
+                {
+                  "name": "map-valueCodeableConcept-translate",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "TODO-SOURCE-FOR-VALUECODEABLECONCEPT",
+                      "variable": "src"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-value",
+                      "contextType": "variable",
+                      "element": "value",
+                      "variable": "tgt-cc",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "add-valueCodeableConcept-coding",
+                      "source": [
+                        {
+                          "context": "src"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "tgt-cc",
+                          "contextType": "variable",
+                          "element": "coding",
+                          "variable": "tgt-coding",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Translate mapping for Patient.extension:sexParameterForClinicalUse.extension:value using TODO-resolveConceptMap"
+                }
+              ],
+              "documentation": "Maps to extension: value | Type: [{'code': 'Extension'}] | Path: Patient.extension:sexParameterForClinicalUse.extension"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'], 'profile': ['http://hl7.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse']}] | Path: Patient.extension"
+        },
+        {
+          "name": "map-gender",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_patient_gender",
+              "variable": "src-gender"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "gender",
+              "variable": "tgt-gender",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-gender"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.gender | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Patient-generalPractitioner",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-generalPractitioner"
+            }
+          ],
+          "documentation": "Reference<Patient.generalPractitioner> → Organization|Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "au_core_patient_identifier_system",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.system | Type: uri"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "au_core_patient_identifier_value",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.identifier.value | Type: string"
+            }
+          ],
+          "documentation": "Maps to Patient.identifier | Type: Identifier | Cardinality: 1..*"
+        },
+        {
+          "name": "map-link",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-link"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "link",
+              "variable": "tgt-link",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-link",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Patient-other",
+              "source": [
+                {
+                  "context": "src-link",
+                  "variable": "src-other"
+                }
+              ],
+              "documentation": "Reference<Patient.link.other> → Patient|RelatedPerson — resolve via bundle assembler"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-link",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-link",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.link.type | Type: code | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Patient.link | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Patient-managingOrganization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-managingOrganization"
+            }
+          ],
+          "documentation": "Reference<Patient.managingOrganization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-maritalStatus",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-maritalStatus"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "maritalStatus",
+              "variable": "tgt-maritalStatus",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.maritalStatus | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-multipleBirth",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_MULTIPLEBIRTH",
+              "variable": "src-multipleBirth"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "multipleBirth",
+              "variable": "tgt-multipleBirth",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-multipleBirth"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.multipleBirth[x] | Type: boolean, integer | Cardinality: 0..1"
+        },
+        {
+          "name": "map-name",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-name"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "name",
+              "variable": "tgt-name",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-name",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "HumanName"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-family",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "au_core_patient_name_family",
+                  "variable": "src-family"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "family",
+                  "variable": "tgt-family",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-family"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.family | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-given",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "au_core_patient_name_given",
+                  "variable": "src-given"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "given",
+                  "variable": "tgt-given",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-given",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-given"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.given | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-name",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-prefix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_PREFIX",
+                  "variable": "src-prefix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "prefix",
+                  "variable": "tgt-prefix",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-prefix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-prefix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.prefix | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-suffix",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "TODO_MAP_SUFFIX",
+                  "variable": "src-suffix"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "suffix",
+                  "variable": "tgt-suffix",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-suffix",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-suffix"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.suffix | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-name",
+                  "element": "au_core_patient_name_use",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-name",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.name.use | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.name | Type: HumanName | Cardinality: 1..* | Complex type with 9 child elements"
+        },
+        {
+          "name": "map-photo",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-photo"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "photo",
+              "variable": "tgt-photo",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-photo",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Attachment"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Patient.photo | Type: Attachment | Cardinality: 0..*"
+        },
+        {
+          "name": "map-telecom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-telecom"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "telecom",
+              "variable": "tgt-telecom",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-telecom",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-rank",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "TODO_MAP_RANK",
+                  "variable": "src-rank"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "rank",
+                  "variable": "tgt-rank",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-rank"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.rank | Type: positiveInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "au_core_patient_telecom_system",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.system | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "au_core_patient_telecom_use",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-telecom",
+                  "element": "au_core_patient_telecom_value",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-telecom",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Patient.telecom.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Patient.telecom | Type: ContactPoint | Cardinality: 0..* | Complex type with 7 child elements"
+        }
+      ]
+    }
+  ]
+}

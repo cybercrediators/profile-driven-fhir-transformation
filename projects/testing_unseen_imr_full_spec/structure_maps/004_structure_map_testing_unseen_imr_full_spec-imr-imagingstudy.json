@@ -1,0 +1,1083 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-imr-imagingstudy-bafed258",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-imr-full-spec-imr-imagingstudy",
+  "name": "Map_004_structure_map_testing_unseen_imr_full_spec_imr_imagingstudy",
+  "title": "Structure Map for testing_unseen_imr_full_spec - imr-imagingstudy",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: imr-imagingstudy). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-imr-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-imagingstudy",
+      "mode": "target",
+      "alias": "imr-imagingstudy"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-imr-imagingstudy",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_imr_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "ImagingStudy",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-imagingstudy"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://profiles.ihe.net/RAD/IMR/StructureDefinition/imr-imagingstudy"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.basedOn> → CarePlan|ServiceRequest|Appointment|AppointmentResponse|Task — resolve via bundle assembler"
+        },
+        {
+          "name": "map-description",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DESCRIPTION",
+              "variable": "src-description"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "description",
+              "variable": "tgt-description",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-description"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.description | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-endpoint",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-endpoint"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.endpoint> → Endpoint — resolve via bundle assembler"
+        },
+        {
+          "name": "map-identifier-studyUID",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier-studyUID",
+              "listMode": [
+                "share"
+              ],
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-identifier-studyUID-system",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-studyUID",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "urn:dicom:uid"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-identifier-studyUID-value",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imr_imagingstudy_identifier_studyUID_value",
+                  "variable": "src-identifier-studyUID-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier-studyUID",
+                  "contextType": "variable",
+                  "element": "value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-identifier-studyUID-value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Slice studyUID of ImagingStudy.identifier (type Identifier)"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-interpreter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-interpreter"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.interpreter> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-modality-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "modality",
+              "variable": "tgt-modality-coding",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-modality-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imr_imagingstudy_modality_system",
+                  "variable": "src-modality-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-modality-coding",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-modality-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-modality-code",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imr_imagingstudy_modality_code",
+                  "variable": "src-modality-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-modality-coding",
+                  "contextType": "variable",
+                  "element": "code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-modality-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-modality-display",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "imr_imagingstudy_modality_display",
+                  "variable": "src-modality-display"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-modality-coding",
+                  "contextType": "variable",
+                  "element": "display",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-modality-display"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for ImagingStudy.modality"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "map-numberOfInstances",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NUMBEROFINSTANCES",
+              "variable": "src-numberOfInstances"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "numberOfInstances",
+              "variable": "tgt-numberOfInstances",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-numberOfInstances"
+                },
+                {
+                  "valueString": "unsignedInt"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.numberOfInstances | Type: unsignedInt | Cardinality: 0..1"
+        },
+        {
+          "name": "map-numberOfSeries",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_NUMBEROFSERIES",
+              "variable": "src-numberOfSeries"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "numberOfSeries",
+              "variable": "tgt-numberOfSeries",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-numberOfSeries"
+                },
+                {
+                  "valueString": "unsignedInt"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.numberOfSeries | Type: unsignedInt | Cardinality: 0..1"
+        },
+        {
+          "name": "map-procedureCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-procedureCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "procedureCode",
+              "variable": "tgt-procedureCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-procedureCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.procedureCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-procedureReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-procedureReference"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.procedureReference> → Procedure — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.reasonReference> → Condition|Observation|Media|DiagnosticReport|DocumentReference — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-referrer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-referrer"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.referrer> → Practitioner|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-series",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-series"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "series",
+              "variable": "tgt-series",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-series",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-bodySite",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-bodySite"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "bodySite",
+                  "variable": "tgt-bodySite",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.bodySite | Type: Coding | Cardinality: 0..1"
+            },
+            {
+              "name": "map-description",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_DESCRIPTION",
+                  "variable": "src-description"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "description",
+                  "variable": "tgt-description",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-description"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.description | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-ImagingStudy-endpoint",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-endpoint"
+                }
+              ],
+              "documentation": "Reference<ImagingStudy.series.endpoint> → Endpoint — resolve via bundle assembler"
+            },
+            {
+              "name": "map-instance",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-instance"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "instance",
+                  "variable": "tgt-instance",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-instance",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-number",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO_MAP_NUMBER",
+                      "variable": "src-number"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "contextType": "variable",
+                      "element": "number",
+                      "variable": "tgt-number",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-number"
+                        },
+                        {
+                          "valueString": "unsignedInt"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.number | Type: unsignedInt | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-sopClass",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "variable": "src-sopClass"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "contextType": "variable",
+                      "element": "sopClass",
+                      "variable": "tgt-sopClass",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Coding"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.sopClass | Type: Coding | Cardinality: 1..1"
+                },
+                {
+                  "name": "map-title",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO_MAP_TITLE",
+                      "variable": "src-title"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "contextType": "variable",
+                      "element": "title",
+                      "variable": "tgt-title",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-title"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.title | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-uid",
+                  "source": [
+                    {
+                      "context": "src-instance",
+                      "element": "TODO_MAP_UID",
+                      "variable": "src-uid"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-instance",
+                      "contextType": "variable",
+                      "element": "uid",
+                      "variable": "tgt-uid",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-uid"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.instance.uid | Type: id | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.instance | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+            },
+            {
+              "name": "map-laterality",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-laterality"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "laterality",
+                  "variable": "tgt-laterality",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.laterality | Type: Coding | Cardinality: 0..1"
+            },
+            {
+              "name": "map-modality-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-series"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "modality",
+                  "variable": "tgt-modality-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-modality-system",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "imr_imagingstudy_series_modality_system",
+                      "variable": "src-modality-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-modality-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-modality-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modality-code",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "imr_imagingstudy_series_modality_code",
+                      "variable": "src-modality-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-modality-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-modality-code"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-modality-display",
+                  "source": [
+                    {
+                      "context": "src-series",
+                      "element": "imr_imagingstudy_series_modality_display",
+                      "variable": "src-modality-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-modality-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-modality-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for ImagingStudy.series.modality"
+            },
+            {
+              "name": "map-number",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_NUMBER",
+                  "variable": "src-number"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "number",
+                  "variable": "tgt-number",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-number"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.number | Type: unsignedInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-numberOfInstances",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_NUMBEROFINSTANCES",
+                  "variable": "src-numberOfInstances"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "numberOfInstances",
+                  "variable": "tgt-numberOfInstances",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-numberOfInstances"
+                    },
+                    {
+                      "valueString": "unsignedInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.numberOfInstances | Type: unsignedInt | Cardinality: 0..1"
+            },
+            {
+              "name": "map-performer",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-performer"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "performer",
+                  "variable": "tgt-performer",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-performer",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-resolve-reference-ImagingStudy-actor",
+                  "source": [
+                    {
+                      "context": "src-performer",
+                      "variable": "src-actor"
+                    }
+                  ],
+                  "documentation": "Reference<ImagingStudy.series.performer.actor> → Practitioner|PractitionerRole|Organization|CareTeam|Patient|Device|RelatedPerson — resolve via bundle assembler"
+                },
+                {
+                  "name": "map-function",
+                  "source": [
+                    {
+                      "context": "src-performer",
+                      "variable": "src-function"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-performer",
+                      "contextType": "variable",
+                      "element": "function",
+                      "variable": "tgt-function",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to ImagingStudy.series.performer.function | Type: CodeableConcept | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "TODO-resolve-reference-ImagingStudy-specimen",
+              "source": [
+                {
+                  "context": "src-series",
+                  "variable": "src-specimen"
+                }
+              ],
+              "documentation": "Reference<ImagingStudy.series.specimen> → Specimen — resolve via bundle assembler"
+            },
+            {
+              "name": "map-started",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "TODO_MAP_STARTED",
+                  "variable": "src-started"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "started",
+                  "variable": "tgt-started",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-started"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.started | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-uid",
+              "source": [
+                {
+                  "context": "src-series",
+                  "element": "imr_imagingstudy_series_uid",
+                  "variable": "src-uid"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-series",
+                  "contextType": "variable",
+                  "element": "uid",
+                  "variable": "tgt-uid",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-uid"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to ImagingStudy.series.uid | Type: id | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.series | Type: BackboneElement | Cardinality: 0..* | Complex type with 15 child elements"
+        },
+        {
+          "name": "map-started",
+          "source": [
+            {
+              "context": "source",
+              "element": "imr_imagingstudy_started",
+              "variable": "src-started"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "started",
+              "variable": "tgt-started",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-started"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.started | Type: dateTime | Cardinality: 1..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "imr_imagingstudy_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to ImagingStudy.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-ImagingStudy-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<ImagingStudy.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,888 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-au-core-medicationstatement-7fa5d873",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-aucore-full-spec-au-core-medicationstatement",
+  "name": "Map_018_structure_map_testing_unseen_aucore_full_spec_au_core_medicationstatement",
+  "title": "Structure Map for testing_unseen_aucore_full_spec - au-core-medicationstatement",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: au-core-medicationstatement). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-aucore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationstatement",
+      "mode": "target",
+      "alias": "au-core-medicationstatement"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-au-core-medicationstatement",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_aucore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "MedicationStatement",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationstatement"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://hl7.org.au/fhir/core/StructureDefinition/au-core-medicationstatement"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-basedOn",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-basedOn"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.basedOn> → MedicationRequest|CarePlan|ServiceRequest — resolve via bundle assembler"
+        },
+        {
+          "name": "map-category",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-category"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.category | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-context",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-context"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.context> → Encounter|EpisodeOfCare — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dateAsserted",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_medicationstatement_dateAsserted",
+              "variable": "src-dateAsserted"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dateAsserted",
+              "variable": "tgt-dateAsserted",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-dateAsserted"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.dateAsserted | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-derivedFrom",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-derivedFrom"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.derivedFrom> → Resource — resolve via bundle assembler"
+        },
+        {
+          "name": "map-dosage",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-dosage"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dosage",
+              "variable": "tgt-dosage",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-dosage",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Dosage"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-additionalInstruction",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-additionalInstruction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "additionalInstruction",
+                  "variable": "tgt-additionalInstruction",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-additionalInstruction",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.additionalInstruction | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-asNeeded",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "element": "TODO_MAP_ASNEEDED",
+                  "variable": "src-asNeeded"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "asNeeded",
+                  "variable": "tgt-asNeeded",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-asNeeded"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.asNeeded[x] | Type: boolean, CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-doseAndRate",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-doseAndRate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "doseAndRate",
+                  "variable": "tgt-doseAndRate",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-doseAndRate",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Element"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-dose",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-dose"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "dose",
+                      "variable": "tgt-dose",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Range"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.dosage.doseAndRate.dose[x] | Type: Range, Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-rate",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-rate"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "rate",
+                      "variable": "tgt-rate",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Ratio"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.dosage.doseAndRate.rate[x] | Type: Ratio, Range, Quantity | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-type",
+                  "source": [
+                    {
+                      "context": "src-doseAndRate",
+                      "variable": "src-type"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-doseAndRate",
+                      "contextType": "variable",
+                      "element": "type",
+                      "variable": "tgt-type",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to MedicationStatement.dosage.doseAndRate.type | Type: CodeableConcept | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.doseAndRate | Type: Element | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-maxDosePerAdministration",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-maxDosePerAdministration"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "maxDosePerAdministration",
+                  "variable": "tgt-maxDosePerAdministration",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.maxDosePerAdministration | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-maxDosePerLifetime",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-maxDosePerLifetime"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "maxDosePerLifetime",
+                  "variable": "tgt-maxDosePerLifetime",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Quantity"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.maxDosePerLifetime | Type: Quantity | Cardinality: 0..1"
+            },
+            {
+              "name": "map-maxDosePerPeriod",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-maxDosePerPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "maxDosePerPeriod",
+                  "variable": "tgt-maxDosePerPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Ratio"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.maxDosePerPeriod | Type: Ratio | Cardinality: 0..1"
+            },
+            {
+              "name": "map-method",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-method"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "method",
+                  "variable": "tgt-method",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.method | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-patientInstruction",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "element": "TODO_MAP_PATIENTINSTRUCTION",
+                  "variable": "src-patientInstruction"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "patientInstruction",
+                  "variable": "tgt-patientInstruction",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-patientInstruction"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.patientInstruction | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-route",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-route"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "route",
+                  "variable": "tgt-route",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.route | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-sequence",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "element": "TODO_MAP_SEQUENCE",
+                  "variable": "src-sequence"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "sequence",
+                  "variable": "tgt-sequence",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-sequence"
+                    },
+                    {
+                      "valueString": "integer"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.sequence | Type: integer | Cardinality: 0..1"
+            },
+            {
+              "name": "map-site",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-site"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "site",
+                  "variable": "tgt-site",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.site | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-text",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "element": "au_core_medicationstatement_dosage_text",
+                  "variable": "src-text"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "text",
+                  "variable": "tgt-text",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-text"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.text | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-timing",
+              "source": [
+                {
+                  "context": "src-dosage",
+                  "variable": "src-timing"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-dosage",
+                  "contextType": "variable",
+                  "element": "timing",
+                  "variable": "tgt-timing",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Timing"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to MedicationStatement.dosage.timing | Type: Timing | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.dosage | Type: Dosage | Cardinality: 0..* | Complex type with 16 child elements"
+        },
+        {
+          "name": "map-effective",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EFFECTIVE",
+              "variable": "src-effective"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "effective",
+              "variable": "tgt-effective",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-effective"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.effective[x] | Type: dateTime, Period | Cardinality: 0..1"
+        },
+        {
+          "name": "map-extension-longTerm",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-LONGTERM_SOURCE",
+              "variable": "src-longTerm"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-longTerm",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-longTerm",
+              "source": [
+                {
+                  "context": "src-longTerm"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-longTerm",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://hl7.org.au/fhir/StructureDefinition/medication-long-term"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://hl7.org.au/fhir/StructureDefinition/medication-long-term"
+            },
+            {
+              "name": "set-extension-value-longTerm",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "TODO-VALUE-SOURCE",
+                  "variable": "srcValue"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-longTerm",
+                  "contextType": "variable",
+                  "element": "valueBoolean",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "srcValue"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension value (type: valueBoolean)"
+            }
+          ],
+          "documentation": "Maps to extension: http://hl7.org.au/fhir/StructureDefinition/medication-long-term | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org.au/fhir/StructureDefinition/medication-long-term'], 'profile': ['http://hl7.org.au/fhir/StructureDefinition/medication-long-term']}] | Path: MedicationStatement.extension"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-informationSource",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-informationSource"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.informationSource> → Patient|Practitioner|PractitionerRole|RelatedPerson|Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-medication",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-medication"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.medication[x]> → Medication — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.note | Type: Annotation | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-partOf",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-partOf"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.partOf> → MedicationAdministration|MedicationDispense|MedicationStatement|Procedure|Observation — resolve via bundle assembler"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.reasonReference> → Condition|Observation|DiagnosticReport — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "au_core_medicationstatement_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to MedicationStatement.statusReason | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-MedicationStatement-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<MedicationStatement.subject> → Patient — resolve via bundle assembler"
+        }
+      ]
+    }
+  ]
+}

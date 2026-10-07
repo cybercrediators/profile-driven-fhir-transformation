@@ -1,0 +1,1346 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-NLLMultiDoseDispConsent-20ee1247",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-senll-full-spec-NLLMultiDoseDispConsent",
+  "name": "Map_017_structure_map_testing_unseen_senll_full_spec_NLLMultiDoseDispConsent",
+  "title": "Structure Map for testing_unseen_senll_full_spec - NLLMultiDoseDispConsent",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: NLLMultiDoseDispConsent). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-senll-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://electronichealth.se/fhir/StructureDefinition/NLLMultiDoseDispConsent",
+      "mode": "target",
+      "alias": "NLLMultiDoseDispConsent"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-NLLMultiDoseDispConsent",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_senll_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Consent",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://electronichealth.se/fhir/StructureDefinition/NLLMultiDoseDispConsent"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://electronichealth.se/fhir/StructureDefinition/NLLMultiDoseDispConsent"
+        },
+        {
+          "name": "map-category-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "category",
+              "variable": "tgt-category-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-category-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-category-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-category-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-category-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-cc-coding0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "consent-dose-disp"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-category-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-category-cc-coding0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://ehalsomyndigheten.se/fhir/CodeSystem/library"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for Consent.category"
+        },
+        {
+          "name": "map-dateTime",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_DATETIME",
+              "variable": "src-dateTime"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "dateTime",
+              "variable": "tgt-dateTime",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-dateTime"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Consent.dateTime | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Consent.identifier | Type: Identifier | Cardinality: 0..*"
+        },
+        {
+          "name": "map-meta",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-meta"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-lastUpdated",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_LASTUPDATED",
+                  "variable": "src-lastUpdated"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "lastUpdated",
+                  "variable": "tgt-lastUpdated",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-lastUpdated"
+                    },
+                    {
+                      "valueString": "instant"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.meta.lastUpdated | Type: instant | Cardinality: 0..1"
+            },
+            {
+              "name": "map-profile",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_PROFILE",
+                  "variable": "src-profile"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "variable": "tgt-profile",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-profile"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.meta.profile | Type: canonical | Cardinality: 0..*"
+            },
+            {
+              "name": "map-security",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "variable": "src-security"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "security",
+                  "variable": "tgt-security",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-security",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-code",
+                  "source": [
+                    {
+                      "context": "src-security",
+                      "element": "TODO_MAP_CODE",
+                      "variable": "src-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-security",
+                      "contextType": "variable",
+                      "element": "code",
+                      "variable": "tgt-code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-code"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.meta.security.code | Type: code | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-display",
+                  "source": [
+                    {
+                      "context": "src-security",
+                      "element": "TODO_MAP_DISPLAY",
+                      "variable": "src-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-security",
+                      "contextType": "variable",
+                      "element": "display",
+                      "variable": "tgt-display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-display"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.meta.security.display | Type: string | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-system",
+                  "source": [
+                    {
+                      "context": "src-security",
+                      "element": "TODO_MAP_SYSTEM",
+                      "variable": "src-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-security",
+                      "contextType": "variable",
+                      "element": "system",
+                      "variable": "tgt-system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-system"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.meta.security.system | Type: uri | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-userSelected",
+                  "source": [
+                    {
+                      "context": "src-security",
+                      "element": "TODO_MAP_USERSELECTED",
+                      "variable": "src-userSelected"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-security",
+                      "contextType": "variable",
+                      "element": "userSelected",
+                      "variable": "tgt-userSelected",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-userSelected"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.meta.security.userSelected | Type: boolean | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-version",
+                  "source": [
+                    {
+                      "context": "src-security",
+                      "element": "TODO_MAP_VERSION",
+                      "variable": "src-version"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-security",
+                      "contextType": "variable",
+                      "element": "version",
+                      "variable": "tgt-version",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-version"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.meta.security.version | Type: string | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Consent.meta.security | Type: Coding | Cardinality: 0..* | Complex type with 7 child elements"
+            },
+            {
+              "name": "map-source",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_SOURCE",
+                  "variable": "src-source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "source",
+                  "variable": "tgt-source",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-source"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.meta.source | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-tag-authored-coded-leaves",
+              "source": [
+                {
+                  "context": "src-meta"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "tag",
+                  "variable": "tgt-tag-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-tag-display",
+                  "source": [
+                    {
+                      "context": "src-meta",
+                      "element": "nLLMultiDoseDispConsent_meta_tag_display",
+                      "variable": "src-tag-display"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-tag-coding",
+                      "contextType": "variable",
+                      "element": "display",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-tag-display"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Explicit coded leaf mappings for Consent.meta.tag"
+            },
+            {
+              "name": "map-versionId",
+              "source": [
+                {
+                  "context": "src-meta",
+                  "element": "TODO_MAP_VERSIONID",
+                  "variable": "src-versionId"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "versionId",
+                  "variable": "tgt-versionId",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-versionId"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.meta.versionId | Type: id | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Consent.meta | Type: Meta | Cardinality: 0..1 | Complex type with 8 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Consent-organization",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-organization"
+            }
+          ],
+          "documentation": "Reference<Consent.organization> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Consent-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<Consent.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "TODO-resolve-reference-Consent-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "documentation": "Reference<Consent.performer> → Organization|Patient|Practitioner|RelatedPerson|PractitionerRole — resolve via bundle assembler"
+        },
+        {
+          "name": "map-policy",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-policy"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "policy",
+              "variable": "tgt-policy",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-policy",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-authority",
+              "source": [
+                {
+                  "context": "src-policy",
+                  "element": "TODO_MAP_AUTHORITY",
+                  "variable": "src-authority"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-policy",
+                  "contextType": "variable",
+                  "element": "authority",
+                  "variable": "tgt-authority",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-authority"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.policy.authority | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "set-fixed-uri",
+              "source": [
+                {
+                  "context": "src-policy"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-policy",
+                  "contextType": "variable",
+                  "element": "uri",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://ehalsomyndigheten.se/nationellalakemedelslistan/policy"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets fixed value for uri"
+            }
+          ],
+          "documentation": "Maps to Consent.policy | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-policyRule",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-policyRule"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "policyRule",
+              "variable": "tgt-policyRule",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Consent.policyRule | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-provision",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-provision"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "provision",
+              "variable": "tgt-provision",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-action",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-action"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "action",
+                  "variable": "tgt-action",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-action",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.action | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-actor",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-actor"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "actor",
+                  "variable": "tgt-actor",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-actor",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "TODO-resolve-reference-Consent-reference",
+                  "source": [
+                    {
+                      "context": "src-actor",
+                      "variable": "src-reference"
+                    }
+                  ],
+                  "documentation": "Reference<Consent.provision.actor.reference> → Device|Group|CareTeam|Organization|Patient|Practitioner|RelatedPerson|PractitionerRole — resolve via bundle assembler"
+                },
+                {
+                  "name": "map-role",
+                  "source": [
+                    {
+                      "context": "src-actor",
+                      "variable": "src-role"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-actor",
+                      "contextType": "variable",
+                      "element": "role",
+                      "variable": "tgt-role",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "CodeableConcept"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.provision.actor.role | Type: CodeableConcept | Cardinality: 1..1"
+                }
+              ],
+              "documentation": "Maps to Consent.provision.actor | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-class",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-class"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "class",
+                  "variable": "tgt-class",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-class",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.class | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-code",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "code",
+                  "variable": "tgt-code",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-code",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.code | Type: CodeableConcept | Cardinality: 0..*"
+            },
+            {
+              "name": "map-data",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-data"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "data",
+                  "variable": "tgt-data",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-data",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "BackboneElement"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-meaning",
+                  "source": [
+                    {
+                      "context": "src-data",
+                      "element": "TODO_MAP_MEANING",
+                      "variable": "src-meaning"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-data",
+                      "contextType": "variable",
+                      "element": "meaning",
+                      "variable": "tgt-meaning",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-meaning"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.provision.data.meaning | Type: code | Cardinality: 1..1"
+                },
+                {
+                  "name": "TODO-resolve-reference-Consent-reference",
+                  "source": [
+                    {
+                      "context": "src-data",
+                      "variable": "src-reference"
+                    }
+                  ],
+                  "documentation": "Reference<Consent.provision.data.reference> → Resource — resolve via bundle assembler"
+                }
+              ],
+              "documentation": "Maps to Consent.provision.data | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+            },
+            {
+              "name": "map-dataPeriod",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-dataPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "dataPeriod",
+                  "variable": "tgt-dataPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.dataPeriod | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-end",
+                  "source": [
+                    {
+                      "context": "src-period",
+                      "element": "TODO_MAP_END",
+                      "variable": "src-end"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-period",
+                      "contextType": "variable",
+                      "element": "end",
+                      "variable": "tgt-end",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-end"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.provision.period.end | Type: dateTime | Cardinality: 0..1"
+                },
+                {
+                  "name": "map-start",
+                  "source": [
+                    {
+                      "context": "src-period",
+                      "element": "nLLMultiDoseDispConsent_provision_period_start",
+                      "variable": "src-start"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-period",
+                      "contextType": "variable",
+                      "element": "start",
+                      "variable": "tgt-start",
+                      "transform": "cast",
+                      "parameter": [
+                        {
+                          "valueId": "src-start"
+                        },
+                        {
+                          "valueString": "dateTime"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Maps to Consent.provision.period.start | Type: dateTime | Cardinality: 0..1"
+                }
+              ],
+              "documentation": "Maps to Consent.provision.period | Type: Period | Cardinality: 0..1 | Complex type with 4 child elements"
+            },
+            {
+              "name": "map-purpose",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-purpose"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "purpose",
+                  "variable": "tgt-purpose",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-purpose",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.purpose | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-securityLabel",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "variable": "src-securityLabel"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "securityLabel",
+                  "variable": "tgt-securityLabel",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-securityLabel",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.securityLabel | Type: Coding | Cardinality: 0..*"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-provision",
+                  "element": "TODO_MAP_TYPE",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-provision",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.provision.type | Type: code | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Consent.provision | Type: BackboneElement | Cardinality: 0..1 | Complex type with 14 child elements"
+        },
+        {
+          "name": "map-scope-fixed-codings",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "scope",
+              "variable": "tgt-scope-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-scope-coding0",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-scope-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-scope-cc-coding0",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-scope-coding0-code",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-scope-cc-coding0",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "patient-privacy"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-scope-coding0-system",
+                  "source": [
+                    {
+                      "context": "source"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-scope-cc-coding0",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://terminology.hl7.org/CodeSystem/consentscope"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Fixed coding slices for Consent.scope"
+        },
+        {
+          "name": "TODO-resolve-reference-Consent-source",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-source"
+            }
+          ],
+          "documentation": "Reference<Consent.source[x]> → Consent|DocumentReference|Contract|QuestionnaireResponse — resolve via bundle assembler"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "nLLMultiDoseDispConsent_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Consent.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-verification",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-verification"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "verification",
+              "variable": "tgt-verification",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-verification",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-verificationDate",
+              "source": [
+                {
+                  "context": "src-verification",
+                  "element": "TODO_MAP_VERIFICATIONDATE",
+                  "variable": "src-verificationDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-verification",
+                  "contextType": "variable",
+                  "element": "verificationDate",
+                  "variable": "tgt-verificationDate",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-verificationDate"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.verification.verificationDate | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-verified",
+              "source": [
+                {
+                  "context": "src-verification",
+                  "element": "TODO_MAP_VERIFIED",
+                  "variable": "src-verified"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-verification",
+                  "contextType": "variable",
+                  "element": "verified",
+                  "variable": "tgt-verified",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-verified"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Consent.verification.verified | Type: boolean | Cardinality: 1..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Consent-verifiedWith",
+              "source": [
+                {
+                  "context": "src-verification",
+                  "variable": "src-verifiedWith"
+                }
+              ],
+              "documentation": "Reference<Consent.verification.verifiedWith> → Patient|RelatedPerson — resolve via bundle assembler"
+            }
+          ],
+          "documentation": "Maps to Consent.verification | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-klgateway-140-encounter-ac93d1c7",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-dkrehab-full-spec-klgateway-140-encounter",
+  "name": "Map_003_structure_map_testing_unseen_dkrehab_full_spec_klgateway_140_encounter",
+  "title": "Structure Map for testing_unseen_dkrehab_full_spec - klgateway-140-encounter",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: klgateway-140-encounter). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-dkrehab-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-encounter",
+      "mode": "target",
+      "alias": "klgateway-140-encounter"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-klgateway-140-encounter",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_dkrehab_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Encounter",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-encounter"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-encounter"
+        },
+        {
+          "name": "map-class-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "class",
+              "variable": "tgt-class-coding",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Coding"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-class-system",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "klgateway_140_encounter_class_system",
+                  "variable": "src-class-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-class-coding",
+                  "contextType": "variable",
+                  "element": "system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-class-system"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-class-code",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "klgateway_140_encounter_class_code",
+                  "variable": "src-class-code"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-class-coding",
+                  "contextType": "variable",
+                  "element": "code",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-class-code"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "set-class-display",
+              "source": [
+                {
+                  "context": "source",
+                  "element": "klgateway_140_encounter_class_display",
+                  "variable": "src-class-display"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-class-coding",
+                  "contextType": "variable",
+                  "element": "display",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-class-display"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Encounter.class"
+        },
+        {
+          "name": "map-extension-basedOnCarePlan",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO-MAP-BASEDONCAREPLAN_SOURCE",
+              "variable": "src-basedOnCarePlan"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "extension",
+              "variable": "ext-basedOnCarePlan",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Extension"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-extension-url-basedOnCarePlan",
+              "source": [
+                {
+                  "context": "src-basedOnCarePlan"
+                }
+              ],
+              "target": [
+                {
+                  "context": "ext-basedOnCarePlan",
+                  "contextType": "variable",
+                  "element": "url",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Sets the extension URL to http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension"
+            }
+          ],
+          "documentation": "Maps to extension: http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension | Type: [{'code': 'Extension', 'profile_canonical': ['http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension'], 'profile': [[{'path': 'Extension.id', 'id': 'Extension.id', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 0, 'max': '1'}, 'description': 'Unique id for inter-element referencing', 'is_required': False, 'fixed_value': [], 'options': [], 'mappings': [{'identity': 'rim', 'map': 'n/a'}], 'is_modifier': False, 'is_summary': False, 'children': []}, {'path': 'Extension.url', 'id': 'Extension.url', 'type': [{'code': 'http://hl7.org/fhirpath/System.String'}], 'cardinality': {'min': 1, 'max': '1'}, 'description': 'identifies the meaning of the extension', 'is_required': True, 'fixed_value': 'http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension', 'options': [], 'comment': 'The definition may point directly to a computable or human-readable definition of the extensibility codes, or it may be a logical URI as declared in some other specification. The definition SHALL be a URI for the Structure Definition defining the extension.', 'mappings': [{'identity': 'rim', 'map': 'N/A'}], 'is_modifier': False, 'is_summary': False, 'fixed_kind': 'fixed', 'children': []}, {'path': 'Extension.value[x]', 'id': 'Extension.value[x]', 'type': [{'code': 'Reference', 'targetProfile': ['http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-care-plan', 'http://fhir.kl.dk/rehab/StructureDefinition/klgateway-140-planned-intervention'], 'type_structure': [{'path': 'Extension.value[x].display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.display', 'id': 'Reference.display', 'type': 'string', 'description': 'Plain text narrative that identifies the resource in addition to the resource reference.', 'is_required': False, 'is_list': False}, {'path': 'Extension.value[x].identifier.assigner.identifier', 'id': 'Reference.identifier', 'type': 'Identifier', 'description': 'An identifier for the target resource. This is used when there is no way to reference the other resource directly, either because the entity it represents is not available through a FHIR server, or because there is no way for the author of the resource to convert a known identifier to an actual location. There is no requirement that a Reference.identifier point to something that is actually exposed as a FHIR instance, but it SHALL point to a business concept that would be expected to be exposed as a FHIR instance, and that instance would need to be of a FHIR resource type allowed by the reference.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.identifier.assigner', 'id': 'Identifier.assigner', 'type': 'Reference', 'description': 'Organization that issued/manages the identifier.', 'is_required': False, 'is_list': False, 'type_structure': [{'path': 'Extension.value[x].identifier.assigner.i… [truncated; full structure in the registry entry for http://fhir.kl.dk/rehab/StructureDefinition/BasedOnCarePlanExtension] | Path: Encounter.extension"
+        },
+        {
+          "name": "map-period",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-period"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "period",
+              "variable": "tgt-period",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Period"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-end",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "klgateway_140_encounter_period_end",
+                  "variable": "src-end"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "end",
+                  "variable": "tgt-end",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-end"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.period.end | Type: dateTime | Cardinality: 1..1"
+            },
+            {
+              "name": "map-start",
+              "source": [
+                {
+                  "context": "src-period",
+                  "element": "klgateway_140_encounter_period_start",
+                  "variable": "src-start"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-period",
+                  "contextType": "variable",
+                  "element": "start",
+                  "variable": "tgt-start",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-start"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Encounter.period.start | Type: dateTime | Cardinality: 1..1"
+            }
+          ],
+          "documentation": "Maps to Encounter.period | Type: Period | Cardinality: 1..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "klgateway_140_encounter_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Encounter.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Encounter-subject",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subject"
+            }
+          ],
+          "documentation": "Reference<Encounter.subject> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-type",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-type"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "type",
+              "variable": "tgt-type",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-type",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Encounter.type | Type: CodeableConcept | Cardinality: 0..* | Complex type with 2 child elements"
+        }
+      ]
+    }
+  ]
+}

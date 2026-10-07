@@ -1,0 +1,820 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-patient-merge-subscription-76f89691",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-isik-full-spec-patient-merge-subscription",
+  "name": "Map_018_structure_map_testing_unseen_isik_full_spec_patient_merge_subscription",
+  "title": "Structure Map for testing_unseen_isik_full_spec - patient-merge-subscription",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: patient-merge-subscription). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-isik-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://gematik.de/fhir/isik/StructureDefinition/patient-merge-subscription",
+      "mode": "target",
+      "alias": "patient-merge-subscription"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-patient-merge-subscription",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_isik_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Subscription",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://gematik.de/fhir/isik/StructureDefinition/patient-merge-subscription"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://gematik.de/fhir/isik/StructureDefinition/patient-merge-subscription"
+        },
+        {
+          "name": "map-channel",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-channel"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "channel",
+              "variable": "tgt-channel",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-endpoint",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "patient_merge_subscription_channel_endpoint",
+                  "variable": "src-endpoint"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "endpoint",
+                  "variable": "tgt-endpoint",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-endpoint"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Subscription.channel.endpoint | Type: url | Cardinality: 0..1"
+            },
+            {
+              "name": "map-extension-heartbeatPeriod",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "TODO-MAP-HEARTBEATPERIOD_SOURCE",
+                  "variable": "src-heartbeatPeriod"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-heartbeatPeriod",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-heartbeatPeriod",
+                  "source": [
+                    {
+                      "context": "src-heartbeatPeriod"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-heartbeatPeriod",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period"
+                },
+                {
+                  "name": "set-extension-value-heartbeatPeriod",
+                  "source": [
+                    {
+                      "context": "src-channel",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-heartbeatPeriod",
+                      "contextType": "variable",
+                      "element": "valueUnsignedInt",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueUnsignedInt)"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-heartbeat-period']}] | Path: Subscription.channel.extension"
+            },
+            {
+              "name": "map-extension-timeout",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "TODO-MAP-TIMEOUT_SOURCE",
+                  "variable": "src-timeout"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-timeout",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-timeout",
+                  "source": [
+                    {
+                      "context": "src-timeout"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-timeout",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout"
+                },
+                {
+                  "name": "set-extension-value-timeout",
+                  "source": [
+                    {
+                      "context": "src-channel",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-timeout",
+                      "contextType": "variable",
+                      "element": "valueUnsignedInt",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueUnsignedInt)"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-timeout']}] | Path: Subscription.channel.extension"
+            },
+            {
+              "name": "map-extension-maxCount",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "TODO-MAP-MAXCOUNT_SOURCE",
+                  "variable": "src-maxCount"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-maxCount",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-maxCount",
+                  "source": [
+                    {
+                      "context": "src-maxCount"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-maxCount",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count"
+                },
+                {
+                  "name": "set-extension-value-maxCount",
+                  "source": [
+                    {
+                      "context": "src-channel",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-maxCount",
+                      "contextType": "variable",
+                      "element": "valuePositiveInt",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valuePositiveInt)"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-max-count']}] | Path: Subscription.channel.extension"
+            },
+            {
+              "name": "map-header",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "TODO_MAP_HEADER",
+                  "variable": "src-header"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "header",
+                  "variable": "tgt-header",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-header",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-header"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Subscription.channel.header | Type: string | Cardinality: 0..*"
+            },
+            {
+              "name": "map-payload",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "patient_merge_subscription_channel_payload",
+                  "variable": "src-payload"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "payload",
+                  "variable": "tgt-payload",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-payload"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-content",
+                  "source": [
+                    {
+                      "context": "src-payload",
+                      "element": "patient_merge_subscription_payload_content",
+                      "variable": "src-content"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-payload",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-content",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-content",
+                      "source": [
+                        {
+                          "context": "src-content"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-content",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content"
+                    },
+                    {
+                      "name": "set-extension-value-content",
+                      "source": [
+                        {
+                          "context": "src-payload",
+                          "element": "patient_merge_subscription_payload_content",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-content",
+                          "contextType": "variable",
+                          "element": "valueCode",
+                          "transform": "cast",
+                          "parameter": [
+                            {
+                              "valueId": "srcValue"
+                            },
+                            {
+                              "valueString": "code"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueCode)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-payload-content']}] | Path: Subscription.channel.payload.extension"
+                }
+              ],
+              "documentation": "Maps to Subscription.channel.payload | Type: code | Cardinality: 1..1 | Complex type with 3 child elements"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-channel",
+                  "element": "patient_merge_subscription_channel_type",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-channel",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-type"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "map-extension-customChannelType",
+                  "source": [
+                    {
+                      "context": "src-type",
+                      "element": "TODO-MAP-CUSTOMCHANNELTYPE_SOURCE",
+                      "variable": "src-customChannelType"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-type",
+                      "contextType": "variable",
+                      "element": "extension",
+                      "variable": "ext-customChannelType",
+                      "transform": "create",
+                      "parameter": [
+                        {
+                          "valueString": "Extension"
+                        }
+                      ]
+                    }
+                  ],
+                  "rule": [
+                    {
+                      "name": "set-extension-url-customChannelType",
+                      "source": [
+                        {
+                          "context": "src-customChannelType"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-customChannelType",
+                          "contextType": "variable",
+                          "element": "url",
+                          "transform": "copy",
+                          "parameter": [
+                            {
+                              "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-channel-type"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-channel-type"
+                    },
+                    {
+                      "name": "set-extension-value-customChannelType",
+                      "source": [
+                        {
+                          "context": "src-type",
+                          "element": "TODO-VALUE-SOURCE",
+                          "variable": "srcValue"
+                        }
+                      ],
+                      "target": [
+                        {
+                          "context": "ext-customChannelType",
+                          "contextType": "variable",
+                          "element": "value",
+                          "transform": "create",
+                          "parameter": [
+                            {
+                              "valueString": "Coding"
+                            }
+                          ]
+                        }
+                      ],
+                      "documentation": "Sets the extension value (type: valueCoding)"
+                    }
+                  ],
+                  "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-channel-type | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-channel-type'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-channel-type']}] | Path: Subscription.channel.type.extension"
+                }
+              ],
+              "documentation": "Maps to Subscription.channel.type | Type: code | Cardinality: 1..1 | Complex type with 3 child elements"
+            }
+          ],
+          "documentation": "Maps to Subscription.channel | Type: BackboneElement | Cardinality: 1..1 | Complex type with 7 child elements"
+        },
+        {
+          "name": "map-contact",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-contact"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "contact",
+              "variable": "tgt-contact",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-contact",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "ContactPoint"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Subscription.contact | Type: ContactPoint | Cardinality: 0..*"
+        },
+        {
+          "name": "map-criteria",
+          "source": [
+            {
+              "context": "source",
+              "element": "patient_merge_subscription_criteria",
+              "variable": "src-criteria"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "criteria",
+              "variable": "tgt-criteria",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-criteria"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-extension-filterCriteria",
+              "source": [
+                {
+                  "context": "src-criteria",
+                  "element": "TODO-MAP-FILTERCRITERIA_SOURCE",
+                  "variable": "src-filterCriteria"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-criteria",
+                  "contextType": "variable",
+                  "element": "extension",
+                  "variable": "ext-filterCriteria",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Extension"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-extension-url-filterCriteria",
+                  "source": [
+                    {
+                      "context": "src-filterCriteria"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-filterCriteria",
+                      "contextType": "variable",
+                      "element": "url",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueString": "http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension URL to http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria"
+                },
+                {
+                  "name": "set-extension-value-filterCriteria",
+                  "source": [
+                    {
+                      "context": "src-criteria",
+                      "element": "TODO-VALUE-SOURCE",
+                      "variable": "srcValue"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "ext-filterCriteria",
+                      "contextType": "variable",
+                      "element": "valueString",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "srcValue"
+                        }
+                      ]
+                    }
+                  ],
+                  "documentation": "Sets the extension value (type: valueString)"
+                }
+              ],
+              "documentation": "Maps to extension: http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria | Type: [{'code': 'Extension', 'profile_canonical': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria'], 'profile': ['http://hl7.org/fhir/uv/subscriptions-backport/StructureDefinition/backport-filter-criteria']}] | Path: Subscription.criteria.extension"
+            }
+          ],
+          "documentation": "Maps to Subscription.criteria | Type: string | Cardinality: 1..1 | Complex type with 3 child elements"
+        },
+        {
+          "name": "map-end",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_END",
+              "variable": "src-end"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "end",
+              "variable": "tgt-end",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-end"
+                },
+                {
+                  "valueString": "instant"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Subscription.end | Type: instant | Cardinality: 0..1"
+        },
+        {
+          "name": "map-error",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ERROR",
+              "variable": "src-error"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "error",
+              "variable": "tgt-error",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-error"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Subscription.error | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reason",
+          "source": [
+            {
+              "context": "source",
+              "element": "patient_merge_subscription_reason",
+              "variable": "src-reason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reason",
+              "variable": "tgt-reason",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-reason"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Subscription.reason | Type: string | Cardinality: 1..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "patient_merge_subscription_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Subscription.status | Type: code | Cardinality: 1..1"
+        }
+      ]
+    }
+  ]
+}

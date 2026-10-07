@@ -1,0 +1,1289 @@
+{
+  "resourceType": "StructureMap",
+  "id": "sm-UKCore-Immunization-2dcc2736",
+  "url": "http://example.org/StructureMap/source-definition-testing-unseen-ukcore-full-spec-UKCore-Immunization",
+  "name": "Map_016_structure_map_testing_unseen_ukcore_full_spec_UKCore_Immunization",
+  "title": "Structure Map for testing_unseen_ukcore_full_spec - UKCore-Immunization",
+  "status": "draft",
+  "description": "Auto-generated StructureMap for given profile mappable fields (Resource: UKCore-Immunization). Placeholders have to be set (or use auto-mapping)",
+  "structure": [
+    {
+      "url": "http://example.org/StructureDefinition/source-definition-testing-unseen-ukcore-full-spec",
+      "mode": "source",
+      "alias": "Source"
+    },
+    {
+      "url": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Immunization",
+      "mode": "target",
+      "alias": "UKCore-Immunization"
+    }
+  ],
+  "group": [
+    {
+      "name": "Transform-UKCore-Immunization",
+      "typeMode": "none",
+      "input": [
+        {
+          "name": "source",
+          "type": "Sourcedefinition_testing_unseen_ukcore_full_spec",
+          "mode": "source"
+        },
+        {
+          "name": "target",
+          "type": "Immunization",
+          "mode": "target"
+        }
+      ],
+      "rule": [
+        {
+          "name": "set-meta-profile",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "meta",
+              "variable": "tgt-meta",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Meta"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "set-meta-profile-url",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-meta",
+                  "contextType": "variable",
+                  "element": "profile",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueString": "https://fhir.hl7.org.uk/StructureDefinition/UKCore-Immunization"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Declare conformance to https://fhir.hl7.org.uk/StructureDefinition/UKCore-Immunization"
+        },
+        {
+          "name": "map-doseQuantity",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-doseQuantity"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "doseQuantity",
+              "variable": "tgt-doseQuantity",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Quantity"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.doseQuantity | Type: Quantity | Cardinality: 0..1"
+        },
+        {
+          "name": "map-education",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-education"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "education",
+              "variable": "tgt-education",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-education",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-documentType",
+              "source": [
+                {
+                  "context": "src-education",
+                  "element": "TODO_MAP_DOCUMENTTYPE",
+                  "variable": "src-documentType"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-education",
+                  "contextType": "variable",
+                  "element": "documentType",
+                  "variable": "tgt-documentType",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-documentType"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.education.documentType | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-presentationDate",
+              "source": [
+                {
+                  "context": "src-education",
+                  "element": "TODO_MAP_PRESENTATIONDATE",
+                  "variable": "src-presentationDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-education",
+                  "contextType": "variable",
+                  "element": "presentationDate",
+                  "variable": "tgt-presentationDate",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-presentationDate"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.education.presentationDate | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-publicationDate",
+              "source": [
+                {
+                  "context": "src-education",
+                  "element": "TODO_MAP_PUBLICATIONDATE",
+                  "variable": "src-publicationDate"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-education",
+                  "contextType": "variable",
+                  "element": "publicationDate",
+                  "variable": "tgt-publicationDate",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-publicationDate"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.education.publicationDate | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "map-reference",
+              "source": [
+                {
+                  "context": "src-education",
+                  "element": "TODO_MAP_REFERENCE",
+                  "variable": "src-reference"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-education",
+                  "contextType": "variable",
+                  "element": "reference",
+                  "variable": "tgt-reference",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-reference"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.education.reference | Type: uri | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Immunization.education | Type: BackboneElement | Cardinality: 0..* | Complex type with 7 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-encounter",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-encounter"
+            }
+          ],
+          "documentation": "Reference<Immunization.encounter> → Encounter — resolve via bundle assembler"
+        },
+        {
+          "name": "map-expirationDate",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_EXPIRATIONDATE",
+              "variable": "src-expirationDate"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "expirationDate",
+              "variable": "tgt-expirationDate",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-expirationDate"
+                },
+                {
+                  "valueString": "date"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.expirationDate | Type: date | Cardinality: 0..1"
+        },
+        {
+          "name": "map-fundingSource",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-fundingSource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "fundingSource",
+              "variable": "tgt-fundingSource",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.fundingSource | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-identifier",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-identifier"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "identifier",
+              "variable": "tgt-identifier",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-identifier",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Identifier"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Immunization-assigner",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-assigner"
+                }
+              ],
+              "documentation": "Reference<Immunization.identifier.assigner> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-period",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-period"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "period",
+                  "variable": "tgt-period",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Period"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.identifier.period | Type: Period | Cardinality: 0..1"
+            },
+            {
+              "name": "map-system",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_SYSTEM",
+                  "variable": "src-system"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "system",
+                  "variable": "tgt-system",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-system"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.identifier.system | Type: uri | Cardinality: 0..1"
+            },
+            {
+              "name": "map-type",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "variable": "src-type"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "type",
+                  "variable": "tgt-type",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.identifier.type | Type: CodeableConcept | Cardinality: 0..1"
+            },
+            {
+              "name": "map-use",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_USE",
+                  "variable": "src-use"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "use",
+                  "variable": "tgt-use",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-use"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.identifier.use | Type: code | Cardinality: 0..1"
+            },
+            {
+              "name": "map-value",
+              "source": [
+                {
+                  "context": "src-identifier",
+                  "element": "TODO_MAP_VALUE",
+                  "variable": "src-value"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-identifier",
+                  "contextType": "variable",
+                  "element": "value",
+                  "variable": "tgt-value",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-value"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.identifier.value | Type: string | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Immunization.identifier | Type: Identifier | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-isSubpotent",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_ISSUBPOTENT",
+              "variable": "src-isSubpotent"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "isSubpotent",
+              "variable": "tgt-isSubpotent",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-isSubpotent"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.isSubpotent | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-location",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-location"
+            }
+          ],
+          "documentation": "Reference<Immunization.location> → Location — resolve via bundle assembler"
+        },
+        {
+          "name": "map-lotNumber",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_LOTNUMBER",
+              "variable": "src-lotNumber"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "lotNumber",
+              "variable": "tgt-lotNumber",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-lotNumber"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.lotNumber | Type: string | Cardinality: 0..1"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-manufacturer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-manufacturer"
+            }
+          ],
+          "documentation": "Reference<Immunization.manufacturer> → Organization — resolve via bundle assembler"
+        },
+        {
+          "name": "map-note",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-note"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "note",
+              "variable": "tgt-note",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-note",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "Annotation"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Immunization-author",
+              "source": [
+                {
+                  "context": "src-note",
+                  "variable": "src-author"
+                }
+              ],
+              "documentation": "Reference<Immunization.note.author[x]> → Practitioner|Patient|RelatedPerson|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-time",
+              "source": [
+                {
+                  "context": "src-note",
+                  "element": "TODO_MAP_TIME",
+                  "variable": "src-time"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-note",
+                  "contextType": "variable",
+                  "element": "time",
+                  "variable": "tgt-time",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-time"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.note.time | Type: dateTime | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Immunization.note | Type: Annotation | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-patient",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-patient"
+            }
+          ],
+          "documentation": "Reference<Immunization.patient> → Patient — resolve via bundle assembler"
+        },
+        {
+          "name": "map-performer",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-performer"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "performer",
+              "variable": "tgt-performer",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-performer",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Immunization-actor",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-actor"
+                }
+              ],
+              "documentation": "Reference<Immunization.performer.actor> → Practitioner|PractitionerRole|Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-function",
+              "source": [
+                {
+                  "context": "src-performer",
+                  "variable": "src-function"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-performer",
+                  "contextType": "variable",
+                  "element": "function",
+                  "variable": "tgt-function",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.performer.function | Type: CodeableConcept | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Immunization.performer | Type: BackboneElement | Cardinality: 0..* | Complex type with 5 child elements"
+        },
+        {
+          "name": "map-primarySource",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_PRIMARYSOURCE",
+              "variable": "src-primarySource"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "primarySource",
+              "variable": "tgt-primarySource",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-primarySource"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.primarySource | Type: boolean | Cardinality: 0..1"
+        },
+        {
+          "name": "map-programEligibility",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-programEligibility"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "programEligibility",
+              "variable": "tgt-programEligibility",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-programEligibility",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.programEligibility | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-protocolApplied",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-protocolApplied"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "protocolApplied",
+              "variable": "tgt-protocolApplied",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-protocolApplied",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "TODO-resolve-reference-Immunization-authority",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "variable": "src-authority"
+                }
+              ],
+              "documentation": "Reference<Immunization.protocolApplied.authority> → Organization — resolve via bundle assembler"
+            },
+            {
+              "name": "map-doseNumber",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "element": "TODO_MAP_DOSENUMBER",
+                  "variable": "src-doseNumber"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "doseNumber",
+                  "variable": "tgt-doseNumber",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-doseNumber"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.doseNumber[x] | Type: positiveInt, string | Cardinality: 1..1"
+            },
+            {
+              "name": "map-series",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "element": "TODO_MAP_SERIES",
+                  "variable": "src-series"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "series",
+                  "variable": "tgt-series",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-series"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.series | Type: string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-seriesDoses",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "element": "TODO_MAP_SERIESDOSES",
+                  "variable": "src-seriesDoses"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "seriesDoses",
+                  "variable": "tgt-seriesDoses",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-seriesDoses"
+                    },
+                    {
+                      "valueString": "positiveInt"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.seriesDoses[x] | Type: positiveInt, string | Cardinality: 0..1"
+            },
+            {
+              "name": "map-targetDisease",
+              "source": [
+                {
+                  "context": "src-protocolApplied",
+                  "variable": "src-targetDisease"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-protocolApplied",
+                  "contextType": "variable",
+                  "element": "targetDisease",
+                  "variable": "tgt-targetDisease",
+                  "listMode": [
+                    "share"
+                  ],
+                  "listRuleId": "map-targetDisease",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "CodeableConcept"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.protocolApplied.targetDisease | Type: CodeableConcept | Cardinality: 0..*"
+            }
+          ],
+          "documentation": "Maps to Immunization.protocolApplied | Type: BackboneElement | Cardinality: 0..* | Complex type with 8 child elements"
+        },
+        {
+          "name": "map-reaction",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reaction"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reaction",
+              "variable": "tgt-reaction",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reaction",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "BackboneElement"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "map-date",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "element": "TODO_MAP_DATE",
+                  "variable": "src-date"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "date",
+                  "variable": "tgt-date",
+                  "transform": "cast",
+                  "parameter": [
+                    {
+                      "valueId": "src-date"
+                    },
+                    {
+                      "valueString": "dateTime"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.reaction.date | Type: dateTime | Cardinality: 0..1"
+            },
+            {
+              "name": "TODO-resolve-reference-Immunization-detail",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "variable": "src-detail"
+                }
+              ],
+              "documentation": "Reference<Immunization.reaction.detail> → Observation — resolve via bundle assembler"
+            },
+            {
+              "name": "map-reported",
+              "source": [
+                {
+                  "context": "src-reaction",
+                  "element": "TODO_MAP_REPORTED",
+                  "variable": "src-reported"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-reaction",
+                  "contextType": "variable",
+                  "element": "reported",
+                  "variable": "tgt-reported",
+                  "transform": "copy",
+                  "parameter": [
+                    {
+                      "valueId": "src-reported"
+                    }
+                  ]
+                }
+              ],
+              "documentation": "Maps to Immunization.reaction.reported | Type: boolean | Cardinality: 0..1"
+            }
+          ],
+          "documentation": "Maps to Immunization.reaction | Type: BackboneElement | Cardinality: 0..* | Complex type with 6 child elements"
+        },
+        {
+          "name": "map-reasonCode",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonCode"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reasonCode",
+              "variable": "tgt-reasonCode",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-reasonCode",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.reasonCode | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "TODO-resolve-reference-Immunization-reasonReference",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reasonReference"
+            }
+          ],
+          "documentation": "Reference<Immunization.reasonReference> → Condition|Observation|DiagnosticReport — resolve via bundle assembler"
+        },
+        {
+          "name": "map-recorded",
+          "source": [
+            {
+              "context": "source",
+              "element": "TODO_MAP_RECORDED",
+              "variable": "src-recorded"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "recorded",
+              "variable": "tgt-recorded",
+              "transform": "cast",
+              "parameter": [
+                {
+                  "valueId": "src-recorded"
+                },
+                {
+                  "valueString": "dateTime"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.recorded | Type: dateTime | Cardinality: 0..1"
+        },
+        {
+          "name": "map-reportOrigin",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-reportOrigin"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "reportOrigin",
+              "variable": "tgt-reportOrigin",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.reportOrigin | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-route",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-route"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "route",
+              "variable": "tgt-route",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.route | Type: CodeableConcept | Cardinality: 0..1 | Complex type with 4 child elements"
+        },
+        {
+          "name": "map-site",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-site"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "site",
+              "variable": "tgt-site",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.site | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-status",
+          "source": [
+            {
+              "context": "source",
+              "element": "uKCore_Immunization_status",
+              "variable": "src-status"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "status",
+              "variable": "tgt-status",
+              "transform": "copy",
+              "parameter": [
+                {
+                  "valueId": "src-status"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.status | Type: code | Cardinality: 1..1"
+        },
+        {
+          "name": "map-statusReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-statusReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "statusReason",
+              "variable": "tgt-statusReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.statusReason | Type: CodeableConcept | Cardinality: 0..1"
+        },
+        {
+          "name": "map-subpotentReason",
+          "source": [
+            {
+              "context": "source",
+              "variable": "src-subpotentReason"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "subpotentReason",
+              "variable": "tgt-subpotentReason",
+              "listMode": [
+                "share"
+              ],
+              "listRuleId": "map-subpotentReason",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "documentation": "Maps to Immunization.subpotentReason | Type: CodeableConcept | Cardinality: 0..*"
+        },
+        {
+          "name": "map-vaccineCode-authored-coded-leaves",
+          "source": [
+            {
+              "context": "source"
+            }
+          ],
+          "target": [
+            {
+              "context": "target",
+              "contextType": "variable",
+              "element": "vaccineCode",
+              "variable": "tgt-vaccineCode-cc",
+              "transform": "create",
+              "parameter": [
+                {
+                  "valueString": "CodeableConcept"
+                }
+              ]
+            }
+          ],
+          "rule": [
+            {
+              "name": "add-vaccineCode-coding",
+              "source": [
+                {
+                  "context": "source"
+                }
+              ],
+              "target": [
+                {
+                  "context": "tgt-vaccineCode-cc",
+                  "contextType": "variable",
+                  "element": "coding",
+                  "variable": "tgt-vaccineCode-coding",
+                  "transform": "create",
+                  "parameter": [
+                    {
+                      "valueString": "Coding"
+                    }
+                  ]
+                }
+              ],
+              "rule": [
+                {
+                  "name": "set-vaccineCode-system",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "immVaxSys",
+                      "variable": "src-vaccineCode-system"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-vaccineCode-coding",
+                      "contextType": "variable",
+                      "element": "system",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-vaccineCode-system"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "set-vaccineCode-code",
+                  "source": [
+                    {
+                      "context": "source",
+                      "element": "immVaxCode",
+                      "variable": "src-vaccineCode-code"
+                    }
+                  ],
+                  "target": [
+                    {
+                      "context": "tgt-vaccineCode-coding",
+                      "contextType": "variable",
+                      "element": "code",
+                      "transform": "copy",
+                      "parameter": [
+                        {
+                          "valueId": "src-vaccineCode-code"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "documentation": "Explicit coded leaf mappings for Immunization.vaccineCode"
+        }
+      ]
+    }
+  ]
+}
