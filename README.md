@@ -146,8 +146,6 @@ Either use plain `"source.path": "Target.path"` mapping to map a field from inpu
 
 Check out [typed StructureMap rules](docs/typed_mapping_rules.md) for multi-source rules, groups/imports/transforms, explicit reference policies, and special elements.
 
-The executable capability inventory and optional Matchbox runtime corpus are documented in [StructureMap construct conformance](docs/structuremap_conformance.md).
-
 ### Optional LLM features
 There are **optional** and different automapping and LLM-assisted [langgraph](https://www.langchain.com/langgraph) based features built-in:
 
@@ -225,7 +223,7 @@ Available server methods: `status`, `stop`, `transform_data`, `transform_batch`,
 | `return_data(payload)`               | Hand the result back to the ETL tool          |
 | `emit_log / emit_error`              | Tool-specific logging and error routing       |
 
-`NiFiETLConnector` (`nifi_connector.py`) implements `ETLConnector` for Apache NiFi 2.x Python processors via `FlowFileTransform`. `scripts/e2e_kfdm_smoke.sh` exercises the full FSH → SUSHI → pipeline → Matchbox → NiFi chain as a scripted smoke test.
+`NiFiETLConnector` (`nifi_connector.py`) implements `ETLConnector` for Apache NiFi 2.x Python processors via `FlowFileTransform`.
 
 ## Testing
 ```bash
@@ -234,7 +232,7 @@ pytest --cov=src --cov-report=html           # with coverage
 ```
 
 ## Evaluation
--> Results and steps to reproduce can be found in the `eval` directory
+-> Results and steps to reproduce can be found in the `docs` and `eval` directories.
 
 ## Project structure
 
@@ -255,4 +253,5 @@ projects/<name>/
 - [fhir.resources](https://github.com/nazrulworld/fhir.resources)
 - [Matchbox FHIR server](https://github.com/ahdis/matchbox)
 - [FHIR Mapping Language spec](https://www.hl7.org/fhir/mapping-language.html)
+- [FHIR StructureMap](https://hl7.org/fhir/R4B/structuremap.html)
 - [Valkey](https://valkey.io/)
